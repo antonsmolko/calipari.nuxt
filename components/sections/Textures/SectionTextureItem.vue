@@ -1,0 +1,54 @@
+<template lang="pug">
+    .tm-textures__item
+        section.uk-section.uk-section-xlarge.uk-section-default
+            .uk-container
+                .tm-textures__header(data-uk-scrollspy="cls:uk-animation-slide-bottom-small; delay: 300")
+                    h2.uk-heading-small.uk-margin-remove {{ title }}
+                    .uk-divider-small
+                .uk-grid.uk-margin-medium-top(data-uk-grid)
+                    .tm-textures__description(class="uk-width-3-5@s" data-uk-scrollspy="cls:uk-animation-slide-bottom-small; delay: 300")
+                        .tm-textures__description-text(v-html="description")
+                        hr.uk-margin
+                        .tm-textures__bottom.tm-text-medium
+                            span.tm-textures__spec Ширина:
+                                span.tm-material__spec-value {{ width }} см
+                            span.tm-textures__spec Цена:
+                                span.tm-material__spec-value {{ cost }} ₽/м<sup>2</sup>
+                    .tm-textures__pattern(class="uk-width-3-4 uk-width-2-5@s" data-uk-lightbox data-uk-scrollspy="cls:uk-animation-slide-bottom-small; delay: 700")
+                        div
+                            a.uk-inline.uk-transition-toggle(:href="`https://manager.npmrundev.ru/image/show/${textureSrc}`" tabindex="0" :data-caption="title")
+                                img.uk-box-shadow-large(:data-src="`https://manager.npmrundev.ru/image/widen/600/${textureSrc}`" data-uk-img)
+        section.tm-textures__sample.uk-section.uk-background-fixed.uk-background-cover(:data-src="`https://manager.npmrundev.ru/image/show/${exampleSrc}`" data-uk-img)
+</template>
+
+<script>
+export default {
+  props: {
+    title: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      required: true
+    },
+    width: {
+      type: Number,
+      required: true
+    },
+    cost: {
+      type: Number,
+      required: true
+    },
+    textureSrc: {
+      type: String,
+      required: true
+    },
+    exampleSrc: {
+      type: String,
+      required: true
+    }
+
+  }
+}
+</script>

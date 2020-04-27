@@ -1,0 +1,127 @@
+@import "./uikit/variables-theme";
+
+// Color
+
+$logo-color: #3CC4FC;
+$accent-color: #24ADED;
+$primary-gradient: linear-gradient(to top right,#0171CD,#159AD1);
+$primary-transparent-gradient: linear-gradient(to top right,rgba(#0171CD, .97),rgba(#159AD1, .97));
+$primary-section-gradient: linear-gradient(to top right, #0171CD, #159AD1);
+$secondary-section-gradient: linear-gradient(to top right, #202325, #2F3036);
+
+$navbar-border: 1px solid rgba(#54A9FD, .08);
+$navbar-local-border-color: #1D1D1F;
+$border-radius-small: 3px;
+
+/* Background */
+$background-smoke: rgba(#fff, .5);
+$inverse-background-smoke: rgba(#d6d6d6, .1);
+
+/* Button */
+
+$button-line-height: $global-control-height;
+
+$button-padding-horizontal: $global-margin;
+$button-font-size: 1rem;
+$button-large-font-size: 1rem;
+$button-small-font-size: .8rem;
+
+$icon-button-background: #DFDFDF;
+$icon-button-color: $global-emphasis-color;
+$icon-button-hover-background: darken($icon-button-background, 5%);
+$icon-button-hover-color: $global-emphasis-color;
+$icon-button-active-background: darken($icon-button-background, 10%);
+$icon-button-active-color: $global-emphasis-color;
+
+$inverse-button-primary-background: dodgerblue;
+$inverse-button-primary-color: $global-inverse-color;
+$inverse-button-primary-hover-background: darken($inverse-button-primary-background, 5%);
+$inverse-button-primary-hover-color: $global-inverse-color;
+$inverse-button-primary-active-background: darken($inverse-button-primary-background, 10%);
+$inverse-button-primary-active-color: $global-inverse-color;
+
+// Border
+$global-emphasis-border: #A7A7A7;
+
+// Brakepoints
+$se: '340px';
+$xs: '560px';
+$s: '640px';
+$hm: '768px'; // 780 editor !
+$m: '960px';
+$l: '1200px';
+$hxl: '1400px';
+$xl: '1600px';
+$xxl: '1800px';
+$qhd: '1921px';
+
+// Editor
+$editor-background-color: rgb(27, 27, 29);
+
+// Form
+$form-radio-checked-border: #eaeaea;
+$form-line-height: $global-control-height;
+
+// Transition
+$transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+$background-time-transition: 2s;
+
+// Navbar
+$navbar-height: 48px;
+$bottom-bar-height: 60px;
+
+// Range
+$form-range-thumb-background-width: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon fill='white' points='15.8,6.5 19.3,10 15.8,13.5 15.1,12.8 17.9,10 15.1,7.2 '/%3E%3Cpath fill='none' stroke='white' stroke-width='1.4' d='M2.1,10h15.8'/%3E%3Cpolygon fill='white' points='4.2,6.5 4.9,7.2 2.1,10 4.9,12.8 4.2,13.5 0.7,10 '/%3E%3C/svg%3E");
+$form-range-thumb-background-height: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon fill='white' points='6.5,4.2 10,0.7 13.5,4.2 12.8,4.9 10,2.1 7.2,4.9 '/%3E%3Cpath fill='none' stroke='white' stroke-width='1.4' d='M10,17.9V2.1'/%3E%3Cpolygon fill='white' points='6.5,15.8 7.2,15.1 10,17.9 12.8,15.1 13.5,15.8 10,19.3 '/%3E%3C/svg%3E");
+$form-range-thumb-height: 30px;
+
+// UiKit Variables Theme
+$global-primary-background: #24ADED; // Не переопределяется!!!
+$global-xxlarge-font-size: 3rem;
+//$global-secondary-background: #313338;
+$global-success-background: #19BA38;
+
+$global-font-family: "OpenSans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+$base-body-font-weight: 300;
+$global-font-size: 20px;
+$global-small-font-size: 14px;
+$base-strong-font-weight: normal;
+$base-heading-font-family: "Lato", $global-font-family;
+$base-heading-font-weight: 300;
+$base-heading-text-transform: uppercase;
+$base-h5-font-size: 1rem;
+$card-small-body-padding-horizontal: $global-margin;
+$card-small-body-padding-vertical: $global-margin;
+$card-secondary-background: $secondary-section-gradient;
+$container-max-width: 1000px;
+$container-large-max-width: 1400px;
+$container-small-max-width: 800px;
+$form-danger-background: #FEF0F0;
+$box-shadow-bottom-background: rgba(#000,.5);
+
+$navbar-background: $global-secondary-background;
+$navbar-nav-item-height: 48px;
+$navbar-nav-item-color: $global-emphasis-color;
+$navbar-nav-item-font-size: 15px;
+$navbar-nav-item-hover-color: $global-primary-background;
+$navbar-nav-item-onclick-color: $global-primary-background;
+$navbar-nav-item-active-color: $global-primary-background;
+$text-bold-font-weight: normal;
+$transition-duration: 0.2s;
+
+$card-large-body-padding-horizontal-l: 55px;
+$card-large-body-padding-vertical-l: 55px;
+
+$inverse-global-color: rgba($global-inverse-color, 0.65);
+$inverse-navbar-nav-item-color: $global-inverse-color;
+$inverse-navbar-nav-item-hover-color: $global-inverse-color;
+$inverse-navbar-nav-item-onclick-color: $global-inverse-color;
+$inverse-navbar-nav-item-active-color: $global-inverse-color;
+
+// Notifications
+
+$notification-width: $width-xlarge-width;
+$notification-position: $navbar-nav-item-height + $global-small-margin;
+$notification-message-font-size: $global-font-size;
+$notification-close-top: $notification-message-padding;
+$notification-close-right: $notification-message-padding;

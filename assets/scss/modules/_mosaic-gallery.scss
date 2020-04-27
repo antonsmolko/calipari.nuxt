@@ -1,0 +1,66 @@
+.mosaic-gallery {
+  width: 100%;
+  float: left;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.mosaic-gallery > div,
+.mosaic-gallery > a,
+.mosaic-gallery > img,
+.mosaic-gallery > video {
+  display: block;
+  float: left;
+  object-fit: cover;
+  transition: opasity .4s;
+  background: $global-muted-background;
+}
+
+.mosaic-gallery > .item {
+  position: relative;
+}
+
+.mosaic-gallery > .item.withImage {
+  background-size: cover;
+}
+
+.mosaic-gallery > .item > .overlay {
+  opacity: 0;
+  position: absolute;
+  left: 0; right: 0; top: 0; bottom: 0;
+  transition: opacity .2s ease-in-out;
+  -moz-transition: opacity .2s ease-in-out;
+  -webkit-transition: opacity .2s ease-in-out;
+}
+
+.mosaic-gallery > .item:hover > .overlay {
+  opacity: 1;
+}
+
+.mosaic-gallery > .item > .overlay > .texts {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 15pt;
+  background: rgba(0, 0, 0, 0.2);
+  color: #fff;
+}
+
+.mosaic-gallery > .item > .overlay > .texts h1,
+.mosaic-gallery > .item > .overlay > .texts h2 {
+  margin: 0;
+  line-height: 1.3em;
+}
+
+.mosaic-gallery > .item > .overlay > .texts h1 {
+  font-size: 17pt;
+}
+
+.mosaic-gallery > .item > .overlay > .texts h2 {
+  font-size: 13pt;
+}
+
+.mosaic-hidden {
+  opacity: 0;
+}

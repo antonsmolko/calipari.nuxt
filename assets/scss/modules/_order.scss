@@ -1,0 +1,215 @@
+$button-delete-background: #efefef;
+$lightbox-background: rgba(#000, .05);
+
+.tm-order-table {
+  width: 100%;
+  border-collapse: collapse;
+  tr {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    background: $background-smoke;
+    padding-top: $global-small-gutter;
+    padding-bottom: $global-small-gutter;
+    padding-right: $global-small-gutter;
+    margin-right: -$global-small-gutter;
+    box-sizing: border-box;
+    .uk-light & {
+      background: $inverse-background-smoke;
+    }
+    @include media-mob($s) {
+      padding-left: $global-small-gutter;
+      padding-right: $global-gutter;
+      margin-left: -$global-gutter;
+      margin-right: -$global-gutter;
+    }
+    @include media-mob($hm) {
+      padding-left: 5px;
+      padding-right: $global-margin;
+      margin-left: 0;
+      margin-right: 0;
+      box-sizing: border-box;
+    }
+  }
+
+  &__preview {
+    order: 1;
+    height: 140px;
+    max-height: 140px;
+    min-height: 140px;
+    img {
+      /*max-width: 100%;*/
+      object-fit: contain;
+      max-width: inherit;
+      max-height: inherit;
+    }
+    @include media-mob($se) {
+      height: 145px;
+      max-height: 145px;
+      min-height: 145px;
+    }
+    @include media-mob($s) {
+      height: 150px;
+      max-height: 150px;
+      min-height: 150px;
+    }
+    @include media-mob($hm) {
+      height: 100px;
+      max-height: 100px;
+      min-height: 100px;
+    }
+    @include media-mob($m) {
+      height: 120px;
+      max-height: 120px;
+      min-height: 120px;
+    }
+
+    &.grayscale {
+      img {
+        filter: grayscale(1);
+      }
+    }
+
+    &.sepia {
+      img {
+        filter: grayscale(1) sepia(0.5);
+      }
+    }
+
+    &.flip {
+      img {
+        transform: scaleX(-1);
+      }
+    }
+  }
+
+  &__lightbox {
+    width: 100%;
+    height: 100%;
+    max-width: inherit;
+    max-height: inherit;
+    min-height: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $lightbox-background;
+  }
+
+  &__params {
+    order: 2;
+    line-height: 1.2;
+    &-item {
+      > span {
+        display: block;
+      }
+      &:not(:last-child) {
+        margin-bottom: 5px;
+      }
+    }
+    &-heading {
+      font-size: 12px;
+    }
+    &-value {
+      &.uk-link {
+        text-decoration: underline;
+      }
+    }
+    @include media-mob($s) {
+      margin-left: 0;
+      &-heading {
+        font-size: 13px;
+      }
+    }
+    @include media-mob($hm) {
+      flex: 1;
+      margin-left: 0;
+      &-item {
+        font-size: .95rem;
+        > span {
+          display: inline-block;
+        }
+      }
+      &-heading {
+        width: 80px;
+        font-size: .95rem;
+      }
+    }
+    @include media-mob($m) {
+      margin-left: $global-small-margin;
+      flex: none;
+      &-item {
+        font-size: 1rem;
+      }
+      &-heading {
+        width: 100px;
+        font-size: 1rem;
+      }
+    }
+  }
+
+  &__counter {
+    order: 4;
+    @include media-mob($s) {
+      order: 3;
+      margin: 0 auto;
+    }
+  }
+
+  &__count {
+    order: 4;
+    > span {
+      display: block;
+      width: 50px;
+      text-align: center;
+      line-height: 36px;
+    }
+    &-x {
+      color: $global-muted-color;
+    }
+    &-value {
+      color: $global-emphasis-color;
+    }
+    @include media-mob($s) {
+      order: 3;
+      margin: 0 auto;
+    }
+    @include media-mob($hm) {
+      > span {
+        line-height: 40px;
+      }
+    }
+  }
+
+  &__price {
+    order: 3;
+    &-heading {
+      padding-right: 5px;
+    }
+    &-value {
+      font-size: $global-medium-font-size;
+      @include media-mob($se) {
+        font-size: $global-large-font-size;
+      }
+    }
+    @include media-mob($s) {
+      order: 4;
+      max-width: 160px;
+      flex: 1;
+      margin: 0 auto;
+      &-value {
+        font-size: $global-medium-font-size;
+      }
+    }
+    @include media-mob($m) {
+      max-width: 180px;
+      &-value {
+        font-size: $global-large-font-size;
+      }
+    }
+  }
+
+  &__trash {
+    order: 5;
+    text-align: right;
+  }
+}

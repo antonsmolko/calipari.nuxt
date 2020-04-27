@@ -1,0 +1,63 @@
+{
+  "name": "calipari.nuxt",
+  "version": "1.0.0",
+  "description": "Viktoria Smolko Calipari project",
+  "author": "Anton Smolko",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@miyaoka/vue-touch-range": "^1.0.1",
+    "@nuxtjs/auth": "^4.9.0",
+    "@nuxtjs/axios": "^5.9.7",
+    "@nuxtjs/svg-sprite": "^0.4.10",
+    "cookie-universal-nuxt": "^2.1.3",
+    "crc-32": "^1.2.0",
+    "cssnano": "^4.1.10",
+    "cssnano-preset-advanced": "^4.0.7",
+    "https": "^1.0.0",
+    "lodash": "^4.17.15",
+    "nuxt": "2.12.0",
+    "nuxt-sass-resources-loader": "^2.0.5",
+    "nuxt-trailingslash-module": "^1.1.0",
+    "nuxt-vuex-localstorage": "^1.2.6",
+    "nuxt-webfontloader": "^1.1.0",
+    "sweetalert2": "^9.10.10",
+    "uikit": "^3.4.0",
+    "vue-meta": "^2.3.3",
+    "vue-resize": "^0.5.0",
+    "vue-select": "^3.10.0",
+    "vue-the-mask": "^0.11.1",
+    "vue2-transitions": "^0.3.0",
+    "vuelidate": "^0.7.5"
+  },
+  "devDependencies": {
+    "@nuxtjs/eslint-config": "^2.0.2",
+    "@nuxtjs/eslint-module": "^1.1.0",
+    "@nuxtjs/style-resources": "^1.0.0",
+    "@vue/test-utils": "^1.0.0-beta.33",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^25.3.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-nuxt": ">=0.5.2",
+    "imagemin-mozjpeg": "^8.0.0",
+    "imagemin-webpack-plugin": "^2.4.2",
+    "jest": "^25.3.0",
+    "mathsass": "^0.11.0",
+    "node-sass": "^4.13.1",
+    "pug": "^2.0.4",
+    "pug-plain-loader": "^1.0.0",
+    "sass-loader": "^8.0.2",
+    "vue-jest": "^4.0.0-0"
+  },
+  "browserslist": [
+    "last 3 version",
+    "> 1%"
+  ]
+}

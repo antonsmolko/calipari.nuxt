@@ -1,0 +1,116 @@
+@import 'assets/scss/vue-select/variables-theme';
+
+.v-select {
+  background-color: transparent;
+}
+
+/* Dropdown Menu */
+
+.vs__dropdown-menu {
+  border: 0;
+  border-top-style: none;
+  border-radius: 0;
+  background: $global-muted-background;
+
+  .uk-light & {
+    background: $global-secondary-background;
+  }
+}
+
+.vs__no-options {
+  text-align: left;
+  padding: 0 $form-large-padding-horizontal;
+}
+
+/* List Items */
+.vs__dropdown-option {
+  padding: 3px $form-large-padding-horizontal;
+  color: $global-muted-color;
+  overflow: hidden;
+  transition: color 0s !important;
+  .uk-light & {
+    color: $inverse-global-color;
+  }
+}
+
+/* Selected Tags */
+.vs__selected {
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  color: $global-emphasis-color;
+
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: calc(100% - #{$global-margin});
+
+  .uk-light & {
+    color: $inverse-global-emphasis-color;
+  }
+
+  .vs--error & {
+    color: $text-danger-color;
+  }
+}
+
+.vs__dropdown-toggle {
+  background: $global-background;
+  color: $global-emphasis-color;
+  box-shadow: $global-medium-box-shadow;
+  .uk-light & {
+    background: $inverse-global-muted-background;
+    color: $inverse-global-color;
+  }
+
+  .vs--disabled & {
+    background: #ddd;
+  }
+}
+.vs--disabled .vs__dropdown-toggle {
+  background: #ddd;
+
+  .uk-light & {
+    background: rgba($global-muted-background, .2);
+  }
+}
+
+.vs--error .vs__dropdown-toggle {
+  background: $form-danger-background;
+
+  .uk-light & {
+    background: rgba($global-danger-background, .2);
+  }
+}
+
+.vs__actions {
+  cursor: pointer;
+  .vs--disabled & {
+    color: $global-muted-color;
+    cursor: inherit;
+  }
+
+  .vs--error & {
+    color: $text-danger-color;
+  }
+}
+
+.vs__selected-options {
+  max-width: calc(100% - #{$global-gutter});
+}
+
+.vs__search,
+.vs__search:focus {
+  font-weight: 300;
+  border: none;
+  color: $global-color;
+
+  .uk-light & {
+    color: $inverse-global-color;
+  }
+}
+
+.vs__search::placeholder {
+  .uk-light & {
+    color: $inverse-global-color;
+  }
+}

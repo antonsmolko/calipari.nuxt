@@ -1,0 +1,41 @@
+//.tm-textures {
+//  &__hero {
+//    background-image: url('/assets/img/bg/bg-polygons.webp');
+//    @include media-portrait() {
+//      background-image: url('/assets/img/bg/bg-polygons-m.webp');
+//    }
+//  }
+//  &__item {
+//    section {
+//      padding-bottom: 0 !important;
+//      margin-bottom: -$global-large-margin;
+//    }
+//  }
+//  &__sample {
+//    min-height: 500px;
+//    max-height: 150vw;
+//    height: 100vh;
+//  }
+//  &__spec {
+//    &:not(:first-child) {
+//      margin-left: $global-margin;
+//    }
+//    &-value {
+//      margin-left: $global-small-margin / 2;
+//      font-weight: $base-strong-font-weight;
+//      color: $global-emphasis-color;
+//    }
+//  }
+//  &__pattern {
+//    img {
+//      width: 100%;
+//      height: auto;
+//      display: block;
+//    }
+//  }
+//  &__bottom {
+//    @include media-mob($s) {
+//      padding-bottom: $global-xlarge-margin;
+//    }
+//  }
+//}

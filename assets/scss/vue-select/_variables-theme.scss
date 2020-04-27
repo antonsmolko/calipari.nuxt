@@ -1,0 +1,30 @@
+@import "assets/scss/vue-select/global/variables";
+$vs-colors: (
+        lightest: rgba(60, 60, 60, 0.26),
+        light: rgba(60, 60, 60, 0.5),
+        dark: #333,
+        darkest: rgba(0, 0, 0, .15),
+) !default;
+
+//  Borders
+$vs-border-width: 0;
+$vs-border-radius: 0;
+
+//  Global Component Variables
+//$vs-component-line-height: $form-line-height;
+$vs-component-line-height: 47px;
+$vs-component-placeholder-color: $global-color;
+
+// Active State
+$vs-state-active-bg: $global-primary-background;
+$vs-state-active-color: $global-inverse-color !important;
+
+//  Dropdown
+$vs-dropdown-box-shadow: $global-medium-box-shadow;
+$vs-dropdown-bg: $global-muted-background;
+
+
+//  Disabled State
+$vs-state-disabled-bg: tranparent;
+$vs-state-disabled-color: $global-muted-color;
+$vs-state-disabled-controls-color: $global-muted-color;

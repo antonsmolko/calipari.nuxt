@@ -1,0 +1,66 @@
+.uk-navbar-nav {
+  &.tm-iconnav {
+    .tm-bottombar & {
+      > li {
+        min-width: inherit;
+        flex-grow: 1;
+        > a, > span {
+          .tm-bottombar__item-title {
+            padding-top: $global-small-margin;
+          }
+          min-height: $bottom-bar-height !important;
+          font-size: .6rem;
+          padding: 0 $global-small-margin;
+          color: $global-inverse-color;
+          &::before {
+            display: none;
+          }
+          .uk-badge {
+            min-width: 14px;
+            height: 14px;
+            top: 9px;
+            left: 55%;
+            font-size: 10px;
+            font-weight: 600;
+            color: $global-color;
+            padding: 0 3px;
+            background-color: $global-inverse-color;
+          }
+
+          @include media-mob($s) {
+            font-size: $global-small-font-size;
+            .uk-badge {
+              left: 53%;
+            }
+          }
+          @include media-mob($m) {
+            .uk-badge {
+              left: 52%;
+            }
+          }
+        }
+
+        &:first-child {
+          border-left: none;
+        }
+
+        &:last-child {
+          border-right: none;
+        }
+      }
+    }
+  }
+  &:hover {
+    &::before {
+      display: none;
+    }
+  }
+}
+
+.tm-bottombar {
+  border-bottom: none;
+  z-index: 2000;
+  .uk-navbar, .uk-navbar-item {
+    min-height: $bottom-bar-height;
+  }
+}

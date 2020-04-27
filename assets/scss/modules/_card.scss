@@ -1,0 +1,43 @@
+.tm-card {
+    &__number, &__aura {
+        position: relative;
+        overflow: hidden;
+        min-height: 15rem;
+        &::before {
+            position: absolute;
+            display: block;
+            opacity: .1;
+        }
+    }
+    &__number {
+        &::before {
+            content: attr(data-num);
+            right: -1rem;
+            bottom: -2.2rem;
+            font-family: $base-heading-font-family;
+            font-weight: 100;
+            font-size: 19rem;
+            text-align: right;
+            line-height: 1;
+        }
+    }
+    &__aura {
+        position: relative;
+        overflow: hidden;
+        min-height: 15rem;
+        &::before {
+            content: url('/img/svg/bg-aura.svg');
+            right: -3rem;
+            bottom: -3rem;
+            width: 17rem;
+            height: 17rem;
+        }
+    }
+    &__expand {
+        @include media_desk($s) {
+            margin: 0 -$global-small-gutter;
+            padding-left: $global-small-gutter;
+            padding-right: $global-small-gutter;
+        }
+    }
+}

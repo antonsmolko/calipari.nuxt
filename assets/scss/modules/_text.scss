@@ -1,0 +1,10 @@
+.tm-text-medium {
+  font-size: 1.2rem;
+}
+
+.tm-text-xsmall {
+  font-size: 12px;
+  @include media_mob($m) {
+    font-size: 13px;
+  }
+}

@@ -1,0 +1,99 @@
+<template lang="pug">
+    div(v-show="isEnabled")
+        TopBar(
+            lead="Оформление заказа"
+            :title="title")
+            //.uk-navbar-item(class="uk-visible@l")
+                //span.uk-h5.tm-total-price__heading Цена
+                //span.uk-text-large.uk-text-emphasis {{ formatPrice }}
+            .uk-navbar-item
+                button.uk-close(type="button", data-uk-close, @click="onClose")
+        section.uk-section(
+            :class="{ 'uk-light': darkPeriod }"
+            data-uk-height-viewport="offset-top: true; offset-bottom: true")
+            .uk-container
+                slot(name="content")
+        SlideYDownTransition(mode="out-in")
+            CheckoutBottomBar(
+                :price="formatPrice"
+                :nextIcon="buttonNextIcon"
+                :nextDisabled="invalid"
+                :buttonNextStyle="buttonNextStyle"
+                @next="onNext"
+            )
+        .uk-padding(class="uk-hidden@l")
+</template>
+<script>
+import { mapState } from 'vuex'
+import setLayout from '~/components/mixins/setLayout'
+import { getFormatPrice } from '~/components/helpers'
+import TopBar from '~/components/layout/TopBar'
+import CheckoutBottomBar from '~/components/Checkout/CheckoutBottomBar'
+
+export default {
+  name: 'CheckoutLayout',
+  components: {
+    CheckoutBottomBar,
+    TopBar
+  },
+  mixins: [setLayout],
+  props: {
+    title: {
+      type: String,
+      default: null
+    },
+    price: {
+      type: Number,
+      required: true
+    },
+    buttonNextText: {
+      type: String,
+      default: 'Далее'
+    },
+    buttonNextIcon: {
+      type: String,
+      default: 'chevron-right'
+    },
+    buttonNextStyle: {
+      type: String,
+      default: 'uk-button-primary'
+    }
+  },
+  computed: {
+    formatPrice () {
+      return getFormatPrice(this.price)
+    },
+    ...mapState({
+      invalid: state => state.checkout.invalid,
+      enabled: state => state.checkout.enabled,
+      cartLength: state => state.cart.items.length
+    }),
+    isEnabled () {
+      return this.enabled && this.cartLength
+    }
+  },
+  created () {
+    if (!this.isEnabled) {
+      this.$router.push('/')
+    }
+    this.setFieldsAction({
+      bottomBar: false,
+      footer: false
+    })
+  },
+  beforeMount () {
+    window.scrollTo(0, 0)
+  },
+  methods: {
+    onPrev () {
+      this.$router.go(-1) ? this.$router.go(-1) : this.$router.push('/')
+    },
+    onNext () {
+      this.$emit('confirm')
+    },
+    onClose () {
+      this.$router.push('/')
+    }
+  }
+}
+</script>

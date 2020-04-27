@@ -1,0 +1,43 @@
+.tm-catalog__title {
+  font-size: 0.95rem;
+  margin-top: $global-small-margin;
+  margin-bottom: 0;
+  color: $global-color;
+  line-height: 1.2;
+  height: 36px;
+  @include media-mob($s) {
+    font-size: 1.1rem;
+    margin-top: $global-small-gutter;
+  }
+  @include media-mob($m) {
+    height: 50px;
+  }
+}
+
+.tm-catalog__topics {
+  &-image {
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+}
+.tm-catalog__colors {
+  &-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  &-sample {
+    display: block;
+    width: 70px;
+    height: 70px;
+  }
+}
+.tm-catalog__interiors {
+  background-image: url('/img/bg/areas/bg-area-01.jpg');
+  @include media-portrait() {
+    background-image: url('/img/bg/areas/bg-area-01.jpg');
+  }
+}
