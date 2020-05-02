@@ -6,11 +6,11 @@
                 id="preview-crop"
                 tabindex="0"
                 :data-caption="imageDataCaption"
-                :href="`${url}/${preview.width}/${preview.height}/${preview.x}/${preview.y}/${flip}/${colorize}/${image.path}`"
+                :href="`${baseUrl}/order-item-full/${preview.width}/${preview.height}/${preview.x}/${preview.y}/${flip}/${colorize}/${image.path}`"
                 :class="[filter.colorize]",
                 :style="cropStyles")
                 img(
-                    :src="`https://manager.npmrundev.ru/image/widen/500/${image.path}`",
+                    :src="`${baseUrl}/widen/500/${image.path}`",
                     :style="imageStyles"
                     :alt="image.article")
 </template>
@@ -50,7 +50,7 @@ export default {
     container: null,
     maxWidth: null,
     maxHeight: null,
-    url: `${process.env.baseUrl}/image/order-item-full`
+    baseUrl: `${process.env.baseUrl}/image`
   }),
   computed: {
     orderRatio () {

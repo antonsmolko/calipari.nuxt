@@ -3,11 +3,14 @@
         .tm-filter__preview(v-if="type")
             template(v-if="type === 'image'")
                 img.uk-box-shadow-medium(
-                    :data-src="`https://manager.npmrundev.ru/image/fit/120/80/${filter['image_path']}`"
+                    :data-src="`${baseUrl}${filter['image_path']}`"
                     :alt="filter.title"
                     data-uk-img)
             template(v-else-if="type === 'color'")
                 .tm-filter__color.uk-box-shadow-medium(:style="`background-color: ${filter.alias}`")
+            template(v-else-if="type === 'icon'")
+                .tm-filter__icon.uk-box-shadow-medium
+                    span.uk-icon(:data-uk-icon="`icon: ${filter['alias']}; ratio: 1.25`")
         h2.uk-h5.tm-filter__title {{ filter.title }}
         span.tm-filter__image-count ({{ filter.images_count }})
         input.tm-filter__checkbox.uk-checkbox(
@@ -22,24 +25,16 @@
 <script>
 export default {
   name: 'FilterItem',
-  model: {
-    prop: 'model',
-    event: 'change'
-  },
   props: {
     filter: {
       type: Object,
       required: true
     },
+    filterField: {
+      type: String,
+      required: true
+    },
     disabled: {
-      type: Boolean,
-      default: false
-    },
-    trueValue: {
-      type: Boolean,
-      default: true
-    },
-    falseValue: {
       type: Boolean,
       default: false
     },
@@ -52,59 +47,18 @@ export default {
     // eslint-disable-next-line vue/require-default-prop
     model: [String, Boolean, Object, Number, Array]
   },
+  data: () => ({
+    baseUrl: `${process.env.baseUrl}/image/fit/120/80/`
+  }),
   computed: {
     isSelected () {
-      if (this.isModelArray) {
-        return this.model.includes(this.value)
-      }
-
-      if (this.hasValue) {
-        return this.model === this.value
-      }
-
-      return this.model === this.trueValue
-    },
-    isModelArray () {
-      return Array.isArray(this.model)
-    },
-    hasValue () {
-      return Object.prototype.hasOwnProperty.call(this.$options.propsData, 'value')
+      return this.$store.getters['filter/isSelected'](this.filterField, this.filter.id)
     }
   },
   methods: {
-    removeItemFromModel (newModel) {
-      const index = newModel.indexOf(this.value)
-
-      if (index !== -1) {
-        newModel.splice(index, 1)
-      }
-    },
-    handleArrayCheckbox () {
-      const newModel = this.model
-
-      if (!this.isSelected) {
-        newModel.push(this.value)
-      } else {
-        this.removeItemFromModel(newModel)
-      }
-
-      this.$emit('change', newModel)
-    },
-    handleSingleSelectCheckbox () {
-      this.$emit('change', this.isSelected ? null : this.value)
-    },
-    handleSimpleCheckbox () {
-      this.$emit('change', this.isSelected ? this.falseValue : this.trueValue)
-    },
-    toggleCheck () {
+    toggleCheck (e) {
       if (!this.disabled) {
-        if (this.isModelArray) {
-          this.handleArrayCheckbox()
-        } else if (this.hasValue) {
-          this.handleSingleSelectCheckbox()
-        } else {
-          this.handleSimpleCheckbox()
-        }
+        this.$emit('toggle', +e.target.value)
       }
     }
   }
@@ -191,6 +145,28 @@ export default {
         margin-left: $global-small-margin;
         border: 1px solid $global-inverse-color;
         box-sizing: border-box;
+        @include media-mob($s) {
+            width: 60px;
+            height: 60px;
+            margin-left: $global-small-gutter;
+        }
+    }
+
+    &__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-left: $global-small-margin;
+        background: rgba(#000, .08);
+        box-sizing: border-box;
+
+        .uk-light & {
+            background: rgba(#fff, .08);
+        }
+
         @include media-mob($s) {
             width: 60px;
             height: 60px;

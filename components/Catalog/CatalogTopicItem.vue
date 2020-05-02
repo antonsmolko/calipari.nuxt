@@ -4,7 +4,7 @@
             :to="{ name: 'catalog-category', params: { category: item.alias } }")
             .tm-catalog__topics-image
                 img.uk-box-shadow-medium(
-                    :data-src="`https://manager.npmrundev.ru/image/fit/400/250/${item.image_path}`"
+                    :data-src="`${baseUrl}${item.image_path}`"
                     :alt="item.title"
                     data-uk-img)
             h3.tm-catalog__title {{ item.title }}
@@ -18,7 +18,10 @@ export default {
       type: Object,
       default: null
     }
-  }
+  },
+  data: () => ({
+    baseUrl: `${process.env.baseUrl}/image/fit/400/250/`
+  })
 }
 </script>
 

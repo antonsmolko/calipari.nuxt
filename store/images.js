@@ -1,8 +1,9 @@
 import array from 'lodash/array'
+import { getParamsString } from '../helpers'
 import action from './mixins/action'
 
 export const state = () => ({
-  item: {},
+  item: null,
   items: [],
   pagination: {
     per_page: 30,
@@ -13,7 +14,8 @@ export const state = () => ({
     sort_by: 'id',
     sort_order: 'asc'
   },
-  loading: false
+  loading: false,
+  lastPreview: null
 })
 
 export const mutations = {
@@ -62,29 +64,41 @@ export const actions = {
       thenContent: response => commit('SET_FIELDS', { item: response.data })
     })
   },
-  getWishList ({ commit }, payload) {
+  getWishList ({ commit }, { key, filter, pagination }) {
     commit('SET_FIELDS', { loading: true })
 
-    return action(this.$api, 'post', commit, {
-      url: '/catalog/images/wish-list',
-      payload,
+    const baseUrl = '/catalog/images'
+    const params = getParamsString({
+      filter: { keys: key, ...filter },
+      pagination
+    })
+    const url = params ? `${baseUrl}${params}` : baseUrl
+
+    return action(this.$api, 'get', commit, {
+      url,
       thenContent: (response) => {
         commit('SET_PAGINATION', response.data.pagination)
         commit('SET_ITEMS', response.data.data)
+        commit('SET_FIELDS', { loading: false })
       }
     })
   },
   getCategoryItems ({ commit }, { key, filter, pagination }) {
     commit('SET_FIELDS', { loading: true })
 
-    const payload = { filter, pagination }
+    const baseUrl = '/catalog/images'
+    const params = getParamsString({
+      filter: { category: [key], ...filter },
+      pagination
+    })
+    const url = params ? `${baseUrl}${params}` : baseUrl
 
-    return action(this.$api, 'post', commit, {
-      url: `/catalog/categories/${key}/images`,
-      payload,
+    return action(this.$api, 'get', commit, {
+      url,
       thenContent: (response) => {
-        commit('SET_PAGINATION', response.data.pagination)
+        commit('SET_PAGINATION', response.data)
         commit('SET_ITEMS', response.data.data)
+        commit('SET_FIELDS', { loading: false })
       }
     })
   },

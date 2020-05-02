@@ -16,9 +16,9 @@
                                 span.tm-material__spec-value {{ cost }} ₽/м<sup>2</sup>
                     .tm-textures__pattern(class="uk-width-3-4 uk-width-2-5@s" data-uk-lightbox data-uk-scrollspy="cls:uk-animation-slide-bottom-small; delay: 700")
                         div
-                            a.uk-inline.uk-transition-toggle(:href="`https://manager.npmrundev.ru/image/show/${textureSrc}`" tabindex="0" :data-caption="title")
-                                img.uk-box-shadow-large(:data-src="`https://manager.npmrundev.ru/image/widen/600/${textureSrc}`" data-uk-img)
-        section.tm-textures__sample.uk-section.uk-background-fixed.uk-background-cover(:data-src="`https://manager.npmrundev.ru/image/show/${exampleSrc}`" data-uk-img)
+                            a.uk-inline.uk-transition-toggle(:href="`${baseUrl}/show/${textureSrc}`" tabindex="0" :data-caption="title")
+                                img.uk-box-shadow-large(:data-src="`${baseUrl}/widen/600/${textureSrc}`" data-uk-img)
+        section.tm-textures__sample.uk-section.uk-background-fixed.uk-background-cover(:data-src="`${baseUrl}/show/${exampleSrc}`" data-uk-img)
 </template>
 
 <script>
@@ -48,7 +48,9 @@ export default {
       type: String,
       required: true
     }
-
-  }
+  },
+  data: () => ({
+    baseUrl: `${process.env.baseUrl}/image`
+  })
 }
 </script>

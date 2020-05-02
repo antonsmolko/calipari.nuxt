@@ -2,7 +2,7 @@
     li.tm-editor__texture-item
         .uk-panel(:class="{'active': isActive }", @click="onClick")
             img.tm-editor__texture-thumb(
-                :src="`https://manager.npmrundev.ru/image/crop/200/200/${item.sample_path}`",
+                :src="`${baseUrl}/crop/200/200/${item.sample_path}`",
                 :alt="item.name")
             span.tm-editor__texture-title.uk-text-truncate {{ item.name }}
 </template>
@@ -24,6 +24,9 @@ export default {
       default: null
     }
   },
+  data: () => ({
+    baseUrl: `${process.env.baseUrl}/image`
+  }),
   computed: {
     isActive () {
       return this.item.id === this.model

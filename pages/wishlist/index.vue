@@ -26,6 +26,7 @@ import setLayout from '~/components/mixins/setLayout'
 
 export default {
   name: 'WishList',
+  scrollToTop: true,
   components: {
     TopBar,
     GalleryLayout
@@ -38,6 +39,9 @@ export default {
   },
   created () {
     this.setFieldsAction({ pageTitle: 'Избранное' })
+  },
+  mounted () {
+    window.scrollTo(0, 0)
   },
   methods: {
     onClose () {

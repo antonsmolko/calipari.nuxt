@@ -13,16 +13,18 @@
                         :key="item.number"
                         :order="item"
                         @pay="onPay"
+                        @cancel="onCancel"
                     )
             section.uk-section.uk-section-xlarge.uk-text-center(
                 v-else :class="{ 'uk-light': darkPeriod }")
-                span.uk-heading-small Список заказов пуст
-                .uk-margin-medium-top
-                    nuxt-link.uk-button.uk-button-primary(to="/profile") Назад
+                .uk-container
+                    span.uk-heading-small Список заказов пуст
+                    .uk-margin-medium-top
+                        nuxt-link.uk-button.uk-button-primary(to="/profile") Назад
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import setLayout from '~/components/mixins/setLayout'
 import TopBar from '~/components/layout/TopBar'
 import OrderListItem from '~/components/Orders/OrderListItem'
@@ -50,8 +52,20 @@ export default {
     })
   },
   methods: {
-    onPay (orderNumber) {
-      // console.log(orderNumber)
+    ...mapActions({
+      cancelOrderAction: 'profile/cancelOrder',
+      addNotificationAction: 'notifications/addItem',
+      createPaymentAction: 'payment/create'
+    }),
+    onPay (hash) {
+      this.$router.push(`/payment/${hash}`)
+    },
+    onCancel (number) {
+      this.cancelOrderAction(number)
+        .then(() => this.addNotificationAction({
+          message: `Заказ № ${number} успешно отменен.`,
+          status: 'success'
+        }))
     },
     onClose () {
       this.$router.push('/profile')

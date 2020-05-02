@@ -62,6 +62,9 @@ export default {
   },
   created () {
     this.setFieldsAction({ pageTitle: 'Каталог' })
+  },
+  mounted () {
+    window.scrollTo(0, 0)
   }
 }
 </script>

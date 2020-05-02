@@ -104,7 +104,8 @@ export default {
   computed: {
     ...mapState({
       image: state => state.images.item,
-      textures: state => state.textures.items
+      textures: state => state.textures.items,
+      prevPath: state => state.prevPath
     }),
     onLoad () {
       return this.textures.length &&
@@ -155,17 +156,23 @@ export default {
     this.cropData.width = this.image.width
     this.cropData.height = this.image.height
   },
-  destroyed () {
-    this.setImageFieldsAction({ image: {} })
-  },
   methods: {
     ...mapActions({
       setImageFieldsAction: 'images/setFields',
       addToCartAction: 'cart/addItem',
-      addNotificationAction: 'notifications/addItem'
+      addNotificationAction: 'notifications/addItem',
+      setFieldsAction: 'setFields'
     }),
     onClose () {
-      this.$router.go(-1) ? this.$router.go(-1) : this.$router.push('/catalog')
+      window.history.length > 1 ? this.goBack() : this.goCatalog()
+    },
+    goBack () {
+      this.setImageFieldsAction({ lastPreview: this.image.id })
+      this.$router.go(-1)
+    },
+    goCatalog () {
+      this.setImageFieldsAction({ lastPreview: null })
+      this.$router.push('/catalog')
     },
     handleRatioLockedChange (value) {
       this.ratioLocked = value

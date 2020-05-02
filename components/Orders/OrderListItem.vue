@@ -4,7 +4,7 @@
             span.tm-orders__number.tm-text-medium.uk-margin-right.uk-text-emphasis {{ order.number }}
             button.uk-button.tm-button-success.uk-button-small(
                 v-if="order.status.alias === 'confirmed'"
-                @click="onClick") Оплатить
+                @click="onPay") Оплатить
             .tm-orders__more.uk-margin-auto-left.uk-inline
                 button.uk-icon(data-uk-icon="more-vertical")
                 .tm-orders__dropdown(
@@ -45,7 +45,6 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
 import { getArticle, getFormatPrice, getFilterString } from '~/helpers'
 
 export default {
@@ -62,10 +61,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      cancelOrderAction: 'profile/cancelOrder',
-      addNotificationAction: 'notifications/addItem'
-    }),
     getImageFullPath (thumbPath) {
       return `${process.env.baseUrl}${thumbPath}`
     },
@@ -80,15 +75,11 @@ export default {
         Цена: ${getFormatPrice(item.price)}`
       /* eslint-enable */
     },
-    onClick () {
-      this.$emit('pay', this.order.number)
+    onPay () {
+      this.$emit('pay', this.order.hash_number)
     },
     onCancel () {
-      this.cancelOrderAction(this.order.number)
-        .then(() => this.addNotificationAction({
-          message: `Заказ № ${this.order.number} успешно отменен.`,
-          status: 'success'
-        }))
+      this.$emit('cancel', this.order.number)
     }
   }
 }

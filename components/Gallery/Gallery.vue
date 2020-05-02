@@ -1,7 +1,7 @@
 <template lang="pug">
     div
         TopBar(:title="title")
-            .uk-navbar-item
+            //.uk-navbar-item
                 span.tm-topbar__control.uk-icon-link(data-uk-icon="arrow-down")
             .uk-navbar-item
                 span.tm-topbar__control.uk-icon-link(data-uk-icon="settings" @click.prevent="onClick")
@@ -15,8 +15,7 @@
                     :intro="intro")
                 section.uk-section(v-show="images.length")
                     .uk-container.uk-container-expand
-                        div(ref="mosaic"
-                            data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 50")
+                        div(ref="mosaic")
                             GalleryImage(
                                 v-for="image in images"
                                 :key="image.id"
@@ -29,8 +28,9 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
+import VueScrollTo from 'vue-scrollto'
 import GalleryHero from './GalleryHero'
 import GalleryImage from './GalleryImage'
 import TopBar from '~/components/layout/TopBar.vue'
@@ -71,13 +71,6 @@ export default {
       default: null
     }
   },
-  metaInfo () {
-    return {
-      style: [
-        // { cssText: this.category.image_path && `.tm-page::before { background-image: url('https://manager.npmrundev.ru/image/show/${this.category.image_path}') }`, type: 'text/css' }
-      ]
-    }
-  },
   data: () => ({
     observerOptions: {
       threshold: 0.1
@@ -99,7 +92,8 @@ export default {
   }),
   computed: {
     ...mapState('images', {
-      loading: state => state.loading
+      loading: state => state.loading,
+      lastPreview: state => state.lastPreview
     })
   },
   watch: {
@@ -112,11 +106,9 @@ export default {
       }
     },
     loading () {
-      if (this.loading) {
-        this.initialized = false
-      } else {
-        this.initMosaic()
-      }
+      this.loading
+        ? this.initialized = false
+        : this.initMosaic()
     },
     paginateEnd () {
       if (this.paginateEnd) {
@@ -127,18 +119,21 @@ export default {
   created () {
     this.setFieldsAction({ footer: false })
   },
-  beforeMount () {
-    window.scrollTo(0, 0)
-  },
-  mounted () {
+  async mounted () {
     if (this.images.length) {
       const mosaicEl = this.$refs.mosaic
       this.mosaic = new Mosaic(mosaicEl, this.mosaicOptions)
 
-      this.initMosaic()
+      await this.initMosaic()
+      if (this.lastPreview) {
+        this.scrollToImage()
+      }
     }
   },
   methods: {
+    ...mapActions('images', {
+      setImageFieldsAction: 'setFields'
+    }),
     intersected () {
       if (this.initialized && !this.paginateEnd) {
         this.$emit('paginate')
@@ -164,6 +159,14 @@ export default {
     },
     dislike (id) {
       this.$emit('dislike', id)
+    },
+    scrollToImage () {
+      const options = {
+        easing: 'ease-in-out',
+        offset: -300,
+        onDone: () => this.setImageFieldsAction({ lastPreview: null })
+      }
+      VueScrollTo.scrollTo(`#image-${this.lastPreview}`, 300, options)
     }
   }
 }

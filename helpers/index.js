@@ -1,3 +1,6 @@
+import forOwn from 'lodash/forOwn'
+import isEmpty from 'lodash/isEmpty'
+import isInteger from 'lodash/isInteger'
 import crc32 from 'crc-32'
 import lib from '~/plugins/lang/ru/lib'
 
@@ -30,6 +33,19 @@ function getActiveFilters (filter) {
 
 export const isDifference = (a, b) => !!a.filter(i => !b.includes(i)).concat(b.filter(i => !a.includes(i))).length
 
+export const noDiff = (a, b) => {
+  if (isDifference(Object.keys(a), Object.keys(b))) {
+    return false
+  }
+  for (const [key, value] of Object.entries(a)) {
+    if (isDifference(b[key], value)) {
+      return false
+    }
+  }
+
+  return true
+}
+
 export const getFormatPrice = price => typeof price === 'number'
   ? price.toLocaleString('ru-Ru', {
     style: 'currency',
@@ -58,3 +74,23 @@ export const getArticle = (id) => {
  * @returns {function(string|null): boolean|boolean}
  */
 export const isFieldLengthValid = length => field => !!field && (field.length >= length)
+
+/**
+ * Get Params String
+ * @param payload
+ * @returns {*}
+ */
+export const getParamsString = (payload) => {
+  const params = []
+
+  forOwn(payload, (keys, field) => {
+    forOwn(keys, (value, key) => {
+      if (!isEmpty(value) || isInteger(value)) {
+        const valueString = Array.isArray(value) ? value.join(';') : value
+        params.push(`${field}[${key}]=${valueString}`)
+      }
+    })
+  })
+
+  return params.length ? `?${params.join('&')}` : null
+}

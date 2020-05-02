@@ -45,8 +45,8 @@ export default {
       }
 
       return this.grayscaleMod
-        ? `https://manager.npmrundev.ru/image/grayscale/${this.backgroundPath}`
-        : `https://manager.npmrundev.ru/image/show/${this.backgroundPath}`
+        ? `${process.env.baseUrl}/image/grayscale/${this.backgroundPath}`
+        : `${process.env.baseUrl}/image/show/${this.backgroundPath}`
     }
   },
   methods: {

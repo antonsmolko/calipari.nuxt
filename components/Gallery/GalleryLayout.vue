@@ -17,8 +17,6 @@
             :mode="mode"
             :keyValue="keyValue"
             :open="filterOpen"
-            :value="filter"
-            @reset="handleFilterReset"
             @close="handleFilterClose"
             @filter="handleFilter"
         )
@@ -63,17 +61,15 @@ export default {
     }
   },
   data: () => ({
-    filter: {
-      tags: [],
-      categories: []
-    },
     filterOpen: false,
     responseData: false
   }),
   computed: {
-    ...mapState('images', {
-      images: state => state.items,
-      pagination: state => state.pagination
+    ...mapState({
+      images: state => state.images.items,
+      pagination: state => state.images.pagination,
+      filter: state => state.filter.current,
+      lastPreview: state => state.images.lastPreview
     }),
     paginationData () {
       return {
@@ -87,7 +83,7 @@ export default {
       return this.pagination.total === this.images.length
     },
     filterQty () {
-      return [...this.filter.tags, ...this.filter.categories].length
+      return this.$store.getters['filter/currentQty']
     },
     imagesRequest () {
       return {
@@ -98,34 +94,30 @@ export default {
     }
   },
   async mounted () {
-    await this.refreshItems()
+    if (!this.lastPreview || !this.images.length) {
+      await this.refreshItems()
+    }
     this.responseData = true
   },
   methods: {
     ...mapActions({
-      setPageTitleAction: 'setFields',
+      setFieldsAction: 'setFields',
       getCategoryItemsAction: 'images/getCategoryItems',
       getWishListAction: 'images/getWishList',
       updatePaginationFieldsAction: 'images/updatePaginationFields',
       setImagesFieldsAction: 'images/setFields',
       resetPaginationAction: 'images/resetPagination',
-      removeItemAction: 'images/removeItem'
+      removeItemAction: 'images/removeItem',
+      clearFilterFieldsAction: 'filter/clearFields'
     }),
     handleFilterOpen () {
       this.filterOpen = true
       this.setFieldsAction({ bottomBar: false })
     },
-    async handleFilter (value) {
-      this.filter = value
+    async handleFilter () {
       await this.refreshItems()
       this.filterOpen = false
       this.setFieldsAction({ bottomBar: true })
-    },
-    handleFilterReset (value) {
-      this.filter.tags = []
-      this.filter.categories = []
-      this.clearImagePaginationState()
-      this.refreshItems()
     },
     handleFilterClose () {
       this.filterOpen = false
@@ -139,6 +131,7 @@ export default {
       this.setImagesFieldsAction({ loading: false })
     },
     async refreshItems () {
+      this.clearFilterFieldsAction()
       this.clearImagePaginationState()
       await this.getItemsByMode()
     },
@@ -150,6 +143,7 @@ export default {
       this.mode === 'wishList'
         ? await this.getWishListAction(this.imagesRequest)
         : await this.getCategoryItemsAction(this.imagesRequest)
+      this.setImagesFieldsAction({ loading: false })
     },
     dislike (id) {
       if (this.mode === 'wishList') {

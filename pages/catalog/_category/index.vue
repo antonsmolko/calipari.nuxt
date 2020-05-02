@@ -9,13 +9,14 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 import GalleryLayout from '~/components/Gallery/GalleryLayout'
 import setLayout from '~/components/mixins/setLayout'
 
 export default {
   name: 'Category',
+  scrollToTop: true,
   components: {
     GalleryLayout
   },
@@ -31,9 +32,23 @@ export default {
       })
   },
   computed: {
-    ...mapState('categories', {
-      item: state => state.item
+    ...mapState({
+      item: state => state.categories.item
     })
+  },
+  mounted () {
+    window.scrollTo(0, 0)
+  },
+  methods: {
+    ...mapActions('filter', {
+      clearFiltersAction: 'clearFilters'
+    })
+  },
+  beforeRouteLeave (to, from, next) {
+    if (to.name !== 'editor-id') {
+      this.clearFiltersAction()
+    }
+    next()
   }
 }
 </script>

@@ -1,5 +1,6 @@
 <template lang="pug">
     .tm-mosaic__image.item.withImage.uk-box-shadow-small(
+        data-uk-scrollspy="cls:uk-animation-fade; duration: 300"
         :id="`image-${image.id}`"
         :data-aspect-ratio="image.ratio"
         :style="`background-image: url('${url}')`")
@@ -45,7 +46,7 @@ export default {
   }),
   computed: {
     url () {
-      return `https://manager.npmrundev.ru/image/heighten/400/${this.image.path}`
+      return `${process.env.baseUrl}/image/heighten/400/${this.image.path}`
     },
     liked () {
       return this.$store.getters['wishList/liked'](this.image.id)

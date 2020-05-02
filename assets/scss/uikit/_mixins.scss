@@ -1,51 +1,40 @@
 // Accordion
 @mixin hook-accordion-title() {
-  .tm-parent > & {
-    &::before {
-      content: "";
-      width: 1.4em;
-      height: 1.4em;
-      margin-left: 10px;
-      float: right;
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2213%22%20height%3D%2213%22%20viewBox%3D%220%200%2013%2013%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Crect%20fill%3D%22%23666%22%20width%3D%2213%22%20height%3D%221%22%20x%3D%220%22%20y%3D%226%22%20%2F%3E%0A%20%20%20%20%3Crect%20fill%3D%22%23666%22%20width%3D%221%22%20height%3D%2213%22%20x%3D%226%22%20y%3D%220%22%20%2F%3E%0A%3C%2Fsvg%3E");
-      background-repeat: no-repeat;
-      background-position: 50% 50%;
-    }
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  align-items: center;
+  &::before {
+    content: "";
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    float: right;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2213%22%20height%3D%2213%22%20viewBox%3D%220%200%2013%2013%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Crect%20fill%3D%22%23666%22%20width%3D%2213%22%20height%3D%221%22%20x%3D%220%22%20y%3D%226%22%20%2F%3E%0A%20%20%20%20%3Crect%20fill%3D%22%23666%22%20width%3D%221%22%20height%3D%2213%22%20x%3D%226%22%20y%3D%220%22%20%2F%3E%0A%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
   }
-  .tm-parent.uk-open > & {
+  .uk-open & {
     &::before {
       background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2213%22%20height%3D%2213%22%20viewBox%3D%220%200%2013%2013%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Crect%20fill%3D%22%23666%22%20width%3D%2213%22%20height%3D%221%22%20x%3D%220%22%20y%3D%226%22%20%2F%3E%0A%3C%2Fsvg%3E");
     }
   }
-  // &.uk-empty {
-  // overflow: hidden;
-  // &::before {
-  //     display: none !important;
-  // }
-  // & + .uk-accordion-content {
-  // overflow: hidden !important;
-  // height: 0 !important;
-  // position: absolute !important;
-  // visibility: hidden !important;
-  // transition: none !important;
-  // transform: none !important;
-  // padding: 0 !important;
-  // margin: 0 !important;
-  // }
-  // }
+  .uk-light & {
+    color: #3CC4FC;
+  }
 }
 
-@mixin hook-accordion-content() {
-  // height: 0;
-  // max-height: 0;
-  // overflow: hidden;
-  // transition: max-height .5s ease-in-out;
-
-  // .uk-open > & {
-  // max-height: 700px;
-  // }
-  transition: all .3s ease;
-}
+//@mixin hook-accordion-content() {
+//  // height: 0;
+//  // max-height: 0;
+//  // overflow: hidden;
+//  // transition: max-height .5s ease-in-out;
+//
+//  // .uk-open > & {
+//  // max-height: 700px;
+//  // }
+//  transition: all .3s ease;
+//}
 
 // Background
 
