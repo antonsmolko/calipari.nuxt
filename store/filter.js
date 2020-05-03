@@ -10,7 +10,7 @@ export const state = () => ({
     tags: [],
     formats: []
   },
-  current: {
+  currents: {
     topics: [],
     colors: [],
     interiors: [],
@@ -46,13 +46,13 @@ export const mutations = {
       ? state.selected[field].splice(1, 0, value)
       : state.selected[field].splice(index, 1)
   },
-  SET_CURRENT (state) {
+  SYNC_CURRENTS (state) {
     for (const [key, value] of Object.entries(state.selected)) {
-      state.current[key] = [...value]
+      state.currents[key] = [...value]
     }
   },
-  SET_SELECTED (state) {
-    for (const [key, value] of Object.entries(state.current)) {
+  SYNC_SELECTED (state) {
+    for (const [key, value] of Object.entries(state.currents)) {
       state.selected[key] = [...value]
     }
   },
@@ -64,8 +64,11 @@ export const mutations = {
   CLEAR_FILTERS (state) {
     for (const key of Object.keys(state.selected)) {
       state.selected[key] = []
-      state.current[key] = []
+      state.currents[key] = []
     }
+  },
+  SET_CURRENT_TAG (state, payload) {
+    state.currents.tags = [payload].slice(0, 1)
   },
   SET_LOADING (state, payload) {
     state.loading = payload
@@ -96,21 +99,24 @@ export const actions = {
   clearFilters ({ commit }) {
     commit('CLEAR_FILTERS')
   },
-  setCurrent ({ commit }) {
-    commit('SET_CURRENT')
+  syncCurrents ({ commit }) {
+    commit('SYNC_CURRENTS')
   },
-  setSelected ({ commit }) {
-    commit('SET_SELECTED')
+  syncSelected ({ commit }) {
+    commit('SYNC_SELECTED')
   },
   clearSelected ({ commit }) {
     commit('CLEAR_SELECTED')
+  },
+  setCurrentTag ({ commit }, payload) {
+    commit('SET_CURRENT_TAG', payload)
   }
 }
 
 export const getters = {
   isSelected: state => (field, id) => state.selected[field].includes(id),
-  isSelectedDiff: state => !noDiff(state.current, state.selected),
+  isSelectedDiff: state => !noDiff(state.currents, state.selected),
   selectedQty: state => values(state.selected).flat().length,
-  currentQty: state => values(state.current).flat().length,
+  currentQty: state => values(state.currents).flat().length,
   selectedFieldQty: state => field => state.selected[field].length
 }

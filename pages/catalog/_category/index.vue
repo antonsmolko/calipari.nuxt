@@ -23,14 +23,10 @@ export default {
   },
   mixins: [setLayout, scrollToTop],
   async fetch ({ store, params }) {
-    await store.$api.$get(`/catalog/categories/${params.category}`)
-      .then((response) => {
-        store.commit('categories/SET_ITEM', response)
-        store.commit('SET_FIELDS', {
-          pageTitle: response.title,
-          footer: false
-        })
-      })
+    const category = await store.getters['categories/getItemByAlias'](params.category)
+    store.commit('categories/SET_FIELD', { field: 'item', value: category })
+    await store.dispatch('categories/getItemTags', category.id)
+    store.commit('SET_FIELDS', { pageTitle: category.title, footer: false })
   },
   computed: {
     ...mapState({

@@ -3,7 +3,7 @@
         .tm-section__semitransparent-background.uk-position-cover.uk-background-cover.uk-background-fixed(
             :data-src="url"
             data-uk-img)
-        .uk-container
+        .uk-container.uk-position-relative
             .uk-margin-large-top.uk-margin-medium-bottom.uk-width-xxlarge(
                 data-uk-scrollspy="cls: uk-animation-slide-bottom-small")
                 h1.uk-heading-medium {{ title }}
@@ -11,6 +11,7 @@
             p.tm-text-medium.uk-margin-large-bottom.uk-width-xxlarge(
                 v-if="intro"
                 data-uk-scrollspy="cls: uk-animation-slide-bottom-small; delay: 500") {{ intro }}
+            slot(name="tags")
 </template>
 
 <script>

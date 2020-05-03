@@ -4,10 +4,12 @@
             v-if="!filterOpen"
             :title="title"
             :images="images"
+            :tags="tags"
             :backgroundPath="backgroundPath"
             :intro="intro"
             :paginateEnd="paginateEnd"
             :filterQty="filterQty"
+            @tagging="handleTagging"
             @filterOpen="handleFilterOpen"
             @paginate="paginate"
             @dislike="dislike"
@@ -67,8 +69,9 @@ export default {
   computed: {
     ...mapState({
       images: state => state.images.items,
+      tags: state => state.categories.tags,
       pagination: state => state.images.pagination,
-      filter: state => state.filter.current,
+      filter: state => state.filter.currents,
       lastPreview: state => state.images.lastPreview
     }),
     paginationData () {
@@ -108,7 +111,8 @@ export default {
       setImagesFieldsAction: 'images/setFields',
       resetPaginationAction: 'images/resetPagination',
       removeItemAction: 'images/removeItem',
-      clearFilterFieldsAction: 'filter/clearFields'
+      clearFilterFieldsAction: 'filter/clearFields',
+      setCurrentTagAction: 'filter/setCurrentTag'
     }),
     handleFilterOpen () {
       this.filterOpen = true
@@ -143,12 +147,25 @@ export default {
       this.mode === 'wishList'
         ? await this.getWishListAction(this.imagesRequest)
         : await this.getCategoryItemsAction(this.imagesRequest)
-      this.setImagesFieldsAction({ loading: false })
+      // this.setImagesFieldsAction({ loading: false })
     },
     dislike (id) {
       if (this.mode === 'wishList') {
         this.removeItemAction(id)
       }
+    },
+    handleTagging (tag) {
+      tag
+        ? this.getTaggedImages(tag)
+        : this.refreshItems()
+    },
+    async getTaggedImages (tag) {
+      await Promise.all([
+        this.clearFilterFieldsAction(),
+        this.clearImagePaginationState()
+      ])
+      await this.setCurrentTagAction(tag)
+      await this.getItemsByMode()
     }
   }
 }

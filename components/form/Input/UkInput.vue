@@ -42,7 +42,7 @@ export default {
   methods: {
     onInput (e) {
       const value = e.target.value
-      this.$emit('input', { [this.name]: value })
+      this.$emit('input', { field: this.name, value })
     }
   }
 }

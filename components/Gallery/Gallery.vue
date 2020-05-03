@@ -13,6 +13,20 @@
                     :backgroundPath="backgroundPath"
                     :grayscaleMod="true"
                     :intro="intro")
+                    template(#tags)
+                        .tm-gallery__tags.uk-flex.uk-flex-wrap(
+                            data-uk-scrollspy="cls: uk-animation-fade"
+                            v-if="tags.length")
+                            GalleryTag(
+                                :active="true"
+                                @click="handleTagClick")
+                            GalleryTag(
+                                v-for="tag in tags"
+                                :key="tag.id"
+                                :item="tag"
+                                @click="handleTagClick"
+                            )
+
                 section.uk-section(v-show="images.length")
                     .uk-container.uk-container-expand
                         div(ref="mosaic")
@@ -33,6 +47,7 @@ import { mapState, mapActions } from 'vuex'
 import VueScrollTo from 'vue-scrollto'
 import GalleryHero from './GalleryHero'
 import GalleryImage from './GalleryImage'
+import GalleryTag from './GalleryTag'
 import TopBar from '~/components/layout/TopBar.vue'
 import Observer from '~/components/Observer'
 import Mosaic from '~/plugins/mosaic'
@@ -43,7 +58,8 @@ export default {
     GalleryHero,
     TopBar,
     Observer,
-    GalleryImage
+    GalleryImage,
+    GalleryTag
   },
   props: {
     title: {
@@ -69,6 +85,10 @@ export default {
     filterQty: {
       type: [Number, String],
       default: null
+    },
+    tags: {
+      type: Array,
+      default: () => []
     }
   },
   data: () => ({
@@ -167,6 +187,9 @@ export default {
         onDone: () => this.setImageFieldsAction({ lastPreview: null })
       }
       VueScrollTo.scrollTo(`#image-${this.lastPreview}`, 300, options)
+    },
+    handleTagClick (tag) {
+      this.$emit('tagging', tag)
     }
   }
 }

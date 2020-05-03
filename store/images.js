@@ -14,6 +14,7 @@ export const state = () => ({
     sort_by: 'id',
     sort_order: 'asc'
   },
+  tags: [],
   loading: false,
   lastPreview: null
 })

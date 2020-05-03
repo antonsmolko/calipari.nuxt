@@ -136,8 +136,7 @@ export default {
   computed: {
     ...mapState('filter', {
       fields: state => state.fields,
-      selected: state => state.selected,
-      current: state => state.current
+      selected: state => state.selected
     }),
     ...mapGetters('filter', [
       'isSelectedDiff',
@@ -146,7 +145,7 @@ export default {
   },
   created () {
     this.setFieldsAction({ footer: false })
-    this.setSelectedFiltersAction()
+    this.syncSelectedFiltersAction()
     this.responseData = true
   },
   methods: {
@@ -154,11 +153,11 @@ export default {
       getFiltersAction: 'getFilters',
       toggleSelectedAction: 'toggleSelected',
       clearSelectedAction: 'clearSelected',
-      setSelectedFiltersAction: 'setSelected',
-      setCurrentFiltersAction: 'setCurrent'
+      syncSelectedFiltersAction: 'syncSelected',
+      syncCurrentsFiltersAction: 'syncCurrents'
     }),
     apply () {
-      this.setCurrentFiltersAction()
+      this.syncCurrentsFiltersAction()
       this.$emit('filter')
     },
     reset () {
