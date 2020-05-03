@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import TopBar from '~/components/layout/TopBar'
 import OrderItem from '~/components/Orders/OrderItem'
 import OrderDetailsItem from '~/components/Orders/OrderDetailsItem'
@@ -73,16 +73,16 @@ export default {
     OrderItem,
     OrderDetailsItem
   },
-  middleware: ['auth'],
+  // middleware: ['auth'],
   async fetch ({ route, store }) {
     const orderNumber = route.params.number
     await store.dispatch('profile/getOrder', orderNumber)
     store.commit('SET_FIELDS', { pageTitle: `Заказ # ${orderNumber}` })
   },
   computed: {
-    order () {
-      return this.$store.getters['profile/getOrder'](this.$route.params.number)
-    }
+    ...mapState('profile', {
+      order: state => state.order
+    })
   },
   methods: {
     ...mapActions({
@@ -96,7 +96,7 @@ export default {
       return getFormatPrice(price)
     },
     onPay () {
-      this.$emit('pay', this.order.number)
+      this.$router.push(`/payment/${this.order.hash_number}`)
     },
     onCancel () {
       this.cancelOrderAction(this.order.number)

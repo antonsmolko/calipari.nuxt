@@ -25,9 +25,6 @@ export default {
     checkout: null,
     responseData: false
   }),
-  // fetch ({ store, params }) {
-  //   store.dispatch('payment/create', params.hash)
-  // },
   computed: {
     ...mapState('payment', {
       payment: state => state.item

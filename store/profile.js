@@ -137,6 +137,5 @@ export const getters = {
   },
   localityIsInvalid: state => !state.fields.locality ||
     !Object.hasOwnProperty.call(state.fields.locality, 'name') ||
-    !Object.hasOwnProperty.call(state.fields.locality, 'id'),
-  getOrder: state => number => state.orders.find(order => order.number === number)
+    !Object.hasOwnProperty.call(state.fields.locality, 'id')
 }
