@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import { mapState, mapActions } from 'vuex'
 
-const Validation = {
+const PageSettings = {
   install (Vue, options) {
     Vue.mixin({
+      scrollToTop: true,
       computed: {
         ...mapState({
           pageTitle: state => state.pageTitle,
@@ -20,4 +21,4 @@ const Validation = {
   }
 }
 
-Vue.use(Validation)
+Vue.use(PageSettings)

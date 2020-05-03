@@ -22,7 +22,7 @@
                 :placeholder="placeholder"
                 :class="{ 'uk-config-danger': vField && vField.$error }"
             )
-        .under-input-notice(v-if="vRules && vField && vField.$error")
+        .under-input-notice.uk-position-relative(v-if="vRules && vField && vField.$error")
             InputNotificationRequire(v-if="!vField.required && vRules.required" :name="title")
             InputNotificationUnique(v-else-if="!vField.unique && vRules.unique" :name="title")
             InputNotificationMinString(v-else-if="!vField.minLength && vRules.minLength" :name="title" :min="min")
@@ -149,7 +149,7 @@ export default {
   },
   methods: {
     onInput (e) {
-      const value = e.target.value
+      let value = e.target.value
       this.currentValue = value
 
       if (this.vField && this.vDelay) {
@@ -158,12 +158,11 @@ export default {
         this.touched(this.vField, value)
       }
 
-      const payload = {}
-      payload[this.name] = this.trim ? value.trim() : value
+      value = this.trim ? value.trim() : value
 
-      this.$store.dispatch(`${this.storeModule}${this.dispatchName}`, payload)
+      this.$store.dispatch(`${this.storeModule}${this.dispatchName}`, { [this.name]: value })
 
-      this.$emit('input', payload)
+      this.$emit('input', { [this.name]: value })
     },
     setValidationDelay (v, value) {
       v.$reset()

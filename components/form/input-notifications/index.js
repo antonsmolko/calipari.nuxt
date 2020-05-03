@@ -4,6 +4,7 @@ import InputNotificationMinString from './InputNotificationMinString'
 import InputNotificationAlias from './InputNotificationAlias'
 import InputNotificationSameAsPassword from './InputNotificationSameAsPassword'
 import InputNotificationEmail from './InputNotificationEmail'
+import InputNotificationPhone from './InputNotificationPhone'
 
 export {
   InputNotificationRequire,
@@ -11,5 +12,6 @@ export {
   InputNotificationMinString,
   InputNotificationAlias,
   InputNotificationSameAsPassword,
-  InputNotificationEmail
+  InputNotificationEmail,
+  InputNotificationPhone
 }

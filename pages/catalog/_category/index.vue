@@ -13,6 +13,7 @@ import { mapState, mapActions } from 'vuex'
 
 import GalleryLayout from '~/components/Gallery/GalleryLayout'
 import setLayout from '~/components/mixins/setLayout'
+import scrollToTop from '~/components/mixins/scrollToTop'
 
 export default {
   name: 'Category',
@@ -20,7 +21,7 @@ export default {
   components: {
     GalleryLayout
   },
-  mixins: [setLayout],
+  mixins: [setLayout, scrollToTop],
   async fetch ({ store, params }) {
     await store.$api.$get(`/catalog/categories/${params.category}`)
       .then((response) => {
@@ -35,9 +36,6 @@ export default {
     ...mapState({
       item: state => state.categories.item
     })
-  },
-  mounted () {
-    window.scrollTo(0, 0)
   },
   methods: {
     ...mapActions('filter', {

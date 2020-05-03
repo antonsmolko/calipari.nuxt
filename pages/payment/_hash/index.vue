@@ -13,6 +13,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 export default {
+  scrollToTop: true,
   metaInfo () {
     return {
       script: [

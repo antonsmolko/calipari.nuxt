@@ -26,6 +26,7 @@
 import { mapState } from 'vuex'
 import SectionTextureItem from '~/components/sections/Textures/SectionTextureItem'
 import setLayout from '~/components/mixins/setLayout'
+import scrollToTop from '~/components/mixins/scrollToTop'
 
 export default {
   metaInfo () {
@@ -35,7 +36,7 @@ export default {
   },
   name: 'Textures',
   components: { SectionTextureItem },
-  mixins: [setLayout],
+  mixins: [setLayout, scrollToTop],
   async fetch ({ store }) {
     await store.$api.$get('/manager/textures')
       .then((response) => {

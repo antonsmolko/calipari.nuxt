@@ -11,6 +11,7 @@
                         :value="value"
                         @input="onInput"
                     )
+            slot(name="notification")
 </template>
 
 <script>
@@ -41,9 +42,7 @@ export default {
   methods: {
     onInput (e) {
       const value = e.target.value
-      const payload = {}
-      payload[this.name] = value
-      this.$emit('input', payload)
+      this.$emit('input', { [this.name]: value })
     }
   }
 }

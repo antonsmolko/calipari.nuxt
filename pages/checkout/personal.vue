@@ -72,20 +72,24 @@
                                             :vDelay="true"
                                             dispatchName="setCustomerFields"
                                         )
-                                        VInput(
-                                            class="uk-margin"
+                                        UkInput(
                                             title="Телефон"
-                                            :label="true"
-                                            icon="receiver"
-                                            type="phone"
                                             name="phone"
-                                            :value="customer.phone"
-                                            module="checkout"
-                                            :vField="$v.customer.phone"
-                                            :vRules="{ required: true }"
-                                            :vDelay="true"
-                                            dispatchName="setCustomerFields"
+                                            icon="phone"
                                         )
+                                            template(#input)
+                                                input(
+                                                    class="uk-input uk-form-large uk-box-shadow-medium"
+                                                    v-mask="$configForm.PHONE_MASK"
+                                                    :value="customer.phone"
+                                                    :tokens="token"
+                                                    @focus="handleControlPhone"
+                                                    @input="handleControlPhone"
+                                                    :masked="true"
+                                                )
+                                            template(#notification)
+                                                .under-input-notice.uk-position-relative(v-if="$v.customer.phone.$error")
+                                                    InputNotificationPhone(v-if="!$v.customer.phone.testPhone" name="Телефон")
                                         .uk-inline.uk-margin.uk-margin-medium-top.uk-width-1-1(class="uk-visible@l")
                                             .uk-flex.uk-flex-between
                                                 button.uk-button.uk-button-danger(
@@ -101,17 +105,23 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { required, minLength, email } from 'vuelidate/lib/validators'
+import { mask } from 'vue-the-mask'
 import VInput from '~/components/form/VInput'
+import UkInput from '~/components/form/Input/UkInput'
 import setLayout from '~/components/mixins/setLayout'
 import CheckoutLayout from '~/components/Checkout/CheckoutLayout'
+import { InputNotificationPhone } from '~/components/form/input-notifications'
 
 export default {
   name: 'Personal',
   components: {
     CheckoutLayout,
-    VInput
+    VInput,
+    UkInput,
+    InputNotificationPhone
   },
   middleware: ['guest'],
+  directives: { mask },
   mixins: [setLayout],
   metaInfo () {
     return {
@@ -119,7 +129,10 @@ export default {
     }
   },
   data: () => ({
-    sectionTitle: null
+    sectionTitle: null,
+    token: {
+      '#': { pattern: /\d/ }
+    }
   }),
   validations: {
     customer: {
@@ -145,6 +158,9 @@ export default {
       },
       phone: {
         required,
+        testPhone (value) {
+          return this.$configForm.PHONE_REGEXP.test(value)
+        },
         touch: false
       }
     }
@@ -173,6 +189,7 @@ export default {
   methods: {
     ...mapActions({
       setCheckoutFieldsAction: 'checkout/setFields',
+      setCustomerFieldsAction: 'checkout/setCustomerFields',
       getAuthUserDetailsAction: 'profile/getDetails',
       setCheckoutCustomerFieldsAction: 'checkout/setCustomerFields',
       setProfileFieldsAction: 'profile/setFields',
@@ -191,6 +208,18 @@ export default {
     },
     setCheckoutInvalid (value) {
       this.setCheckoutFieldsAction({ invalid: value })
+    },
+    handleControlPhone (e) {
+      const input = e.target
+      const value = input.value
+      const startWith = this.$configForm.PHONE_START_WITH
+      let maskedValue = value
+      if ((value.length < 4) || !value.startsWith(startWith)) {
+        input.value = startWith
+        maskedValue = startWith
+      }
+      this.$v.customer.phone.$touch()
+      this.setCustomerFieldsAction({ phone: maskedValue })
     }
   }
 }

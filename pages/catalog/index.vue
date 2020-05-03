@@ -25,10 +25,10 @@ import CatalogTopicItem from '~/components/Catalog/CatalogTopicItem'
 import CatalogColorItem from '~/components/Catalog/CatalogColorItem'
 import CatalogInteriorItem from '~/components/Catalog/CatalogInteriorItem'
 import setLayout from '~/components/mixins/setLayout'
+import scrollToTop from '~/components/mixins/scrollToTop'
 
 export default {
   name: 'Catalog',
-  scrollToTop: true,
   metaInfo () {
     return {
       title: 'Каталог'
@@ -41,7 +41,7 @@ export default {
     CatalogColorItem,
     CatalogInteriorItem
   },
-  mixins: [setLayout],
+  mixins: [setLayout, scrollToTop],
   async fetch ({ store }) {
     await store.$api.$get('/catalog/categories')
       .then(response => store.commit('categories/SET_ITEMS', response))
@@ -62,9 +62,6 @@ export default {
   },
   created () {
     this.setFieldsAction({ pageTitle: 'Каталог' })
-  },
-  mounted () {
-    window.scrollTo(0, 0)
   }
 }
 </script>

@@ -81,7 +81,6 @@
                                                 title="Телефон"
                                                 name="phone"
                                                 icon="phone"
-                                                @input="handleVInput"
                                             )
                                                 template(#input)
                                                     input(
@@ -93,6 +92,9 @@
                                                         @input="handleControlPhone"
                                                         :masked="true"
                                                     )
+                                                template(#notification)
+                                                    .under-input-notice.uk-position-relative(v-if="$v.fields.phone.$error")
+                                                        InputNotificationPhone(v-if="!$v.fields.phone.testPhone" name="Телефон")
                                             .uk-margin-medium-top(v-if="fromRoute")
                                                 button.uk-button.uk-button-primary(
                                                     :disabled="$v.fields.$invalid"
@@ -140,11 +142,11 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import { email, minLength, required } from 'vuelidate/lib/validators'
 import { mask } from 'vue-the-mask'
 import debounce from 'lodash/debounce'
-import forOwn from 'lodash/forOwn'
 import TopBar from '~/components/layout/TopBar'
 import VInput from '~/components/form/VInput'
 import UkInput from '~/components/form/Input/UkInput'
 import VSelect from '~/components/form/Select/VSelect'
+import { InputNotificationPhone } from '~/components/form/input-notifications'
 import setLayout from '~/components/mixins/setLayout'
 const _debounce = debounce(value => value(), 300)
 export default {
@@ -154,7 +156,8 @@ export default {
     TopBar,
     VInput,
     UkInput,
-    VSelect
+    VSelect,
+    InputNotificationPhone
   },
   directives: { mask },
   mixins: [setLayout],
@@ -250,13 +253,13 @@ export default {
       getSettlementsAction: 'delivery/getSettlements',
       setCheckoutFieldsAction: 'checkout/setFields'
     }),
-    handleVInput (payload) {
-      this.setProfileFieldsAction(payload)
-      forOwn(payload, (value, key) => this.$v.fields[key].$touch)
+    handleVInput ({ field, value }) {
+      this.setProfileFieldsAction({ [field]: value })
+      this.$v.fields[field].$touch()
       _debounce(this.updateAction)
     },
-    handleInput (payload) {
-      this.setProfileFieldsAction(payload)
+    handleInput ({ field, value }) {
+      this.setProfileFieldsAction({ [field]: value })
       _debounce(this.updateAction)
     },
     nameControl () {
@@ -302,6 +305,7 @@ export default {
         input.value = startWith
         maskedValue = startWith
       }
+      this.$v.fields.phone.$touch()
       this.setProfileFieldsAction({ phone: maskedValue })
       if (maskedValue.match(this.$configForm.PHONE_REGEXP)) {
         _debounce(this.updateAction)
