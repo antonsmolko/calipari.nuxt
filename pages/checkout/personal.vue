@@ -24,7 +24,7 @@
                                             name="last_name"
                                             :value="customer.last_name"
                                             module="checkout"
-                                            :min="2"
+                                            :min="$configForm.BASE_MIN_LENGTH"
                                             :vField="$v.customer.last_name"
                                             :vRules="{ required: true, minLength: true }"
                                             :vDelay="true"
@@ -38,7 +38,7 @@
                                             name="first_name"
                                             :value="customer.first_name"
                                             module="checkout"
-                                            :min="2"
+                                            :min="$configForm.BASE_MIN_LENGTH"
                                             :vField="$v.customer.first_name"
                                             :vRules="{ required: true, minLength: true }"
                                             :vDelay="true"
@@ -52,7 +52,7 @@
                                             name="middle_name"
                                             :value="customer.middle_name"
                                             module="checkout"
-                                            :min="2"
+                                            :min="$configForm.BASE_MIN_LENGTH"
                                             :vField="$v.customer.middle_name"
                                             :vRules="{ required: true, minLength: true }"
                                             :vDelay="true"
@@ -190,10 +190,7 @@ export default {
       this.$router.push('/checkout/delivery')
     },
     setCheckoutInvalid (value) {
-      this.setCheckoutFieldsAction({
-        invalid: value,
-        customerInvalid: value
-      })
+      this.setCheckoutFieldsAction({ invalid: value })
     }
   }
 }

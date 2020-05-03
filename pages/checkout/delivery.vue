@@ -35,7 +35,7 @@
                                 @click.prevent="onPrev"
                             ) Назад
                             button.uk-button.uk-button-primary(
-                                :disabled="deliveryIsInvalid"
+                                :disabled="invalid"
                                 @click.prevent="onNext"
                                 type="submit"
                             ) Продолжить
@@ -72,7 +72,8 @@ export default {
       pickups: state => state.settings.items.pickups,
       selectDeliveryId: state => state.checkout.delivery,
       pickup: state => state.checkout.pickup,
-      enabled: state => state.checkout.enabled
+      enabled: state => state.checkout.enabled,
+      invalid: state => state.checkout.invalid
     }),
     ...mapGetters({
       defaultDeliveryId: 'delivery/defaultItemId',
@@ -83,6 +84,11 @@ export default {
     }),
     selectDelivery () {
       return this.$store.getters['delivery/getItemById'](this.selectDeliveryId)
+    }
+  },
+  watch: {
+    deliveryIsInvalid () {
+      this.setCheckoutInvalid(this.deliveryIsInvalid)
     }
   },
   created () {
@@ -96,6 +102,7 @@ export default {
       this.setCheckoutFieldsAction({ pickup: this.defaultPickup })
     }
     this.setDefaultDelivery()
+    this.setCheckoutInvalid(this.deliveryIsInvalid)
     this.setFieldsAction({ pageTitle: 'Оформление заказа. Способы доставки' })
   },
   methods: {
@@ -120,6 +127,9 @@ export default {
     },
     changePickup (value) {
       this.setCheckoutFieldsAction({ pickup: value })
+    },
+    setCheckoutInvalid (value) {
+      this.setCheckoutFieldsAction({ invalid: value })
     }
   }
 }
