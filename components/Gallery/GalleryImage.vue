@@ -1,6 +1,6 @@
 <template lang="pug">
     .tm-mosaic__image.item.withImage.uk-box-shadow-small(
-        data-uk-scrollspy="cls:uk-animation-fade; delay: 300"
+        data-uk-scrollspy="cls:uk-animation-fade; delay: 200"
         :id="`image-${image.id}`"
         :data-aspect-ratio="image.ratio"
         :style="`background-image: url('${url}')`")

@@ -18,12 +18,13 @@
                             data-uk-scrollspy="cls: uk-animation-fade"
                             v-if="tags.length")
                             GalleryTag(
-                                :active="true"
+                                :active="!currentQty"
                                 @click="handleTagClick")
                             GalleryTag(
                                 v-for="tag in tags"
                                 :key="tag.id"
                                 :item="tag"
+                                :active="activeTag === tag.id"
                                 @click="handleTagClick"
                             )
 
@@ -42,7 +43,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 import VueScrollTo from 'vue-scrollto'
 import GalleryHero from './GalleryHero'
@@ -114,7 +115,11 @@ export default {
     ...mapState('images', {
       loading: state => state.loading,
       lastPreview: state => state.lastPreview
-    })
+    }),
+    ...mapGetters('filter', [
+      'currentQty',
+      'activeTag'
+    ])
   },
   watch: {
     images () {

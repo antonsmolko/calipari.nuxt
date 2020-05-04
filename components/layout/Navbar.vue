@@ -16,7 +16,8 @@
                             li: a(href="#") Контакты
                     .uk-navbar-right
                         ul.uk-navbar-nav.tm-navbar-icon(class="uk-visible@m")
-                            li.uk-navbar-item: a(href="" data-uk-icon="search")
+                            li.uk-navbar-item
+                                nuxt-link(to="/search" data-uk-icon="search")
                             li.uk-navbar-item
                                 nuxt-link(to="/wishlist" data-uk-icon="heart")
                                     span.uk-badge(v-if="likeQty") {{ likeQty }}

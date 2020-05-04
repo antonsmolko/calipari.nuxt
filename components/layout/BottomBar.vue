@@ -7,6 +7,8 @@
                     span.tm-bottombar__item-title Главная
                 li: nuxt-link(to="/catalog" data-uk-icon="album")
                     span.tm-bottombar__item-title Каталог
+                li: nuxt-link(to="/search" data-uk-icon="search")
+                    span.tm-bottombar__item-title Поиск
                 li: nuxt-link(to="/cart" data-uk-icon="bag")
                     span.uk-badge(v-if="cartQty") {{ cartQty }}
                     span.tm-bottombar__item-title Корзина

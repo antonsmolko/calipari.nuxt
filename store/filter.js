@@ -1,4 +1,5 @@
 import values from 'lodash/values'
+import head from 'lodash/head'
 import { noDiff, getParamsString } from '../helpers'
 import action from './mixins/action'
 
@@ -118,5 +119,9 @@ export const getters = {
   isSelectedDiff: state => !noDiff(state.currents, state.selected),
   selectedQty: state => values(state.selected).flat().length,
   currentQty: state => values(state.currents).flat().length,
-  selectedFieldQty: state => field => state.selected[field].length
+  selectedFieldQty: state => field => state.selected[field].length,
+  isTagged: (state, getters) => getters.currentQty === 1 && state.currents.tags.length === 1,
+  activeTag: (state, getters) => getters.isTagged
+    ? head(state.currents.tags)
+    : null
 }

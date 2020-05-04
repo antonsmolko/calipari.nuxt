@@ -112,6 +112,7 @@ export default {
       resetPaginationAction: 'images/resetPagination',
       removeItemAction: 'images/removeItem',
       clearFilterFieldsAction: 'filter/clearFields',
+      clearFilterAction: 'filter/clearFilters',
       setCurrentTagAction: 'filter/setCurrentTag'
     }),
     handleFilterOpen () {
@@ -155,9 +156,9 @@ export default {
       }
     },
     handleTagging (tag) {
-      tag
+      tag !== null
         ? this.getTaggedImages(tag)
-        : this.refreshItems()
+        : this.resetTags()
     },
     async getTaggedImages (tag) {
       await Promise.all([
@@ -166,6 +167,10 @@ export default {
       ])
       await this.setCurrentTagAction(tag)
       await this.getItemsByMode()
+    },
+    resetTags () {
+      this.clearFilterAction()
+      this.refreshItems()
     }
   }
 }

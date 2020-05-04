@@ -43,12 +43,15 @@ export default {
             content: '';
             display: block;
             position: absolute;
-            top: 100%;
+            bottom: -4px;
             left: 0;
             right: 0;
             width: 100%;
             height: 2px;
+            opacity: 0;
             background: $primary-gradient;
+            animation-timing-function: $transition-timing-function;
+            animation: slide-bottom $transition-duration forwards;
         }
         .uk-light & {
             &::before {
@@ -59,6 +62,16 @@ export default {
             &::before {
                 margin-top: 2px;
             }
+        }
+    }
+    @keyframes slide-bottom {
+        0% {
+            bottom: -6px;
+            opacity: 0;
+        }
+        100% {
+            bottom: -4px;
+            opacity: 1;
         }
     }
 }
