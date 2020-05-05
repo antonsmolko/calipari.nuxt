@@ -6,9 +6,6 @@
             :images="images"
             :tags="tags"
             :backgroundPath="backgroundPath"
-            :intro="intro"
-            :paginateEnd="paginateEnd"
-            :filterQty="filterQty"
             @tagging="handleTagging"
             @filterOpen="handleFilterOpen"
             @paginate="paginate"
@@ -29,7 +26,6 @@ import { mapState, mapActions } from 'vuex'
 
 import TopBar from '~/components/layout/TopBar.vue'
 import ImageFilter from '~/components/ImageFilter/ImageFilter'
-import setLayout from '~/components/mixins/setLayout'
 import Gallery from '~/components/Gallery/Gallery'
 
 export default {
@@ -39,7 +35,6 @@ export default {
     ImageFilter,
     TopBar
   },
-  mixins: [setLayout],
   props: {
     title: {
       type: String,
@@ -56,10 +51,6 @@ export default {
     backgroundPath: {
       type: String,
       default: ''
-    },
-    intro: {
-      type: String,
-      default: ''
     }
   },
   data: () => ({
@@ -69,31 +60,13 @@ export default {
   computed: {
     ...mapState({
       images: state => state.images.items,
-      tags: state => state.categories.tags,
-      pagination: state => state.images.pagination,
-      filter: state => state.filter.currents,
+      tags: state => state.tags.items,
       lastPreview: state => state.images.lastPreview
     }),
-    paginationData () {
-      return {
-        current_page: this.pagination.current_page,
-        per_page: this.pagination.per_page,
-        sort_order: this.pagination.sort_order,
-        sort_by: this.pagination.sort_by
-      }
-    },
-    paginateEnd () {
-      return this.pagination.total === this.images.length
-    },
-    filterQty () {
-      return this.$store.getters['filter/currentQty']
-    },
-    imagesRequest () {
-      return {
-        key: this.keyValue,
-        filter: this.filterQty ? this.filter : null,
-        pagination: this.paginationData
-      }
+    filterElement () {
+      return this.mode === 'wishList'
+        ? { keys: this.keyValue }
+        : { category: this.keyValue }
     }
   },
   async mounted () {
@@ -102,13 +75,16 @@ export default {
     }
     this.responseData = true
   },
+  destroyed () {
+    this.setFieldTagsAction({ field: 'items', value: [] })
+  },
   methods: {
     ...mapActions({
       setFieldsAction: 'setFields',
-      getCategoryItemsAction: 'images/getCategoryItems',
-      getWishListAction: 'images/getWishList',
+      setFieldTagsAction: 'tags/setField',
+      getItemsAction: 'images/getItems',
       updatePaginationFieldsAction: 'images/updatePaginationFields',
-      setImagesFieldsAction: 'images/setFields',
+      setImagesFieldAction: 'images/setField',
       resetPaginationAction: 'images/resetPagination',
       removeItemAction: 'images/removeItem',
       clearFilterFieldsAction: 'filter/clearFields',
@@ -129,26 +105,20 @@ export default {
       this.setFieldsAction({ bottomBar: true })
     },
     async paginate () {
-      this.updatePaginationFieldsAction({
-        current_page: this.pagination.current_page + 1
-      })
-      await this.getItemsByMode()
-      this.setImagesFieldsAction({ loading: false })
+      await this.getItems(true)
+      this.setImagesFieldAction({ field: 'loading', value: false })
     },
     async refreshItems () {
       this.clearFilterFieldsAction()
       this.clearImagePaginationState()
-      await this.getItemsByMode()
+      await this.getItems()
     },
     clearImagePaginationState () {
       this.resetPaginationAction()
-      this.setImagesFieldsAction({ items: [] })
+      this.setImagesFieldAction({ field: 'items', value: [] })
     },
-    async getItemsByMode () {
-      this.mode === 'wishList'
-        ? await this.getWishListAction(this.imagesRequest)
-        : await this.getCategoryItemsAction(this.imagesRequest)
-      // this.setImagesFieldsAction({ loading: false })
+    async getItems (increasePage = false) {
+      await this.getItemsAction({ filterElement: this.filterElement, increasePage })
     },
     dislike (id) {
       if (this.mode === 'wishList') {
@@ -166,7 +136,7 @@ export default {
         this.clearImagePaginationState()
       ])
       await this.setCurrentTagAction(tag)
-      await this.getItemsByMode()
+      await this.getItems()
     },
     resetTags () {
       this.clearFilterAction()

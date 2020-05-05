@@ -3,7 +3,6 @@
         GalleryLayout(
             :title="item.title"
             :backgroundPath="item.image_path"
-            :intro="item.description"
             :keyValue="item.id"
         )
 </template>
@@ -25,7 +24,7 @@ export default {
   async fetch ({ store, params }) {
     const category = await store.getters['categories/getItemByAlias'](params.category)
     store.commit('categories/SET_FIELD', { field: 'item', value: category })
-    await store.dispatch('categories/getItemTags', category.id)
+    await store.dispatch('tags/getItemsByCategoryId', category.id)
     store.commit('SET_FIELDS', { pageTitle: category.title, footer: false })
   },
   computed: {

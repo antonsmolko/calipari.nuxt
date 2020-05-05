@@ -18,11 +18,12 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 import GalleryLayout from '~/components/Gallery/GalleryLayout'
 import TopBar from '~/components/layout/TopBar'
 import setLayout from '~/components/mixins/setLayout'
+import scrollToTop from '~/components/mixins/scrollToTop'
 
 export default {
   name: 'WishList',
@@ -31,19 +32,22 @@ export default {
     TopBar,
     GalleryLayout
   },
-  mixins: [setLayout],
+  mixins: [setLayout, scrollToTop],
   computed: {
     ...mapState('wishList', {
       items: state => state.items
     })
   },
   created () {
+    if (this.items.length) {
+      this.getTagsAction(this.items)
+    }
     this.setFieldsAction({ pageTitle: 'Избранное' })
   },
-  mounted () {
-    window.scrollTo(0, 0)
-  },
   methods: {
+    ...mapActions('tags', {
+      getTagsAction: 'getItemsByImageKeys'
+    }),
     onClose () {
       this.$router.go(-1) ? this.$router.go(-1) : this.$router.push('/')
     }

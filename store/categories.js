@@ -2,8 +2,7 @@ import action from './mixins/action'
 
 export const state = () => ({
   item: {},
-  items: [],
-  tags: []
+  items: []
 })
 
 export const mutations = {
@@ -23,12 +22,6 @@ export const actions = {
     return action(this.$api, 'get', commit, {
       url: '/catalog/categories',
       thenContent: response => commit('SET_FIELD', { field: 'items', value: response.data })
-    })
-  },
-  getItemTags ({ commit }, id) {
-    return action(this.$api, 'get', commit, {
-      url: `/catalog/categories/${id}/tags`,
-      thenContent: response => commit('SET_FIELD', { field: 'tags', value: response.data })
     })
   }
 }

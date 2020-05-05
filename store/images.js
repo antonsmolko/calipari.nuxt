@@ -14,7 +14,6 @@ export const state = () => ({
     sort_by: 'id',
     sort_order: 'asc'
   },
-  tags: [],
   loading: false,
   lastPreview: null
 })
@@ -53,6 +52,9 @@ export const mutations = {
       }
     }
   },
+  SET_FIELD (state, { field, value }) {
+    state[field] = value
+  },
   REMOVE_ITEM (state, id) {
     state.items = state.items.filter(item => item.id !== id)
   }
@@ -65,14 +67,20 @@ export const actions = {
       thenContent: response => commit('SET_FIELDS', { item: response.data })
     })
   },
-  getWishList ({ commit }, { key, filter, pagination }) {
-    commit('SET_FIELDS', { loading: true })
+  getItems ({ state, commit, rootState }, { filterElement, increasePage = false }) {
+    commit('SET_FIELD', { field: 'loading', value: true })
 
     const baseUrl = '/catalog/images'
-    const params = getParamsString({
-      filter: { keys: key, ...filter },
-      pagination
-    })
+    const filter = { ...rootState.filter.currents, ...filterElement }
+    const pagination = {
+      current_page: increasePage
+        ? state.pagination.current_page + 1
+        : state.pagination.current_page,
+      per_page: state.pagination.per_page,
+      sort_order: state.pagination.sort_order,
+      sort_by: state.pagination.sort_by
+    }
+    const params = getParamsString({ filter, pagination })
     const url = params ? `${baseUrl}${params}` : baseUrl
 
     return action(this.$api, 'get', commit, {
@@ -80,26 +88,7 @@ export const actions = {
       thenContent: (response) => {
         commit('SET_PAGINATION', response.data.pagination)
         commit('SET_ITEMS', response.data.data)
-        commit('SET_FIELDS', { loading: false })
-      }
-    })
-  },
-  getCategoryItems ({ commit }, { key, filter, pagination }) {
-    commit('SET_FIELDS', { loading: true })
-
-    const baseUrl = '/catalog/images'
-    const params = getParamsString({
-      filter: { category: [key], ...filter },
-      pagination
-    })
-    const url = params ? `${baseUrl}${params}` : baseUrl
-
-    return action(this.$api, 'get', commit, {
-      url,
-      thenContent: (response) => {
-        commit('SET_PAGINATION', response.data)
-        commit('SET_ITEMS', response.data.data)
-        commit('SET_FIELDS', { loading: false })
+        commit('SET_FIELD', { field: 'loading', value: false })
       }
     })
   },
@@ -112,9 +101,14 @@ export const actions = {
   setFields ({ commit }, payload) {
     commit('SET_FIELDS', payload)
   },
+  setField ({ commit }, payload) {
+    commit('SET_FIELD', payload)
+  },
   removeItem ({ commit }, id) {
     commit('REMOVE_ITEM', id)
   }
 }
 
-export const getters = {}
+export const getters = {
+  paginateEnd: state => state.pagination.total === state.items.length
+}

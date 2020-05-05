@@ -20,7 +20,7 @@
                 template(#open-indicator="{ attributes }")
                     span(v-bind="attributes" data-uk-icon="chevron-down")
                 template(#no-options)
-                    | Введите город
+                    | Введите запрос
                 template(#spinner="{ loading }")
                     div(v-if="loading" data-uk-spinner)
                 template(#footer)

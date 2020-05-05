@@ -42,10 +42,6 @@ export default {
     CatalogInteriorItem
   },
   mixins: [setLayout, scrollToTop],
-  async fetch ({ store }) {
-    await store.$api.$get('/catalog/categories')
-      .then(response => store.commit('categories/SET_ITEMS', response))
-  },
   data: () => ({
     topBarTitle: 'Каталог'
   }),
