@@ -1,5 +1,6 @@
 import values from 'lodash/values'
 import head from 'lodash/head'
+import omit from 'lodash/omit'
 import { noDiff, getParamsString } from '../helpers'
 import action from './mixins/action'
 
@@ -77,9 +78,10 @@ export const mutations = {
 }
 
 export const actions = {
-  getFilters ({ commit }, { filter, condition = null }) {
+  getFilters ({ state, commit }, { restrictiveElement, condition = null }) {
     commit('SET_LOADING', true)
     const baseUrl = condition ? `/catalog/filters/${condition}` : '/catalog/filters'
+    const filter = { ...restrictiveElement, ...omit(state.selected, [condition]) }
     const params = getParamsString({ filter })
     const url = params ? `${baseUrl}${params}` : baseUrl
 

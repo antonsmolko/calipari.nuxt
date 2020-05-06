@@ -100,7 +100,6 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import omit from 'lodash/omit'
 import ImageFilterSection from './ImageFilterSection'
 import ImageFilterItem from './ImageFilterItem'
 import TopBar from '~/components/layout/TopBar'
@@ -122,7 +121,7 @@ export default {
     },
     keyValue: {
       type: [Number, Array],
-      required: true
+      default: () => null
     },
     open: {
       type: Boolean,
@@ -135,17 +134,21 @@ export default {
   }),
   computed: {
     ...mapState('filter', {
-      fields: state => state.fields,
-      selected: state => state.selected
+      fields: state => state.fields
     }),
     ...mapGetters('filter', [
       'isSelectedDiff',
       'selectedQty'
-    ])
+    ]),
+    filterRestrictiveElement () {
+      return this.mode === 'imageKeys'
+        ? { restrictive_keys: this.keyValue }
+        : { [`restrictive_${this.mode}`]: this.keyValue }
+    }
   },
-  created () {
+  async created () {
     this.setFieldsAction({ footer: false })
-    this.syncSelectedFiltersAction()
+    await this.syncSelectedFiltersAction()
     this.responseData = true
   },
   methods: {
@@ -173,10 +176,10 @@ export default {
       this.toggleSelectedAction({ field, value })
     },
     getFilters (condition) {
-      const filter = omit(this.selected, [condition])
-      this.mode === 'wishList'
-        ? this.getFiltersAction({ filter: { keys: this.keyValue, ...filter }, condition })
-        : this.getFiltersAction({ filter: { category: this.keyValue, ...filter }, condition })
+      this.getFiltersAction({
+        restrictiveElement: this.filterRestrictiveElement,
+        condition
+      })
     },
     handleFieldToggle (field) {
       if (this.activeField !== field) {

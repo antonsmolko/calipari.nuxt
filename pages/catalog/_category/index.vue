@@ -33,13 +33,17 @@ export default {
     })
   },
   methods: {
-    ...mapActions('filter', {
-      clearFiltersAction: 'clearFilters'
+    ...mapActions({
+      clearFiltersAction: 'filter/clearFilters',
+      setFieldTagsAction: 'tags/setField',
+      setImagesFieldAction: 'images/setField'
     })
   },
   beforeRouteLeave (to, from, next) {
     if (to.name !== 'editor-id') {
       this.clearFiltersAction()
+      this.setFieldTagsAction({ field: 'items', value: [] })
+      this.setImagesFieldAction({ field: 'items', value: [] })
     }
     next()
   }

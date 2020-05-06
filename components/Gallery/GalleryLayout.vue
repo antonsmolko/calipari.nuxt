@@ -1,16 +1,35 @@
 <template lang="pug">
     div(data-uk-height-viewport="offset-top: true; offset-bottom: true")
+        FadeTransition
+            .tm-section.uk-background-fixed(v-show="backgroundPath && !filterOpen")
+                .tm-section__semitransparent-background.uk-position-cover.uk-background-cover(
+                    :data-src="url"
+                    data-uk-img)
         Gallery(
             v-if="!filterOpen"
             :title="title"
             :images="images"
-            :tags="tags"
-            :backgroundPath="backgroundPath"
-            @tagging="handleTagging"
+            :enabled="!!keyValue"
             @filterOpen="handleFilterOpen"
             @paginate="paginate"
-            @dislike="dislike"
-        )
+            @dislike="dislike")
+            template(#hero)
+                GalleryHero(:title="title")
+                    template(#sub-hero)
+                        slot(name="search")
+                        .tm-gallery__tags.uk-flex.uk-flex-wrap(
+                            data-uk-scrollspy="target: > div; cls: uk-animation-slide-bottom-small; delay: 50"
+                            v-if="tags && tags.length")
+                            GalleryTag(
+                                :active="!filterQty"
+                                @click="tagClick")
+                            GalleryTag(
+                                v-for="tag in tags"
+                                :key="tag.id"
+                                :item="tag"
+                                :active="activeTag === tag.id"
+                                @click="tagClick"
+                            )
         ImageFilter(
             v-if="filterOpen"
             :mode="mode"
@@ -22,18 +41,22 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 import TopBar from '~/components/layout/TopBar.vue'
-import ImageFilter from '~/components/ImageFilter/ImageFilter'
 import Gallery from '~/components/Gallery/Gallery'
+import GalleryHero from '~/components/Gallery/GalleryHero'
+import GalleryTag from '~/components/Gallery/GalleryTag'
+import ImageFilter from '~/components/ImageFilter/ImageFilter'
 
 export default {
   name: 'GalleryLayout',
   components: {
+    TopBar,
     Gallery,
-    ImageFilter,
-    TopBar
+    GalleryHero,
+    GalleryTag,
+    ImageFilter
   },
   props: {
     title: {
@@ -42,15 +65,19 @@ export default {
     },
     keyValue: {
       type: [Number, Array],
-      required: true
+      default: () => null
     },
     mode: {
       type: String,
       default: 'category'
     },
+    isWishList: {
+      type: Boolean,
+      default: false
+    },
     backgroundPath: {
       type: String,
-      default: ''
+      default: null
     }
   },
   data: () => ({
@@ -63,28 +90,34 @@ export default {
       tags: state => state.tags.items,
       lastPreview: state => state.images.lastPreview
     }),
-    filterElement () {
-      return this.mode === 'wishList'
-        ? { keys: this.keyValue }
-        : { category: this.keyValue }
+    ...mapGetters({
+      filterQty: 'filter/currentQty',
+      activeTag: 'filter/activeTag'
+    }),
+    url () {
+      if (!this.backgroundPath) {
+        return ''
+      }
+
+      return `${process.env.baseUrl}/image/grayscale/${this.backgroundPath}`
+    },
+    restrictiveFilterElement () {
+      return this.mode === 'imageKeys'
+        ? { restrictive_keys: this.keyValue }
+        : { [`restrictive_${this.mode}`]: this.keyValue }
     }
   },
   async mounted () {
-    if (!this.lastPreview || !this.images.length) {
+    if ((!this.lastPreview || !this.images.length) && this.keyValue) {
       await this.refreshItems()
     }
     this.responseData = true
   },
-  destroyed () {
-    this.setFieldTagsAction({ field: 'items', value: [] })
-  },
   methods: {
     ...mapActions({
       setFieldsAction: 'setFields',
-      setFieldTagsAction: 'tags/setField',
       getItemsAction: 'images/getItems',
       updatePaginationFieldsAction: 'images/updatePaginationFields',
-      setImagesFieldAction: 'images/setField',
       resetPaginationAction: 'images/resetPagination',
       removeItemAction: 'images/removeItem',
       clearFilterFieldsAction: 'filter/clearFields',
@@ -105,38 +138,37 @@ export default {
       this.setFieldsAction({ bottomBar: true })
     },
     async paginate () {
-      await this.getItems(true)
-      this.setImagesFieldAction({ field: 'loading', value: false })
+      await this.getItems({ increasePage: true })
     },
     async refreshItems () {
       this.clearFilterFieldsAction()
-      this.clearImagePaginationState()
-      await this.getItems()
-    },
-    clearImagePaginationState () {
       this.resetPaginationAction()
-      this.setImagesFieldAction({ field: 'items', value: [] })
+      await this.getItems({ clear: true })
     },
-    async getItems (increasePage = false) {
-      await this.getItemsAction({ filterElement: this.filterElement, increasePage })
+    async getItems (options = null) {
+      await this.getItemsAction({
+        restrictiveElement: this.restrictiveFilterElement,
+        increasePage: options.increasePage || false,
+        clear: options.clear || false
+      })
     },
     dislike (id) {
-      if (this.mode === 'wishList') {
+      if (this.isWishList) {
         this.removeItemAction(id)
       }
     },
-    handleTagging (tag) {
+    tagClick (tag) {
       tag !== null
         ? this.getTaggedImages(tag)
         : this.resetTags()
     },
     async getTaggedImages (tag) {
       await Promise.all([
-        this.clearFilterFieldsAction(),
-        this.clearImagePaginationState()
+        this.clearFilterAction(),
+        this.resetPaginationAction()
       ])
       await this.setCurrentTagAction(tag)
-      await this.getItems()
+      await this.getItems({ clear: true })
     },
     resetTags () {
       this.clearFilterAction()

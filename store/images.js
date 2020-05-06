@@ -67,11 +67,11 @@ export const actions = {
       thenContent: response => commit('SET_FIELDS', { item: response.data })
     })
   },
-  getItems ({ state, commit, rootState }, { filterElement, increasePage = false }) {
+  getItems ({ state, commit, rootState }, { restrictiveElement, increasePage = false, clear = false }) {
     commit('SET_FIELD', { field: 'loading', value: true })
 
     const baseUrl = '/catalog/images'
-    const filter = { ...rootState.filter.currents, ...filterElement }
+    const filter = { ...rootState.filter.currents, ...restrictiveElement }
     const pagination = {
       current_page: increasePage
         ? state.pagination.current_page + 1
@@ -87,7 +87,9 @@ export const actions = {
       url,
       thenContent: (response) => {
         commit('SET_PAGINATION', response.data.pagination)
-        commit('SET_ITEMS', response.data.data)
+        clear
+          ? commit('SET_FIELD', { field: 'items', value: response.data.data })
+          : commit('SET_ITEMS', response.data.data)
         commit('SET_FIELD', { field: 'loading', value: false })
       }
     })

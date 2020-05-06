@@ -1,45 +1,40 @@
 <template lang="pug">
     main(:class="{ 'uk-light': darkPeriod }")
-        section.uk-section.uk-section-large
-            .uk-container
-                .uk-flex.uk-flex-center
-                    .uk-width-1-1(class="uk-width-xlarge@s")
-                        .tm-login__header
-                            h1.uk-heading-small.uk-margin-remove Поиск изображений
-                            .uk-divider-small
-                        .tm-form.uk-margin-medium-top
-                            .uk-fieldset
-                                VSelect(
-                                    class="uk-margin"
-                                    name="search"
-                                    icon="search"
-                                    @input="onSelect"
-                                    @search="onSearch"
-                                    :isLoading="loading"
-                                    label="title"
-                                    :value="selected"
-                                    :placeholder="selected ? '' : 'Введите запрос'"
-                                    :options="searched")
-        GalleryImageSection(
-            v-if="images.length"
-            :images="images"
-            @paginate="paginate"
-        )
-        .uk-width-1-1.uk-flex.uk-flex-center.uk-margin-large-top(
-            v-else-if="imagesLoading")
-            .uk-spinner(data-uk-spinner ratio="3")
+        GalleryLayout(
+            :title="pageTitle"
+            :mode="mode"
+            :backgroundPath="imagePath"
+            :keyValue="key")
+            template(#search)
+                .tm-form.uk-margin-medium-top.uk-position-relative.uk-position-z-index(
+                    data-uk-scrollspy="cls: uk-animation-slide-bottom-small")
+                    .uk-fieldset
+                        VSelect(
+                            class="uk-margin"
+                            name="search"
+                            icon="search"
+                            @input="onSelect"
+                            @search="onSearch"
+                            :isLoading="loading"
+                            label="title"
+                            :value="selected"
+                            :placeholder="selected ? '' : 'Введите запрос'"
+                            :options="searched")
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
+import throttle from 'lodash/throttle'
 import VSelect from '~/components/form/Select/VSelect'
-import GalleryImageSection from '~/components/Gallery/GalleryImageSection'
+import GalleryLayout from '~/components/Gallery/GalleryLayout'
+
 import setLayout from '~/components/mixins/setLayout'
 import scrollToTop from '~/components/mixins/scrollToTop'
+const _throttle = throttle(f => f(), 300)
 export default {
   components: {
     VSelect,
-    GalleryImageSection
+    GalleryLayout
   },
   mixins: [setLayout, scrollToTop],
   metaInfo () {
@@ -47,21 +42,29 @@ export default {
       title: 'Поиск изображений'
     }
   },
+  data: () => ({
+    query: ''
+  }),
   computed: {
     ...mapState({
-      searched: state => state.tags.items,
-      selected: state => state.tags.item,
+      searched: state => state.search.searched,
+      selected: state => state.search.selected,
       loading: state => state.tags.loading,
       images: state => state.images.items,
-      imagesLoading: state => state.images.loading,
+      tags: state => state.tags.items,
       lastPreview: state => state.images.lastPreview
     }),
     ...mapGetters({
       paginateEnd: 'images/paginateEnd',
-      filterQty: 'filter/currentQty'
+      filterQty: 'filter/currentQty',
+      activeTag: 'filter/activeTag',
+      imagePath: 'search/imagePath',
+      key: 'search/key',
+      mode: 'search/mode'
     })
   },
   created () {
+    this.setFieldsAction({ pageTitle: 'Поиск' })
     if (!this.lastPreview) {
       this.clearImagePaginationState()
       this.setTagFieldsAction({
@@ -72,17 +75,26 @@ export default {
   },
   methods: {
     ...mapActions({
-      getSearchedItemsAction: 'tags/getSearchedItems',
-      setTagFieldAction: 'tags/setField',
+      getSearchedResultAction: 'search/getSearchedResult',
+      setSelectedAction: 'search/setSelected',
+      setSearchFieldsAction: 'search/setFields',
       setTagFieldsAction: 'tags/setFields',
       getImages: 'images/getItems',
       resetPaginationAction: 'images/resetPagination',
-      setImagesFieldAction: 'images/setField'
+      setImagesFieldAction: 'images/setField',
+
+      getTagsAction: 'tags/getItemsByCategoryId',
+      clearFiltersAction: 'filter/clearFilters',
+      setFieldTagsAction: 'tags/setField'
     }),
-    onSelect (tag) {
-      this.setTagFieldAction({ field: 'item', value: tag })
+    onSelect (selected) {
+      this.setSelectedAction(selected)
       this.clearImagePaginationState()
+      this.clearFiltersAction()
       this.getItems()
+      selected.type === 'category'
+        ? this.getTagsAction(selected.id)
+        : this.setFieldTagsAction({ field: 'items', value: [] })
     },
     clearImagePaginationState () {
       this.resetPaginationAction()
@@ -90,16 +102,32 @@ export default {
     },
     onSearch (query) {
       if (query) {
-        this.getSearchedItemsAction(query.trim())
+        this.query = query.trim()
+        _throttle(this.search)
       }
     },
+    search () {
+      this.getSearchedResultAction(this.query)
+    },
     getItems (increasePage = false) {
-      const filterElement = { tags: [this.selected.id] }
-      return this.getImages({ filterElement, increasePage })
+      const restrictiveElement = { [`restrictive_${this.selected.type}`]: [this.selected.id] }
+      return this.getImages({ restrictiveElement, increasePage })
     },
     paginate () {
       this.getItems(true)
+    },
+    tagClick (tag) {
+      this.$emit('tagging', tag)
     }
+  },
+  beforeRouteLeave (to, from, next) {
+    if (to.name !== 'editor-id') {
+      this.setSearchFieldsAction({ searched: [], selected: null })
+      this.clearFiltersAction()
+      this.setFieldTagsAction({ field: 'items', value: [] })
+      this.setImagesFieldAction({ field: 'items', value: [] })
+    }
+    next()
   }
 }
 </script>

@@ -1,8 +1,5 @@
 <template lang="pug">
-    section.uk-section.uk-position-relative
-        .tm-section__semitransparent-background.uk-position-cover.uk-background-cover.uk-background-fixed(
-            :data-src="url"
-            data-uk-img)
+    section.tm-section__hero.uk-section.uk-position-relative
         .uk-container.uk-position-relative
             .uk-margin-large-top.uk-margin-medium-bottom.uk-width-xxlarge(
                 data-uk-scrollspy="cls: uk-animation-slide-bottom-small")
@@ -11,7 +8,7 @@
             p.tm-text-medium.uk-margin-large-bottom.uk-width-xxlarge(
                 v-if="intro"
                 data-uk-scrollspy="cls: uk-animation-slide-bottom-small; delay: 500") {{ intro }}
-            slot(name="tags")
+            slot(name="sub-hero")
 </template>
 
 <script>
@@ -25,29 +22,16 @@ export default {
     },
     backgroundPath: {
       type: String,
-      required: true
+      default: null
     },
     intro: {
       type: String,
       default: ''
-    },
-    grayscaleMod: {
-      type: Boolean,
-      default: false
     }
   },
   computed: {
     liked () {
       return this.$store.getters['wishlist/liked'](this.image.id)
-    },
-    url () {
-      if (!this.backgroundPath) {
-        return ''
-      }
-
-      return this.grayscaleMod
-        ? `${process.env.baseUrl}/image/grayscale/${this.backgroundPath}`
-        : `${process.env.baseUrl}/image/show/${this.backgroundPath}`
     }
   },
   methods: {
@@ -60,3 +44,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.tm-section__hero {
+    z-index: 2;
+}
+</style>

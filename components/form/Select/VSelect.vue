@@ -1,10 +1,11 @@
 <template lang="pug">
-    .div
+    div
         label.uk-form-label(v-if="labelName") {{ labelName }}
         .tm-select(:class="{ 'tm-error': error }")
             .tm-select__icon(v-if="icon")
                 i.uk-icon(:data-uk-icon="icon")
             vue-select(
+                :filterable="false"
                 :name="name"
                 :class="{ 'vs--error': error, 'tm-select__form-icon': icon }"
                 @input="onInput"
@@ -16,7 +17,7 @@
                 :placeholder="placeholder"
                 :options="options"
                 :disabled="disabled"
-                :map-keydown="handlerKeydown")
+                )
                 template(#open-indicator="{ attributes }")
                     span(v-bind="attributes" data-uk-icon="chevron-down")
                 template(#no-options)
@@ -85,22 +86,22 @@ export default {
     },
     onSearch (value) {
       this.$emit('search', value)
-    },
-    handlerKeydown: (map, vm) => ({
-      ...map,
-      38: (e) => {
-        e.preventDefault()
-        if (vm.typeAheadPointer > 0) {
-          vm.typeAheadPointer -= 1
-        }
-      },
-      40: (e) => {
-        e.preventDefault()
-        if (vm.typeAheadPointer < vm.options.length - 1) {
-          vm.typeAheadPointer += 1
-        }
-      }
-    })
+    }
+    // handlerKeydown: (map, vm) => ({
+    //   ...map,
+    //   38: (e) => {
+    //     e.preventDefault()
+    //     if (vm.typeAheadPointer > 0) {
+    //       vm.typeAheadPointer -= 1
+    //     }
+    //   },
+    //   40: (e) => {
+    //     e.preventDefault()
+    //     if (vm.typeAheadPointer < vm.options.length - 1) {
+    //       vm.typeAheadPointer += 1
+    //     }
+    //   }
+    // })
   }
 }
 </script>

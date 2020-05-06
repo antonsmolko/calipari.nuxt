@@ -2,10 +2,15 @@
     main(:class="{ 'uk-light': darkPeriod }")
         GalleryLayout(
             v-if="items.length"
-            mode="wishList"
+            mode="imageKeys"
             title="Избранное"
-            :keyValue="items"
-        )
+            :isWishList="true"
+            :keyValue="items")
+            template(#hero)
+                GalleryHero(
+                    :title="title"
+                    :backgroundPath="backgroundPath"
+                    :grayscaleMod="true")
         template(v-else)
             TopBar(title="Избранное")
                 .uk-navbar-item
@@ -21,6 +26,7 @@
 import { mapState, mapActions } from 'vuex'
 
 import GalleryLayout from '~/components/Gallery/GalleryLayout'
+import GalleryHero from '~/components/Gallery/GalleryHero'
 import TopBar from '~/components/layout/TopBar'
 import setLayout from '~/components/mixins/setLayout'
 import scrollToTop from '~/components/mixins/scrollToTop'
@@ -30,7 +36,8 @@ export default {
   scrollToTop: true,
   components: {
     TopBar,
-    GalleryLayout
+    GalleryLayout,
+    GalleryHero
   },
   mixins: [setLayout, scrollToTop],
   computed: {
@@ -45,12 +52,23 @@ export default {
     this.setFieldsAction({ pageTitle: 'Избранное' })
   },
   methods: {
-    ...mapActions('tags', {
-      getTagsAction: 'getItemsByImageKeys'
+    ...mapActions({
+      getTagsAction: 'tags/getItemsByImageKeys',
+      clearFiltersAction: 'filter/clearFilters',
+      setFieldTagsAction: 'tags/setField',
+      setImagesFieldAction: 'images/setField'
     }),
     onClose () {
       this.$router.go(-1) ? this.$router.go(-1) : this.$router.push('/')
     }
+  },
+  beforeRouteLeave (to, from, next) {
+    if (to.name !== 'editor-id') {
+      this.clearFiltersAction()
+      this.setFieldTagsAction({ field: 'items', value: [] })
+      this.setImagesFieldAction({ field: 'items', value: [] })
+    }
+    next()
   }
 }
 </script>
