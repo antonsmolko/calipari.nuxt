@@ -26,7 +26,7 @@
                     //span(data-uk-icon="heart")
                 span.tm-mosaic__like(
                     :class="{ 'uk-active': liked }"
-                    @click="onLike")
+                    @click="onLike()")
                     span(data-uk-icon="heart")
                 //nuxt-link.tm-mosaic__settings.uk-background-primary.uk-light(:to="`/editor/${image.id}`" data-no-mosaic="true")
                     span(data-uk-icon="settings")

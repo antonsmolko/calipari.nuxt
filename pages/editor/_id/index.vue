@@ -23,7 +23,11 @@
                 .tm-editor__workspace-header.uk-flex.uk-flex-between.uk-margin
                     .uk-flex
                         span.uk-h5.uk-margin-remove Изображение
-                        .tm-editor__workspace-article.uk-margin-small-left {{ image.article }}
+                        .tm-editor__workspace-article.uk-margin-small-left {{ orderSettings.currentImage.article }}
+                    .tm-editor__like(
+                        :class="{ 'uk-active': liked }"
+                        @click="onLike")
+                        span.uk-icon(data-uk-icon="heart")
                 Cropper.tm-editor__image-cropper(
                     :image="orderSettings.currentImage"
                     :ratio="sizesRatio"
@@ -158,6 +162,9 @@ export default {
         cropHeight: Math.round(this.cropData.height) || this.orderSettings.currentImage.height,
         qty: 1
       }
+    },
+    liked () {
+      return this.$store.getters['wishList/liked'](this.orderSettings.currentImage.id)
     }
   },
   created () {
@@ -175,7 +182,8 @@ export default {
       addToCartAction: 'cart/addItem',
       addNotificationAction: 'notifications/addItem',
       setFieldsAction: 'setFields',
-      setImagesFieldsAction: 'images/setFields'
+      setImagesFieldsAction: 'images/setFields',
+      toggleLikeAction: 'wishList/toggle'
     }),
     onClose () {
       window.history.length > 1 ? this.goBack() : this.goCatalog()
@@ -201,6 +209,9 @@ export default {
         status: 'success'
       })
       this.onClose()
+    },
+    onLike () {
+      this.toggleLikeAction(this.orderSettings.currentImage.id)
     }
   }
 }
@@ -534,6 +545,25 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
         }
         @include media_mob($qhd) {
             padding: $global-medium-margin $global-margin $global-gutter * 2 $global-margin;
+        }
+    }
+
+    &__like {
+        cursor: pointer;
+        line-height: 1;
+        color: $inverse-global-color;
+        //background: rgba($global-secondary-background, .5);
+        svg path {
+            fill: rgba($global-secondary-background, .3);
+        }
+
+        &.uk-active {
+            color: $inverse-global-emphasis-color;
+            .uk-icon {
+                svg path {
+                    fill: $inverse-global-emphasis-color;
+                }
+            }
         }
     }
 
