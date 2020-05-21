@@ -116,7 +116,8 @@ export default {
     ...mapState({
       image: state => state.images.item,
       collection: state => state.images.collection,
-      textures: state => state.textures.items
+      textures: state => state.textures.items,
+      fromWishList: state => state.images.isWishList
     }),
     onLoad () {
       return this.textures.length &&
@@ -174,26 +175,32 @@ export default {
     this.cropData.height = this.image.height
   },
   beforeDestroy () {
-    this.setImagesFieldsAction({ item: null, collection: [] })
+    this.setImagesFieldsAction({
+      item: null,
+      collection: [],
+      isWishList: false
+    })
   },
   methods: {
     ...mapActions({
-      setImageFieldsAction: 'images/setFields',
+      setImagesFieldsAction: 'images/setFields',
+      setImagesFieldAction: 'images/setField',
       addToCartAction: 'cart/addItem',
       addNotificationAction: 'notifications/addItem',
       setFieldsAction: 'setFields',
-      setImagesFieldsAction: 'images/setFields',
-      toggleLikeAction: 'wishList/toggle'
+      toggleLikeAction: 'wishList/toggle',
+      removeImageAction: 'images/removeItem',
+      addImageAction: 'images/addItem'
     }),
     onClose () {
       window.history.length > 1 ? this.goBack() : this.goCatalog()
     },
     goBack () {
-      this.setImageFieldsAction({ lastPreview: this.image.id })
+      this.setImagesFieldAction({ field: 'lastPreview', value: this.image.id })
       this.$router.go(-1)
     },
     goCatalog () {
-      this.setImageFieldsAction({ lastPreview: null })
+      this.setImagesFieldAction({ field: 'lastPreview', value: null })
       this.$router.push('/catalog')
     },
     handleRatioLockedChange (value) {
@@ -211,8 +218,21 @@ export default {
       this.onClose()
     },
     onLike () {
-      this.toggleLikeAction(this.orderSettings.currentImage.id)
+      const image = this.orderSettings.currentImage
+      this.toggleLikeAction(image.id)
+      if (this.fromWishList) {
+        this.liked
+          ? this.addImageAction(image)
+          : this.removeImageAction(image.id)
+      }
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next((vm) => {
+      if (from.name === 'wishlist') {
+        vm.setImagesFieldAction({ field: 'isWishList', value: true })
+      }
+    })
   }
 }
 </script>

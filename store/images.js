@@ -16,7 +16,8 @@ export const state = () => ({
     sort_order: 'asc'
   },
   loading: false,
-  lastPreview: null
+  lastPreview: null,
+  isWishList: false
 })
 
 export const mutations = {
@@ -58,6 +59,9 @@ export const mutations = {
   },
   REMOVE_ITEM (state, id) {
     state.items = state.items.filter(item => item.id !== id)
+  },
+  ADD_ITEM (state, item) {
+    state.items = unionBy(state.items, [item], 'id')
   }
 }
 
@@ -120,6 +124,9 @@ export const actions = {
   },
   removeItem ({ commit }, id) {
     commit('REMOVE_ITEM', id)
+  },
+  addItem ({ commit }, item) {
+    commit('ADD_ITEM', item)
   }
 }
 
