@@ -1,6 +1,6 @@
 <template lang="pug">
     .tm-editor__filter-item
-        button.tm-editor__filter-button.uk-button(s
+        button.tm-editor__filter-button.uk-button(
             type='button',
             :data-uk-icon="`icon: ${icon}; ratio: 1.4`",
             :class="{'active': active}",

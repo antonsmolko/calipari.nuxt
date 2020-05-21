@@ -1,27 +1,62 @@
 // Accordion
-@mixin hook-accordion-title() {
+//@mixin hook-accordion-title() {
+  //display: flex;
+  //flex-direction: row-reverse;
+  //justify-content: space-between;
+  //align-items: center;
+  //&::before {
+  //  content: "";
+  //  width: 20px;
+  //  height: 20px;
+  //  margin-left: 10px;
+  //  float: right;
+  //  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2213%22%20height%3D%2213%22%20viewBox%3D%220%200%2013%2013%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Crect%20fill%3D%22%23666%22%20width%3D%2213%22%20height%3D%221%22%20x%3D%220%22%20y%3D%226%22%20%2F%3E%0A%20%20%20%20%3Crect%20fill%3D%22%23666%22%20width%3D%221%22%20height%3D%2213%22%20x%3D%226%22%20y%3D%220%22%20%2F%3E%0A%3C%2Fsvg%3E");
+  //  background-repeat: no-repeat;
+  //  background-position: 50% 50%;
+  //}
+  //.uk-open & {
+  //  &::before {
+  //    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2213%22%20height%3D%2213%22%20viewBox%3D%220%200%2013%2013%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Crect%20fill%3D%22%23666%22%20width%3D%2213%22%20height%3D%221%22%20x%3D%220%22%20y%3D%226%22%20%2F%3E%0A%3C%2Fsvg%3E");
+  //  }
+  //}
+  //.uk-light & {
+  //  color: #3CC4FC;
+  //}
+//}
+@mixin hook-accordion-title(){
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-between;
   align-items: center;
+  padding: 9px 0;
+  overflow: hidden;
+
   &::before {
     content: "";
+    //width: ($accordion-title-line-height * 1em);
+    //height: ($accordion-title-line-height * 1em);
     width: 20px;
     height: 20px;
-    margin-left: 10px;
+    margin-left: $accordion-icon-margin-left;
     float: right;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2213%22%20height%3D%2213%22%20viewBox%3D%220%200%2013%2013%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Crect%20fill%3D%22%23666%22%20width%3D%2213%22%20height%3D%221%22%20x%3D%220%22%20y%3D%226%22%20%2F%3E%0A%20%20%20%20%3Crect%20fill%3D%22%23666%22%20width%3D%221%22%20height%3D%2213%22%20x%3D%226%22%20y%3D%220%22%20%2F%3E%0A%3C%2Fsvg%3E");
+    @include svg-fill($internal-accordion-close-image, "#000", $accordion-icon-color);
     background-repeat: no-repeat;
     background-position: 50% 50%;
   }
+
   .uk-open & {
-    &::before {
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2213%22%20height%3D%2213%22%20viewBox%3D%220%200%2013%2013%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%20%20%3Crect%20fill%3D%22%23666%22%20width%3D%2213%22%20height%3D%221%22%20x%3D%220%22%20y%3D%226%22%20%2F%3E%0A%3C%2Fsvg%3E");
-    }
+    &::before { @include svg-fill($internal-accordion-open-image, "#000", $accordion-icon-color); }
   }
-  .uk-light & {
-    color: #3CC4FC;
+}
+
+@mixin hook-inverse-component-accordion(){
+
+  .uk-accordion-title::before { @include svg-fill($internal-accordion-close-image, "#000", $inverse-global-color); }
+
+  .uk-open & {
+    .uk-accordion-title::before { @include svg-fill($internal-accordion-open-image, "#000", $inverse-global-color); }
   }
+
 }
 
 //@mixin hook-accordion-content() {
@@ -403,14 +438,14 @@
 
 
 }
-
-@mixin hook-navbar-nav-item-hover() {
-  opacity: .65;
-}
-
-@mixin hook-navbar-nav-item-active() {
-  opacity: .65;
-}
+//
+//@mixin hook-navbar-nav-item-hover() {
+//  color: $inverse-global-color !important;
+//}
+//
+//@mixin hook-navbar-nav-item-active() {
+//  color: $inverse-global-color !important;
+//}
 
 @mixin hook-navbar-misc() {
   .uk-navbar-nav > li > a, // Nav item
@@ -437,48 +472,42 @@
     color: $navbar-nav-item-color;
   }
 
-  .uk-navbar-nav > li:hover > a,
+  .uk-navbar-nav > li > a:hover,
   .uk-navbar-nav > li > a:focus,
   .uk-navbar-nav > li > a.uk-open,
-  .uk-navbar-nav > li:hover > span,
+  .uk-navbar-nav > li > a.uk-active,
+  .uk-navbar-nav > li > span:hover,
   .uk-navbar-nav > li > span:focus,
+  .uk-navbar-nav > li > span.uk-active,
   .uk-navbar-nav > li > span.uk-open {
-    color: $navbar-nav-item-hover-color;
+    color: $inverse-global-color !important;
     outline: none;
   }
 
-  /* Active */
-  .uk-navbar-nav > li.uk-active > a,
-  .uk-navbar-nav > li.uk-active > span {
-    color: $navbar-nav-item-active-color;
-  }
-
   .uk-navbar-nav > li {
-    position: relative;
-
-    &::before {
-      content: '';
-      display: block;
-      position: absolute;
-      z-index: -1;
-      height: 3px;
-      background-color: #32beff;
-      transition: $transition-duration;
-      transition-timing-function: $transition-timing-function;
-      transition-property: opacity, top;
-      top: -3px;
-      left: 13px;
-      right: 13px;
-      opacity: 0;
-    }
-
-    &.uk-active, &:hover {
+    > a, > span {
       position: relative;
-      z-index: 1;
-
       &::before {
-        top: 0;
-        opacity: 1;
+        content: '';
+        display: block;
+        position: absolute;
+        z-index: -1;
+        height: 3px;
+        background-color: #32beff;
+        transition: $transition-duration;
+        transition-timing-function: $transition-timing-function;
+        transition-property: opacity, top;
+        top: -3px;
+        left: 13px;
+        right: 13px;
+        opacity: 0;
+      }
+      &.uk-active, &:hover {
+        &::before {
+          top: 0;
+          opacity: 1;
+          z-index: 1;
+        }
       }
     }
   }

@@ -1,6 +1,7 @@
 export const state = () => ({
   searched: [],
   selected: null,
+  tags: [],
   loading: false
 })
 
@@ -44,8 +45,17 @@ export const actions = {
 }
 
 export const getters = {
-  imagePath: state => state.selected && state.selected.type === 'category'
+  imagePath: state => state.selected
     ? state.selected.image_path : null,
   key: state => state.selected ? state.selected.id : null,
   mode: state => state.selected ? state.selected.type : null
+  // tags: (state, getters, rootState) => {
+  //   const searchedType = state.searched.type
+  //   switch (searchedType) {
+  //     case 'category':
+  //       return rootState.categories.tags
+  //     case 'collection':
+  //       return rootState.collections.tags
+  //   }
+  // }
 }

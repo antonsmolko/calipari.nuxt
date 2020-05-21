@@ -28,10 +28,10 @@
 export default {
   computed: {
     cartQty () {
-      return this.$store.getters['cart/getQty']
+      return this.$store.getters['cart/qty']
     },
     likeQty () {
-      return this.$store.getters['wishList/getQty']
+      return this.$store.getters['wishList/qty']
     }
   }
 }
@@ -53,9 +53,6 @@ export default {
                     font-size: 9px;
                     padding: 0 $global-small-margin;
                     color: $global-inverse-color;
-                    &::before {
-                        display: none;
-                    }
                     .uk-badge {
                         min-width: 14px;
                         height: 14px;

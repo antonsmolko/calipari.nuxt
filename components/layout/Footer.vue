@@ -1,6 +1,6 @@
 <template lang="pug">
-    footer.tm-footer.uk-section.uk-section-primary
-        .uk-container.uk-container-expand
+    footer.tm-footer.uk-section.uk-light
+        .uk-container.uk-container-expand.uk-position-relative
             .tm-footer__content
                 a.uk-logo.uk-icon(href="" data-uk-icon="icon: calipari; ratio: 1.2")
                 .tm-footer__contacts.uk-flex
@@ -21,8 +21,27 @@
 
 <style lang="scss">
 .tm-footer {
+    position: relative;
+    z-index: 1;
     margin-top: auto !important;
     margin-bottom: 60px;
+    &::before {
+        content: '';
+        position: absolute;
+        display: block;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        background-image: $footer-primary-gradient;
+    }
+    /*.tm-category & {*/
+    /*    &::before {*/
+    /*        opacity: .82;*/
+    /*    }*/
+    /*}*/
     @include media-mob($l) {
         margin-bottom: 0;
     }

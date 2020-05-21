@@ -6,7 +6,7 @@
             :backgroundPath="imagePath"
             :keyValue="key")
             template(#search)
-                .tm-form.uk-margin-medium-top.uk-position-relative.uk-position-z-index(
+                .tm-search__form.uk-margin-medium-top.uk-position-relative.uk-position-z-index(
                     data-uk-scrollspy="cls: uk-animation-slide-bottom-small")
                     .uk-fieldset
                         VSelect(
@@ -67,10 +67,7 @@ export default {
     this.setFieldsAction({ pageTitle: 'Поиск' })
     if (!this.lastPreview) {
       this.clearImagePaginationState()
-      this.setTagFieldsAction({
-        items: [],
-        item: null
-      })
+      this.clearTags()
     }
   },
   methods: {
@@ -78,23 +75,31 @@ export default {
       getSearchedResultAction: 'search/getSearchedResult',
       setSelectedAction: 'search/setSelected',
       setSearchFieldsAction: 'search/setFields',
-      setTagFieldsAction: 'tags/setFields',
+      setTagsFieldAction: 'tags/setField',
       getImages: 'images/getItems',
       resetPaginationAction: 'images/resetPagination',
       setImagesFieldAction: 'images/setField',
-
-      getTagsAction: 'tags/getItemsByCategoryId',
-      clearFiltersAction: 'filter/clearFilters',
-      setFieldTagsAction: 'tags/setField'
+      getCategoryTagsAction: 'tags/getItemsByCategoryId',
+      getCollectionTagsAction: 'tags/getItemsByCollectionId',
+      clearFiltersAction: 'filter/clearFilters'
     }),
     onSelect (selected) {
+      this.clearTags()
       this.setSelectedAction(selected)
       this.clearImagePaginationState()
       this.clearFiltersAction()
       this.getItems()
-      selected.type === 'category'
-        ? this.getTagsAction(selected.id)
-        : this.setFieldTagsAction({ field: 'items', value: [] })
+
+      this.selected.type === 'category'
+        ? this.getCategoryTagsAction(selected.id)
+        : this.clearTags()
+      // switch (this.selected.type) {
+      //   case 'category':
+      //     this.getCategoryTagsAction(selected.id)
+      //     break
+      //   case 'collection':
+      //     this.getCollectionTagsAction(selected.id)
+      // }
     },
     clearImagePaginationState () {
       this.resetPaginationAction()
@@ -118,13 +123,16 @@ export default {
     },
     tagClick (tag) {
       this.$emit('tagging', tag)
+    },
+    clearTags () {
+      this.setTagsFieldAction({ field: 'items', value: [] })
     }
   },
   beforeRouteLeave (to, from, next) {
     if (to.name !== 'editor-id') {
       this.setSearchFieldsAction({ searched: [], selected: null })
       this.clearFiltersAction()
-      this.setFieldTagsAction({ field: 'items', value: [] })
+      this.clearTags()
       this.setImagesFieldAction({ field: 'items', value: [] })
     }
     next()

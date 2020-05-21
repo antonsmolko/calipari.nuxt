@@ -1,11 +1,11 @@
 <template lang="pug">
     main(:class="{ 'uk-light': darkPeriod }")
-        TopBar(:title="topBarTitle")
+        TopBar(:title="pageTitle")
         CatalogSection(
             title="По Темам"
             containerStyles="uk-container-large"
             gridStyles="uk-child-width-1-2 uk-child-width-1-3@s uk-child-width-1-4@m uk-child-width-1-5@l")
-            CatalogTopicItem(v-for="topic in topics" :key="topic.id" :item="topic")
+            CatalogImageItem(v-for="topic in topics" :key="topic.id" :item="topic")
         CatalogSection(
             title="По Цветам"
             sectionStyles="tm-section__muted"
@@ -15,15 +15,19 @@
         CatalogSection(
             title="Интерьеры"
             gridStyles="uk-child-width-1-2 uk-child-width-1-3@m")
-            CatalogInteriorItem(v-for="interior in interiors" :key="interior.id" :item="interior")
+            CatalogImageItem(
+                v-for="interior in interiors"
+                :key="interior.id"
+                :item="interior"
+                :width="500"
+                :height="500")
 </template>
 
 <script>
 import TopBar from '~/components/layout/TopBar.vue'
 import CatalogSection from '~/components/Catalog/CatalogSection'
-import CatalogTopicItem from '~/components/Catalog/CatalogTopicItem'
+import CatalogImageItem from '~/components/Catalog/CatalogImageItem'
 import CatalogColorItem from '~/components/Catalog/CatalogColorItem'
-import CatalogInteriorItem from '~/components/Catalog/CatalogInteriorItem'
 import setLayout from '~/components/mixins/setLayout'
 import scrollToTop from '~/components/mixins/scrollToTop'
 
@@ -31,20 +35,16 @@ export default {
   name: 'Catalog',
   metaInfo () {
     return {
-      title: 'Каталог'
+      title: this.pageTitle
     }
   },
   components: {
     TopBar,
     CatalogSection,
-    CatalogTopicItem,
-    CatalogColorItem,
-    CatalogInteriorItem
+    CatalogImageItem,
+    CatalogColorItem
   },
   mixins: [setLayout, scrollToTop],
-  data: () => ({
-    topBarTitle: 'Каталог'
-  }),
   computed: {
     topics () {
       return this.$store.getters['categories/getItemsByType']('topics')
@@ -57,7 +57,7 @@ export default {
     }
   },
   created () {
-    this.setFieldsAction({ pageTitle: 'Каталог' })
+    this.setFieldAction({ field: 'pageTitle', value: 'Каталог' })
   }
 }
 </script>

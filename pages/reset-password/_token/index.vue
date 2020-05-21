@@ -3,7 +3,7 @@
         section.uk-section.uk-section-large.tm-section-lines(data-uk-height-viewport='offset-top: true')
             .uk-position-center.uk-flex.uk-flex-column.uk-flex-middle.uk-padding.uk-text-center(v-if="loaded")
                 span.uk-text-large Подождите...
-                    .uk-margin-top(data-uk-spinner="ratio: 3")
+                .uk-margin-top(data-uk-spinner="ratio: 3")
             .uk-container(v-else)
                 .uk-flex.uk-flex-center
                     .uk-width-1-1(class="uk-width-xlarge@s")

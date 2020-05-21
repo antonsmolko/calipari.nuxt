@@ -81,7 +81,7 @@ export const actions = {
 }
 
 export const getters = {
-  getQty: state => state.items.reduce((qty, item) => qty + item.qty, 0),
+  qty: state => state.items.reduce((qty, item) => qty + item.qty, 0),
   totalPrice: (state, getters) => state.items.reduce((total, item) => total + getters.itemPrice(item), 0),
   itemPrice: (state, getters, rootState, rootGetters) => (item) => {
     const texture = rootGetters['textures/getItemById'](item.texture)

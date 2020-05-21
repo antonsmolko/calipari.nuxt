@@ -39,5 +39,5 @@ export const actions = {
 
 export const getters = {
   liked: state => id => state.items.includes(id),
-  getQty: state => state.items.length
+  qty: state => state.items.length
 }

@@ -16,6 +16,7 @@
                 :value="value"
                 :placeholder="placeholder"
                 :options="options"
+                :getOptionKey="getOptionKey"
                 :disabled="disabled"
                 )
                 template(#open-indicator="{ attributes }")
@@ -86,22 +87,18 @@ export default {
     },
     onSearch (value) {
       this.$emit('search', value)
+    },
+    getOptionKey (option) {
+      if (typeof option === 'object' && option.image_path) {
+        return option.image_path
+      }
+
+      if (typeof option === 'object' && option.id) {
+        return option.id
+      }
+
+      return null
     }
-    // handlerKeydown: (map, vm) => ({
-    //   ...map,
-    //   38: (e) => {
-    //     e.preventDefault()
-    //     if (vm.typeAheadPointer > 0) {
-    //       vm.typeAheadPointer -= 1
-    //     }
-    //   },
-    //   40: (e) => {
-    //     e.preventDefault()
-    //     if (vm.typeAheadPointer < vm.options.length - 1) {
-    //       vm.typeAheadPointer += 1
-    //     }
-    //   }
-    // })
   }
 }
 </script>

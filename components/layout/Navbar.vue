@@ -28,7 +28,9 @@
                                 li.uk-navbar-item
                                     nuxt-link(to="/profile")
                                         .tm-navbar__gravatar
-                                            img(:data-src="$auth.user.gravatar_small" :alt="$auth.user.name" data-uk-img)
+                                            img(:data-src="$auth.user.gravatar_small"
+                                                :alt="$auth.user.name"
+                                                data-uk-img)
                             template(v-else)
                                 li.uk-navbar-item
                                     nuxt-link(to="/login" data-uk-icon="user")
@@ -39,10 +41,10 @@
 export default {
   computed: {
     cartQty () {
-      return this.$store.getters['cart/getQty']
+      return this.$store.getters['cart/qty']
     },
     likeQty () {
-      return this.$store.getters['wishList/getQty']
+      return this.$store.getters['wishList/qty']
     }
   }
 }
@@ -50,6 +52,7 @@ export default {
 
 <style lang="scss">
 .tm-navbar {
+    z-index: 10;
     &__gravatar {
         width: 36px;
         height: 36px;

@@ -3,7 +3,7 @@
         section.uk-section.uk-section-large.tm-section-lines(data-uk-height-viewport='offset-top: true')
             .uk-position-center.uk-flex.uk-flex-column.uk-flex-middle.uk-padding.uk-text-center(v-if="loaded")
                 span.uk-text-large Письмо отправляется...
-                    .uk-margin-top(data-uk-spinner="ratio: 3")
+                .uk-margin-top(data-uk-spinner="ratio: 3")
             .uk-container(v-else)
                 .uk-flex.uk-flex-center
                     .uk-width-1-1(class="uk-width-xlarge@s")
@@ -45,7 +45,6 @@ import VInput from '~/components/form/VInput'
 import setLayout from '~/components/mixins/setLayout'
 
 export default {
-  middleware: 'guest',
   components: { VInput },
   mixins: [form, setLayout],
   metaInfo () {
@@ -73,7 +72,6 @@ export default {
         this.loaded = true
         await this.$axios.post('/auth/reset-password', { email: this.form.email })
         await this.$router.push({ name: 'index' })
-        // this.$store.dispatch('notifications/clearItems')
       } catch (e) {
         this.loaded = false
         return e

@@ -13,6 +13,9 @@ export const mutations = {
         state[field] = value
       }
     }
+  },
+  SET_FIELD (state, { field, value }) {
+    state[field] = value
   }
 }
 
@@ -27,6 +30,9 @@ export const actions = {
   },
   setFields ({ commit }, payload) {
     commit('SET_FIELDS', payload)
+  },
+  setField ({ commit }, payload) {
+    commit('SET_FIELD', payload)
   }
 }
 

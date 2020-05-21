@@ -28,7 +28,7 @@ export default {
 
 <style lang="scss">
 .tm-topbar {
-
+    z-index: 10;
     &__heading {
         color: $global-emphasis-color !important;
     }

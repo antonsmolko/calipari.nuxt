@@ -14,7 +14,8 @@ const PageSettings = {
       },
       methods: {
         ...mapActions({
-          setFieldsAction: 'setFields'
+          setFieldsAction: 'setFields',
+          setFieldAction: 'setField'
         })
       }
     })

@@ -9,7 +9,7 @@
                         h1.uk-margin-remove Материалы
                         .uk-divider-small
                     div
-                    .tm-text-medium В нашем интернет-магазине Вы сможете купить любые фотообои на стену из более чем 7 000 подобранных изображений и из 40 млн. фото из фотобанков. Все фотообои производятся на заказ по Вашим размерам и именно под Вашу стену. Заполните размеры, оформите заявку и уже через 3 дня заказ будет у Вас.
+                        span.tm-text-medium В нашем интернет-магазине Вы сможете купить любые фотообои на стену из более чем 7 000 подобранных изображений и из 40 млн. фото из фотобанков. Все фотообои производятся на заказ по Вашим размерам и именно под Вашу стену. Заполните размеры, оформите заявку и уже через 3 дня заказ будет у Вас.
         SectionTextureItem(
             v-for="item in items"
             :key="item.id"
@@ -38,11 +38,8 @@ export default {
   components: { SectionTextureItem },
   mixins: [setLayout, scrollToTop],
   async fetch ({ store }) {
-    await store.$api.$get('/manager/textures')
-      .then((response) => {
-        store.commit('textures/SET_ITEMS', response)
-        store.commit('SET_FIELDS', { pageTitle: 'Материалы' })
-      })
+    await store.dispatch('textures/getItems')
+      .then(() => store.commit('SET_FIELD', { field: 'pageTitle', value: 'Материалы' }))
   },
   computed: {
     ...mapState('textures', [
@@ -57,39 +54,6 @@ export default {
         background-image: url('/img/bg/bg-polygons.webp');
         @include media-portrait() {
             background-image: url('/img/bg/bg-polygons-m.webp');
-        }
-    }
-    &__item {
-        section {
-            padding-bottom: 0 !important;
-            margin-bottom: -$global-large-margin;
-        }
-    }
-    &__sample {
-        min-height: 500px;
-        max-height: 150vw;
-        height: 100vh;
-    }
-    &__spec {
-        &:not(:first-child) {
-            margin-left: $global-margin;
-        }
-        &-value {
-            margin-left: $global-small-margin / 2;
-            font-weight: $base-strong-font-weight;
-            color: $global-emphasis-color;
-        }
-    }
-    &__pattern {
-        img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-    }
-    &__bottom {
-        @include media-mob($s) {
-            padding-bottom: $global-xlarge-margin;
         }
     }
 }

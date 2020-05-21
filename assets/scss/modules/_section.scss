@@ -64,8 +64,9 @@
         @include media-mob($l) {
             //padding-bottom: 300px;
             margin-bottom: -140px;
-            max-height: calc(100vh - #{$navbar-height * 2});
-            min-height: 700px;
+            //max-height: calc(100vh - #{$navbar-height * 2});
+            height: 100vh;
+            //min-height: 700px;
         }
     }
 }

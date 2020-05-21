@@ -39,3 +39,10 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+    .tm-editor {
+        &__texture-item {
+            user-select: none;
+        }
+    }
+</style>

@@ -16,10 +16,6 @@
     }
     &-icon {
         li {
-            &::before {
-                left: 8px;
-                right: 8px;
-            }
             > a, > span {
                 padding: 0;
                 .uk-badge {
@@ -34,6 +30,10 @@
                     padding: 0 3px;
                     margin-left: 2px;
                     z-index: 1;
+                }
+                &::before {
+                    left: -5px;
+                    right: -5px;
                 }
             }
         }

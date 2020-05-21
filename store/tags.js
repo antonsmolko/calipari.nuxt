@@ -33,17 +33,12 @@ export const actions = {
       thenContent: response => commit('SET_FIELD', { field: 'items', value: response.data })
     })
   },
-  // getSearchedItems ({ commit }, query) {
-  //   commit('SET_FIELD', { field: 'loading', value: true })
-  //
-  //   return this.$api.$get(`/catalog/tags/${query}`)
-  //     .then((response) => {
-  //       commit('SET_FIELDS', {
-  //         items: response,
-  //         loading: false
-  //       })
-  //     })
-  // },
+  getItemsByCollectionId ({ commit }, id) {
+    return action(this.$api, 'get', commit, {
+      url: `/catalog/collections/${id}/tags`,
+      thenContent: response => commit('SET_FIELD', { field: 'items', value: response.data })
+    })
+  },
   setField ({ commit }, payload) {
     commit('SET_FIELD', payload)
   },

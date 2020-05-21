@@ -3,6 +3,7 @@ import action from './mixins/action'
 export const state = () => ({
   item: {},
   items: []
+  // tags: []
 })
 
 export const mutations = {
@@ -12,6 +13,9 @@ export const mutations = {
 }
 
 export const actions = {
+  setField ({ commit }, payload) {
+    commit('SET_FIELD', payload)
+  },
   getItemByAlias ({ commit }, alias) {
     return action(this.$api, 'get', commit, {
       url: `/catalog/categories/${alias}`,
@@ -24,6 +28,19 @@ export const actions = {
       thenContent: response => commit('SET_FIELD', { field: 'items', value: response.data })
     })
   }
+  // getTagsByImageKeys ({ commit }, keys) {
+  //   return action(this.$api, 'post', commit, {
+  //     url: '/catalog/images/wish-list/tags',
+  //     payload: { keys },
+  //     thenContent: response => commit('SET_FIELD', { field: 'tags', value: response.data })
+  //   })
+  // }
+  // getTagsByItemId ({ commit }, id) {
+  //   return action(this.$api, 'get', commit, {
+  //     url: `/catalog/categories/${id}/tags`,
+  //     thenContent: response => commit('SET_FIELD', { field: 'tags', value: response.data })
+  //   })
+  // }
 }
 
 export const getters = {

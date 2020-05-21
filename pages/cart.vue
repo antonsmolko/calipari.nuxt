@@ -1,5 +1,5 @@
 <template lang="pug">
-    div
+    main
         TopBar(title="Корзина")
             .uk-navbar-item(class="uk-visible@l" v-if="items.length")
                 //span.tm-total-price__heading Цена
@@ -27,19 +27,21 @@
                 nuxt-link.uk-button.uk-button-primary.uk-margin-medium-top(to="/catalog") В каталог
         SlideYDownTransition(mode="out-in")
             CartBottomBar(
-                v-if="totalPrice"
+                v-if="items.length"
                 :price="totalPrice"
                 @checkout="checkout")
         .uk-padding(class="uk-hidden@l")
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import { getFormatPrice } from '~/components/helpers'
 
 import TopBar from '~/components/layout/TopBar'
 import CartBottomBar from '~/components/Cart/CartBottomBar'
 import CartList from '~/components/Cart/CartList'
+import setLayout from '~/components/mixins/setLayout'
+import scrollToTop from '~/components/mixins/scrollToTop'
 export default {
   scrollToTop: true,
   components: {
@@ -47,6 +49,7 @@ export default {
     CartBottomBar,
     TopBar
   },
+  mixins: [setLayout, scrollToTop],
   metaInfo () {
     return {
       title: 'Корзина'
@@ -54,11 +57,7 @@ export default {
   },
   async fetch ({ store, params }) {
     await new Promise((resolve) => {
-      store.commit('SET_FIELDS', {
-        pageTitle: 'Корзина',
-        bottomBar: false,
-        footer: false
-      })
+      store.commit('SET_FIELDS', { bottomBar: false, footer: false })
       resolve()
     })
   },
@@ -71,6 +70,9 @@ export default {
     ...mapState({
       items: state => state.cart.items
     }),
+    ...mapGetters('cart', [
+      'qty'
+    ]),
     totalFormatPrice () {
       return getFormatPrice(this.totalPrice)
     },
@@ -78,8 +80,13 @@ export default {
       return this.$store.getters['cart/totalPrice']
     }
   },
-  beforeMount () {
-    window.scrollTo(0, 0)
+  watch: {
+    qty () {
+      this.setFieldAction({ field: 'bottomBar', value: !this.qty })
+    }
+  },
+  created () {
+    this.setFieldsAction({ bottomBar: !this.qty, pageTitle: 'Корзина' })
   },
   methods: {
     ...mapActions({
@@ -94,7 +101,7 @@ export default {
         : this.$router.push('/checkout/invite')
     },
     onClose () {
-      this.$router.go(-1) ? this.$router.go(-1) : this.$router.push('/')
+      window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
     }
   }
 }

@@ -152,11 +152,14 @@ export default {
       addNotificationAction: 'notifications/addItem'
     }),
     async onSubmit () {
+      this.loaded = true
+      this.loadedMessage = 'Выполняется регистрация...'
       try {
         await this.$axios.post(`/auth/login/${this.form.service}/register`, this.form)
         await this.$router.push({ name: 'index' })
         this.syncResources()
       } catch (e) {
+        this.loaded = false
         return e
       }
     },

@@ -1,5 +1,5 @@
 <template lang="pug">
-    section.uk-section
+    section.uk-section.tm-gallery__section
         .uk-container.uk-container-expand
             div(ref="mosaic")
                 GalleryImage(
@@ -107,6 +107,7 @@ export default {
       })
     },
     dislike (id) {
+      this.initMosaic()
       this.$emit('dislike', id)
     },
     scrollToImage () {
@@ -123,4 +124,8 @@ export default {
 
 <style>
 @import '../../assets/scss/modules/_mosaic-gallery.scss';
+.tm-gallery__section {
+    position: relative;
+    z-index: 2;
+}
 </style>

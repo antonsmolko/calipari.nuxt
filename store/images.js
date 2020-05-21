@@ -1,10 +1,11 @@
-import array from 'lodash/array'
+import unionBy from 'lodash/unionBy'
 import { getParamsString } from '../helpers'
 import action from './mixins/action'
 
 export const state = () => ({
   item: null,
   items: [],
+  collection: [],
   pagination: {
     per_page: 30,
     total: 0,
@@ -20,7 +21,7 @@ export const state = () => ({
 
 export const mutations = {
   SET_ITEMS (state, payload) {
-    state.items = array.unionBy(state.items, payload, 'id')
+    state.items = unionBy(state.items, payload, 'id')
   },
   SET_PAGINATION (state, payload) {
     for (const [field] of Object.entries(state.pagination)) {
@@ -64,7 +65,18 @@ export const actions = {
   getItem ({ commit }, id) {
     return action(this.$api, 'get', commit, {
       url: `/catalog/images/${id}`,
-      thenContent: response => commit('SET_FIELDS', { item: response.data })
+      thenContent: response => commit('SET_FIELD', { field: 'item', value: response.data })
+    })
+  },
+  getItemFromEditor ({ commit }, id) {
+    return action(this.$api, 'get', commit, {
+      url: `/catalog/images/${id}/editor`,
+      thenContent: (response) => {
+        const { item, collection } = response.data
+        collection
+          ? commit('SET_FIELDS', { item, collection: [...[item], ...collection] })
+          : commit('SET_FIELD', { field: 'item', value: item })
+      }
     })
   },
   getItems ({ state, commit, rootState }, { restrictiveElement, increasePage = false, clear = false }) {

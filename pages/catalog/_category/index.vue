@@ -16,33 +16,45 @@ import scrollToTop from '~/components/mixins/scrollToTop'
 
 export default {
   name: 'Category',
-  scrollToTop: true,
+  metaInfo () {
+    return {
+      title: this.pageTitle,
+      bodyAttrs: {
+        class: 'tm-category'
+      }
+    }
+  },
   components: {
     GalleryLayout
   },
   mixins: [setLayout, scrollToTop],
-  async fetch ({ store, params }) {
+  async fetch ({ store, params, redirect }) {
     const category = await store.getters['categories/getItemByAlias'](params.category)
+    if (!category) {
+      return redirect('/notfound')
+    }
     store.commit('categories/SET_FIELD', { field: 'item', value: category })
     await store.dispatch('tags/getItemsByCategoryId', category.id)
-    store.commit('SET_FIELDS', { pageTitle: category.title, footer: false })
   },
   computed: {
     ...mapState({
       item: state => state.categories.item
     })
   },
+  created () {
+    this.setFieldAction({ field: 'pageTitle', value: this.item.title })
+  },
   methods: {
     ...mapActions({
       clearFiltersAction: 'filter/clearFilters',
-      setFieldTagsAction: 'tags/setField',
+      setCategoriesFieldAction: 'categories/setField',
       setImagesFieldAction: 'images/setField'
     })
   },
   beforeRouteLeave (to, from, next) {
     if (to.name !== 'editor-id') {
       this.clearFiltersAction()
-      this.setFieldTagsAction({ field: 'items', value: [] })
+      this.setCategoriesFieldAction({ field: 'tags', value: [] })
       this.setImagesFieldAction({ field: 'items', value: [] })
     }
     next()

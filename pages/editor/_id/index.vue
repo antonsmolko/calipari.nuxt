@@ -3,6 +3,10 @@
         EditorTopBar(@close="onClose")
         .tm-editor__frame(data-uk-height-viewport="offset-top: true")
             .tm-editor__left-bar(data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 100")
+                EditorCollection(
+                    v-if="collection.length"
+                    v-model="orderSettings.currentImage"
+                    :items="collection")
                 EditorSizes(
                     :maxWidth="maxWidth"
                     :maxHeight="maxHeight"
@@ -21,14 +25,14 @@
                         span.uk-h5.uk-margin-remove Изображение
                         .tm-editor__workspace-article.uk-margin-small-left {{ image.article }}
                 Cropper.tm-editor__image-cropper(
-                    :image="image"
+                    :image="orderSettings.currentImage"
                     :ratio="sizesRatio"
                     :active="!ratioLocked"
                     :filter="orderSettings.filter"
                     @cropped="getCropData")
             .tm-editor__right-bar(data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 100")
                 EditorPreview(
-                    :image="image"
+                    :image="orderSettings.currentImage"
                     :orderSizes="orderSettings.sizes"
                     :cropData="cropData"
                     :ratioLocked="ratioLocked"
@@ -54,6 +58,7 @@ import EditorTopBar from '~/components/Editor/EditorTopBar'
 import EditorSizes from '~/components/Editor/EditorSizes'
 import EditorFilter from '~/components/Editor/EditorFilter'
 import EditorTexture from '~/components/Editor/EditorTexture'
+import EditorCollection from '~/components/Editor/EditorCollection'
 import Cropper from '~/components/Editor/Cropper/Cropper'
 import EditorPreview from '~/components/Editor/EditorPreview'
 import EditorInfo from '~/components/Editor/EditorInfo'
@@ -69,6 +74,7 @@ export default {
     EditorSizes,
     EditorFilter,
     EditorTexture,
+    EditorCollection,
     Cropper,
     EditorPreview,
     EditorInfo,
@@ -76,11 +82,12 @@ export default {
     EditorBottomBar
   },
   async fetch ({ store, params }) {
-    await store.$api.$get(`/catalog/images/${params.id}`)
-      .then(response => store.commit('images/SET_FIELDS', { item: response }))
+    await store.dispatch('images/getItemFromEditor', params.id)
+    store.commit('SET_FIELDS', { bottomBar: false, footer: false })
   },
   data: () => ({
     orderSettings: {
+      currentImage: null,
       filter: {
         flip: false,
         colorize: false
@@ -104,8 +111,8 @@ export default {
   computed: {
     ...mapState({
       image: state => state.images.item,
-      textures: state => state.textures.items,
-      prevPath: state => state.prevPath
+      collection: state => state.images.collection,
+      textures: state => state.textures.items
     }),
     onLoad () {
       return this.textures.length &&
@@ -114,10 +121,12 @@ export default {
         this.image.ratio
     },
     maxWidth () {
-      return Math.round(this.image.width / this.sizeFactor)
+      return this.image.max_print_width
+        ? this.image.max_print_width
+        : Math.round(this.orderSettings.currentImage.width / this.sizeFactor)
     },
     maxHeight () {
-      return Math.round(this.maxWidth / this.image.ratio)
+      return Math.round(this.maxWidth / this.orderSettings.currentImage.ratio)
     },
     sizesRatio () {
       return Math.round(this.orderSettings.sizes.width / this.orderSettings.sizes.height * 1000) / 1000
@@ -137,31 +146,36 @@ export default {
     cartGoodData () {
       return {
         id: hash(),
-        imageId: this.image.id,
-        imageName: this.image.path,
+        imageId: this.orderSettings.currentImage.id,
+        imageName: this.orderSettings.currentImage.path,
         width: this.orderSettings.sizes.width,
         height: this.orderSettings.sizes.height,
         texture: this.orderSettings.texture,
         filter: this.orderSettings.filter,
         x: Math.round(this.cropData.x),
         y: Math.round(this.cropData.y),
-        cropWidth: Math.round(this.cropData.width) || this.image.width,
-        cropHeight: Math.round(this.cropData.height) || this.image.height,
+        cropWidth: Math.round(this.cropData.width) || this.orderSettings.currentImage.width,
+        cropHeight: Math.round(this.cropData.height) || this.orderSettings.currentImage.height,
         qty: 1
       }
     }
   },
   created () {
+    this.orderSettings.currentImage = this.image
     this.orderSettings.texture = this.textures[0].id
     this.cropData.width = this.image.width
     this.cropData.height = this.image.height
+  },
+  beforeDestroy () {
+    this.setImagesFieldsAction({ item: null, collection: [] })
   },
   methods: {
     ...mapActions({
       setImageFieldsAction: 'images/setFields',
       addToCartAction: 'cart/addItem',
       addNotificationAction: 'notifications/addItem',
-      setFieldsAction: 'setFields'
+      setFieldsAction: 'setFields',
+      setImagesFieldsAction: 'images/setFields'
     }),
     onClose () {
       window.history.length > 1 ? this.goBack() : this.goCatalog()
@@ -286,6 +300,18 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
         @include media_mob($xl) {
             width: 430px;
         }
+        &-slider {
+            margin-left: -$global-small-gutter;
+            padding: 0 $global-small-gutter;
+            @include media-mob($s) {
+                margin-left: -$global-gutter;
+                padding: 0 $global-margin 0 $global-gutter;
+            }
+            @include media-mob($m) {
+                margin-left: -$global-medium-margin;
+                padding: 0 $global-margin 0 $global-medium-margin;
+            }
+        }
     }
 
     /* Sizes
@@ -296,7 +322,6 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
             border: 1px solid $inverse-global-border;
             box-sizing: border-box;
             padding: 0;
-            //min-width: 72px;
             width: 72px;
 
             .uk-inline {
@@ -394,21 +419,23 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
     /* Filter
     ========================================================================== */
 
-    &__filter-button {
-        width: 100%;
-        background-color: rgba(#fff, .1);
-        height: 40px;
-        border: 1px solid transparent;
-        border-radius: 0;
-        padding: 0 20px;
-        line-height: inherit;
-        @include media-mob($m) {
-            padding: 0 25px;
-        }
+    &__filter {
+        &-button {
+            width: 100%;
+            background-color: rgba(#fff, .1);
+            height: 40px;
+            border: 1px solid transparent;
+            border-radius: 0;
+            padding: 0 20px;
+            line-height: inherit;
+            @include media-mob($m) {
+                padding: 0 25px;
+            }
 
-        &.active {
-            border-color: $global-inverse-color;
-            color: $global-inverse-color;
+            &.active {
+                border-color: $global-inverse-color;
+                color: $global-inverse-color;
+            }
         }
     }
 
@@ -464,6 +491,7 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
     ========================================================================== */
 
     &__workspace {
+        z-index: 1;
         display: flex;
         width: 100%;
         order: 1;
@@ -546,6 +574,7 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
             padding-left: $global-gutter;
         }
         @include media_mob($m) {
+            width: 350px;
             padding-left: $global-medium-margin;
         }
         @include media_mob($l) {

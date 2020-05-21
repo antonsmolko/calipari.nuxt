@@ -47,6 +47,6 @@ export default {
 
 <style lang="scss">
 .tm-section__hero {
-    z-index: 2;
+    z-index: 3;
 }
 </style>

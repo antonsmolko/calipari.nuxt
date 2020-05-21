@@ -55,7 +55,7 @@ export default {
     ...mapActions({
       getTagsAction: 'tags/getItemsByImageKeys',
       clearFiltersAction: 'filter/clearFilters',
-      setFieldTagsAction: 'tags/setField',
+      setCategoriesFieldAction: 'categories/setField',
       setImagesFieldAction: 'images/setField'
     }),
     onClose () {
@@ -65,7 +65,7 @@ export default {
   beforeRouteLeave (to, from, next) {
     if (to.name !== 'editor-id') {
       this.clearFiltersAction()
-      this.setFieldTagsAction({ field: 'items', value: [] })
+      this.setCategoriesFieldAction({ field: 'tags', value: [] })
       this.setImagesFieldAction({ field: 'items', value: [] })
     }
     next()

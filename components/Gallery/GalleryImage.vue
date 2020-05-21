@@ -5,19 +5,20 @@
         :data-aspect-ratio="image.ratio"
         :style="`background-image: url('${url}')`")
         .tm-mosaic__image-spinner.uk-text-muted(
-            v-show="imageLoaded"
+            v-show="imgLoaded"
             data-uk-spinner="ratio: 2"
             data-no-mosaic="true")
-        span.tm-mosaic__inside(v-show="!imageLoaded")
+        span.tm-mosaic__inside(v-show="!imgLoaded")
             nuxt-link.tm-mosaic__overlay-link(
                 :to="`/editor/${image.id}`"
                 data-no-mosaic="true")
             span.tm-mosaic__inside-top
                 span.tm-mosaic__article {{ image.article }}
-                //span.tm-mosaic__like(
-                    //:class="{ 'uk-active': liked }"
-                    //@click="onLike")
-                    //span(data-uk-icon="heart")
+                nuxt-link.tm-mosaic__collection(
+                    v-if="image.collection"
+                    :to="`/catalog/collections/${image.collection.alias}`"
+                    data-no-mosaic="true")
+                    span(data-uk-icon="thumbnails")
                 //span.tm-mosaic__logo
                     span(data-uk-icon="icon: instagram; ratio: 1.2")
             span.tm-mosaic__inside-bottom
@@ -42,7 +43,7 @@ export default {
     }
   },
   data: () => ({
-    imageLoaded: true
+    imgLoaded: true
   }),
   computed: {
     url () {
@@ -60,9 +61,9 @@ export default {
     }
   },
   created () {
-    this.loadImageAsync(this.url)
+    this.loadImgAsync(this.url)
       .then(() => {
-        this.imageLoaded = false
+        this.imgLoaded = false
       })
   },
   methods: {
@@ -72,7 +73,7 @@ export default {
     onLike () {
       this.toggleLikeAction(this.image.id)
     },
-    loadImageAsync (url) {
+    loadImgAsync (url) {
       return new Promise((resolve) => {
         const img = new Image()
         img.src = url
@@ -127,17 +128,24 @@ export default {
         }
     }
 
-    &__article {
-        font-size: 13px;
-        font-weight: normal;
-        background: rgba($global-secondary-background, .5);
-        color: $global-inverse-color;
-        padding: 3px 5px;
+    &__article, &__collection {
         line-height: 1;
+        background: rgba($global-secondary-background, .5);
         margin: $base-mosaic-margin;
     }
 
-    &__logo, &__like, &__settings {
+    &__article {
+        font-size: 13px;
+        color: $global-inverse-color;
+        font-weight: normal;
+        padding: 3px 5px;
+    }
+
+    &__collection {
+        padding: 2px;
+    }
+
+    &__logo, &__like {
         display: flex;
         user-select: none;
     }
@@ -163,7 +171,7 @@ export default {
         height: $base-mosaic-button-size;
     }
 
-    &__like, &__settings {
+    &__like, &__collection {
         margin: $base-mosaic-margin;
         color: $inverse-global-color;
         cursor: pointer;

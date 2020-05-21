@@ -1,10 +1,5 @@
 <template lang="pug">
     div(data-uk-height-viewport="offset-top: true; offset-bottom: true")
-        FadeTransition
-            .tm-section.uk-background-fixed(v-show="backgroundPath && !filterOpen")
-                .tm-section__semitransparent-background.uk-position-cover.uk-background-cover(
-                    :data-src="url"
-                    data-uk-img)
         Gallery(
             v-if="!filterOpen"
             :title="title"
@@ -38,6 +33,13 @@
             @close="handleFilterClose"
             @filter="handleFilter"
         )
+        .tm-category__background.uk-position-fixed.uk-width-1-1.uk-height-viewport.uk-position-z-index.uk-position-top(
+            data-uk-scrollspy="cls: uk-animation-fade; delay: 50")
+            .tm-section__semitransparent-background.uk-position-cover.uk-background-cover.uk-background-fixed(
+                v-show="backgroundPath"
+                :data-src="url" data-uk-img)
+            .tm-category__background-default(
+                v-if="!backgroundPath")
 </template>
 
 <script>
@@ -95,11 +97,9 @@ export default {
       activeTag: 'filter/activeTag'
     }),
     url () {
-      if (!this.backgroundPath) {
-        return ''
-      }
-
-      return `${process.env.baseUrl}/image/grayscale/${this.backgroundPath}`
+      return this.backgroundPath
+        ? `${process.env.baseUrl}/image/grayscale/${this.backgroundPath}`
+        : ''
     },
     restrictiveFilterElement () {
       return this.mode === 'imageKeys'
@@ -178,6 +178,8 @@ export default {
 }
 </script>
 
-<style>
-    @import '../../assets/scss/modules/_mosaic-gallery.scss';
+<style lang="scss">
+.tm-category__background-default {
+    background: rgba(#000, .08);
+}
 </style>

@@ -50,7 +50,7 @@
                                         @control="emailControl"
                                     )
                             .uk-margin-medium-top
-                                button.uk-button.uk-button-primary Сбросить пароль
+                                nuxt-link.uk-button.uk-button-primary(to="/reset-password") Сбросить пароль
                             .uk-grid(data-uk-grid class="uk-child-width-1-2@m")
                                 div.uk-margin-large-top
                                     h2.uk-h2.uk-margin-bottom Личные данные

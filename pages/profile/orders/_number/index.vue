@@ -74,8 +74,8 @@ export default {
     OrderDetailsItem
   },
   // middleware: ['auth'],
-  async fetch ({ route, store }) {
-    const orderNumber = route.params.number
+  async fetch ({ params, store }) {
+    const orderNumber = params.number
     await store.dispatch('profile/getOrder', orderNumber)
     store.commit('SET_FIELDS', { pageTitle: `Заказ # ${orderNumber}` })
   },

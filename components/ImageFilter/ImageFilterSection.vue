@@ -50,28 +50,6 @@ export default {
 
 <style lang="scss">
 .tm-filter {
-    @include media-mob($m) {
-        &::before {
-            content: '';
-            position: fixed;
-            display: block;
-            height: 100vh;
-            width: calc(50vw - #{$global-medium-margin});
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 0;
-            will-change: background;
-            background-image: url('/img/bg/bg-megapolice.jpg');
-            background-repeat: no-repeat;
-            background-position: 40%;
-            background-size: cover;
-            opacity: 0;
-            animation: fade-in 1.5s ease forwards;
-        }
-    }
-
     &__section-muted {
         position: relative;
         &::before {
@@ -134,15 +112,6 @@ export default {
         font-weight: normal;
         padding: 0 3px;
         line-height: 18px;
-    }
-}
-
-@keyframes fade-in {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: .2;
     }
 }
 </style>
