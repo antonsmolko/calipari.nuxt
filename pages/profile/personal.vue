@@ -1,158 +1,157 @@
 <template lang="pug">
-    main
-        TopBar(
-            :title="pageTitle")
-            .uk-navbar-item
-                button.uk-close(type="button", data-uk-close, @click="onClose")
-        SlideYDownTransition
-            section.uk-section(
-                v-if="responseData"
-                :class="{ 'uk-light': darkPeriod }"
-                data-uk-height-viewport="offset-top: true; offset-bottom: true")
-                .uk-container
-                    .uk-flex.uk-flex-center
-                        .uk-width-large(class="uk-width-1-1@m")
-                            h2.uk-h2.uk-margin-bottom Аккаунт
-                            .uk-grid.uk-grid-row-small(data-uk-grid class="uk-child-width-1-2@m")
-                                div
-                                    VInput(
-                                        title="Имя"
-                                        :label="true"
-                                        icon="person"
-                                        name="name"
-                                        :controlBtn="true"
-                                        :controlBtnIcon="nameIsEdited ? 'check' : 'pencil'"
-                                        :disabled="!nameIsEdited"
-                                        :min="2"
-                                        :value="account.name"
-                                        :vField="$v.account.name"
-                                        :vRules="{ required: true, minLength: true }"
-                                        :vDelay="true"
-                                        module="profile"
-                                        dispatchName="setAccountFields"
-                                        @control="nameControl"
-                                    )
-                                div
-                                    VInput(
-                                        title="Email"
-                                        :label="true"
-                                        icon="mail"
-                                        name="email"
-                                        :controlBtn="true"
-                                        :controlBtnIcon="emailIsEdited ? 'check' : 'pencil'"
-                                        :disabled="!emailIsEdited"
-                                        :value="account.email"
-                                        :vField="$v.account.email"
-                                        :vRules="{ required: true, email: true }"
-                                        :vDelay="true"
-                                        module="profile"
-                                        dispatchName="setAccountFields"
-                                        @control="emailControl"
-                                    )
-                            .uk-margin-medium-top
-                                nuxt-link.uk-button.uk-button-primary(to="/reset-password") Сбросить пароль
-                            .uk-grid(data-uk-grid class="uk-child-width-1-2@m")
-                                div.uk-margin-large-top
-                                    h2.uk-h2.uk-margin-bottom Личные данные
-                                    form(@submit.prevent="handleCheckout")
-                                        .uk-grid.uk-grid-small.uk-flex-column(data-uk-grid)
-                                            UkInput(
-                                                title="Фамилия"
-                                                name="last_name"
-                                                icon="last-name"
-                                                :value="fields.last_name"
-                                                @input="handleVInput"
-                                            )
-                                            UkInput(
+    Page
+        template(#main)
+            main
+                TopBar(
+                    :title="pageTitle")
+                    .uk-navbar-item
+                        button.uk-close(type="button", data-uk-close, @click="onClose")
+                SlideYDownTransition
+                    section.uk-section(
+                        v-if="responseData"
+                        :class="{ 'uk-light': darkPeriod }"
+                        data-uk-height-viewport="offset-top: true; offset-bottom: true")
+                        .uk-container
+                            .uk-flex.uk-flex-center
+                                .uk-width-large(class="uk-width-1-1@m")
+                                    h2.uk-h2.uk-margin-bottom Аккаунт
+                                    .uk-grid.uk-grid-row-small(
+                                        data-uk-grid class="uk-child-width-1-2@m")
+                                        div
+                                            VInput(
                                                 title="Имя"
-                                                name="first_name"
-                                                icon="first-name"
-                                                :value="fields.first_name"
-                                                @input="handleVInput"
-                                            )
-                                            UkInput(
-                                                title="Отчество"
-                                                name="middle_name"
-                                                icon="middle-name"
-                                                :value="fields.middle_name"
-                                                @input="handleVInput"
-                                            )
-                                            UkInput(
-                                                title="Телефон"
-                                                name="phone"
-                                                icon="phone"
-                                            )
-                                                template(#input)
-                                                    input(
-                                                        class="uk-input uk-form-large uk-box-shadow-medium"
-                                                        v-mask="$configForm.PHONE_MASK"
-                                                        :value="fields.phone"
-                                                        :tokens="token"
-                                                        @focus="handleControlPhone"
-                                                        @input="handleControlPhone"
-                                                        :masked="true"
-                                                    )
-                                                template(#notification)
-                                                    .under-input-notice.uk-position-relative(v-if="$v.fields.phone.$error")
-                                                        InputNotificationPhone(v-if="!$v.fields.phone.testPhone" name="Телефон")
-                                            .uk-margin-medium-top(v-if="fromRoute")
-                                                button.uk-button.uk-button-primary(
-                                                    :disabled="$v.fields.$invalid"
-                                                    type="submit"
-                                                    @click.prevent="onCheckout") Продолжить оформление заказа
-                                div.uk-margin-large-top
-                                    h2.uk-h2.uk-margin-bottom Данные доставки
-                                    .uk-grid.uk-grid-small.uk-flex-column(data-uk-grid)
-                                        UkInput(
-                                            title="Почтовый индекс"
-                                            name="postal_code"
-                                            icon="hashtag"
-                                            :value="fields.postal_code"
-                                            @input="handleInput"
-                                        )
-                                        VSelect(
-                                            name="locality"
-                                            labelName="Регион / город"
-                                            icon="world"
-                                            @input="localityInput"
-                                            @search="localitySearch"
-                                            :isLoading="settlementsLoading"
-                                            label="name"
-                                            :value="!localityIsInvalid ? fields.locality.name : ''"
-                                            :placeholder="!localityIsInvalid ? '' : 'Введите населенный пункт'"
-                                            :options="settlements"
-                                            noOptionsText="Введите город")
-                                        UkInput(
-                                            title="Улица"
-                                            name="street"
-                                            icon="location"
-                                            :value="fields.street"
-                                            @input="handleInput"
-                                        )
-                                        UkInput(
-                                            title="Дом / Строение / Корпус / Квартира"
-                                            name="apartments"
-                                            icon="home"
-                                            :value="fields.apartments"
-                                            @input="handleInput"
-                                        )
+                                                :label="true"
+                                                icon="person"
+                                                name="name"
+                                                :controlBtn="true"
+                                                :controlBtnIcon="nameIsEdited ? 'check' : 'pencil'"
+                                                :disabled="!nameIsEdited"
+                                                :min="2"
+                                                :value="account.name"
+                                                :vField="$v.account.name"
+                                                :vRules="{ required: true, minLength: true }"
+                                                :vDelay="true"
+                                                module="profile"
+                                                dispatchName="setAccountFields"
+                                                @control="nameControl")
+                                        div
+                                            VInput(
+                                                title="Email"
+                                                :label="true"
+                                                icon="mail"
+                                                name="email"
+                                                :controlBtn="true"
+                                                :controlBtnIcon="emailIsEdited ? 'check' : 'pencil'"
+                                                :disabled="!emailIsEdited"
+                                                :value="account.email"
+                                                :vField="$v.account.email"
+                                                :vRules="{ required: true, email: true }"
+                                                :vDelay="true"
+                                                module="profile"
+                                                dispatchName="setAccountFields"
+                                                @control="emailControl")
+                                    .uk-margin-medium-top
+                                        nuxt-link.uk-button.uk-button-primary(to="/reset-password") Сбросить пароль
+                                    .uk-grid(data-uk-grid class="uk-child-width-1-2@m")
+                                        div.uk-margin-large-top
+                                            h2.uk-h2.uk-margin-bottom Личные данные
+                                            form(@submit.prevent="handleCheckout")
+                                                .uk-grid.uk-grid-small.uk-flex-column(data-uk-grid)
+                                                    UkInput(
+                                                        title="Фамилия"
+                                                        name="last_name"
+                                                        icon="last-name"
+                                                        :value="fields.last_name"
+                                                        @input="handleVInput")
+                                                    UkInput(
+                                                        title="Имя"
+                                                        name="first_name"
+                                                        icon="first-name"
+                                                        :value="fields.first_name"
+                                                        @input="handleVInput")
+                                                    UkInput(
+                                                        title="Отчество"
+                                                        name="middle_name"
+                                                        icon="middle-name"
+                                                        :value="fields.middle_name"
+                                                        @input="handleVInput")
+                                                    UkInput(
+                                                        title="Телефон"
+                                                        name="phone"
+                                                        icon="phone")
+                                                        template(#input)
+                                                            input(
+                                                                class="uk-input uk-form-large uk-box-shadow-medium"
+                                                                v-mask="$configForm.PHONE_MASK"
+                                                                :value="fields.phone"
+                                                                :tokens="token"
+                                                                @focus="handleControlPhone"
+                                                                @input="handleControlPhone"
+                                                                :masked="true")
+                                                        template(#notification)
+                                                            .under-input-notice.uk-position-relative(
+                                                                v-if="$v.fields.phone.$error")
+                                                                InputNotificationPhone(
+                                                                    v-if="!$v.fields.phone.testPhone"
+                                                                    name="Телефон")
+                                                    .uk-margin-medium-top(v-if="fromRoute")
+                                                        button.uk-button.uk-button-primary(
+                                                            :disabled="$v.fields.$invalid"
+                                                            type="submit"
+                                                            @click.prevent="onCheckout") Продолжить оформление заказа
+                                        div.uk-margin-large-top
+                                            h2.uk-h2.uk-margin-bottom Данные доставки
+                                            .uk-grid.uk-grid-small.uk-flex-column(data-uk-grid)
+                                                UkInput(
+                                                    title="Почтовый индекс"
+                                                    name="postal_code"
+                                                    icon="hashtag"
+                                                    :value="fields.postal_code"
+                                                    @input="handleInput")
+                                                VSelect(
+                                                    name="locality"
+                                                    labelName="Регион / город"
+                                                    icon="world"
+                                                    @input="localityInput"
+                                                    @search="localitySearch"
+                                                    :isLoading="settlementsLoading"
+                                                    label="name"
+                                                    :value="!localityIsInvalid ? fields.locality.name : ''"
+                                                    :placeholder="!localityIsInvalid ? '' : 'Введите населенный пункт'"
+                                                    :options="settlements"
+                                                    noOptionsText="Введите город")
+                                                UkInput(
+                                                    title="Улица"
+                                                    name="street"
+                                                    icon="location"
+                                                    :value="fields.street"
+                                                    @input="handleInput")
+                                                UkInput(
+                                                    title="Дом / Строение / Корпус / Квартира"
+                                                    name="apartments"
+                                                    icon="home"
+                                                    :value="fields.apartments"
+                                                    @input="handleInput")
 </template>
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { email, minLength, required } from 'vuelidate/lib/validators'
 import { mask } from 'vue-the-mask'
 import debounce from 'lodash/debounce'
+import Page from '~/components/layout/Page'
 import TopBar from '~/components/layout/TopBar'
 import VInput from '~/components/form/VInput'
 import UkInput from '~/components/form/Input/UkInput'
 import VSelect from '~/components/form/Select/VSelect'
 import { InputNotificationPhone } from '~/components/form/input-notifications'
 import setLayout from '~/components/mixins/setLayout'
+import scrollToTop from '~/components/mixins/scrollToTop'
 const _debounce = debounce(value => value(), 300)
 export default {
   middleware: 'auth',
   scrollToTop: true,
   components: {
+    Page,
     TopBar,
     VInput,
     UkInput,
@@ -160,7 +159,7 @@ export default {
     InputNotificationPhone
   },
   directives: { mask },
-  mixins: [setLayout],
+  mixins: [setLayout, scrollToTop],
   metaInfo () {
     return {
       title: this.pageTitle

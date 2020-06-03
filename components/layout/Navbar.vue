@@ -11,9 +11,9 @@
                         ul.uk-navbar-nav
                             li: nuxt-link(to="/catalog")  Каталог
                             li: nuxt-link(to="/textures") Материалы
-                            li: a(href="#") Информация
-                            li: a(href="#") Портфолио
-                            li: a(href="#") Контакты
+                            li: nuxt-link(to="/blog") Блог
+                            li: nuxt-link(to="/portfolio") Портфолио
+                            li: nuxt-link(to="/contacts") Контакты
                     .uk-navbar-right
                         ul.uk-navbar-nav.tm-navbar-icon(class="uk-visible@m")
                             li.uk-navbar-item

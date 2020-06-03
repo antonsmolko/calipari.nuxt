@@ -1,5 +1,5 @@
 <template lang="pug">
-    div(v-if="onLoad")
+    FadeTransition(mode="out-in" v-if="onLoad")
         nuxt
 </template>
 <script>

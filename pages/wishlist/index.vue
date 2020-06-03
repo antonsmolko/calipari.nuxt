@@ -1,30 +1,33 @@
 <template lang="pug">
-    main(:class="{ 'uk-light': darkPeriod }")
-        GalleryLayout(
-            v-if="items.length"
-            mode="imageKeys"
-            title="Избранное"
-            :isWishList="true"
-            :keyValue="items")
-            template(#hero)
-                GalleryHero(
-                    :title="title"
-                    :backgroundPath="backgroundPath"
-                    :grayscaleMod="true")
-        template(v-else)
-            TopBar(title="Избранное")
-                .uk-navbar-item
-                    button.uk-close.tm-topbar__control(type="button", data-uk-close, @click="onClose")
-            .uk-section.uk-section-xlarge
-                .uk-text-center
-                    span.uk-heading-small Список пуст
-                    p.tm-text-medium Воспользуйтесь каталогом, чтобы добавить изображения
-                    nuxt-link.uk-button.uk-button-primary.uk-margin-medium-top(to="/catalog") В каталог
+    Page
+        template(#main)
+            main(:class="{ 'uk-light': darkPeriod }")
+                GalleryLayout(
+                    v-if="items.length"
+                    mode="imageKeys"
+                    title="Избранное"
+                    :isWishList="true"
+                    :keyValue="items")
+                    template(#hero)
+                        GalleryHero(
+                            :title="title"
+                            :backgroundPath="backgroundPath"
+                            :grayscaleMod="true")
+                template(v-else)
+                    TopBar(title="Избранное")
+                        .uk-navbar-item
+                            button.uk-close.tm-topbar__control(type="button", data-uk-close, @click="onClose")
+                    .uk-section.uk-section-xlarge
+                        .uk-container
+                            .uk-text-center
+                                span.uk-heading-small Список пуст
+                                p.tm-text-medium Воспользуйтесь каталогом, чтобы добавить изображения
+                                nuxt-link.uk-button.uk-button-primary.uk-margin-medium-top(to="/catalog") В каталог
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
-
+import Page from '~/components/layout/Page.vue'
 import GalleryLayout from '~/components/Gallery/GalleryLayout'
 import GalleryHero from '~/components/Gallery/GalleryHero'
 import TopBar from '~/components/layout/TopBar'
@@ -35,6 +38,7 @@ export default {
   name: 'WishList',
   scrollToTop: true,
   components: {
+    Page,
     TopBar,
     GalleryLayout,
     GalleryHero
@@ -59,7 +63,7 @@ export default {
       setImagesFieldAction: 'images/setField'
     }),
     onClose () {
-      this.$router.go(-1) ? this.$router.go(-1) : this.$router.push('/')
+      window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
     }
   },
   beforeRouteLeave (to, from, next) {

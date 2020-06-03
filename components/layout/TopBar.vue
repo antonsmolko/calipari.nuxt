@@ -6,7 +6,7 @@
                     .uk-navbar-left
                         .uk-navbar-item.uk-flex.uk-flex-column.uk-flex-top
                             span.tm-topbar__lead(v-if="lead") {{ lead }}
-                            h1.uk-h4.tm-topbar__heading.uk-margin-remove {{ title }}
+                            h1.uk-h4.tm-topbar__heading.uk-margin-remove.uk-text-truncate {{ title }}
                     .uk-navbar-right
                         slot
 </template>
@@ -30,7 +30,20 @@ export default {
 .tm-topbar {
     z-index: 10;
     &__heading {
+        max-width: calc(100vw - #{$global-gutter} - 44px);
         color: $global-emphasis-color !important;
+        @include media_mob($se) {
+            max-width: $width-medium-width;
+        }
+        @include media_mob($s) {
+            max-width: $width-large-width;
+        }
+        @include media_mob($m) {
+            max-width: $width-xlarge-width;
+        }
+        @include media_mob($l) {
+            max-width: $width-xxlarge-width;
+        }
     }
 
     &__lead {
@@ -42,9 +55,6 @@ export default {
         position: relative;
         color: $global-emphasis-color !important;
         cursor: pointer;
-        //&:not(:last-child) {
-        //    margin-right: $global-small-margin;
-        //}
 
         .uk-badge {
             position: absolute;

@@ -3,8 +3,11 @@
         .tm-hero.uk-container(:class="{ 'uk-light': darkPeriod }")
             .tm-hero__container(data-uk-grid)
                 .tm-hero__strip-block(class="uk-width-1-2@m")
-                    .tm-hero__strip.uk-background-cover(data-src="/img/main/hero/strip-1.jpg" data-uk-img data-uk-scrollspy="cls:uk-animation-slide-top; delay: 500")
-                        img.tm-hero__strip-roll(data-src="/img/main/hero/roll.png" data-uk-img)
+                    .tm-hero__strip.uk-background-cover(
+                        data-src="/img/main/hero/strip-2.jpg"
+                        data-uk-img
+                        data-uk-scrollspy="cls:uk-animation-slide-top; delay: 500")
+                        img.tm-hero__strip-roll(:data-src="rollSrc" data-uk-img)
                 .tm-hero__content(data-uk-scrollspy="cls:uk-animation-fade" class="uk-width-1-2@m")
                     .tm-hero__heading
                         span.tm-hero__brand-name.uk-heading-large.uk-text-background Calipari
@@ -19,7 +22,17 @@
                 a.uk-link-muted.uk-text-uppercase(href="") Facebook
                 a.uk-link-muted.uk-text-uppercase(href="") Instagram
 </template>
-
+<script>
+export default {
+  computed: {
+    rollSrc () {
+      return this.darkPeriod
+        ? '/img/main/hero/roll.png'
+        : '/img/main/hero/roll-light.png'
+    }
+  }
+}
+</script>
 <style lang="scss">
 .tm-hero {
     display: flex;
@@ -96,6 +109,7 @@
 
     &__strip {
         height: 40vh;
+        box-shadow: -3px 0 8px rgba(#000, .2);
         @include media-mob($m) {
             height: 80vh;
         }
@@ -207,7 +221,7 @@
 
     &__title {
         margin-bottom: $global-small-margin;
-        font-weight: $base-body-font-weight;
+        //font-weight: $base-body-font-weight;
         @include media-mob-portrait($s) {
             font-size: 45.3px;
         }

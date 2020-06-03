@@ -21,14 +21,8 @@ export const actions = {
   setField ({ commit }, payload) {
     commit('SET_FIELD', payload)
   }
-  // getTagsByItemId ({ commit }, id) {
-  //   return action(this.$api, 'get', commit, {
-  //     url: `/catalog/collections/${id}/tags`,
-  //     thenContent: response => commit('SET_FIELD', { field: 'tags', value: response.data })
-  //   })
-  // }
 }
 
 export const getters = {
-  mainImage: state => state.item.images.find(image => image.id === state.item.main_image_id)
+  mainImage: state => state.item ? state.item.images.find(image => image.id === state.item.main_image_id) : null
 }

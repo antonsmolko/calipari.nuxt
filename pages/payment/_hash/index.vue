@@ -1,19 +1,23 @@
 <template lang="pug">
-    main(:class="{ 'uk-light': darkPeriod }")
-        section.uk-section.uk-text-center
-            .uk-container
-                .uk-margin-large-bottom
-                    h1.uk-heading-small.uk-margin-remove Оплата
-                    span.uk-text-lead {{ payment.description }}
-                    .uk-divider-small
-                FadeTransition(v-show="responseData")
-                    #payment-form
+    Page
+        template(#main)
+            main(:class="{ 'uk-light': darkPeriod }")
+                section.uk-section.uk-text-center
+                    .uk-container
+                        .uk-margin-large-bottom
+                            h1.uk-heading-small.uk-margin-remove Оплата
+                            span.uk-text-lead {{ payment.description }}
+                            .uk-divider-small
+                        FadeTransition(v-show="responseData")
+                            #payment-form
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import Page from '~/components/layout/Page.vue'
 export default {
   scrollToTop: true,
+  components: { Page },
   metaInfo () {
     return {
       script: [

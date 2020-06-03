@@ -1,42 +1,46 @@
 <template lang="pug">
-    main
-        TopBar(:title="pageTitle")
-            .uk-navbar-item
-                button.uk-close(type="button", data-uk-close, @click="onClose")
-        SlideYDownTransition(v-show="pageTitle")
-            section.tm-orders.uk-section(
-                v-if="items.length"
-                :class="{ 'uk-light': darkPeriod }")
-                .uk-container
-                    OrderListItem(
-                        v-for="item in items"
-                        :key="item.number"
-                        :order="item"
-                        @pay="onPay"
-                        @cancel="onCancel"
-                    )
-            section.uk-section.uk-section-xlarge.uk-text-center(
-                v-else :class="{ 'uk-light': darkPeriod }")
-                .uk-container
-                    span.uk-heading-small Список заказов пуст
-                    .uk-margin-medium-top
-                        nuxt-link.uk-button.uk-button-primary(to="/profile") Назад
+    Page
+        template(#main)
+            main
+                TopBar(:title="pageTitle")
+                    .uk-navbar-item
+                        button.uk-close(type="button", data-uk-close, @click="onClose")
+                SlideYDownTransition(v-show="pageTitle")
+                    section.tm-orders.uk-section(
+                        v-if="items.length"
+                        :class="{ 'uk-light': darkPeriod }")
+                        .uk-container
+                            OrderListItem(
+                                v-for="item in items"
+                                :key="item.number"
+                                :order="item"
+                                @pay="onPay"
+                                @cancel="onCancel")
+                    section.uk-section.uk-section-xlarge.uk-text-center(
+                        v-else :class="{ 'uk-light': darkPeriod }")
+                        .uk-container
+                            span.uk-heading-small Список заказов пуст
+                            .uk-margin-medium-top
+                                nuxt-link.uk-button.uk-button-primary(to="/profile") Назад
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import Page from '~/components/layout/Page.vue'
 import setLayout from '~/components/mixins/setLayout'
+import scrollToTop from '~/components/mixins/scrollToTop'
 import TopBar from '~/components/layout/TopBar'
 import OrderListItem from '~/components/Orders/OrderListItem'
 export default {
   name: 'Orders',
   scrollToTop: true,
   components: {
+    Page,
     TopBar,
     OrderListItem
   },
   // middleware: ['auth'],
-  mixins: [setLayout],
+  mixins: [scrollToTop, setLayout],
   metaInfo () {
     return {
       title: this.pageTitle

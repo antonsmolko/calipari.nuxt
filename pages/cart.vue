@@ -1,42 +1,43 @@
 <template lang="pug">
-    main
-        TopBar(title="Корзина")
-            .uk-navbar-item(class="uk-visible@l" v-if="items.length")
-                //span.tm-total-price__heading Цена
-                //span.uk-h3.uk-text-emphasis.uk-margin-right {{ totalFormatPrice }}
-                button.uk-button.uk-button-small.uk-button-danger(
-                    @click.prevent="checkout") Оформить
-            .uk-navbar-item
-                button.uk-close(type="button", data-uk-close, @click="onClose")
-        section.uk-section.uk-position-relative(
-            v-if="items.length"
-            :class="{ 'uk-light': darkPeriod }"
-            data-uk-height-viewport="offset-top: true; offset-bottom: true")
-            CartList(
-                :items="items"
-            )
-            .uk-container(class="uk-visible@l")
-                .tm-checkout__footer
-                    span.tm-total-price__heading Цена
-                    span.uk-text-large.uk-text-emphasis {{ totalFormatPrice }}
-                    button.uk-button.uk-button-danger(@click.prevent="checkout") Оформить
-        section.uk-section.uk-section-xlarge.uk-text-center(v-else :class="{ 'uk-light': darkPeriod }")
-            .uk-container
-                span.uk-heading-small Корзина пуста
-                p.tm-text-medium Воспользуйтесь каталогом, чтобы добавить заказ
-                nuxt-link.uk-button.uk-button-primary.uk-margin-medium-top(to="/catalog") В каталог
-        SlideYDownTransition(mode="out-in")
-            CartBottomBar(
-                v-if="items.length"
-                :price="totalPrice"
-                @checkout="checkout")
-        .uk-padding(class="uk-hidden@l")
+    Page
+        template(#main)
+            main
+                TopBar(title="Корзина")
+                    .uk-navbar-item(class="uk-visible@l" v-if="items.length")
+                        //span.tm-total-price__heading Цена
+                        //span.uk-h3.uk-text-emphasis.uk-margin-right {{ totalFormatPrice }}
+                        button.uk-button.uk-button-small.uk-button-danger(
+                            @click.prevent="checkout") Оформить
+                    .uk-navbar-item
+                        button.uk-close(type="button", data-uk-close, @click="onClose")
+                section.uk-section.uk-position-relative(
+                    v-if="items.length"
+                    :class="{ 'uk-light': darkPeriod }"
+                    data-uk-height-viewport="offset-top: true; offset-bottom: true")
+                    CartList(
+                        :items="items")
+                    .uk-container(class="uk-visible@l")
+                        .tm-checkout__footer
+                            span.tm-total-price__heading Цена
+                            span.uk-text-large.uk-text-emphasis {{ totalFormatPrice }}
+                            button.uk-button.uk-button-danger(@click.prevent="checkout") Оформить
+                section.uk-section.uk-section-xlarge.uk-text-center(v-else :class="{ 'uk-light': darkPeriod }")
+                    .uk-container
+                        span.uk-heading-small Корзина пуста
+                        p.tm-text-medium Воспользуйтесь каталогом, чтобы добавить заказ
+                        nuxt-link.uk-button.uk-button-primary.uk-margin-medium-top(to="/catalog") В каталог
+                SlideYDownTransition(mode="out-in")
+                    CartBottomBar(
+                        v-if="items.length"
+                        :price="totalPrice"
+                        @checkout="checkout")
+                .uk-padding(class="uk-hidden@l")
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { getFormatPrice } from '~/components/helpers'
-
+import Page from '~/components/layout/Page.vue'
 import TopBar from '~/components/layout/TopBar'
 import CartBottomBar from '~/components/Cart/CartBottomBar'
 import CartList from '~/components/Cart/CartList'
@@ -45,6 +46,7 @@ import scrollToTop from '~/components/mixins/scrollToTop'
 export default {
   scrollToTop: true,
   components: {
+    Page,
     CartList,
     CartBottomBar,
     TopBar

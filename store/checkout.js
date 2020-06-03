@@ -45,6 +45,9 @@ export const mutations = {
       }
     }
   },
+  SET_FIELD (state, { field, value }) {
+    state[field] = value
+  },
   ENABLE (state, { createdAt, price }) {
     state.enabled = true
     state.createdAt = createdAt
@@ -60,6 +63,9 @@ export const actions = {
   },
   setFields ({ commit }, payload) {
     commit('SET_FIELDS', payload)
+  },
+  setField ({ commit }, payload) {
+    commit('SET_FIELD', payload)
   },
   enable ({ commit }, payload) {
     commit('ENABLE', payload)
@@ -81,7 +87,7 @@ export const getters = {
   deliveryIsInvalid: (state, getters, rootState, rootGetters) => {
     const delivery = rootGetters['delivery/getItemById'](state.delivery)
 
-    if (delivery !== null) {
+    if (delivery !== null && delivery) {
       switch (delivery.alias) {
         case 'cdek':
           return getters.localityIsInvalid || getters.pvzIsInvalid
@@ -130,25 +136,27 @@ export const getters = {
 
     let details = {}
 
-    switch (delivery.alias) {
-      case 'pickup':
-        details = { pickup: state.pickup.value }
-        break
-      case 'cdek':
-        details = {
-          locality: state.locality,
-          pvz: state.pvz,
-          price: state.deliveryPrice
-        }
-        break
-      case 'cdek_courier':
-        details = {
-          locality: state.locality,
-          street: state.street,
-          apartments: state.apartments,
-          price: state.deliveryPrice
-        }
-        break
+    if (delivery !== null && delivery) {
+      switch (delivery.alias) {
+        case 'pickup':
+          details = { pickup: state.pickup.value }
+          break
+        case 'cdek':
+          details = {
+            locality: state.locality,
+            pvz: state.pvz,
+            price: state.deliveryPrice
+          }
+          break
+        case 'cdek_courier':
+          details = {
+            locality: state.locality,
+            street: state.street,
+            apartments: state.apartments,
+            price: state.deliveryPrice
+          }
+          break
+      }
     }
 
     return { id: state.delivery, ...details }

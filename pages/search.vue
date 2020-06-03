@@ -1,38 +1,41 @@
 <template lang="pug">
-    main(:class="{ 'uk-light': darkPeriod }")
-        GalleryLayout(
-            :title="pageTitle"
-            :mode="mode"
-            :backgroundPath="imagePath"
-            :keyValue="key")
-            template(#search)
-                .tm-search__form.uk-margin-medium-top.uk-position-relative.uk-position-z-index(
-                    data-uk-scrollspy="cls: uk-animation-slide-bottom-small")
-                    .uk-fieldset
-                        VSelect(
-                            class="uk-margin"
-                            name="search"
-                            icon="search"
-                            @input="onSelect"
-                            @search="onSearch"
-                            :isLoading="loading"
-                            label="title"
-                            :value="selected"
-                            :placeholder="selected ? '' : 'Введите запрос'"
-                            :options="searched")
+    Page
+        template(#main)
+            main(:class="{ 'uk-light': darkPeriod }")
+                GalleryLayout(
+                    :title="pageTitle"
+                    :mode="mode"
+                    :backgroundPath="imagePath"
+                    :keyValue="key")
+                    template(#search)
+                        .tm-search__form.uk-margin-medium-top.uk-position-relative.uk-position-z-index(
+                            data-uk-scrollspy="cls: uk-animation-slide-bottom-small")
+                            .uk-fieldset
+                                VSelect(
+                                    class="uk-margin"
+                                    name="search"
+                                    icon="search"
+                                    @input="onSelect"
+                                    @search="onSearch"
+                                    :isLoading="loading"
+                                    label="title"
+                                    :value="selected"
+                                    :placeholder="selected ? '' : 'Введите запрос'"
+                                    :options="searched")
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import throttle from 'lodash/throttle'
+import Page from '~/components/layout/Page.vue'
 import VSelect from '~/components/form/Select/VSelect'
 import GalleryLayout from '~/components/Gallery/GalleryLayout'
-
 import setLayout from '~/components/mixins/setLayout'
 import scrollToTop from '~/components/mixins/scrollToTop'
 const _throttle = throttle(f => f(), 300)
 export default {
   components: {
+    Page,
     VSelect,
     GalleryLayout
   },

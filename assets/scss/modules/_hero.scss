@@ -77,7 +77,6 @@
         bottom: 0;
         max-width: inherit;
         height: auto;
-        bottom: 0;
         left: 50%;
         transform: translate(-50%, 85%);
         @include media-mob-portrait($s) {
@@ -168,7 +167,7 @@
     }
     &__title {
         margin-bottom: $global-small-margin;
-        font-weight: $base-body-font-weight;
+        //font-weight: $base-body-font-weight;
         @include media-mob-portrait($s) {
             font-size: 45.3px;
         }

@@ -13,11 +13,11 @@
                 @paginate="paginate"
             )
             .uk-width-1-1.uk-flex.uk-flex-center.uk-margin-large-top(v-else)
-                    .uk-spinner(data-uk-spinner ratio="3")
+                .uk-spinner.uk-text-muted(data-uk-spinner ratio="3")
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 
 import GalleryImage from './GalleryImage'
 import GalleryImageSection from './GalleryImageSection'
@@ -52,13 +52,7 @@ export default {
       activeTag: 'filter/activeTag'
     })
   },
-  created () {
-    this.setFieldsAction({ footer: false })
-  },
   methods: {
-    ...mapActions('images', {
-      setImageFieldsAction: 'setFields'
-    }),
     paginate () {
       this.$emit('paginate')
     },

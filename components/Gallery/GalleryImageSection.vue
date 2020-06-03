@@ -6,8 +6,7 @@
                     v-for="image in images"
                     :key="image.id"
                     :image="image"
-                    @dislike="dislike"
-                )
+                    @dislike="dislike")
         Observer(
             :options="observerOptions"
             @intersect="intersected")
@@ -19,6 +18,7 @@ import VueScrollTo from 'vue-scrollto'
 import GalleryImage from '~/components/Gallery/GalleryImage'
 import Observer from '~/components/Observer'
 import Mosaic from '~/plugins/mosaic'
+
 export default {
   name: 'GalleryImageSection',
   components: {
@@ -68,12 +68,11 @@ export default {
         : this.initMosaic()
     },
     paginateEnd () {
-      if (this.paginateEnd) {
-        this.setFieldsAction({ footer: true })
-      }
+      this.setFieldAction({ field: 'footer', value: this.paginateEnd })
     }
   },
   async mounted () {
+    this.setFieldAction({ field: 'footer', value: this.paginateEnd })
     const mosaicEl = this.$refs.mosaic
     this.mosaic = new Mosaic(mosaicEl, this.mosaicOptions)
 
@@ -84,7 +83,7 @@ export default {
   },
   methods: {
     ...mapActions('images', {
-      setImageFieldsAction: 'setFields'
+      setImageFieldAction: 'setField'
     }),
     intersected () {
       if (this.initialized && !this.paginateEnd) {
@@ -114,7 +113,7 @@ export default {
       const options = {
         easing: 'ease-in-out',
         offset: -300,
-        onDone: () => this.setImageFieldsAction({ lastPreview: null })
+        onDone: () => this.setImageFieldAction({ field: 'lastPreview', value: null })
       }
       VueScrollTo.scrollTo(`#image-${this.lastPreview}`, 300, options)
     }

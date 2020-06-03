@@ -27,7 +27,7 @@
 @import "~uikit/src/scss/components/spinner.scss"; // After: Icon
 // @import "~uikit/src/scss/components/totop.scss"; // After: Icon
 @import "~uikit/src/scss/components/marker.scss"; // After: Icon
-// @import "~uikit/src/scss/components/alert.scss"; // After: Close
+@import "~uikit/src/scss/components/alert.scss"; // After: Close
 @import "~uikit/src/scss/components/badge.scss";
 @import "~uikit/src/scss/components/label.scss";
 @import "~uikit/src/scss/components/overlay.scss"; // After: Icon
@@ -40,8 +40,8 @@
 @import "~uikit/src/scss/components/navbar.scss"; // After: Card, Grid, Nav, Icon, Search
 // @import "~uikit/src/scss/components/subnav.scss";
 // @import "~uikit/src/scss/components/breadcrumb.scss";
-// @import "~uikit/src/scss/components/pagination.scss";
-// @import "~uikit/src/scss/components/tab.scss";
+@import "~uikit/src/scss/components/pagination.scss";
+@import "~uikit/src/scss/components/tab.scss";
 // @import "~uikit/src/scss/components/slidenav.scss"; // After: Icon
 @import "~uikit/src/scss/components/dotnav.scss";
 // @import "~uikit/src/scss/components/thumbnav.scss";
@@ -56,7 +56,7 @@
 @import "~uikit/src/scss/components/slider.scss";
 @import "~uikit/src/scss/components/sticky.scss";
 //@import "~uikit/src/scss/components/offcanvas.scss";
-//@import "~uikit/src/scss/components/switcher.scss";
+@import "~uikit/src/scss/components/switcher.scss";
 // @import "~uikit/src/scss/components/leader.scss";
 // Scrollspy
 // Toggle

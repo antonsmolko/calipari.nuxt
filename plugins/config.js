@@ -12,6 +12,19 @@ const form = Object.freeze({
 
 Vue.prototype.$configForm = form
 
+/**
+ * Типы статей блого
+ */
+const postTypes = [
+  { title: 'Новости', index: 'news' },
+  { title: 'Гид', index: 'guide' },
+  { title: 'Акции', index: 'stocks' },
+  { title: 'События', index: 'events' }
+]
+
+Vue.prototype.$postTypes = postTypes
+
 export {
-  form
+  form,
+  postTypes
 }

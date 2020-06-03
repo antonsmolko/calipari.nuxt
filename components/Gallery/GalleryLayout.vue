@@ -23,16 +23,14 @@
                                 :key="tag.id"
                                 :item="tag"
                                 :active="activeTag === tag.id"
-                                @click="tagClick"
-                            )
+                                @click="tagClick")
         ImageFilter(
             v-if="filterOpen"
             :mode="mode"
             :keyValue="keyValue"
             :open="filterOpen"
             @close="handleFilterClose"
-            @filter="handleFilter"
-        )
+            @filter="handleFilter")
         .tm-category__background.uk-position-fixed.uk-width-1-1.uk-height-viewport.uk-position-z-index.uk-position-top(
             data-uk-scrollspy="cls: uk-animation-fade; delay: 50")
             .tm-section__semitransparent-background.uk-position-cover.uk-background-cover.uk-background-fixed(
@@ -115,9 +113,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      setFieldsAction: 'setFields',
+      setFieldAction: 'setField',
       getItemsAction: 'images/getItems',
-      updatePaginationFieldsAction: 'images/updatePaginationFields',
       resetPaginationAction: 'images/resetPagination',
       removeItemAction: 'images/removeItem',
       clearFilterFieldsAction: 'filter/clearFields',
@@ -126,16 +123,16 @@ export default {
     }),
     handleFilterOpen () {
       this.filterOpen = true
-      this.setFieldsAction({ bottomBar: false })
+      this.setFieldAction({ field: 'bottomBar', value: false })
     },
     async handleFilter () {
       await this.refreshItems()
       this.filterOpen = false
-      this.setFieldsAction({ bottomBar: true })
+      this.setFieldAction({ field: 'bottomBar', value: true })
     },
     handleFilterClose () {
       this.filterOpen = false
-      this.setFieldsAction({ bottomBar: true })
+      this.setFieldAction({ field: 'bottomBar', value: true })
     },
     async paginate () {
       await this.getItems({ increasePage: true })

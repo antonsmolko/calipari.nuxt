@@ -1,15 +1,17 @@
 <template lang="pug">
-    main(:class="{ 'uk-light': darkPeriod }")
-        GalleryLayout(
-            :title="item.title"
-            :backgroundPath="item.image_path"
-            :keyValue="item.id"
-        )
+    Page
+        template(#main)
+            main(:class="{ 'uk-light': darkPeriod }")
+                GalleryLayout(
+                    :title="item.title"
+                    :backgroundPath="item.image_path"
+                    :keyValue="item.id")
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
 
+import Page from '~/components/layout/Page.vue'
 import GalleryLayout from '~/components/Gallery/GalleryLayout'
 import setLayout from '~/components/mixins/setLayout'
 import scrollToTop from '~/components/mixins/scrollToTop'
@@ -18,13 +20,11 @@ export default {
   name: 'Category',
   metaInfo () {
     return {
-      title: this.pageTitle,
-      bodyAttrs: {
-        class: 'tm-category'
-      }
+      title: this.pageTitle
     }
   },
   components: {
+    Page,
     GalleryLayout
   },
   mixins: [setLayout, scrollToTop],
