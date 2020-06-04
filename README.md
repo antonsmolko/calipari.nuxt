@@ -1,6 +1,6 @@
 # nuxt
 
-> Viktoria Smolko Aura Photo project
+> From Viktoria Smolko Calipari project
 
 ## Build Setup
 

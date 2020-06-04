@@ -21,7 +21,7 @@ export const actions = {
       : commit('TOGGLE', id)
   },
   sync ({ state, commit }) {
-    const token = this.$auth.getToken('local')
+    const token = this.$auth.token.get()
     const items = state.items
     const headers = { Authorization: token }
 
@@ -29,7 +29,7 @@ export const actions = {
       .then(response => commit('SET_ITEMS', response))
   },
   toggleAuth ({ commit }, id) {
-    const token = this.$auth.getToken('local')
+    const token = this.$auth.token.get()
     const headers = { Authorization: token }
 
     return this.$api.$get(`/profile/wishlist/${id}/toggle`, { headers })

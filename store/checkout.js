@@ -72,7 +72,7 @@ export const actions = {
   },
   orderConfirm ({ commit, getters }) {
     const headers = this.$auth.loggedIn
-      ? { Authorization: this.$auth.getToken('local') }
+      ? { Authorization: this.$auth.token.get() }
       : {}
 
     return this.$api.$post('/orders', getters.orderDetails, { headers })

@@ -76,7 +76,7 @@ export default {
     OrderItem,
     OrderDetailsItem
   },
-  // middleware: ['auth'],
+  middleware: ['auth'],
   async fetch ({ params, store }) {
     const orderNumber = params.number
     await store.dispatch('profile/getOrder', orderNumber)

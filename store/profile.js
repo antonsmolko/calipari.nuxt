@@ -61,7 +61,7 @@ export const mutations = {
 
 export const actions = {
   getDetails ({ commit }) {
-    const token = this.$auth.getToken('local')
+    const token = this.$auth.token.get()
 
     return this.$api.$get('/profile/details', {
       headers: { Authorization: token }
@@ -69,14 +69,14 @@ export const actions = {
       .then(response => commit('RESPONSE_SET_FIELDS', response))
   },
   update ({ state }) {
-    const token = this.$auth.getToken('local')
+    const token = this.$auth.token.get()
 
     return this.$api.$post('/profile/details', state.fields, {
       headers: { Authorization: token }
     })
   },
   updateAccountName ({ commit, state }) {
-    const token = this.$auth.getToken('local')
+    const token = this.$auth.token.get()
 
     return this.$api.$post('/profile/name', { name: state.account.name }, {
       headers: { Authorization: token }
@@ -87,14 +87,14 @@ export const actions = {
       }, { root: true }))
   },
   updateAccountEmail ({ state }) {
-    const token = this.$auth.getToken('local')
+    const token = this.$auth.token.get()
 
     return this.$api.$post('/profile/email', { email: state.account.email }, {
       headers: { Authorization: token }
     })
   },
   getOrders ({ commit }) {
-    const token = this.$auth.getToken('local')
+    const token = this.$auth.token.get()
 
     return this.$api.$get('/profile/orders', {
       headers: { Authorization: token }
@@ -102,7 +102,7 @@ export const actions = {
       .then(response => commit('SET_ORDERS', response))
   },
   getOrder ({ commit }, number) {
-    const token = this.$auth.getToken('local')
+    const token = this.$auth.token.get()
 
     return this.$api.$get(`/profile/orders/${number}`, {
       headers: { Authorization: token }
@@ -110,7 +110,7 @@ export const actions = {
       .then(response => commit('SET_ORDER', response))
   },
   cancelOrder ({ commit }, number) {
-    const token = this.$auth.getToken('local')
+    const token = this.$auth.token.get()
 
     return this.$api.$get(`/profile/orders/${number}/cancel`, {
       headers: { Authorization: token }

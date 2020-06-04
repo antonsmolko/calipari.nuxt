@@ -39,7 +39,7 @@ export default {
     TopBar,
     OrderListItem
   },
-  // middleware: ['auth'],
+  middleware: ['auth'],
   mixins: [scrollToTop, setLayout],
   metaInfo () {
     return {

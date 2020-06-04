@@ -88,7 +88,9 @@ export default {
   },
   data () {
     return {
-      token: this.$route.query.token ? this.$route.query.token : null,
+      token: this.$route.query.access_token ? this.$route.query.access_token : null,
+      tokenType: this.$route.query.token_type ? this.$route.query.token_type : null,
+      expiresIn: this.$route.query.expires_in ? this.$route.query.expires_in : null,
       noVerified: this.$route.query.no_verified,
       loaded: false,
       loadedMessage: '',
@@ -124,17 +126,21 @@ export default {
     if (this.token) {
       this.loaded = true
       this.loadedMessage = 'Выполняется авторизация...'
-      this.$auth.setToken('local', 'Bearer ' + this.token)
-      this.$auth.setStrategy('local')
+      this.$auth.setUserToken({
+        access_token: this.token,
+        token_type: this.tokenType,
+        expires_in: this.expiresIn
+      })
+      this.$auth.setStrategy('laravelJWT')
 
       this.$auth.fetchUser()
         .then(() => {
-          this.$router.push({ name: 'index' })
+          // this.$router.push({ name: 'index' })
           this.syncResources()
         })
         .catch((e) => {
           this.$auth.logout()
-          return this.$router.push(`/auth/${this.$route.query.origin ? this.$route.query.origin : 'register'}`)
+          return this.$router.push(`/${this.origin ? this.origin : 'register'}`)
         })
     } else if (this.noVerified) {
       this.loaded = true

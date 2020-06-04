@@ -50,7 +50,7 @@ export const actions = {
     commit('SET_FIELDS', payload)
   },
   sync ({ state, commit }) {
-    const token = this.$auth.getToken('local')
+    const token = this.$auth.token.get()
     const items = state.items
     const headers = { Authorization: token }
 
@@ -58,21 +58,21 @@ export const actions = {
       .then(response => commit('SET_ITEMS', response))
   },
   add ({ commit }, item) {
-    const token = this.$auth.getToken('local')
+    const token = this.$auth.token.get()
     const headers = { Authorization: token }
 
     return this.$api.$post('/carts/add', { item }, { headers })
       .then(response => commit('SET_ITEMS', response))
   },
   delete ({ commit }, id) {
-    const token = this.$auth.getToken('local')
+    const token = this.$auth.token.get()
     const headers = { Authorization: token }
 
     return this.$api.$delete(`/carts/${id}`, { headers })
       .then(response => commit('SET_ITEMS', response))
   },
   setQty ({ commit }, payload) {
-    const token = this.$auth.getToken('local')
+    const token = this.$auth.token.get()
     const headers = { Authorization: token }
 
     return this.$api.$post('/carts/set-qty', payload, { headers })
