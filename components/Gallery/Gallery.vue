@@ -10,8 +10,7 @@
                 v-if="images.length"
                 :images="images"
                 @dislike="dislike"
-                @paginate="paginate"
-            )
+                @paginate="paginate")
             .uk-width-1-1.uk-flex.uk-flex-center.uk-margin-large-top(v-else)
                 .uk-spinner.uk-text-muted(data-uk-spinner ratio="3")
 </template>
