@@ -324,7 +324,9 @@ export default {
       this.$router.push('/checkout/delivery')
     },
     onClose () {
-      this.$router.push(this.fromRoute)
+      this.fromRoute
+        ? this.$router.push(this.fromRoute)
+        : window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/profile')
     }
   }
 }

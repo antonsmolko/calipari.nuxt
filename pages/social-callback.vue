@@ -131,11 +131,11 @@ export default {
         token_type: this.tokenType,
         expires_in: this.expiresIn
       })
-      this.$auth.setStrategy('laravelJWT')
+      this.$auth.setStrategy('local')
 
       this.$auth.fetchUser()
         .then(() => {
-          // this.$router.push({ name: 'index' })
+          this.$router.push({ name: 'index' })
           this.syncResources()
         })
         .catch((e) => {

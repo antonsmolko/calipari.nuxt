@@ -1,5 +1,5 @@
 <template lang="pug">
-    .div
+    div
         TopBar(:title="title")
             .uk-navbar-item(v-if="images.length")
                 span.tm-topbar__control.uk-icon-link(data-uk-icon="settings" @click.prevent="filterClick")

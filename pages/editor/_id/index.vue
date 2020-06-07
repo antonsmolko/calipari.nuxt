@@ -1,6 +1,5 @@
 <template lang="pug">
     .tm-editor.uk-light(v-if="onLoad")
-        EditorTopBar(@close="onClose")
         .tm-editor__frame(data-uk-height-viewport="offset-top: true")
             .tm-editor__left-bar(data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 100")
                 EditorCollection(
@@ -13,8 +12,7 @@
                     :minValue="minInputValue"
                     :ratio="image.ratio"
                     v-model="orderSettings.sizes"
-                    @ratio-locked-change="handleRatioLockedChange"
-                )
+                    @ratio-locked-change="handleRatioLockedChange")
                 EditorFilter(v-model="orderSettings.filter")
                 EditorTexture(
                     v-model="orderSettings.texture"
@@ -41,8 +39,7 @@
                     :cropData="cropData"
                     :ratioLocked="ratioLocked"
                     :filter="orderSettings.filter"
-                    :texture="orderTexture.name"
-                )
+                    :texture="orderTexture.name")
                 EditorInfo(
                     :article="image.article"
                     :width="orderSettings.sizes.width"
@@ -58,7 +55,6 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 
-import EditorTopBar from '~/components/Editor/EditorTopBar'
 import EditorSizes from '~/components/Editor/EditorSizes'
 import EditorFilter from '~/components/Editor/EditorFilter'
 import EditorTexture from '~/components/Editor/EditorTexture'
@@ -68,13 +64,11 @@ import EditorPreview from '~/components/Editor/EditorPreview'
 import EditorInfo from '~/components/Editor/EditorInfo'
 import EditorPurchase from '~/components/Editor/EditorPurchase'
 import EditorBottomBar from '~/components/Editor/EditorBottomBar'
+import scrollToTop from '~/components/mixins/scrollToTop'
 import { filterSet, hash } from '~/helpers'
 
 export default {
-  layout: 'editor',
-  scrollToTop: true,
   components: {
-    EditorTopBar,
     EditorSizes,
     EditorFilter,
     EditorTexture,
@@ -85,9 +79,15 @@ export default {
     EditorPurchase,
     EditorBottomBar
   },
+  mixins: [scrollToTop],
   async fetch ({ store, params }) {
     await store.dispatch('images/getItemFromEditor', params.id)
-    store.commit('SET_FIELDS', { bottomBar: false, footer: false })
+    store.commit('SET_FIELDS', {
+      pageTitle: 'Редактор',
+      bottomBar: false,
+      footer: false,
+      editorEnable: true
+    })
   },
   data: () => ({
     orderSettings: {
@@ -175,6 +175,7 @@ export default {
     this.cropData.height = this.image.height
   },
   beforeDestroy () {
+    this.setFieldAction({ field: 'editorEnable', value: false })
     this.setImagesFieldsAction({
       item: null,
       collection: [],
@@ -192,17 +193,6 @@ export default {
       removeImageAction: 'images/removeItem',
       addImageAction: 'images/addItem'
     }),
-    onClose () {
-      window.history.length > 1 ? this.goBack() : this.goCatalog()
-    },
-    goBack () {
-      this.setImagesFieldAction({ field: 'lastPreview', value: this.image.id })
-      this.$router.go(-1)
-    },
-    goCatalog () {
-      this.setImagesFieldAction({ field: 'lastPreview', value: null })
-      this.$router.push('/catalog')
-    },
     handleRatioLockedChange (value) {
       this.ratioLocked = value
     },

@@ -103,7 +103,7 @@ export default {
     async onSubmit () {
       try {
         this.loaded = true
-        await this.$auth.loginWith('laravelJWT', {
+        await this.$auth.loginWith('local', {
           data: {
             email: this.form.email,
             password: this.form.password

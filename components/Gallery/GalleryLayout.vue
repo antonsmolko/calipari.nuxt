@@ -81,8 +81,7 @@ export default {
     }
   },
   data: () => ({
-    filterOpen: false,
-    responseData: false
+    filterOpen: false
   }),
   computed: {
     ...mapState({
@@ -109,7 +108,6 @@ export default {
     if ((!this.lastPreview || !this.images.length) && this.keyValue) {
       await this.refreshItems()
     }
-    this.responseData = true
   },
   methods: {
     ...mapActions({

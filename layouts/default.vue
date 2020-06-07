@@ -3,28 +3,36 @@
         Notification(
             v-for="notification in notifications"
             :key="notification.id"
-            :item="notification"
-        )
+            :item="notification")
         Navbar
+            template(#content v-if="editorEnable")
+                EditorNavbarContent
         FadeTransition(mode="out-in")
             nuxt(keep-alive :keep-alive-props="{ max: 10 }" :key="$route.fullPath")
         SlideYDownTransition(mode="out-in")
             BottomBar(v-if="bottomBar")
+        Menu
 </template>
 <script>
+import { mapState } from 'vuex'
 import TopBar from '~/components/layout/TopBar.vue'
 import BottomBar from '~/components/layout/BottomBar.vue'
 import Notification from '~/components/notifications/Notification'
+import Menu from '~/components/layout/OffCanvas/OffCanvasMenu.vue'
+import EditorNavbarContent from '~/components/Editor/EditorNavbarContent'
 import notifications from '~/components/mixins/notifications'
+import layoutTimePeriod from '~/components/mixins/layoutTimePeriod'
 
 export default {
   name: 'Default',
   components: {
+    EditorNavbarContent,
     TopBar,
     BottomBar,
-    Notification
+    Notification,
+    Menu
   },
-  mixins: [notifications],
+  mixins: [notifications, layoutTimePeriod],
   metaInfo () {
     return {
       title: 'Главная',
@@ -44,6 +52,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      editorEnable: state => state.editorEnable
+    }),
     isDarkPeriod () {
       return this.timePeriod === 'evening' || this.timePeriod === 'night'
     },

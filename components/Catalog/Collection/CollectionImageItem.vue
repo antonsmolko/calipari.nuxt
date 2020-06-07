@@ -1,22 +1,21 @@
 <template lang="pug">
-    .uk-panel(class="uk-width-1-2@s uk-width-1-3@m")
-        .tm-mosaic__image.uk-box-shadow-small
-            .tm-mosaic__image-spinner.uk-text-muted.uk-position-z-index(
-                v-show="imgLoaded"
-                data-uk-spinner="ratio: 2"
-                data-no-mosaic="true")
-            span.tm-mosaic__article {{ item.article }}
-            span.tm-mosaic__like(
-                :class="{ 'uk-active': liked }"
-                @click="onLike")
-                span(data-uk-icon="heart")
-            nuxt-link.uk-link-reset(
-                :to="`/editor/${item.id}`")
-                .tm-mosaic__container.uk-position-relative
-                    img.uk-box-shadow-medium(
-                        :data-src="url"
-                        :alt="item.title"
-                        data-uk-img)
+    .tm-mosaic__image.uk-box-shadow-small(:id="`image-${item.id}`")
+        .tm-mosaic__image-spinner.uk-text-muted.uk-position-z-index(
+            v-show="imgLoaded"
+            data-uk-spinner="ratio: 2"
+            data-no-mosaic="true")
+        span.tm-mosaic__article {{ item.article }}
+        span.tm-mosaic__like(
+            :class="{ 'uk-active': liked }"
+            @click="onLike")
+            span(data-uk-icon="heart")
+        nuxt-link.uk-link-reset(
+            :to="editorUrl")
+            .tm-mosaic__container.uk-position-relative
+                img.uk-box-shadow-medium(
+                    :data-src="imageUrl"
+                    :alt="item.title"
+                    data-uk-img)
 </template>
 
 <script>
@@ -27,6 +26,10 @@ export default {
     item: {
       type: Object,
       default: null
+    },
+    anchor: {
+      type: String,
+      default: null
     }
   },
   data: () => ({
@@ -34,8 +37,11 @@ export default {
     baseUrl: `${process.env.baseUrl}/image/widen`
   }),
   computed: {
-    url () {
+    imageUrl () {
       return `${this.baseUrl}/500/${this.item.path}`
+    },
+    editorUrl () {
+      return this.anchor ? `/editor/${this.item.id}?anchor=${this.anchor}` : `/editor/${this.item.id}`
     },
     liked () {
       return this.$store.getters['wishList/liked'](this.item.id)
@@ -49,7 +55,7 @@ export default {
     }
   },
   created () {
-    this.loadImgAsync(this.url)
+    this.loadImgAsync(this.imageUrl)
       .then(() => { this.imgLoaded = false })
   },
   methods: {

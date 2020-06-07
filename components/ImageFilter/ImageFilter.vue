@@ -11,8 +11,7 @@
             SlideYDownTransition
                 .uk-navbar-item
                     span.tm-topbar__control.uk-icon-link(data-uk-icon="close" @click.prevent="close")
-        ul(
-            data-uk-scrollspy="cls: uk-animation-slide-bottom-small; delay: 250"
+        ul(data-uk-scrollspy="cls: uk-animation-slide-bottom-small; delay: 250"
             data-uk-accordion="content: .uk-accordion-content; toggle: .uk-accordion-title")
             ImageFilterSection(
                 title="По формату"

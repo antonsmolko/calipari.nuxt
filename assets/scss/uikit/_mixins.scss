@@ -699,10 +699,29 @@ $form-range-thumb-background-height: url("data:image/svg+xml,%3Csvg width='20' h
   }
 }
 @mixin hook-tab-item() {
-
+  border-bottom: 2px solid transparent;
 }
 @mixin hook-tab-item-active() {
-  border-bottom: 2px solid $tab-item-active-border;
+  border-color: $tab-item-active-border;
+}
+@mixin hook-tab-right() {
+    &::before {
+      top: 0;
+      bottom: 0;
+      left: 0 !important;
+      right: auto;
+      border-left: $tab-border-width solid $tab-border;
+      border-bottom: none;
+    }
+    li {
+      &:not(:last-child) {
+        margin-bottom: $global-small-margin;
+      }
+    }
+}
+@mixin hook-tab-right-item() {
+  border-left: 2px solid transparent;
+  border-bottom: none;
 }
 
 

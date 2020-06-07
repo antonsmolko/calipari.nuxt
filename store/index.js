@@ -1,9 +1,11 @@
 export const state = () => ({
+  darkPeriod: false,
   pageTitle: '',
   bottomBar: true,
   footer: true,
-  darkPeriod: false,
-  timePeriod: false
+  timePeriod: false,
+  editorEnable: false,
+  scrollTo: null
 })
 
 export const mutations = {

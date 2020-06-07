@@ -15,9 +15,12 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import VueScrollTo from 'vue-scrollto'
+import debounce from 'lodash/debounce'
 import GalleryImage from '~/components/Gallery/GalleryImage'
 import Observer from '~/components/Observer'
 import Mosaic from '~/plugins/mosaic'
+
+const _debounce = debounce(fn => fn(), 2000)
 
 export default {
   name: 'GalleryImageSection',
@@ -77,6 +80,7 @@ export default {
     this.mosaic = new Mosaic(mosaicEl, this.mosaicOptions)
 
     await this.initMosaic()
+
     if (this.lastPreview) {
       this.scrollToImage()
     }
@@ -102,7 +106,7 @@ export default {
         this.mosaicTmt = setTimeout(() => {
           this.mosaic.init()
           resolve()
-        }, 50)
+        })
       })
     },
     dislike (id) {
@@ -113,9 +117,12 @@ export default {
       const options = {
         easing: 'ease-in-out',
         offset: -300,
-        onDone: () => this.setImageFieldAction({ field: 'lastPreview', value: null })
+        onDone: () => _debounce(this.clearLastPreview)
       }
       VueScrollTo.scrollTo(`#image-${this.lastPreview}`, 300, options)
+    },
+    clearLastPreview () {
+      this.setImageFieldAction({ field: 'lastPreview', value: null })
     }
   }
 }
