@@ -131,7 +131,7 @@ export default {
         token_type: this.tokenType,
         expires_in: this.expiresIn
       })
-      this.$auth.setStrategy('local')
+      this.$auth.setStrategy('laravelJWT')
 
       this.$auth.fetchUser()
         .then(() => {

@@ -5,10 +5,9 @@
             data-uk-spinner="ratio: 2"
             data-no-mosaic="true")
         span.tm-mosaic__article {{ item.article }}
-        span.tm-mosaic__like(
-            :class="{ 'uk-active': liked }"
-            @click="onLike")
-            span(data-uk-icon="heart")
+        ImageLike.tm-mosaic__like(
+            :liked="liked"
+            @like="onLike")
         nuxt-link.uk-link-reset(
             :to="editorUrl")
             .tm-mosaic__container.uk-position-relative
@@ -20,8 +19,11 @@
 
 <script>
 import { mapActions } from 'vuex'
+import ImageLike from '~/components/Gallery/ImageLike'
+
 export default {
   name: 'CollectionImageSection',
+  components: { ImageLike },
   props: {
     item: {
       type: Object,

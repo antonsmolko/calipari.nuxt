@@ -34,11 +34,12 @@
 <script>
 import Page from '~/components/layout/Page.vue'
 import setLayout from '~/components/mixins/setLayout'
+import scrollToTop from '~/components/mixins/scrollToTop'
 export default {
   middleware: 'auth',
   scrollToTop: true,
   components: { Page },
-  mixins: [setLayout],
+  mixins: [setLayout, scrollToTop],
   metaInfo () {
     return {
       title: this.pageTitle

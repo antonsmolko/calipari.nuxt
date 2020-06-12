@@ -22,10 +22,9 @@
                     .uk-flex
                         span.uk-h5.uk-margin-remove Изображение
                         .tm-editor__workspace-article.uk-margin-small-left {{ orderSettings.currentImage.article }}
-                    .tm-editor__like(
-                        :class="{ 'uk-active': liked }"
-                        @click="onLike")
-                        span.uk-icon(data-uk-icon="heart")
+                    ImageLike.tm-editor__like(
+                        :liked="liked"
+                        @like="onLike")
                 Cropper.tm-editor__image-cropper(
                     :image="orderSettings.currentImage"
                     :ratio="sizesRatio"
@@ -46,8 +45,7 @@
                     :height="orderSettings.sizes.height"
                     :flip="orderSettings.filter.flip"
                     :colorEffect="orderColorEffectName"
-                    :texture="orderTexture.name"
-                )
+                    :texture="orderTexture.name")
                 EditorPurchase(:price="orderPrice" @confirm="onConfirm")
         EditorBottomBar(:price="orderPrice" @confirm="onConfirm")
 </template>
@@ -64,7 +62,9 @@ import EditorPreview from '~/components/Editor/EditorPreview'
 import EditorInfo from '~/components/Editor/EditorInfo'
 import EditorPurchase from '~/components/Editor/EditorPurchase'
 import EditorBottomBar from '~/components/Editor/EditorBottomBar'
+import ImageLike from '~/components/Gallery/ImageLike'
 import scrollToTop from '~/components/mixins/scrollToTop'
+import closeEditorMethods from '~/components/mixins/closeEditorMethods'
 import { filterSet, hash } from '~/helpers'
 
 export default {
@@ -77,9 +77,10 @@ export default {
     EditorPreview,
     EditorInfo,
     EditorPurchase,
-    EditorBottomBar
+    EditorBottomBar,
+    ImageLike
   },
-  mixins: [scrollToTop],
+  mixins: [scrollToTop, closeEditorMethods],
   async fetch ({ store, params }) {
     await store.dispatch('images/getItemFromEditor', params.id)
     store.commit('SET_FIELDS', {
@@ -559,19 +560,10 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
     }
 
     &__like {
-        cursor: pointer;
-        line-height: 1;
-        color: $inverse-global-color;
-        //background: rgba($global-secondary-background, .5);
-        svg path {
-            fill: rgba($global-secondary-background, .3);
-        }
-
         &.uk-active {
-            color: $inverse-global-emphasis-color;
             .uk-icon {
                 svg path {
-                    fill: $inverse-global-emphasis-color;
+                    /*stroke: tomato !important;*/
                 }
             }
         }

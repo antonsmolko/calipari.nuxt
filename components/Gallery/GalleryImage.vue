@@ -1,5 +1,5 @@
 <template lang="pug">
-    .tm-mosaic__image.item.withImage.uk-box-shadow-small(
+    .tm-mosaic__image.item.withImage.uk-box-shadow-medium(
         data-uk-scrollspy="cls:uk-animation-fade; delay: 200"
         :id="`image-${image.id}`"
         :data-aspect-ratio="image.ratio"
@@ -24,18 +24,19 @@
             span.tm-mosaic__inside-bottom
                 //span.tm-mosaic__like.uk-active
                     //span(data-uk-icon="heart")
-                span.tm-mosaic__like(
-                    :class="{ 'uk-active': liked }"
-                    @click="onLike()")
-                    span(data-uk-icon="heart")
+                ImageLike.tm-mosaic__like(
+                    :liked="liked"
+                    @like="onLike")
                 //nuxt-link.tm-mosaic__settings.uk-background-primary.uk-light(:to="`/editor/${image.id}`" data-no-mosaic="true")
                     span(data-uk-icon="settings")
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+import ImageLike from './ImageLike'
 export default {
   name: 'GalleryImage',
+  components: { ImageLike },
   props: {
     image: {
       type: Object,
@@ -181,24 +182,6 @@ export default {
 
         .uk-icon {
             margin: auto;
-        }
-    }
-
-    &__like {
-        position: relative;
-        color: $inverse-global-color;
-        //background: rgba($global-secondary-background, .5);
-        svg path {
-            fill: rgba($global-secondary-background, .3);
-        }
-
-        &.uk-active {
-            color: $inverse-global-emphasis-color;
-            .uk-icon {
-                svg path {
-                    fill: $inverse-global-emphasis-color;
-                }
-            }
         }
     }
 

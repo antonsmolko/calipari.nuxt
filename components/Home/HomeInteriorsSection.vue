@@ -3,7 +3,7 @@
         .uk-container.uk-container-large
             .uk-width-1-1.uk-position-relative
                 .uk-position-relative(data-uk-height-match)
-                    .uk-width-1-1.uk-position-relative.uk-position-z-index(class="uk-width-large@m")
+                    .uk-width-1-1.uk-position-relative.uk-position-z-index(class="uk-width-1-6@m")
                         .tm-interiors__heading.uk-margin-large-bottom(
                             data-uk-scrollspy="cls: uk-animation-slide-bottom-small; delay: 200"
                             class="uk-width-medium uk-width-large@m")
@@ -67,7 +67,7 @@ export default {
     }
   },
   data: () => ({
-    baseInteriorImageUrl: `${process.env.baseUrl}/image/fit/1600/900`,
+    baseInteriorImageUrl: `${process.env.baseUrl}/image/show`,
     baseImageUrl: `${process.env.baseUrl}/image/widen/500`,
     slideOn: false,
     tabOn: false,
@@ -86,13 +86,13 @@ export default {
     ])
   },
   created () {
-    if (!this.lastPreview) {
+    if (!this.lastPreview || !this.currentInterior) {
       this.init()
     }
   },
   mounted () {
     this.sliderElem = this.$refs.slider
-    if (this.lastPreview) {
+    if (this.lastPreview && this.currentInterior) {
       this.setLastState()
     }
   },
@@ -238,7 +238,7 @@ export default {
             }
             li {
                 height: inherit;
-                opacity: .7;
+                //opacity: .7;
             }
         }
     }
