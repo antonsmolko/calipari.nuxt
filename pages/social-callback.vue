@@ -126,11 +126,12 @@ export default {
     if (this.token) {
       this.loaded = true
       this.loadedMessage = 'Выполняется авторизация...'
-      this.$auth.setUserToken({
-        access_token: this.token,
-        token_type: this.tokenType,
-        expires_in: this.expiresIn
-      })
+      this.$auth.setUserToken(this.token, true)
+      // this.$auth.setUserToken({
+      //   access_token: this.token,
+      //   token_type: this.tokenType,
+      //   expires_in: this.expiresIn
+      // })
       this.$auth.setStrategy('laravelJWT')
 
       this.$auth.fetchUser()
@@ -139,7 +140,8 @@ export default {
           this.syncResources()
         })
         .catch((e) => {
-          this.$auth.logout()
+          console.log(e)
+          // this.$auth.logout()
           return this.$router.push(`/${this.origin ? this.origin : 'register'}`)
         })
     } else if (this.noVerified) {

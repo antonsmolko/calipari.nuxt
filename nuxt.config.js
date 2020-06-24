@@ -148,12 +148,12 @@ export default {
           },
           user: {
             url: '/auth/me',
-            method: 'post',
+            method: 'get',
             propertyName: 'data'
           },
           logout: {
             url: '/auth/logout',
-            method: 'post'
+            method: 'get'
           }
         },
         token: {
@@ -180,7 +180,7 @@ export default {
     //     pushAssets: (req, res, publicPath, preloadFiles) => preloadFiles
     //     .map(f => `<${publicPath}${f.file}>; rel=preload; as=${f.asType}`)
     //   },
-    // compressor: false,
+    compressor: false,
     resourceHints: false,
     etag: false,
     static: {

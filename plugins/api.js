@@ -25,9 +25,10 @@ export default function ({ $axios, store, redirect }, inject) {
 
   api.onError((err) => {
     const error = err.response
+    console.log(error)
     switch (error.status) {
-      case 404:
-        return redirect('/notfound')
+      // case 404:
+      //   return redirect('/notfound')
       case 500:
         return store.dispatch('notifications/addItem', {
           message: errorsLibrary.ERROR_DEFAULT,

@@ -94,6 +94,7 @@ export const actions = {
     })
   },
   getOrders ({ commit }) {
+    console.log(this.$auth.token.get())
     const token = this.$auth.token.get()
 
     return this.$api.$get('/profile/orders', {
