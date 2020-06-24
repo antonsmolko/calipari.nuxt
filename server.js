@@ -25,7 +25,7 @@ if (process.env.NODE_ENV !== 'production') {
   server = http.createServer(app)
 }
 // We instantiate nuxt.js with the options
-const config = require('./nuxt.config.module.js')
+const config = require('./nuxt.config.js')
 
 config.dev = !isProd
 const nuxt = new Nuxt(config)
