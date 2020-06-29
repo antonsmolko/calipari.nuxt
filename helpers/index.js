@@ -4,7 +4,7 @@ import isInteger from 'lodash/isInteger'
 import crc32 from 'crc-32'
 import lib from '~/plugins/lang/ru/lib'
 
-export const getFilterString = (filter) => {
+export const getFilterDetailsString = (filter) => {
   const activeFilters = getActiveFilters(filter)
 
   return activeFilters.length
@@ -17,7 +17,7 @@ export const getFilterString = (filter) => {
         }
       })
       .join(', ')
-    : '-'
+    : '—'
 }
 
 function getActiveFilters (filter) {
@@ -60,7 +60,8 @@ export const hash = () => {
 }
 
 export const filterSet = {
-  flip: lib.FILTER_FLIP,
+  flipH: lib.FILTER_FLIP_H,
+  flipV: lib.FILTER_FLIP_V,
   grayscale: lib.FILTER_GRAYSCALE,
   sepia: lib.FILTER_SEPIA
 }
@@ -94,3 +95,22 @@ export const getParamsString = (payload) => {
 
   return params.length ? `?${params.join('&')}` : null
 }
+
+// export const refreshTokens = async ($auth, cb = null) => {
+//   const isTokenExpired = $auth.strategy.token.status().expired()
+//   const isRefreshExpired = $auth.strategy.refreshToken.status().expired()
+//
+//   if (!$auth.loggedIn) {
+//     return
+//   }
+//
+//   if (isRefreshExpired) {
+//     await $auth.logout()
+//
+//     return
+//   }
+//
+//   if (isTokenExpired) {
+//     await $auth.refreshTokens()
+//   }
+// }

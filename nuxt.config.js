@@ -1,7 +1,9 @@
+import path from 'path'
+import fs from 'fs'
 import imageminMozjpeg from 'imagemin-mozjpeg'
 const ImageminPlugin = require('imagemin-webpack-plugin').default
 const isDev = process.env.NODE_ENV !== 'production'
-const baseUrl = process.env.BASE_URL || 'https://manager.calipari.ru'
+const baseUrl = 'https://manager.calipari.ru'
 
 export default {
   mode: 'universal',
@@ -11,6 +13,7 @@ export default {
   /*
   ** Headers of the page
   */
+
   head: {
     htmlAttrs: {
       lang: 'ru'
@@ -22,7 +25,15 @@ export default {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
-      { rel: 'shortcut icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'shortcut icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'preload', as: 'font', href: '/fonts/LatoHairline/LatoHairline.woff', type: 'font/woff', crossorigin: 'anonymous' },
+      { rel: 'preload', as: 'font', href: '/fonts/LatoThin/LatoThin.woff', type: 'font/woff', crossorigin: 'anonymous' },
+      { rel: 'preload', as: 'font', href: '/fonts/LatoLight/LatoLight.woff', type: 'font/woff', crossorigin: 'anonymous' },
+      { rel: 'preload', as: 'font', href: '/fonts/LatoRegular/LatoRegular.woff', type: 'font/woff', crossorigin: 'anonymous' },
+      { rel: 'preload', as: 'font', href: '/fonts/LatoHairline/LatoHairline.woff2', type: 'font/woff2', crossorigin: 'anonymous' },
+      { rel: 'preload', as: 'font', href: '/fonts/LatoThin/LatoThin.woff2', type: 'font/woff2', crossorigin: 'anonymous' },
+      { rel: 'preload', as: 'font', href: '/fonts/LatoLight/LatoLight.woff2', type: 'font/woff2', crossorigin: 'anonymous' },
+      { rel: 'preload', as: 'font', href: '/fonts/LatoRegular/LatoRegular.woff2', type: 'font/woff2', crossorigin: 'anonymous' }
     ]
   },
   rootDir: __dirname,
@@ -32,11 +43,11 @@ export default {
   ** Customize the progress-bar color
   */
   loading: false,
-  loadingIndicator: {
-    name: 'circle',
-    color: '#3B8070',
-    background: 'white'
-  },
+  // loadingIndicator: {
+  //   name: 'circle',
+  //   color: '#3B8070',
+  //   background: 'white'
+  // },
   /*
   ** Global CSS
   */
@@ -45,6 +56,13 @@ export default {
     './assets/scss/styles.scss'
   ],
   router: {
+    extendRoutes (routes, resolve) {
+      routes.push({
+        name: 'notfound',
+        path: '*',
+        component: resolve(__dirname, 'pages/404.vue')
+      })
+    },
     prefetchLinks: false,
     linkExactActiveClass: 'uk-active',
     middleware: [
@@ -124,8 +142,14 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: `${baseUrl}/api`
+    baseURL: `${baseUrl}/api`,
+    https: true,
+    credentials: true
+    // proxy: true
   },
+  // proxy: {
+  //   '/api/': 'https://manager.calipari.ru/api'
+  // },
   auth: {
     strategies: {
       laravelJWT: {
@@ -134,8 +158,7 @@ export default {
         endpoints: {
           login: {
             url: '/auth/login',
-            method: 'post',
-            propertyName: 'token'
+            method: 'post'
           },
           refresh: {
             url: '/auth/refresh',
@@ -148,20 +171,21 @@ export default {
           },
           user: {
             url: '/auth/me',
-            method: 'get',
+            method: 'post',
             propertyName: 'data'
           },
           logout: {
             url: '/auth/logout',
-            method: 'get'
+            method: 'post'
           }
         },
         token: {
           property: 'access_token',
-          maxAge: 60
+          maxAge: 60 * 60
         },
         refreshToken: {
-          maxAge: 20160 * 60
+          maxAge: 20160 * 60,
+          tokenRequired: true
         },
         autoRefresh: true
       }
@@ -181,6 +205,11 @@ export default {
     //     .map(f => `<${publicPath}${f.file}>; rel=preload; as=${f.asType}`)
     //   },
     compressor: false,
+    // bundleRenderer: {
+    //   shouldPreload: (file, type) => {
+    //     return ['script', 'style', 'font'].includes(type)
+    //   }
+    // },
     resourceHints: false,
     etag: false,
     static: {
@@ -350,6 +379,12 @@ export default {
         img: 'data-src',
         div: 'data-src'
       }
+    }
+  },
+  server: {
+    https: {
+      key: fs.readFileSync(path.resolve(__dirname, 'localhost.key')),
+      cert: fs.readFileSync(path.resolve(__dirname, 'localhost.crt'))
     }
   }
 }

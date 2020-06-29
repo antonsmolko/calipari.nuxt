@@ -2,9 +2,8 @@
     .cropper(:class="[filter.colorize]")
         .cropper__container(ref="container")
             .cropper__canvas(v-show="isCropperSet" ref="canvas")
-                img(
-                    ref="image"
-                    :class="{'scale-x': filter.flip}",
+                img(ref="image"
+                    :class="{'scale-x': filter.flipH, 'scale-y': filter.flipV}",
                     :src="imageUrl",
                     :alt="image.article")
                 .cropper__crop-box(
@@ -71,7 +70,8 @@ export default {
       height: 0,
       translateX: 0,
       translateY: 0,
-      scaleX: 1
+      scaleX: 1,
+      scaleY: 1
     },
     naturalCropData: {
       width: 0,
@@ -132,11 +132,14 @@ export default {
       return {
         width: `${this.imageStyles.width}px`,
         height: `${this.imageStyles.height}px`,
-        transform: `translateX(${transX}) scaleX(${this.scaleX}) translateY(${transY})`
+        transform: `translateX(${transX}) scaleX(${this.scaleX}) translateY(${transY}) scaleY(${this.scaleY})`
       }
     },
     scaleX () {
-      return this.filter.flip ? -1 : 1
+      return this.filter.flipH ? -1 : 1
+    },
+    scaleY () {
+      return this.filter.flipV ? -1 : 1
     },
     imageUrl () {
       return `${process.env.baseUrl}/image/show/${this.image.path}`
@@ -189,6 +192,9 @@ export default {
     },
     scaleX () {
       this.imageStyles.scaleX = this.scaleX ? -1 : 1
+    },
+    scaleY () {
+      this.imageStyles.scaleY = this.scaleY ? -1 : 1
     },
     responsive () {
       if (this.responsive) {

@@ -6,17 +6,16 @@
                 id="preview-crop"
                 tabindex="0"
                 :data-caption="imageDataCaption"
-                :href="`${baseUrl}/order-item-full/${preview.width}/${preview.height}/${preview.x}/${preview.y}/${flip}/${colorize}/${image.path}`"
+                :href="`${baseUrl}/order-full/${preview.width}/${preview.height}/${preview.x}/${preview.y}/${flipH}/${flipV}/${colorize}/${image.path}`"
                 :class="[filter.colorize]",
                 :style="cropStyles")
-                img(
-                    :src="`${baseUrl}/widen/500/${image.path}`",
+                img(:src="`${baseUrl}/widen/500/${image.path}`",
                     :style="imageStyles"
                     :alt="image.article")
 </template>
 
 <script>
-import { getFilterString } from '~/helpers'
+import { getFilterDetailsString } from '~/helpers'
 
 export default {
   name: 'EditorPreview',
@@ -75,7 +74,7 @@ export default {
       return {
         width: `${this.cropSizes.width}px`,
         height: `${this.cropSizes.height}px`,
-        transform: `translateX(${this.scaleX})`
+        transform: `translateX(${this.scaleX}) translateY(${this.scaleY})`
       }
     },
     cropSizes () {
@@ -90,7 +89,10 @@ export default {
         : { width: this.maxHeight * this.orderRatio, height: this.maxHeight }
     },
     scaleX () {
-      return this.filter.flip ? -1 : 1
+      return this.filter.flipH ? -1 : 1
+    },
+    scaleY () {
+      return this.filter.flipV ? -1 : 1
     },
     imageStyles () {
       const translateX = this.cropData.x * this.sizeFactor
@@ -100,16 +102,16 @@ export default {
           ? {
             width: `${this.cropSizes.width}px`,
             height: 'auto',
-            transform: `translate(${-translateX}px, ${-translateY}px) scaleX(${this.scaleX})`
+            transform: `translate(${-translateX}px, ${-translateY}px) scaleX(${this.scaleX}) scaleY(${this.scaleY})`
           }
           : {
             width: 'auto',
             height: `${this.cropSizes.height}px`,
-            transform: `translate(${-translateX}px, ${-translateY}px) scaleX(${this.scaleX})`
+            transform: `translate(${-translateX}px, ${-translateY}px) scaleX(${this.scaleX}) scaleY(${this.scaleY})`
           }
       }
 
-      return { width: '100%', height: 'auto', transform: `translate(0, 0)  scaleX(${this.scaleX})` }
+      return { width: '100%', height: 'auto', transform: `translate(0, 0)  scaleX(${this.scaleX}) scaleY(${this.scaleY})` }
     },
     preview () {
       return {
@@ -119,8 +121,11 @@ export default {
         y: Math.round(this.cropData.y)
       }
     },
-    flip () {
-      return +this.filter.flip
+    flipH () {
+      return Number(this.filter.flipH)
+    },
+    flipV () {
+      return Number(this.filter.flipV)
     },
     colorize () {
       return this.filter.colorize ? this.filter.colorize : 0
@@ -131,11 +136,11 @@ export default {
         Ширина: ${this.orderSizes.width} см |
         Высота: ${this.orderSizes.height} см |
         Фактура: «${this.texture}» |
-        Эффекты: ${this.filterString}`
+        Эффекты: ${this.filterDetailsString}`
       /* eslint-enable */
     },
-    filterString () {
-      return getFilterString(this.filter)
+    filterDetailsString () {
+      return getFilterDetailsString(this.filter)
     }
   },
   mounted () {

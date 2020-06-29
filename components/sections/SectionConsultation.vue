@@ -13,7 +13,9 @@
             input.uk-input.uk-form-large(type="tel")
           .uk-inline.uk-margin.uk-margin-medium-top
             div(class="" data-uk-grid)
-              p.uk-text-small(class="uk-width-expand@s") Нажимая кнопку «Получить макет», я даю согласие на обработку персональных данных и соглашаюсь <a href="#" class="uk-link-text">политикой конфиденциальности</a>
+              p.uk-text-small(class="uk-width-expand@s")
+                | Нажимая кнопку «Получить макет», я даю согласие на обработку персональных данных и соглашаюсь с&nbsp;
+                nuxt-link(to="/policy") политикой конфиденциальности
               div(class="uk-width-auto@s")
                 button.uk-button.uk-button-large.uk-button-secondary(type="submit") Отправить
 </template>

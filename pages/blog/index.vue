@@ -16,7 +16,7 @@
                         .uk-margin-large-top.uk-margin-medium-bottom
                             h1.uk-heading-medium {{ pageTitle }}
                             .uk-divider-small.uk-margin-large-bottom
-                            .tm-text-medium(v-if="page.intro" v-html="page.intro")
+                            .tm-text-medium(v-if="page.content" v-html="page.content")
                 section.uk-section.uk-section-default
                     .uk-container.uk-container-large
                         .uk-flex.uk-flex-center.uk-margin-medium-bottom

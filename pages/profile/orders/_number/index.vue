@@ -26,7 +26,10 @@
                                         h4.uk-h4.uk-text-background Заказ
                                         OrderDetailsItem(heading="Номер" :content="order.number")
                                         OrderDetailsItem(heading="Дата" :content="order.date")
-                                        OrderDetailsItem(heading="Статус" :content="order.status.title")
+                                        OrderDetailsItem(
+                                            heading="Статус"
+                                            :content="order.status.title"
+                                            :contentCss="statusCss")
                                 .tm-order-details__block.tm-order-details__delivery
                                     .uk-card.uk-card-small.uk-card-body
                                         h4.uk-h4.uk-text-background Детали доставки
@@ -85,7 +88,17 @@ export default {
   computed: {
     ...mapState('profile', {
       order: state => state.order
-    })
+    }),
+    statusCss () {
+      switch (this.order.status.alias) {
+        case 'canceled':
+          return 'uk-label uk-label-danger tm-text-medium'
+        case 'completed':
+          return 'uk-label uk-label-success tm-text-medium'
+        default:
+          return 'uk-label tm-text-medium'
+      }
+    }
   },
   methods: {
     ...mapActions({

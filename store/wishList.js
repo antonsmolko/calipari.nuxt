@@ -21,15 +21,15 @@ export const actions = {
       : commit('TOGGLE', id)
   },
   sync ({ state, commit }) {
-    const token = this.$auth.token.get()
-    const items = state.items
-    const headers = { Authorization: token }
+    const token = this.$auth.strategy.token.get()
+    const likes = state.items
+    const headers = token ? { Authorization: token } : {}
 
-    return this.$api.$post('/profile/wishlist/sync', { items }, { headers })
+    return this.$api.$post('/profile/wishlist/sync', { likes }, { headers })
       .then(response => commit('SET_ITEMS', response))
   },
   toggleAuth ({ commit }, id) {
-    const token = this.$auth.token.get()
+    const token = this.$auth.strategy.token.get()
     const headers = { Authorization: token }
 
     return this.$api.$get(`/profile/wishlist/${id}/toggle`, { headers })

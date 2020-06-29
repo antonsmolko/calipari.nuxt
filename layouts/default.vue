@@ -14,7 +14,7 @@
         Menu
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import TopBar from '~/components/layout/TopBar.vue'
 import BottomBar from '~/components/layout/BottomBar.vue'
 import Notification from '~/components/notifications/Notification'
@@ -79,11 +79,18 @@ export default {
       this.setThemeByTimePeriod()
     }, 10 * 60 * 1000)
     this.onLoad = true
+
+    this.syncCartAction()
+    this.syncWishListAction()
   },
   beforeDestroy () {
     clearInterval(this.timeInterval)
   },
   methods: {
+    ...mapActions({
+      syncCartAction: 'cart/sync',
+      syncWishListAction: 'wishList/sync'
+    }),
     setThemeByTimePeriod () {
       const date = new Date()
       this.currentHour = date.getHours()

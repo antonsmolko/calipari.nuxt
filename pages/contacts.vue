@@ -32,7 +32,7 @@
                                 hint-content="some hint")
                         .tm-contacts__spinner.uk-position-cover.uk-flex.uk-flex-middle(v-show="!mapInit")
                             .uk-margin-auto.uk-text-muted(data-uk-spinner="ratio: 3")
-                section.uk-section.uk-section-large.uk-section-default
+                section.uk-section.uk-section-large.tm-section__muted
                     .uk-container.uk-position-relative
                         .uk-grid.uk-flex-center(
                             data-uk-grid
@@ -53,7 +53,7 @@
                                 form.uk-grid.uk-flex-column(data-uk-grid)
                                     UkInput.uk-width-1-1(
                                         name="name"
-                                        icon="person")
+                                        icon="user")
                                     UkInput.uk-width-1-1(
                                         name="phone"
                                         icon="phone")
@@ -104,7 +104,6 @@ export default {
   },
   methods: {
     onClick (e) {
-      console.log(e)
       this.coords = e.get('coords')
     },
     init () {

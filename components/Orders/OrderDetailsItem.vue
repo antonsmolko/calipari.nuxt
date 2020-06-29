@@ -4,10 +4,8 @@
             v-if="heading"
             class="uk-width-1-3"
         ) {{ heading }}
-        span.tm-order-details__value.uk-text-emphasis(
-            class="uk-width-2-3"
-            :class="contentCss"
-        ) {{ content }}
+        span.tm-order-details__value.uk-text-emphasis(class="uk-width-2-3")
+            span.uk-display-inline(:class="contentCss") {{ content }}
 </template>
 
 <script>

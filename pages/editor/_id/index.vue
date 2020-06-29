@@ -1,53 +1,67 @@
 <template lang="pug">
-    .tm-editor.uk-light(v-if="onLoad")
-        .tm-editor__frame(data-uk-height-viewport="offset-top: true")
-            .tm-editor__left-bar(data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 100")
-                EditorCollection(
-                    v-if="collection.length"
-                    v-model="orderSettings.currentImage"
-                    :items="collection")
-                EditorSizes(
-                    :maxWidth="maxWidth"
-                    :maxHeight="maxHeight"
-                    :minValue="minInputValue"
-                    :ratio="image.ratio"
-                    v-model="orderSettings.sizes"
-                    @ratio-locked-change="handleRatioLockedChange")
-                EditorFilter(v-model="orderSettings.filter")
-                EditorTexture(
-                    v-model="orderSettings.texture"
-                    :items="textures")
-            .tm-editor__workspace
-                .tm-editor__workspace-header.uk-flex.uk-flex-between.uk-margin
-                    .uk-flex
-                        span.uk-h5.uk-margin-remove Изображение
-                        .tm-editor__workspace-article.uk-margin-small-left {{ orderSettings.currentImage.article }}
-                    ImageLike.tm-editor__like(
-                        :liked="liked"
-                        @like="onLike")
-                Cropper.tm-editor__image-cropper(
-                    :image="orderSettings.currentImage"
-                    :ratio="sizesRatio"
-                    :active="!ratioLocked"
-                    :filter="orderSettings.filter"
-                    @cropped="getCropData")
-            .tm-editor__right-bar(data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 100")
-                EditorPreview(
-                    :image="orderSettings.currentImage"
-                    :orderSizes="orderSettings.sizes"
-                    :cropData="cropData"
-                    :ratioLocked="ratioLocked"
-                    :filter="orderSettings.filter"
-                    :texture="orderTexture.name")
-                EditorInfo(
-                    :article="image.article"
-                    :width="orderSettings.sizes.width"
-                    :height="orderSettings.sizes.height"
-                    :flip="orderSettings.filter.flip"
-                    :colorEffect="orderColorEffectName"
-                    :texture="orderTexture.name")
-                EditorPurchase(:price="orderPrice" @confirm="onConfirm")
-        EditorBottomBar(:price="orderPrice" @confirm="onConfirm")
+    div
+        .tm-editor.uk-light.uk-position-relative(
+            v-if="$fetchState.pending"
+            data-uk-height-viewport="offset-top: true")
+            .uk-position-center.uk-flex.uk-flex-column.uk-flex-middle.uk-padding.uk-text-center.uk-text-muted
+                span.uk-text-large Загружается редактор...
+                .uk-margin-top.uk-tex-muted(data-uk-spinner="ratio: 3")
+        .tm-editor.uk-light.uk-position-relative(
+            v-else-if="$fetchState.error"
+            data-uk-height-viewport="offset-top: true")
+            .uk-position-center.uk-flex.uk-flex-column.uk-flex-middle.uk-padding.uk-text-center.uk-text-muted
+                p.uk-text-large {{ $fetchState.error.message }}
+        .tm-editor.uk-light(v-else)
+            .tm-editor__frame(
+                data-uk-height-viewport="offset-top: true")
+                .tm-editor__left-bar(data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 100")
+                    EditorCollection(
+                        v-if="collection.length"
+                        v-model="orderSettings.currentImage"
+                        :items="collection")
+                    EditorSizes(
+                        :maxWidth="maxWidth"
+                        :maxHeight="maxHeight"
+                        :minValue="minInputValue"
+                        :ratio="image.ratio"
+                        v-model="orderSettings.sizes"
+                        @ratio-locked-change="handleRatioLockedChange")
+                    EditorFilter(v-model="orderSettings.filter")
+                    EditorTexture(
+                        v-model="orderSettings.texture"
+                        :items="textures")
+                .tm-editor__workspace
+                    .tm-editor__workspace-header.uk-flex.uk-flex-between.uk-margin
+                        .uk-flex
+                            span.uk-h5.uk-margin-remove Изображение
+                            .tm-editor__workspace-article.uk-margin-small-left {{ orderSettings.currentImage.article }}
+                        ImageLike.tm-editor__like(
+                            :liked="liked"
+                            @like="onLike")
+                    Cropper.tm-editor__image-cropper(
+                        :image="orderSettings.currentImage"
+                        :ratio="sizesRatio"
+                        :active="!ratioLocked"
+                        :filter="orderSettings.filter"
+                        @cropped="getCropData")
+                .tm-editor__right-bar(data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 100")
+                    EditorPreview(
+                        :image="orderSettings.currentImage"
+                        :orderSizes="orderSettings.sizes"
+                        :cropData="cropData"
+                        :ratioLocked="ratioLocked"
+                        :filter="orderSettings.filter"
+                        :texture="orderTexture.name")
+                    EditorInfo(
+                        :article="image.article"
+                        :width="orderSettings.sizes.width"
+                        :height="orderSettings.sizes.height"
+                        :flipH="orderSettings.filter.flipH"
+                        :flipV="orderSettings.filter.flipV"
+                        :colorEffect="orderColorEffectName"
+                        :texture="orderTexture.name")
+                    EditorPurchase(:price="orderPrice" @confirm="onConfirm")
+            EditorBottomBar(:price="orderPrice" @confirm="onConfirm")
 </template>
 
 <script>
@@ -81,20 +95,35 @@ export default {
     ImageLike
   },
   mixins: [scrollToTop, closeEditorMethods],
-  async fetch ({ store, params }) {
-    await store.dispatch('images/getItemFromEditor', params.id)
-    store.commit('SET_FIELDS', {
+  async fetch () {
+    this.$store.dispatch('setFields', {
       pageTitle: 'Редактор',
       bottomBar: false,
       footer: false,
       editorEnable: true
     })
+    if (!this.$route.params.id) {
+      await this.$router.push('/404')
+    }
+    await this.$store.dispatch('images/getItemFromEditor', this.$route.params.id)
+      .then(() => {
+        this.orderSettings.currentImage = this.image
+        this.orderSettings.texture = this.textures[0].id
+        this.cropData.width = this.image.width
+        this.cropData.height = this.image.height
+      })
+      .catch((error) => {
+        if (error.status === 404) {
+          this.$router.push('/404')
+        }
+      })
   },
   data: () => ({
     orderSettings: {
       currentImage: null,
       filter: {
-        flip: false,
+        flipH: false,
+        flipV: false,
         colorize: false
       },
       texture: null,
@@ -141,7 +170,9 @@ export default {
       return this.$store.getters['textures/getItemById'](this.orderSettings.texture)
     },
     orderColorEffectName () {
-      return filterSet[this.orderSettings.filter.colorize] ? filterSet[this.orderSettings.filter.colorize] : '-'
+      return filterSet[this.orderSettings.filter.colorize]
+        ? filterSet[this.orderSettings.filter.colorize]
+        : '—'
     },
     orderPrice () {
       const textureTax = this.orderTexture.price
@@ -149,19 +180,19 @@ export default {
 
       return Math.round(orderArea * textureTax / 100) * 100
     },
-    cartGoodData () {
+    cartItemData () {
       return {
         id: hash(),
-        imageId: this.orderSettings.currentImage.id,
-        imageName: this.orderSettings.currentImage.path,
-        width: this.orderSettings.sizes.width,
-        height: this.orderSettings.sizes.height,
-        texture: this.orderSettings.texture,
+        image_id: this.orderSettings.currentImage.id,
+        image_path: this.orderSettings.currentImage.path,
+        width_cm: this.orderSettings.sizes.width,
+        height_cm: this.orderSettings.sizes.height,
+        texture_id: this.orderSettings.texture,
         filter: this.orderSettings.filter,
         x: Math.round(this.cropData.x),
         y: Math.round(this.cropData.y),
-        cropWidth: Math.round(this.cropData.width) || this.orderSettings.currentImage.width,
-        cropHeight: Math.round(this.cropData.height) || this.orderSettings.currentImage.height,
+        width_px: Math.round(this.cropData.width) || this.orderSettings.currentImage.width,
+        height_px: Math.round(this.cropData.height) || this.orderSettings.currentImage.height,
         qty: 1
       }
     },
@@ -169,12 +200,23 @@ export default {
       return this.$store.getters['wishList/liked'](this.orderSettings.currentImage.id)
     }
   },
-  created () {
-    this.orderSettings.currentImage = this.image
-    this.orderSettings.texture = this.textures[0].id
-    this.cropData.width = this.image.width
-    this.cropData.height = this.image.height
-  },
+  // created () {
+  // await this.$store.dispatch('images/getItemFromEditor', this.$route.params.id)
+  //   .catch((error) => {
+  //     console.log(error.status)
+  //   })
+  // await this.$store.dispatch('setFields', {
+  //   pageTitle: 'Редактор',
+  //   bottomBar: false,
+  //   footer: false,
+  //   editorEnable: true
+  // })
+  //   console.log(this.image)
+  //   this.orderSettings.currentImage = this.image
+  //   this.orderSettings.texture = this.textures[0].id
+  //   this.cropData.width = this.image.width
+  //   this.cropData.height = this.image.height
+  // },
   beforeDestroy () {
     this.setFieldAction({ field: 'editorEnable', value: false })
     this.setImagesFieldsAction({
@@ -201,7 +243,7 @@ export default {
       this.cropData = value
     },
     onConfirm () {
-      this.addToCartAction(this.cartGoodData)
+      this.addToCartAction(this.cartItemData)
       this.addNotificationAction({
         message: 'Ваш товар добавлен в корзину!',
         status: 'success'
@@ -448,10 +490,10 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
             height: 40px;
             border: 1px solid transparent;
             border-radius: 0;
-            padding: 0 20px;
+            padding: 0 15px;
             line-height: inherit;
-            @include media-mob($m) {
-                padding: 0 25px;
+            @include media-mob($xl) {
+                padding: 0 20px;
             }
 
             &.active {
@@ -559,16 +601,6 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
         }
     }
 
-    &__like {
-        &.uk-active {
-            .uk-icon {
-                svg path {
-                    /*stroke: tomato !important;*/
-                }
-            }
-        }
-    }
-
     /* Right Bar
     ========================================================================== */
 
@@ -638,9 +670,6 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
             overflow: hidden;
             margin: 0 auto;
             box-shadow: 0 7px 20px -10px #000;
-            // @include media_mob($se) {
-            //     margin: 0;
-            // }
             @include media_mob($l) {
                 margin: 0 auto;
             }
@@ -672,7 +701,6 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
 
         &-item {
             display: flex;
-            align-items: center;
             line-height: 1.2;
 
             &:not(:last-child) {
@@ -742,6 +770,10 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
 
         .scale-x {
             transform: scaleX(-1);
+        }
+
+        .scale-y {
+            transform: scaleY(-1);
         }
     }
 

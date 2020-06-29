@@ -50,29 +50,29 @@ export const actions = {
     commit('SET_FIELDS', payload)
   },
   sync ({ state, commit }) {
-    const token = this.$auth.token.get()
+    const token = this.$auth.strategy.token.get()
     const items = state.items
-    const headers = { Authorization: token }
+    const headers = token ? { Authorization: token } : {}
 
     return this.$api.$post('/carts/sync', { items }, { headers })
       .then(response => commit('SET_ITEMS', response))
   },
   add ({ commit }, item) {
-    const token = this.$auth.token.get()
+    const token = this.$auth.strategy.token.get()
     const headers = { Authorization: token }
 
     return this.$api.$post('/carts/add', { item }, { headers })
       .then(response => commit('SET_ITEMS', response))
   },
   delete ({ commit }, id) {
-    const token = this.$auth.token.get()
+    const token = this.$auth.strategy.token.get()
     const headers = { Authorization: token }
 
     return this.$api.$delete(`/carts/${id}`, { headers })
       .then(response => commit('SET_ITEMS', response))
   },
   setQty ({ commit }, payload) {
-    const token = this.$auth.token.get()
+    const token = this.$auth.strategy.token.get()
     const headers = { Authorization: token }
 
     return this.$api.$post('/carts/set-qty', payload, { headers })
@@ -84,9 +84,9 @@ export const getters = {
   qty: state => state.items.reduce((qty, item) => qty + item.qty, 0),
   totalPrice: (state, getters) => state.items.reduce((total, item) => total + getters.itemPrice(item), 0),
   itemPrice: (state, getters, rootState, rootGetters) => (item) => {
-    const texture = rootGetters['textures/getItemById'](item.texture)
+    const texture = rootGetters['textures/getItemById'](item.texture_id)
     const textureTax = texture.price
-    const orderArea = Math.round(item.width * item.height / 100) / 100
+    const orderArea = Math.round(item.width_cm * item.height_cm / 100) / 100
     const price = Math.round(orderArea * textureTax / 100) * 100
 
     return price * item.qty

@@ -1,5 +1,5 @@
 <template lang="pug">
-    section.tm-catalog__topics.uk-section.uk-section-large.uk-text-center(
+    section.tm-catalog__section.uk-section.uk-section-large.uk-text-center(
         data-uk-scrollspy="cls:uk-animation-slide-bottom-small"
         :class="sectionStyles")
         .uk-container(:class="containerStyles")
@@ -35,3 +35,20 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.tm-catalog__title {
+    font-size: 0.95rem;
+    margin-top: $global-small-margin;
+    margin-bottom: 0;
+    color: $global-color;
+    line-height: 1.2;
+    height: 36px;
+    @include media-mob($s) {
+        font-size: 1.1rem;
+        margin-top: $global-small-gutter;
+    }
+    @include media-mob($m) {
+        height: 50px;
+    }
+}
+</style>

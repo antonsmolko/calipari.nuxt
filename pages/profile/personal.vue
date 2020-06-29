@@ -21,7 +21,7 @@
                                             VInput(
                                                 title="Имя"
                                                 :label="true"
-                                                icon="person"
+                                                icon="user"
                                                 name="name"
                                                 :controlBtn="true"
                                                 :controlBtnIcon="nameIsEdited ? 'check' : 'pencil'"
@@ -148,6 +148,7 @@ import setLayout from '~/components/mixins/setLayout'
 import scrollToTop from '~/components/mixins/scrollToTop'
 const _debounce = debounce(value => value(), 300)
 export default {
+  name: 'Personal',
   middleware: 'auth',
   scrollToTop: true,
   components: {

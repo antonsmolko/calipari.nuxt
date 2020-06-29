@@ -117,6 +117,9 @@ export default {
             }
         }
     }
+    .next, .prev {
+        -webkit-tap-highlight-color: transparent;
+    }
 }
 
 .carousel-3d-slide {
