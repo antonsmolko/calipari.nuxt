@@ -96,21 +96,27 @@ export const getParamsString = (payload) => {
   return params.length ? `?${params.join('&')}` : null
 }
 
-// export const refreshTokens = async ($auth, cb = null) => {
-//   const isTokenExpired = $auth.strategy.token.status().expired()
-//   const isRefreshExpired = $auth.strategy.refreshToken.status().expired()
-//
-//   if (!$auth.loggedIn) {
-//     return
-//   }
-//
-//   if (isRefreshExpired) {
-//     await $auth.logout()
-//
-//     return
-//   }
-//
-//   if (isTokenExpired) {
-//     await $auth.refreshTokens()
-//   }
-// }
+export const getPhoneFormat = (str) => {
+  const pattern = /^([8]{1})[-( ]?([0-9]{3})[-) ]?([0-9]{3})[- ]?([0-9]{4})$/
+
+  return str.replace(pattern, (match, p1, p2, p3, p4) => `+7 ${p2} ${p3} ${p4}`)
+}
+
+export const refreshTokens = async ($auth) => {
+  const isTokenExpired = $auth.strategy.token.status().expired()
+  const isRefreshExpired = $auth.strategy.refreshToken.status().expired()
+
+  if (!$auth.loggedIn) {
+    return
+  }
+
+  if (isRefreshExpired) {
+    await $auth.logout()
+
+    return
+  }
+
+  if (isTokenExpired) {
+    await $auth.refreshTokens()
+  }
+}

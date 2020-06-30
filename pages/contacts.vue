@@ -39,15 +39,22 @@
                             data-uk-scrollspy="cls: uk-animation-slide-bottom-small; delay: 300")
                             div(class="uk-width-xlarge@s uk-width-2-5@m")
                                 h3.uk-h3.uk-text-primary Пункты самовывоза
-                                p г. Брянск, пр-кт Московский, дом 99, строительный комплекс «Твой Дом», павильон&nbsp;34
-                                p г. Брянск, ул. Кромская, дом 50, «Сервисбаза», склад&nbsp;3Б
+                                p {{ getSettingValueByKey('pickup_1') }}
+                                p {{ getSettingValueByKey('pickup_2') }}
                                 h3.uk-h3.uk-text-primary Свяжитесь с нами
-                                a.uk-link.uk-link-muted.uk-display-block(href="tel:89529674204") +7 (952) 967 4204
-                                a.uk-link.uk-link-muted.uk-display-block(href="mail:info@calipari.ru") info@calipari.ru
+                                a.uk-link.uk-link-muted.uk-display-block(
+                                    :href="`tel:${phone}`")
+                                    | {{ phoneFormat }}
+                                a.uk-link.uk-link-muted.uk-display-block(
+                                    :href="`mail:${getSettingValueByKey('company_email')}`")
+                                    | {{ getSettingValueByKey('company_email') }}
                                 h3.uk-h3.uk-text-primary Подписывайтесь на нас
-                                a.uk-link.uk-link-muted.uk-text-uppercase.uk-margin-right(href="https://vk.com") Vkontakte
-                                a.uk-link.uk-link-muted.uk-text-uppercase.uk-margin-right(href="https://facebook.com") Facebook
-                                a.uk-link.uk-link-muted.uk-text-uppercase(href="https://instagram.com") Instagram
+                                a.uk-link.uk-link-muted.uk-text-uppercase.uk-margin-right(
+                                    :href="getSettingValueByKey('vk_account')") Vkontakte
+                                a.uk-link.uk-link-muted.uk-text-uppercase.uk-margin-right(
+                                    :href="getSettingValueByKey('facebook_account')") Facebook
+                                a.uk-link.uk-link-muted.uk-text-uppercase(
+                                    :href="getSettingValueByKey('instagram_account')") Instagram
                             div(class="uk-width-xlarge@s uk-width-3-5@m")
                                 h3.uk-h3.uk-text-primary Обратная связь
                                 form.uk-grid.uk-flex-column(data-uk-grid)
@@ -62,7 +69,9 @@
                                         icon="comment"
                                         :rows="7")
                                     .uk-width-1-1.uk-margin-top
-                                        p.uk-text-small.uk-margin-right() Нажимая кнопку «Отправить», я даю согласие на обработку персональных данных и соглашаюсь с <a class="uk-link uk-link-muted" href="/">политикой&nbsp;конфиденциальности</a>
+                                        p.uk-text-small.uk-margin-right()
+                                            | Нажимая кнопку «Отправить», я даю согласие на обработку персональных данных и соглашаюсь с&nbsp;
+                                            nuxt-link(to="/policy") политикой конфиденциальности
                                         button.uk-button.uk-button-primary(type="submit") Отправить
 </template>
 
@@ -73,6 +82,7 @@ import UkInput from '~/components/form/Input/UkInput'
 import UkTextarea from '~/components/form/Input/UkTextarea'
 import setLayout from '~/components/mixins/setLayout'
 import scrollToTop from '~/components/mixins/scrollToTop'
+import { getPhoneFormat } from '~/helpers'
 
 export default {
   name: 'Contacts',
@@ -99,6 +109,14 @@ export default {
     ],
     mapInit: false
   }),
+  computed: {
+    phoneFormat () {
+      return getPhoneFormat(this.phone)
+    },
+    phone () {
+      return this.getSettingValueByKey('company_phone')
+    }
+  },
   created () {
     this.setFieldAction({ field: 'pageTitle', value: 'Контакты' })
   },
@@ -108,6 +126,10 @@ export default {
     },
     init () {
       this.mapInit = true
+    },
+    getSettingValueByKey (key) {
+      const setting = this.$store.getters['settings/getSettingByKey'](key)
+      return setting.value
     }
   }
 }

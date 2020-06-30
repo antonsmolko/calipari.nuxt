@@ -57,9 +57,9 @@ export default {
       title: 'Корзина'
     }
   },
-  async fetch ({ store, params }) {
+  async fetch () {
     await new Promise((resolve) => {
-      store.commit('SET_FIELDS', { bottomBar: false, footer: false })
+      this.$store.dispatch('setFields', { bottomBar: false, footer: false })
       resolve()
     })
   },

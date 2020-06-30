@@ -1,3 +1,5 @@
+import { refreshTokens } from '~/helpers'
+
 export const state = () => ({
   items: [],
   totalPrice: null,
@@ -31,17 +33,26 @@ export const mutations = {
 }
 
 export const actions = {
-  addItem ({ commit, dispatch }, item) {
+  async addItem ({ commit, dispatch }, item) {
+    if (this.$auth.loggedIn) {
+      await refreshTokens(this.$auth)
+    }
     this.$auth.loggedIn
       ? dispatch('add', { item })
       : commit('ADD_ITEM', item)
   },
-  setItemQty ({ commit, dispatch }, payload) {
+  async setItemQty ({ commit, dispatch }, payload) {
+    if (this.$auth.loggedIn) {
+      await refreshTokens(this.$auth)
+    }
     return this.$auth.loggedIn
       ? dispatch('setQty', payload)
       : commit('SET_ITEM_QTY', payload)
   },
-  deleteItem ({ commit, dispatch }, id) {
+  async deleteItem ({ commit, dispatch }, id) {
+    if (this.$auth.loggedIn) {
+      await refreshTokens(this.$auth)
+    }
     this.$auth.loggedIn
       ? dispatch('delete', id)
       : commit('DELETE_ITEM', id)
@@ -49,7 +60,10 @@ export const actions = {
   setFields ({ commit }, payload) {
     commit('SET_FIELDS', payload)
   },
-  sync ({ state, commit }) {
+  async sync ({ state, commit }) {
+    if (this.$auth.loggedIn) {
+      await refreshTokens(this.$auth)
+    }
     const token = this.$auth.strategy.token.get()
     const items = state.items
     const headers = token ? { Authorization: token } : {}

@@ -22,6 +22,7 @@ import Menu from '~/components/layout/OffCanvas/OffCanvasMenu.vue'
 import EditorNavbarContent from '~/components/Editor/EditorNavbarContent'
 import notifications from '~/components/mixins/notifications'
 import layoutTimePeriod from '~/components/mixins/layoutTimePeriod'
+import { refreshTokens } from '~/helpers'
 
 export default {
   name: 'Default',
@@ -73,7 +74,10 @@ export default {
       }
     }
   },
-  mounted () {
+  async mounted () {
+    if (this.$auth.loggedIn) {
+      await refreshTokens(this.$auth)
+    }
     this.setThemeByTimePeriod()
     this.timeInterval = setInterval(() => {
       this.setThemeByTimePeriod()
