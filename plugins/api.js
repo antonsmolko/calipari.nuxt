@@ -27,6 +27,7 @@ export default function ({ $axios, store, redirect }, inject) {
     const error = err.response
 
     if (error.status === 404) {
+      redirect('/notfound')
       store.dispatch('notifications/addItem', {
         message: errorsLibrary.ERROR_NOTFOUND
       })

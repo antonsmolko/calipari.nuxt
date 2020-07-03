@@ -1,6 +1,6 @@
 <template lang="pug">
     .tm-editor__info.tm-editor__panel
-        h5.uk-h5.uk-margin-bottom Параметры заказа
+        editor-panel-heading(title="Параметры заказа")
         .tm-editor__info-item.uk-flex.uk-flex-between
             span.tm-editor__info-title.uk-text-muted Артикул
             span.tm-editor__info-value.uk-text-right {{ article }}
@@ -22,8 +22,12 @@
 </template>
 
 <script>
+import EditorPanelHeading from './EditorPanelHeading'
 export default {
   name: 'EditorInfo',
+  components: {
+    EditorPanelHeading
+  },
   props: {
     article: {
       type: String,

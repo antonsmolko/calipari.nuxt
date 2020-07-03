@@ -1,5 +1,5 @@
 <template lang="pug">
-    Page
+    Page(v-if="responseData")
         template(#main)
             main
                 TopBar(:title="pageTitle")
@@ -9,13 +9,13 @@
                     :class="{ 'uk-light': darkPeriod }"
                     data-uk-scrollspy="cls:uk-animation-slide-bottom-small")
                     .uk-container.uk-container-large
-                        h2.uk-heading-small {{ collection.title }}
+                        h2.uk-heading-small {{ colorCollection.title }}
                         .uk-divider-small.uk-margin-large-bottom
                         .uk-grid.uk-grid-small(
                             data-uk-grid
                             data-uk-scrollspy="target: > *; cls: uk-animation-fade; delay: 50")
                             .uk-panel(
-                                v-for="item in collection.images"
+                                v-for="item in colorCollection.images"
                                 class="uk-width-1-2@s uk-width-1-3@m")
                                 CollectionImageItem(:item="item" :key="item.id")
                 .uk-position-fixed.uk-width-1-1.uk-height-viewport.uk-position-top(
@@ -37,7 +37,7 @@ import scrollToTop from '~/components/mixins/scrollToTop'
 import scrollToImage from '~/components/mixins/scrollToImage'
 
 export default {
-  name: 'Collection',
+  name: 'ColorCollection',
   metaInfo () {
     return {
       title: this.pageTitle
@@ -49,15 +49,30 @@ export default {
     CollectionImageItem
   },
   mixins: [setLayout, scrollToTop, scrollToImage],
-  async fetch ({ store, params }) {
-    store.dispatch('collections/setField', { field: 'item', value: null })
-    await store.dispatch('collections/getItem', params.collection)
+  async fetch () {
+    if (!this.$route.params.collection) {
+      await this.$router.push('/notfound')
+    }
+    this.$store.dispatch('colorCollections/setField', { field: 'item', value: null })
+    await this.$store.dispatch('colorCollections/getItem', this.$route.params.collection)
+      .then((response) => {
+        this.setFieldAction({ field: 'pageTitle', value: response.title })
+        this.responseData = true
+      })
+      .catch((error) => {
+        if (error.status === 404) {
+          this.$router.push('/notfound')
+        }
+      })
   },
+  data: () => ({
+    responseData: false
+  }),
   computed: {
     ...mapState({
-      collection: state => state.collections.item
+      colorCollection: state => state.colorCollections.item
     }),
-    ...mapGetters('collections', [
+    ...mapGetters('colorCollections', [
       'mainImage'
     ]),
     backgroundPath () {
@@ -69,12 +84,8 @@ export default {
         : ''
     }
   },
-  created () {
-    this.setFieldAction({ field: 'pageTitle', value: this.collection.title })
-  },
   methods: {
     ...mapActions({
-      setCollectionsFieldAction: 'collections/setField',
       setImageFieldAction: 'images/setField'
     }),
     onClose () {

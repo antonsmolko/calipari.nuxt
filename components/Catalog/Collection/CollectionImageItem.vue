@@ -22,7 +22,7 @@ import { mapActions } from 'vuex'
 import ImageLike from '~/components/Gallery/ImageLike'
 
 export default {
-  name: 'CollectionImageSection',
+  name: 'CollectionImageItem',
   components: { ImageLike },
   props: {
     item: {

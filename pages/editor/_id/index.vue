@@ -12,18 +12,24 @@
             .uk-position-center.uk-flex.uk-flex-column.uk-flex-middle.uk-padding.uk-text-center.uk-text-muted
                 p.uk-text-large {{ $fetchState.error.message }}
         .tm-editor.uk-light(v-else)
-            .tm-editor__frame(
-                data-uk-height-viewport="offset-top: true")
+            .tm-editor__frame(data-uk-height-viewport="offset-top: true")
                 .tm-editor__left-bar(data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 100")
-                    EditorCollection(
-                        v-if="collection.length"
+                    EditorArtCollection(
+                        v-if="artCollection.length"
                         v-model="orderSettings.currentImage"
-                        :items="collection")
+                        @click="changeArtCollectionItem"
+                        :items="artCollection")
+                    EditorColorCollection(
+                        v-if="colorCollection.length"
+                        v-model="orderSettings.currentImage"
+                        :loading="colorCollectionLoading"
+                        :items="colorCollection")
                     EditorSizes(
                         :maxWidth="maxWidth"
                         :maxHeight="maxHeight"
                         :minValue="minInputValue"
-                        :ratio="image.ratio"
+                        :ratio="orderSettings.currentImage.ratio"
+                        :locked="ratioLocked"
                         v-model="orderSettings.sizes"
                         @ratio-locked-change="handleRatioLockedChange")
                     EditorFilter(v-model="orderSettings.filter")
@@ -53,7 +59,7 @@
                         :filter="orderSettings.filter"
                         :texture="orderTexture.name")
                     EditorInfo(
-                        :article="image.article"
+                        :article="orderSettings.currentImage.article"
                         :width="orderSettings.sizes.width"
                         :height="orderSettings.sizes.height"
                         :flipH="orderSettings.filter.flipH"
@@ -66,11 +72,13 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import some from 'lodash/some'
 
 import EditorSizes from '~/components/Editor/EditorSizes'
 import EditorFilter from '~/components/Editor/EditorFilter'
 import EditorTexture from '~/components/Editor/EditorTexture'
-import EditorCollection from '~/components/Editor/EditorCollection'
+import EditorColorCollection from '~/components/Editor/EditorColorCollection'
+import EditorArtCollection from '~/components/Editor/EditorArtCollection'
 import Cropper from '~/components/Editor/Cropper/Cropper'
 import EditorPreview from '~/components/Editor/EditorPreview'
 import EditorInfo from '~/components/Editor/EditorInfo'
@@ -86,7 +94,8 @@ export default {
     EditorSizes,
     EditorFilter,
     EditorTexture,
-    EditorCollection,
+    EditorColorCollection,
+    EditorArtCollection,
     Cropper,
     EditorPreview,
     EditorInfo,
@@ -103,18 +112,17 @@ export default {
       editorEnable: true
     })
     if (!this.$route.params.id) {
-      await this.$router.push('/404')
+      await this.$router.push('/notfound')
     }
     await this.$store.dispatch('images/getItemFromEditor', this.$route.params.id)
       .then(() => {
         this.orderSettings.currentImage = this.image
+        this.setCropData(this.image)
         this.orderSettings.texture = this.textures[0].id
-        this.cropData.width = this.image.width
-        this.cropData.height = this.image.height
       })
       .catch((error) => {
         if (error.status === 404) {
-          this.$router.push('/404')
+          this.$router.push('/notfound')
         }
       })
   },
@@ -140,24 +148,26 @@ export default {
       height: null,
       x: 0,
       y: 0
-    }
+    },
+    colorCollectionLoading: false
   }),
   computed: {
     ...mapState({
       image: state => state.images.item,
-      collection: state => state.images.collection,
+      colorCollection: state => state.images.colorCollection,
+      artCollection: state => state.images.artCollection,
       textures: state => state.textures.items,
       fromWishList: state => state.images.isWishList
     }),
-    onLoad () {
-      return this.textures.length &&
-        this.orderSettings.texture &&
-        this.image &&
-        this.image.ratio
-    },
+    // onLoad () {
+    //   return this.textures.length &&
+    //     this.orderSettings.texture &&
+    //     this.image &&
+    //     this.image.ratio
+    // },
     maxWidth () {
-      return this.image.max_print_width
-        ? this.image.max_print_width
+      return this.orderSettings.currentImage.max_print_width
+        ? this.orderSettings.currentImage.max_print_width
         : Math.round(this.orderSettings.currentImage.width / this.sizeFactor)
     },
     maxHeight () {
@@ -221,7 +231,7 @@ export default {
     this.setFieldAction({ field: 'editorEnable', value: false })
     this.setImagesFieldsAction({
       item: null,
-      collection: [],
+      colorCollection: [],
       isWishList: false
     })
   },
@@ -234,13 +244,28 @@ export default {
       setFieldsAction: 'setFields',
       toggleLikeAction: 'wishList/toggle',
       removeImageAction: 'images/removeItem',
-      addImageAction: 'images/addItem'
+      addImageAction: 'images/addItem',
+      getImageColorCollectionImagesAction: 'images/getItemColorCollectionImages'
     }),
-    handleRatioLockedChange (value) {
-      this.ratioLocked = value
+    handleRatioLockedChange () {
+      this.ratioLocked = !this.ratioLocked
     },
     getCropData (value) {
       this.cropData = value
+    },
+    changeArtCollectionItem (image) {
+      this.ratioLocked = true
+      this.setCropData(image)
+      if (image.hasColorCollection && !some(this.colorCollection, { id: image.id })) {
+        this.colorCollectionLoading = true
+        this.getImageColorCollectionImagesAction(image.id)
+          .then(() => {
+            this.colorCollectionLoading = false
+          })
+      }
+      if (!image.hasColorCollection) {
+        this.setImagesFieldAction({ field: 'colorCollection', value: [] })
+      }
     },
     onConfirm () {
       this.addToCartAction(this.cartItemData)
@@ -258,6 +283,10 @@ export default {
           ? this.addImageAction(image)
           : this.removeImageAction(image.id)
       }
+    },
+    setCropData (image) {
+      this.cropData.width = image.width
+      this.cropData.height = image.height
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -322,7 +351,7 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
         }
 
         @include media_mob($xs) {
-            padding: $global-margin;
+            padding: $global-small-gutter $global-margin;
         }
         @include media_mob($qhd) {
             padding-top: $global-medium-margin;
@@ -477,77 +506,6 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
             background-image: $inverse-background-image;
             cursor: pointer;
             transition: opacity .25s ease;
-        }
-    }
-
-    /* Filter
-    ========================================================================== */
-
-    &__filter {
-        &-button {
-            width: 100%;
-            background-color: rgba(#fff, .1);
-            height: 40px;
-            border: 1px solid transparent;
-            border-radius: 0;
-            padding: 0 15px;
-            line-height: inherit;
-            @include media-mob($xl) {
-                padding: 0 20px;
-            }
-
-            &.active {
-                border-color: $global-inverse-color;
-                color: $global-inverse-color;
-            }
-        }
-    }
-
-    /* Texture
-    ========================================================================== */
-
-    &__texture {
-        flex-grow: 1;
-
-        &-item {
-            cursor: pointer;
-            width: 25%;
-            @include media_mob($s) {
-                width: 95px;
-            }
-            @include media_mob($l) {
-                width: 85px;
-            }
-            @include media_mob($xl) {
-                width: 110px;
-            }
-
-            > .active, &:hover {
-                opacity: 1;
-
-                .tm-editor__texture-thumb {
-                    opacity: 1;
-                }
-
-                .tm-editor__texture-title {
-                    color: #fff;
-                }
-            }
-        }
-
-        &-thumb {
-            display: block;
-            width: 100%;
-            height: auto;
-            opacity: .5;
-            transition: opacity .25s ease;
-        }
-
-        &-title {
-            display: block;
-            transition: color .25s ease;
-            font-size: $global-small-font-size;
-            margin-top: 5px;
         }
     }
 

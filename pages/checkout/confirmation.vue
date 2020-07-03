@@ -66,8 +66,10 @@
                                             span.uk-text-large.uk-text-emphasis {{ totalFormatPrice }}
                                             button.uk-button.uk-button-danger.uk-margin-left(
                                                 @click.prevent="onNext") Оформить
-                    SlideYDownTransition(v-show="pending")
-                        .uk-position-center.uk-text-muted(data-uk-spinner="ratio: 3")
+
+                    .uk-position-center.uk-flex.uk-flex-column.uk-flex-middle.uk-padding.uk-text-center(v-if="pending")
+                        span.uk-text-large Заказ отправляется...
+                        .uk-margin-top.uk-tex-muted(data-uk-spinner="ratio: 3")
 </template>
 
 <script>

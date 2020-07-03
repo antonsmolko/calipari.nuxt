@@ -1,6 +1,6 @@
 <template lang="pug">
     .tm-editor__filter.tm-editor__panel
-        h5.uk-h5.uk-margin-bottom Фильтр
+        editor-panel-heading(title="Фильтр")
         .uk-grid.uk-child-width-auto.uk-grid-small(
             data-uk-grid
             data-uk-scrollspy="cls: uk-animation-slide-left-medium; delay: 500")
@@ -23,11 +23,15 @@
 </template>
 
 <script>
+import EditorPanelHeading from './EditorPanelHeading'
 import EditorFilterItem from './EditorFilterItem'
 
 export default {
   name: 'EditorFilter',
-  components: { EditorFilterItem },
+  components: {
+    EditorPanelHeading,
+    EditorFilterItem
+  },
   model: {
     prop: 'model',
     event: 'filtering'
@@ -61,3 +65,31 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.tm-editor {
+
+    /* Filter
+    ========================================================================== */
+
+    &__filter {
+        &-button {
+            width: 100%;
+            background-color: rgba(#fff, .1);
+            height: $global-gutter;
+            border: 1px solid transparent;
+            border-radius: 0;
+            padding: 0 $global-small-gutter;
+            line-height: 1;
+            @include media-mob($xl) {
+                padding: 0 $global-margin;
+            }
+
+            &.active {
+                border-color: $global-inverse-color;
+                color: $global-inverse-color;
+            }
+        }
+    }
+}
+</style>

@@ -10,16 +10,29 @@ export default {
     })
   },
   mounted () {
-    this.$nextTick(function () {
-      if (this.lastPreview) {
-        this.scrollToImage()
+    this.scrollToImageProcess()
+  },
+  watch: {
+    responseData () {
+      if (this.responseData) {
+        this.scrollToImageProcess()
       }
-    })
+    }
   },
   methods: {
     ...mapActions({
       setImageFieldAction: 'images/setField'
     }),
+    scrollToImageProcess () {
+      this.$nextTick(function () {
+        if (this.lastPreview) {
+          const image = document.querySelector(`#image-${this.lastPreview}`)
+          if (image) {
+            this.scrollToImage()
+          }
+        }
+      })
+    },
     scrollToImage () {
       const options = {
         easing: 'ease-in-out',

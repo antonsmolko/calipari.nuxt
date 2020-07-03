@@ -3,6 +3,7 @@ import isEmpty from 'lodash/isEmpty'
 import isInteger from 'lodash/isInteger'
 import crc32 from 'crc-32'
 import lib from '~/plugins/lang/ru/lib'
+import { form } from '~/plugins/config'
 
 export const getFilterDetailsString = (filter) => {
   const activeFilters = getActiveFilters(filter)
@@ -74,7 +75,14 @@ export const getArticle = (id) => {
  * @param length
  * @returns {function(string|null): boolean|boolean}
  */
-export const isFieldLengthValid = length => field => !!field && (field.length >= length)
+export const isFieldLengthValid = length => field => Boolean(field) && (field.length >= length)
+
+/**
+ * Check customer phone number
+ * @param phone
+ * @returns {boolean|*}
+ */
+export const isPhoneValid = phone => Boolean(phone) && phone.match(form.PHONE_REGEXP)
 
 /**
  * Get Params String
@@ -97,6 +105,9 @@ export const getParamsString = (payload) => {
 }
 
 export const getPhoneFormat = (str) => {
+  if (!str) {
+    return str
+  }
   const pattern = /^([8]{1})[-( ]?([0-9]{3})[-) ]?([0-9]{3})[- ]?([0-9]{4})$/
 
   return str.replace(pattern, (match, p1, p2, p3, p4) => `+7 ${p2} ${p3} ${p4}`)
@@ -111,6 +122,7 @@ export const refreshTokens = async ($auth) => {
   }
 
   if (isRefreshExpired) {
+    console.log('REFRESH EXPIRED !!!')
     await $auth.logout()
 
     return

@@ -1,16 +1,20 @@
 <template lang="pug">
     .tm-editor__purchase.tm-editor__panel(class="uk-visible@l")
-        h5.uk-h5.uk-margin-bottom Цена
+        editor-panel-heading(title="Цена")
         .tm-editor__purchase-content.uk-flex-wrap
             span.tm-editor__purchase-price.uk-text-emphasis {{ formatPrice }}
-            button.uk-button.uk-button-small.uk-button-danger.uk-margin(type='button' @click="onClick") В корзину
+            button.uk-button.uk-button-small.uk-button-danger(type='button' @click="onClick") В корзину
 </template>
 
 <script>
+import EditorPanelHeading from './EditorPanelHeading'
 import { getFormatPrice } from '~/helpers'
 
 export default {
   name: 'EditorPurchase',
+  components: {
+    EditorPanelHeading
+  },
   props: {
     price: {
       type: [String, Number],

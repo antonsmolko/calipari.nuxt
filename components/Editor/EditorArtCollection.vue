@@ -1,6 +1,8 @@
 <template lang="pug">
     .tm-editor__collection.tm-editor__panel.uk-light
-        h5.uk-h5.uk-margin-bottom(class="uk-visible@s") Коллекция
+        editor-panel-heading(
+            class="uk-visible@s"
+            title="Арт коллекция")
         .tm-editor__left-bar-slider.uk-position-relative.uk-visible-toggle.uk-light(
             tabindex="-1"
             data-uk-slider="finite: true"
@@ -10,16 +12,21 @@
                     v-for="item in items"
                     :key="item.id"
                     :item="item"
+                    type="art"
                     v-model="currentItem"
                     @click="onClick")
-            ul.uk-slider-nav.uk-dotnav.uk-flex-center.uk-margin-top(class="uk-visible@m")
+            //ul.uk-slider-nav.uk-dotnav.uk-flex-center.uk-margin-top(class="uk-visible@xl")
 </template>
 
 <script>
 import EditorCollectionItem from './EditorCollectionItem'
+import EditorPanelHeading from './EditorPanelHeading'
 export default {
-  name: 'EditorTexture',
-  components: { EditorCollectionItem },
+  name: 'EditorColorCollection',
+  components: {
+    EditorPanelHeading,
+    EditorCollectionItem
+  },
   model: {
     prop: 'model',
     event: 'click'

@@ -18,6 +18,8 @@ import TopBar from '~/components/layout/TopBar.vue'
 import setLayout from '~/components/mixins/setLayout'
 import scrollToTop from '~/components/mixins/scrollToTop'
 export default {
+  layout: '404',
+  name: 'Notfound',
   components: {
     Page,
     TopBar

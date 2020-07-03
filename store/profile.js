@@ -1,6 +1,5 @@
-import { isFieldLengthValid } from '../helpers'
+import { isFieldLengthValid, isPhoneValid } from '../helpers'
 import { form } from '~/plugins/config'
-
 const isLengthValid = isFieldLengthValid(form.BASE_MIN_LENGTH)
 
 export const state = () => ({
@@ -133,7 +132,7 @@ export const getters = {
     return !isLengthValid(state.fields.first_name) ||
       !isLengthValid(state.fields.last_name) ||
       !isLengthValid(state.fields.middle_name) ||
-      !state.fields.phone.match(form.PHONE_REGEXP)
+      !isPhoneValid(state.fields.phone)
   },
   localityIsInvalid: state => !state.fields.locality ||
     !Object.hasOwnProperty.call(state.fields.locality, 'name') ||

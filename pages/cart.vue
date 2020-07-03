@@ -44,7 +44,6 @@ import CartList from '~/components/Cart/CartList'
 import setLayout from '~/components/mixins/setLayout'
 import scrollToTop from '~/components/mixins/scrollToTop'
 export default {
-  scrollToTop: true,
   components: {
     Page,
     CartList,

@@ -1,6 +1,6 @@
 <template lang="pug">
     .tm-editor__preview.tm-editor__panel
-        h5.uk-h5.uk-margin-bottom Превью
+        editor-panel-heading(title="Превью")
         div(id="preview-container" ref="preview" data-uk-lightbox)
             a.uk-display-block.uk-transition-toggle(
                 id="preview-crop"
@@ -15,10 +15,14 @@
 </template>
 
 <script>
+import EditorPanelHeading from './EditorPanelHeading'
 import { getFilterDetailsString } from '~/helpers'
 
 export default {
   name: 'EditorPreview',
+  components: {
+    EditorPanelHeading
+  },
   props: {
     image: {
       type: Object,

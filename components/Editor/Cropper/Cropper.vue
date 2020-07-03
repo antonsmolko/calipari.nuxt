@@ -165,6 +165,11 @@ export default {
         }
       }
     },
+    async image () {
+      await this.removeListeners()
+      await this.init()
+      this.handleResize()
+    },
     active () {
       if (this.active) {
         this.viewBoxStyles.width = this.imageStyles.width
@@ -208,8 +213,7 @@ export default {
     window.addEventListener('resize', this.handleResize)
   },
   beforeDestroy () {
-    removeListener(this.cropBox, EVENT_POINTER_DOWN, this.startCropMove)
-    removeListener(this.cropBox.ownerDocument, EVENT_POINTER_UP, this.endCropMove)
+    this.removeListeners()
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
@@ -360,6 +364,10 @@ export default {
         img.src = url
         img.onload = resolve
       })
+    },
+    removeListeners () {
+      removeListener(this.cropBox, EVENT_POINTER_DOWN, this.startCropMove)
+      removeListener(this.cropBox.ownerDocument, EVENT_POINTER_UP, this.endCropMove)
     }
   }
 }

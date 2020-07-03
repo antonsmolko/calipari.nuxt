@@ -56,13 +56,6 @@ export default {
     './assets/scss/styles.scss'
   ],
   router: {
-    extendRoutes (routes, resolve) {
-      routes.push({
-        name: 'notfound',
-        path: '*',
-        component: resolve(__dirname, 'pages/404.vue')
-      })
-    },
     prefetchLinks: false,
     linkExactActiveClass: 'uk-active',
     middleware: [

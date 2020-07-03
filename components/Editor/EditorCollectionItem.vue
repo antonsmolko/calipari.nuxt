@@ -1,14 +1,14 @@
 <template lang="pug">
     li.tm-editor__collection-item
         .uk-panel(:class="{'active': isActive }", @click="onClick")
-            img.tm-editor__collection-thumb(
-                :src="`${baseUrl}/widen/200/${item.path}`",
+            img(:class="thumbStyle"
+                :src="thumbPath",
                 :alt="item.article")
 </template>
 
 <script>
 export default {
-  name: 'EditorCollectionItem',
+  name: 'EditorColorCollectionItem',
   model: {
     prop: 'model',
     event: 'click'
@@ -21,6 +21,10 @@ export default {
     model: {
       type: Object,
       default: null
+    },
+    type: {
+      type: String,
+      default: 'color'
     }
   },
   data: () => ({
@@ -29,6 +33,16 @@ export default {
   computed: {
     isActive () {
       return this.item.id === this.model.id
+    },
+    thumbPath () {
+      return this.type === 'art'
+        ? `${this.baseUrl}/heighten/100/${this.item.path}`
+        : `${this.baseUrl}/widen/200/${this.item.path}`
+    },
+    thumbStyle () {
+      return this.type === 'art'
+        ? 'tm-editor__collection-thumb-art'
+        : 'tm-editor__collection-thumb-color'
     }
   },
   methods: {
@@ -50,7 +64,12 @@ export default {
             }
         }
         &__collection-thumb {
-            width: 80px;
+            &-art, &-color {
+                height: 50px;
+                @include media_mob($xxl) {
+                    height: 70px;
+                }
+            }
         }
     }
 </style>
