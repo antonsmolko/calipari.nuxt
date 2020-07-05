@@ -32,6 +32,7 @@
                     :value="pvz"
                     :placeholder="pvzs.length ? 'Выберите пункт вывоза заказа' : ''"
                     :options="pvzs"
+                    optionKey="code"
                     noOptionsText="Нет совпадений с поиском")
                     template(#footer v-if="pvzsNotFound")
                         span.uk-text-small.uk-text-danger В данном н.п. пункте нет пунктов самовывоза CDEK
@@ -112,12 +113,14 @@ export default {
       }
     },
     localityInput (value) {
+      console.log('locality', value)
       value
         ? this.changeLocality(value)
         : this.initCdekFields()
       this.$v.locality.$touch()
     },
     pvzsInput (value) {
+      console.log('pvzsInput', value)
       value
         ? this.setPvz(value)
         : this.clearPvzs()

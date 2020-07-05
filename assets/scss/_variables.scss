@@ -63,6 +63,9 @@ $editor-background-color: rgb(27, 27, 29);
 $form-radio-checked-border: #eaeaea;
 $form-line-height: $global-control-height;
 
+/** Mosaic image */
+$base-mosaic-badge-margin: 6px;
+
 // Transition
 $transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
 $background-time-transition: 2s;

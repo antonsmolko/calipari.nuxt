@@ -14,17 +14,17 @@
         .tm-editor.uk-light(v-else)
             .tm-editor__frame(data-uk-height-viewport="offset-top: true")
                 .tm-editor__left-bar(data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 100")
-                    EditorArtCollection(
+                    editor-art-collection(
                         v-if="artCollection.length"
                         v-model="orderSettings.currentImage"
                         @click="changeArtCollectionItem"
                         :items="artCollection")
-                    EditorColorCollection(
+                    editor-color-collection(
                         v-if="colorCollection.length"
                         v-model="orderSettings.currentImage"
                         :loading="colorCollectionLoading"
                         :items="colorCollection")
-                    EditorSizes(
+                    editor-sizes(
                         :maxWidth="maxWidth"
                         :maxHeight="maxHeight"
                         :minValue="minInputValue"
@@ -32,33 +32,33 @@
                         :locked="ratioLocked"
                         v-model="orderSettings.sizes"
                         @ratio-locked-change="handleRatioLockedChange")
-                    EditorFilter(v-model="orderSettings.filter")
-                    EditorTexture(
+                    editor-filter(v-model="orderSettings.filter")
+                    editor-texture(
                         v-model="orderSettings.texture"
                         :items="textures")
                 .tm-editor__workspace
                     .tm-editor__workspace-header.uk-flex.uk-flex-between.uk-margin
                         .uk-flex
-                            span.uk-h5.uk-margin-remove Изображение
+                            editor-panel-heading.uk-margin-remove(title="Изображение")
                             .tm-editor__workspace-article.uk-margin-small-left {{ orderSettings.currentImage.article }}
-                        ImageLike.tm-editor__like(
+                        image-like.tm-editor__like(
                             :liked="liked"
                             @like="onLike")
-                    Cropper.tm-editor__image-cropper(
+                    cropper.tm-editor__image-cropper(
                         :image="orderSettings.currentImage"
                         :ratio="sizesRatio"
                         :active="!ratioLocked"
                         :filter="orderSettings.filter"
                         @cropped="getCropData")
                 .tm-editor__right-bar(data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 100")
-                    EditorPreview(
+                    editor-preview(
                         :image="orderSettings.currentImage"
                         :orderSizes="orderSettings.sizes"
                         :cropData="cropData"
                         :ratioLocked="ratioLocked"
                         :filter="orderSettings.filter"
                         :texture="orderTexture.name")
-                    EditorInfo(
+                    editor-info(
                         :article="orderSettings.currentImage.article"
                         :width="orderSettings.sizes.width"
                         :height="orderSettings.sizes.height"
@@ -66,8 +66,8 @@
                         :flipV="orderSettings.filter.flipV"
                         :colorEffect="orderColorEffectName"
                         :texture="orderTexture.name")
-                    EditorPurchase(:price="orderPrice" @confirm="onConfirm")
-            EditorBottomBar(:price="orderPrice" @confirm="onConfirm")
+                    editor-purchase(:price="orderPrice" @confirm="onConfirm")
+            editor-bottom-bar(:price="orderPrice" @confirm="onConfirm")
 </template>
 
 <script>
@@ -85,6 +85,7 @@ import EditorInfo from '~/components/Editor/EditorInfo'
 import EditorPurchase from '~/components/Editor/EditorPurchase'
 import EditorBottomBar from '~/components/Editor/EditorBottomBar'
 import ImageLike from '~/components/Gallery/ImageLike'
+import EditorPanelHeading from '~/components/Editor/EditorPanelHeading'
 import scrollToTop from '~/components/mixins/scrollToTop'
 import closeEditorMethods from '~/components/mixins/closeEditorMethods'
 import { filterSet, hash } from '~/helpers'
@@ -101,7 +102,8 @@ export default {
     EditorInfo,
     EditorPurchase,
     EditorBottomBar,
-    ImageLike
+    ImageLike,
+    EditorPanelHeading
   },
   mixins: [scrollToTop, closeEditorMethods],
   async fetch () {
@@ -530,6 +532,7 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
             background-color: $global-secondary-background;
             padding: $global-small-margin / 2 $global-small-margin;
             line-height: 1;
+            margin-top: -2px;
         }
 
         @include media_device(mobile-portrait) {

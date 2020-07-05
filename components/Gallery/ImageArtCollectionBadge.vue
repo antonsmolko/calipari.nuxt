@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: 'ImageArtCollectionButton',
+  name: 'ImageArtCollectionBadge',
   props: {
     url: {
       type: String,
@@ -20,6 +20,12 @@ export default {
 <style lang="scss">
 .tm-mosaic {
     &__art-collection {
+        display: block;
+        background: rgba($global-secondary-background, .5);
+        line-height: 1;
+        padding: 1px;
+        margin: $base-mosaic-badge-margin;
+        cursor: pointer;
         svg {
             rect {
                 &.r1 {

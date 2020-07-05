@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: 'ImageColorCollectionButton',
+  name: 'ImageColorCollectionBadge',
   props: {
     url: {
       type: String,
@@ -20,6 +20,16 @@ export default {
 <style lang="scss">
 .tm-mosaic {
     &__color-collection {
+        display: block;
+        background: rgba($global-secondary-background, .5);
+        line-height: 1;
+        padding: 1px;
+        margin: $base-mosaic-badge-margin;
+        cursor: pointer;
+
+        .uk-icon {
+            margin: auto;
+        }
         svg {
             circle {
                 &.c1 {

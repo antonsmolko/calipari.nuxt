@@ -42,7 +42,7 @@
                                 a.uk-padding-small.uk-link-text(data-uk-slidenav-previous data-uk-slideshow-item="previous" href="#")
                                 a.uk-padding-small.uk-link-text(data-uk-slidenav-next data-uk-slideshow-item="next" href="#")
                 SlideYDownTransition(mode="out-in" v-if="currentSlide")
-                    ColorCollectionImageItem.uk-position-bottom-right(
+                    CollectionImageItem.uk-position-bottom-right(
                         v-if="!slideOn && !tabOn"
                         anchor="home-interiors"
                         :item="currentSlide.image")
@@ -52,13 +52,13 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import debounce from 'lodash/debounce'
 import head from 'lodash/head'
 import find from 'lodash/find'
-import ColorCollectionImageItem from '~/components/Catalog/ColorCollection/ColorCollectionImageItem'
+import CollectionImageItem from '~/components/Catalog/Collection/CollectionImageItem'
 
 const _debounce = debounce(fn => fn(), 500)
 
 export default {
   components: {
-    ColorCollectionImageItem
+    CollectionImageItem
   },
   props: {
     items: {

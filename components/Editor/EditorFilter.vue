@@ -76,7 +76,7 @@ export default {
         &-button {
             width: 100%;
             background-color: rgba(#fff, .1);
-            height: $global-gutter;
+            height: 36px;
             border: 1px solid transparent;
             border-radius: 0;
             padding: 0 $global-small-gutter;

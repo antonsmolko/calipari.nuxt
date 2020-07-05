@@ -17,7 +17,10 @@
                             .uk-panel(
                                 v-for="item in artCollection.images"
                                 class="uk-width-1-2@s uk-width-1-3@m")
-                                CollectionImageItem(:item="item" :key="item.id")
+                                CollectionImageItem(
+                                    :colorBadge="true"
+                                    :item="item"
+                                    :key="item.id")
                 .uk-position-fixed.uk-width-1-1.uk-height-viewport.uk-position-top(
                     data-uk-scrollspy="cls: uk-animation-fade; delay: 50")
                     .tm-section__semitransparent-background.uk-position-cover.uk-background-cover.uk-background-fixed(

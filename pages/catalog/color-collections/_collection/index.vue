@@ -13,11 +13,15 @@
                         .uk-divider-small.uk-margin-large-bottom
                         .uk-grid.uk-grid-small(
                             data-uk-grid
+                            data-uk-height-match
                             data-uk-scrollspy="target: > *; cls: uk-animation-fade; delay: 50")
                             .uk-panel(
                                 v-for="item in colorCollection.images"
                                 class="uk-width-1-2@s uk-width-1-3@m")
-                                CollectionImageItem(:item="item" :key="item.id")
+                                CollectionImageItem(
+                                    :artBadge="true"
+                                    :item="item"
+                                    :key="item.id")
                 .uk-position-fixed.uk-width-1-1.uk-height-viewport.uk-position-top(
                     data-uk-scrollspy="cls: uk-animation-fade; delay: 50")
                     .tm-section__semitransparent-background.uk-position-cover.uk-background-cover.uk-background-fixed(

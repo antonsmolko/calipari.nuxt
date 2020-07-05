@@ -8,7 +8,7 @@
                 :filterable="false"
                 :name="name"
                 :class="{ 'vs--error': error, 'tm-select__form-icon': icon }"
-                @input="onInput"
+                @input="handleInput"
                 @search="onSearch"
                 :clearable="false"
                 :loading="isLoading"
@@ -17,8 +17,7 @@
                 :placeholder="placeholder"
                 :options="options"
                 :getOptionKey="getOptionKey"
-                :disabled="disabled"
-                )
+                :disabled="disabled")
                 template(#open-indicator="{ attributes }")
                     span(v-bind="attributes" data-uk-icon="chevron-down")
                 template(#no-options)
@@ -68,6 +67,10 @@ export default {
       type: Array,
       default: () => []
     },
+    optionKey: {
+      type: String,
+      default: null
+    },
     noOptionsText: {
       type: String,
       default: ''
@@ -82,13 +85,17 @@ export default {
     }
   },
   methods: {
-    onInput (value) {
+    handleInput (value) {
+      console.log('onInput', value)
       this.$emit('input', value)
     },
     onSearch (value) {
       this.$emit('search', value)
     },
     getOptionKey (option) {
+      if (this.optionKey) {
+        return option[this.optionKey]
+      }
       if (typeof option === 'object' && option.image_path) {
         return option.image_path
       }

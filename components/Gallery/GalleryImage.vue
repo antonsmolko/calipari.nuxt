@@ -15,10 +15,10 @@
             span.tm-mosaic__inside-top
                 span.tm-mosaic__article {{ image.article }}
                 .tm-mosaic__collections(data-no-mosaic="true")
-                    image-color-collection-button(
+                    image-color-collection-badge(
                         v-if="image.colorCollection"
                         :url="`/catalog/color-collections/${image.colorCollection.alias}`")
-                    image-art-collection-button(
+                    image-art-collection-badge(
                         v-if="image.artCollection"
                         :url="`/catalog/art-collections/${image.artCollection.alias}`")
             span.tm-mosaic__inside-bottom
@@ -30,14 +30,14 @@
 <script>
 import { mapActions } from 'vuex'
 import ImageLike from './ImageLike'
-import ImageColorCollectionButton from '~/components/Gallery/ImageColorCollectionButton'
-import ImageArtCollectionButton from '~/components/Gallery/ImageArtCollectionButton'
+import ImageColorCollectionBadge from '~/components/Gallery/ImageColorCollectionBadge'
+import ImageArtCollectionBadge from '~/components/Gallery/ImageArtCollectionBadge'
 export default {
   name: 'GalleryImage',
   components: {
     ImageLike,
-    ImageColorCollectionButton,
-    ImageArtCollectionButton
+    ImageColorCollectionBadge,
+    ImageArtCollectionBadge
   },
   props: {
     image: {
@@ -89,9 +89,6 @@ export default {
 
 <style lang="scss">
 .tm-mosaic {
-    $base-mosaic-margin: 4px;
-    $mosaic-logo-size: 40px;
-
     &__image {
         position: relative;
         background-color: rgba($global-secondary-background, .2);
@@ -140,7 +137,7 @@ export default {
         color: $global-inverse-color;
         font-weight: normal;
         padding: 3px 4px;
-        margin: $base-mosaic-margin;
+        margin: $base-mosaic-badge-margin;
     }
 
     &__color-collection, &__art-collection {
@@ -154,7 +151,7 @@ export default {
     }
 
     &__art-collection, &__color-collection {
-        margin: $base-mosaic-margin;
+        margin: $base-mosaic-badge-margin;
         cursor: pointer;
 
         .uk-icon {
@@ -163,7 +160,7 @@ export default {
     }
 
     &__like {
-        margin: $base-mosaic-margin + 2px;
+        margin: $base-mosaic-badge-margin + 2px;
     }
 
     &__overlay-link {
