@@ -3,7 +3,7 @@
         .cropper__container(ref="container")
             .cropper__canvas(v-show="isCropperSet" ref="canvas")
                 img(ref="image"
-                    :class="{'scale-x': filter.flipH, 'scale-y': filter.flipV}",
+                    :style="canvasStyle",
                     :src="imageUrl",
                     :alt="image.article")
                 .cropper__crop-box(
@@ -115,6 +115,11 @@ export default {
     scaleImage () {
       return this.image.width / this.imageStyles.width
     },
+    canvasStyle () {
+      return {
+        transform: `scale(${this.scaleX}, ${this.scaleY})`
+      }
+    },
     cropBoxStyle () {
       const transX = this.viewBoxStyles.translateX !== 0 ? `${this.viewBoxStyles.translateX}px` : 0
       const transY = this.viewBoxStyles.translateY !== 0 ? `${this.viewBoxStyles.translateY}px` : 0
@@ -183,18 +188,23 @@ export default {
       this.imageStyles.translateX = 0
       this.imageStyles.translateY = 0
 
-      this.setNaturalCrop()
+      this.setNaturalCrop({
+        width: this.image.width,
+        height: this.image.height,
+        x: 0,
+        y: 0
+      })
 
       this.resetCropMove()
 
       this.$emit('cropped', this.naturalCropData)
     },
-    translateX () {
-      this.setNaturalCrop()
-    },
-    translateY () {
-      this.setNaturalCrop()
-    },
+    // translateX () {
+    //   this.setNaturalCrop()
+    // },
+    // translateY () {
+    //   this.setNaturalCrop()
+    // },
     scaleX () {
       this.imageStyles.scaleX = this.scaleX ? -1 : 1
     },
@@ -340,11 +350,16 @@ export default {
       this.imageStyles.translateX = -this.viewBoxStyles.translateX
       this.imageStyles.translateY = -this.viewBoxStyles.translateY
     },
-    setNaturalCrop () {
-      this.naturalCropData.width = this.viewBoxStyles.width * this.scaleImage
-      this.naturalCropData.height = this.viewBoxStyles.height * this.scaleImage
-      this.naturalCropData.x = this.viewBoxStyles.translateX * this.scaleImage
-      this.naturalCropData.y = this.viewBoxStyles.translateY * this.scaleImage
+    setNaturalCrop (cropData = null) {
+      const width = cropData ? cropData.width : this.viewBoxStyles.width * this.scaleImage
+      const height = cropData ? cropData.height : this.viewBoxStyles.height * this.scaleImage
+      const x = cropData ? cropData.x : this.viewBoxStyles.translateX * this.scaleImage
+      const y = cropData ? cropData.y : this.viewBoxStyles.translateY * this.scaleImage
+
+      this.$set(this.naturalCropData, 'width', width)
+      this.$set(this.naturalCropData, 'height', height)
+      this.$set(this.naturalCropData, 'x', x)
+      this.$set(this.naturalCropData, 'y', y)
     },
     resetCropMove () {
       this.lastTranslateX = 0

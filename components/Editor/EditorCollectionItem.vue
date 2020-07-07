@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  name: 'EditorColorCollectionItem',
+  name: 'EditorCollectionItem',
   model: {
     prop: 'model',
     event: 'click'
@@ -65,7 +65,10 @@ export default {
         }
         &__collection-thumb {
             &-art, &-color {
-                height: 50px;
+                height: 40px;
+                @include media_mob($m) {
+                    height: 50px;
+                }
                 @include media_mob($xxl) {
                     height: 70px;
                 }

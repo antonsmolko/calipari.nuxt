@@ -14,14 +14,18 @@
         .tm-editor.uk-light(v-else)
             .tm-editor__frame(data-uk-height-viewport="offset-top: true")
                 .tm-editor__left-bar(data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 100")
-                    editor-art-collection(
+                    editor-collection(
                         v-if="artCollection.length"
+                        title="Арт-коллекция"
                         v-model="orderSettings.currentImage"
                         @click="changeArtCollectionItem"
+                        :loading="artCollectionLoading"
                         :items="artCollection")
-                    editor-color-collection(
+                    editor-collection(
                         v-if="colorCollection.length"
+                        title="Цветовая коллекция"
                         v-model="orderSettings.currentImage"
+                        @click="changeColorCollection"
                         :loading="colorCollectionLoading"
                         :items="colorCollection")
                     editor-sizes(
@@ -77,8 +81,7 @@ import some from 'lodash/some'
 import EditorSizes from '~/components/Editor/EditorSizes'
 import EditorFilter from '~/components/Editor/EditorFilter'
 import EditorTexture from '~/components/Editor/EditorTexture'
-import EditorColorCollection from '~/components/Editor/EditorColorCollection'
-import EditorArtCollection from '~/components/Editor/EditorArtCollection'
+import EditorCollection from '~/components/Editor/EditorCollection'
 import Cropper from '~/components/Editor/Cropper/Cropper'
 import EditorPreview from '~/components/Editor/EditorPreview'
 import EditorInfo from '~/components/Editor/EditorInfo'
@@ -95,8 +98,7 @@ export default {
     EditorSizes,
     EditorFilter,
     EditorTexture,
-    EditorColorCollection,
-    EditorArtCollection,
+    EditorCollection,
     Cropper,
     EditorPreview,
     EditorInfo,
@@ -151,7 +153,8 @@ export default {
       x: 0,
       y: 0
     },
-    colorCollectionLoading: false
+    colorCollectionLoading: false,
+    artCollectionLoading: false
   }),
   computed: {
     ...mapState({
@@ -247,7 +250,8 @@ export default {
       toggleLikeAction: 'wishList/toggle',
       removeImageAction: 'images/removeItem',
       addImageAction: 'images/addItem',
-      getImageColorCollectionImagesAction: 'images/getItemColorCollectionImages'
+      getImageColorCollectionImagesAction: 'images/getItemColorCollectionImages',
+      getImageArtCollectionImagesAction: 'images/getItemArtCollectionImages'
     }),
     handleRatioLockedChange () {
       this.ratioLocked = !this.ratioLocked
@@ -256,17 +260,31 @@ export default {
       this.cropData = value
     },
     changeArtCollectionItem (image) {
-      this.ratioLocked = true
-      this.setCropData(image)
-      if (image.hasColorCollection && !some(this.colorCollection, { id: image.id })) {
-        this.colorCollectionLoading = true
-        this.getImageColorCollectionImagesAction(image.id)
-          .then(() => {
-            this.colorCollectionLoading = false
-          })
+      if (!some(this.colorCollection, { id: image.id })) {
+        this.ratioLocked = true
+        this.setCropData(image)
+        if (image.hasColorCollection) {
+          this.colorCollectionLoading = true
+          this.getImageColorCollectionImagesAction(image.id)
+            .then(() => {
+              this.colorCollectionLoading = false
+            })
+        }
       }
       if (!image.hasColorCollection) {
         this.setImagesFieldAction({ field: 'colorCollection', value: [] })
+      }
+    },
+    changeColorCollection (image) {
+      if (image.hasArtCollection && !some(this.artCollection, { id: image.id })) {
+        this.artCollectionLoading = true
+        this.getImageArtCollectionImagesAction(image.id)
+          .then(() => {
+            this.artCollectionLoading = false
+          })
+      }
+      if (!image.hasArtCollection) {
+        this.setImagesFieldAction({ field: 'artCollection', value: [] })
       }
     },
     onConfirm () {
@@ -287,8 +305,10 @@ export default {
       }
     },
     setCropData (image) {
-      this.cropData.width = image.width
-      this.cropData.height = image.height
+      this.$set(this.cropData, 'width', image.width)
+      this.$set(this.cropData, 'height', image.height)
+      this.$set(this.cropData, 'x', 0)
+      this.$set(this.cropData, 'y', 0)
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -727,14 +747,6 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
             img {
                 filter: brightness(0.95) grayscale(1) sepia(0.4);
             }
-        }
-
-        .scale-x {
-            transform: scaleX(-1);
-        }
-
-        .scale-y {
-            transform: scaleY(-1);
         }
     }
 

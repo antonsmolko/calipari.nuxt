@@ -88,6 +88,12 @@ export const actions = {
       thenContent: response => commit('SET_FIELD', { field: 'colorCollection', value: response.data })
     })
   },
+  getItemArtCollectionImages ({ commit }, id) {
+    return action(this.$api, 'get', commit, {
+      url: `/catalog/images/${id}/art-collection-images`,
+      thenContent: response => commit('SET_FIELD', { field: 'artCollection', value: response.data })
+    })
+  },
   getItems ({ state, commit, rootState }, { restrictiveElement, increasePage = false, clear = false }) {
     commit('SET_FIELD', { field: 'loading', value: true })
 

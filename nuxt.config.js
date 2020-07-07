@@ -25,15 +25,7 @@ export default {
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
-      { rel: 'shortcut icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'preload', as: 'font', href: '/fonts/LatoHairline/LatoHairline.woff', type: 'font/woff', crossorigin: 'anonymous' },
-      { rel: 'preload', as: 'font', href: '/fonts/LatoThin/LatoThin.woff', type: 'font/woff', crossorigin: 'anonymous' },
-      { rel: 'preload', as: 'font', href: '/fonts/LatoLight/LatoLight.woff', type: 'font/woff', crossorigin: 'anonymous' },
-      { rel: 'preload', as: 'font', href: '/fonts/LatoRegular/LatoRegular.woff', type: 'font/woff', crossorigin: 'anonymous' },
-      { rel: 'preload', as: 'font', href: '/fonts/LatoHairline/LatoHairline.woff2', type: 'font/woff2', crossorigin: 'anonymous' },
-      { rel: 'preload', as: 'font', href: '/fonts/LatoThin/LatoThin.woff2', type: 'font/woff2', crossorigin: 'anonymous' },
-      { rel: 'preload', as: 'font', href: '/fonts/LatoLight/LatoLight.woff2', type: 'font/woff2', crossorigin: 'anonymous' },
-      { rel: 'preload', as: 'font', href: '/fonts/LatoRegular/LatoRegular.woff2', type: 'font/woff2', crossorigin: 'anonymous' }
+      { rel: 'shortcut icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
   rootDir: __dirname,
@@ -115,8 +107,15 @@ export default {
   ],
   webfontloader: {
     events: false,
-    google: {
-      families: ['Open+Sans:300,400:cyrillic&display=swap']
+    custom: {
+      families: [
+        'Roboto Condensed:n3,n4',
+        'Oswald:n2,n3'
+      ],
+      urls: [
+        'https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400&display=swap',
+        'https://fonts.googleapis.com/css?family=Oswald:200,300&display=swap'
+      ]
     },
     timeout: 5000
   },

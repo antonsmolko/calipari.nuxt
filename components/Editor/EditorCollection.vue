@@ -2,7 +2,7 @@
     .tm-editor__collection.tm-editor__panel.uk-light
         editor-panel-heading(
             class="uk-visible@s"
-            title="Цветовая коллекция")
+            :title="title")
         .tm-editor__collection-slider-container
             .tm-editor__left-bar-slider.uk-position-relative.uk-visible-toggle.uk-light(
                 v-if="!loading"
@@ -14,19 +14,17 @@
                         v-for="item in items"
                         :key="item.id"
                         :item="item"
+                        type="art"
                         v-model="currentItem"
                         @click="onClick")
-            //ul.uk-slider-nav.uk-dotnav.uk-flex-center.uk-margin-top(class="uk-visible@xl")
 </template>
 
 <script>
-import some from 'lodash/some'
-import first from 'lodash/first'
 import EditorCollectionItem from './EditorCollectionItem'
 import EditorPanelHeading from './EditorPanelHeading'
 
 export default {
-  name: 'EditorColorCollection',
+  name: 'EditorCollection',
   components: {
     EditorPanelHeading,
     EditorCollectionItem
@@ -38,6 +36,10 @@ export default {
   props: {
     items: {
       type: Array,
+      required: true
+    },
+    title: {
+      type: String,
       required: true
     },
     model: {
@@ -60,11 +62,6 @@ export default {
   created () {
     this.currentItem = this.model
   },
-  updated () {
-    this.currentItem = !some(this.items, { id: this.currentItem.id })
-      ? first(this.items)
-      : this.model
-  },
   methods: {
     onClick () {
       this.$emit('click', this.currentItem)
@@ -78,7 +75,10 @@ export default {
     &__collection {
         padding-right: 0 !important;
         &-slider-container {
-            height: 52px;
+            height: 42px;
+            @include media_mob($m) {
+                height: 52px;
+            }
             @include media_mob($xxl) {
                 height: 72px;
             }
