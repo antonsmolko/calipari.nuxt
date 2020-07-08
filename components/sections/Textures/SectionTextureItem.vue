@@ -1,6 +1,6 @@
 <template lang="pug">
     .tm-textures__item
-        section.uk-section.uk-section-xlarge.uk-section-default
+        section.tm-textures__content.uk-section.uk-section-large.uk-section-default.uk-padding-remove-bottom
             .uk-container
                 .tm-textures__header(data-uk-scrollspy="cls:uk-animation-slide-bottom-small; delay: 300")
                     h2.uk-heading-small.uk-margin-remove {{ title }}
@@ -20,7 +20,9 @@
                         div
                             a.uk-inline.uk-transition-toggle(:href="`${baseUrl}/show/${textureSrc}`" tabindex="0" :data-caption="title")
                                 img.uk-box-shadow-large(:data-src="`${baseUrl}/widen/600/${textureSrc}`" data-uk-img)
-        section.tm-textures__sample.uk-section.uk-background-fixed.uk-background-cover(:data-src="`${baseUrl}/show/${exampleSrc}`" data-uk-img)
+        section.tm-textures__sample.uk-section.uk-background-fixed.uk-background-cover(
+            :data-uk-height-viewport="`offset-top: ${true}; offset-bottom: ${sampleBottomOffset}`"
+            :data-src="`${baseUrl}/show/${exampleSrc}`" data-uk-img)
 </template>
 
 <script>
@@ -49,6 +51,10 @@ export default {
     exampleSrc: {
       type: String,
       required: true
+    },
+    sampleBottomOffset: {
+      type: [String, Number],
+      default: 0
     }
   },
   data: () => ({
@@ -58,16 +64,10 @@ export default {
 </script>
 <style lang="scss">
     .tm-textures {
-        &__item {
-            section {
-                padding-bottom: 0 !important;
+        &__content {
+            .uk-container {
                 margin-bottom: -$global-large-margin;
             }
-        }
-        &__sample {
-            min-height: 500px;
-            max-height: 150vw;
-            height: 100vh;
         }
         &__spec {
             &-heading {

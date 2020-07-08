@@ -3,13 +3,14 @@
         template(#main)
             main
                 TopBar(:title="pageTitle")
-                section.tm-textures__hero.uk-section.uk-flex.uk-flex-middle(
+                section.tm-textures__hero.uk-section.uk-flex(
                     :class="{ 'uk-light': darkPeriod }"
-                    data-uk-height-viewport="offset-top: true")
+                    data-uk-parallax="bgy: 100"
+                    :data-uk-height-viewport="`offset-top: ${true}; offset-bottom: ${bottomOffset}`")
                     .tm-textures__hero-container.uk-container.uk-flex-1
                         .tm-textures__hero-content.uk-margin-xlarge-bottom(
                             data-uk-scrollspy="cls: uk-animation-slide-bottom-small"
-                            class="uk-width-large@s uk-width-xlarge@m")
+                            class="uk-width-large@s uk-width-xlarge@l")
                             .uk-margin-large-bottom
                                 h1.uk-heading-medium.uk-text-background.uk-margin-remove Материалы
                                 .uk-divider-small
@@ -22,6 +23,7 @@
                     :description="item.description"
                     :width="item.width"
                     :cost="item.price"
+                    :sampleBottomOffset="bottomOffset"
                     :textureSrc="item.sample_path"
                     :exampleSrc="item.background_path")
 </template>
@@ -33,6 +35,7 @@ import TopBar from '~/components/layout/TopBar.vue'
 import SectionTextureItem from '~/components/sections/Textures/SectionTextureItem'
 import setLayout from '~/components/mixins/setLayout'
 import scrollToTop from '~/components/mixins/scrollToTop'
+import { getBreakPointByKey } from '~/helpers'
 
 export default {
   metaInfo () {
@@ -52,37 +55,60 @@ export default {
       .then(() => this.$store.dispatch('setField', { field: 'pageTitle', value: 'Материалы' }))
   },
   computed: {
-    ...mapState('textures', [
-      'items'
-    ])
+    ...mapState({
+      items: state => state.textures.items,
+      breakPoint: state => state.breakPoint
+    }),
+    bottomOffset () {
+      const mediumBreakPoint = getBreakPointByKey('m')
+      return this.breakPoint.value <= mediumBreakPoint.value
+        ? '60px'
+        : 0
+    }
   }
 }
 </script>
 <style lang="scss">
 .tm-textures {
     &__hero {
-        background-image: url('/img/bg/bg-textures.png');
+        background-image: url('/img/bg/bg-textures-1.png');
         background-repeat: no-repeat;
-        background-position: bottom right -100%;
+        background-position: bottom right;
         background-size: 90%;
-        @include media_mob($l) {
+        align-items: center;
+        @include media-mob($l) {
             background-size: 85%;
         }
-        @include media_mob($xl) {
+        @include media-mob($xl) {
             background-size: 85%;
         }
-        @include media_mob($xxl) {
+        @include media-mob($xxl) {
             background-size: 80%;
         }
+        @include media-desk($se) {
+            &-content {
+                .tm-text-medium {
+                    font-size: 1rem;
+                }
+            }
+        }
         @include media-portrait() {
-            background-image: url('/img/bg/bg-textures.png');
+            background-image: url('/img/bg/bg-textures-m.png');
             background-size: contain;
             background-position: bottom center;
+            align-items: flex-start;
+        }
+        @include media-mob-portrait($s) {
+            background-size: 80%;
+            background-position: bottom right;
+            padding-top: $section-large-padding-vertical-m;
             &-container {
                 display: flex;
                 justify-content: center;
-                padding-bottom: 20vh;
             }
+        }
+        @include media-mob-portrait($m) {
+            padding-top: $section-large-padding-vertical-m;
         }
     }
 }

@@ -15,6 +15,7 @@
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
+import throttle from 'lodash/throttle'
 import TopBar from '~/components/layout/TopBar.vue'
 import BottomBar from '~/components/layout/BottomBar.vue'
 import Notification from '~/components/notifications/Notification'
@@ -22,7 +23,8 @@ import Menu from '~/components/layout/OffCanvas/OffCanvasMenu.vue'
 import EditorNavbarContent from '~/components/Editor/EditorNavbarContent'
 import notifications from '~/components/mixins/notifications'
 import layoutTimePeriod from '~/components/mixins/layoutTimePeriod'
-import { refreshTokens } from '~/helpers'
+import { refreshTokens, getCurrentBreakPoint } from '~/helpers'
+const _throttle = throttle(fn => fn(), 50)
 
 export default {
   name: 'Default',
@@ -75,6 +77,9 @@ export default {
     }
   },
   async mounted () {
+    this.handleResize()
+    window.addEventListener('resize', this.handleResize)
+
     if (this.$auth.loggedIn) {
       await refreshTokens(this.$auth)
     }
@@ -88,6 +93,7 @@ export default {
     this.syncWishListAction()
   },
   beforeDestroy () {
+    window.removeEventListener('resize', this.handleResize)
     clearInterval(this.timeInterval)
   },
   methods: {
@@ -95,6 +101,15 @@ export default {
       syncCartAction: 'cart/sync',
       syncWishListAction: 'wishList/sync'
     }),
+    handleResize () {
+      _throttle(this.setCurrentBreakPoint)
+    },
+    setCurrentBreakPoint () {
+      this.setFieldAction({
+        field: 'breakPoint',
+        value: getCurrentBreakPoint(window.innerWidth)
+      })
+    },
     setThemeByTimePeriod () {
       const date = new Date()
       this.currentHour = date.getHours()

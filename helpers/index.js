@@ -1,6 +1,7 @@
 import forOwn from 'lodash/forOwn'
 import isEmpty from 'lodash/isEmpty'
 import isInteger from 'lodash/isInteger'
+import maxBy from 'lodash/maxBy'
 import crc32 from 'crc-32'
 import lib from '~/plugins/lang/ru/lib'
 import { form } from '~/plugins/config'
@@ -131,4 +132,29 @@ export const refreshTokens = async ($auth) => {
   if (isTokenExpired) {
     await $auth.refreshTokens()
   }
+}
+
+export const breakPoints = [
+  { key: 'qhd', value: 1921 },
+  { key: 'xxl', value: 1800 },
+  { key: 'xl', value: 1600 },
+  { key: 'hxl', value: 1400 },
+  { key: 'l', value: 1200 },
+  { key: 'm', value: 960 },
+  { key: 'hm', value: 768 },
+  { key: 's', value: 640 },
+  { key: 'xs', value: 560 },
+  { key: 'se', value: 340 }
+]
+
+export const getBreakPointByKey = (key) => {
+  return breakPoints.find(breakPoint => breakPoint.key === key)
+}
+
+export const getCurrentBreakPoint = (viewportWidth) => {
+  const filteredBreaks = breakPoints.filter(breakPoint => breakPoint.value <= viewportWidth)
+
+  return filteredBreaks.length
+    ? maxBy(filteredBreaks, 'value')
+    : maxBy(breakPoints, 'value')
 }
