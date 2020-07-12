@@ -58,11 +58,11 @@ export default {
   },
   data: () => ({
     imgLoaded: true,
-    baseUrl: `${process.env.baseUrl}/image/widen`
+    baseImageUrl: `${process.env.baseImageUrl}/widen`
   }),
   computed: {
     imageUrl () {
-      return `${this.baseUrl}/500/${this.item.path}`
+      return `${this.baseImageUrl}/500/${this.item.path}`
     },
     editorUrl () {
       return this.anchor ? `/editor/${this.item.id}?anchor=${this.anchor}` : `/editor/${this.item.id}`

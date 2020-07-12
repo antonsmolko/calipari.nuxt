@@ -32,7 +32,7 @@
 import { mapState } from 'vuex'
 import Page from '~/components/layout/Page.vue'
 import TopBar from '~/components/layout/TopBar.vue'
-import SectionTextureItem from '~/components/sections/Textures/SectionTextureItem'
+import SectionTextureItem from '~/components/Textures/SectionTextureItem'
 import setLayout from '~/components/mixins/setLayout'
 import scrollToTop from '~/components/mixins/scrollToTop'
 import { getBreakPointByKey } from '~/helpers'
@@ -52,7 +52,7 @@ export default {
   mixins: [setLayout, scrollToTop],
   async fetch () {
     await this.$store.dispatch('textures/getItems')
-      .then(() => this.$store.dispatch('setField', { field: 'pageTitle', value: 'Материалы' }))
+    await this.$store.dispatch('setField', { field: 'pageTitle', value: 'Материалы' })
   },
   computed: {
     ...mapState({

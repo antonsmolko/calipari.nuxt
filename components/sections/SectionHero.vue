@@ -12,7 +12,7 @@
                     .tm-hero__heading
                         span.tm-hero__brand-name.uk-heading-large.uk-text-background Calipari
                         span.tm-hero__title.uk-h1.uk-margin-remove Студия печати<br>и дизайна
-                        span.tm-hero__lead.uk-margin-top Изготовление фотообоев<br>на заказ
+                        span.tm-hero__lead.uk-margin-top Изготовление<br>фотообоев<br>на заказ
                         .tm-hero__email
                             a.tm-text-medium.uk-link-muted(href="") info@calipari.ru
                     .tm-hero__phone

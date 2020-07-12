@@ -61,7 +61,7 @@ export default {
   // },
   data: () => ({
     responseData: false,
-    baseImageUrl: `${process.env.baseUrl}/image/widen/800`
+    baseImageUrl: `${process.env.baseImageUrl}/widen/800`
   }),
   computed: {
     ...mapState({

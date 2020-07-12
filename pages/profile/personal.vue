@@ -26,6 +26,7 @@
                                                 :controlBtn="true"
                                                 :controlBtnIcon="nameIsEdited ? 'check' : 'pencil'"
                                                 :disabled="!nameIsEdited"
+                                                :trim="false"
                                                 :min="2"
                                                 :value="account.name"
                                                 :vField="$v.account.name"
@@ -265,6 +266,9 @@ export default {
     nameControl () {
       if (this.nameIsEdited) {
         this.updateAccountNameAction()
+          .then(() => {
+            this.$auth.fetchUser()
+          })
       }
       this.nameIsEdited = !this.nameIsEdited
     },

@@ -35,7 +35,7 @@
                                 .uk-card.uk-card-default.uk-box-shadow-medium
                                     .uk-card-media-top
                                         nuxt-link.uk-link-reset(:to="`/blog/${item.alias}`")
-                                            img(:data-src="`${imgBaseUrl}/${item.image_path}`"
+                                            img(:data-src="`${baseImageUrl}/${item.image_path}`"
                                                 :alt="item.title"
                                                 data-uk-img)
                                     .uk-card-body
@@ -103,13 +103,10 @@ export default {
       'availableTypes',
       'defaultType'
     ]),
-    imgBaseUrl () {
-      return `${process.env.baseUrl}/image/fit/600/400`
+    baseImageUrl () {
+      return `${process.env.baseImageUrl}/fit/600/400`
     }
   },
-  // created () {
-  //   this.currentTypeIndex = this.defaultType ? this.defaultType.index : null
-  // },
   methods: {
     ...mapActions({
       getItemsAction: 'resources/getItems',

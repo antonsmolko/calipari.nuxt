@@ -86,7 +86,6 @@ export default {
   },
   methods: {
     handleInput (value) {
-      console.log('onInput', value)
       this.$emit('input', value)
     },
     onSearch (value) {

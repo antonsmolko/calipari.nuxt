@@ -150,7 +150,7 @@ export default {
         return ''
       }
 
-      return `${process.env.baseUrl}/image/grayscale/${this.backgroundPath}`
+      return `${process.env.baseImageUrl}/grayscale/${this.backgroundPath}`
     }
   },
   async created () {

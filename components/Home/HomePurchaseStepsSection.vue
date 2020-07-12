@@ -12,7 +12,7 @@
                         data-uk-grid)
                         div(data-uk-scrollspy="cls: uk-animation-fade; delay: 300"
                             :class="{ 'uk-flex-last@s': !(item.id % 2) }")
-                            img.uk-box-shadow-large(:data-src="`${baseUrl}/${item.image_path}`"
+                            img.uk-box-shadow-large(:data-src="`${baseImageUrl}/${item.image_path}`"
                                 :alt="item.title"
                                 data-uk-img)
                         .uk-card-body.tm-card__number(
@@ -32,7 +32,7 @@ export default {
     }
   },
   data: () => ({
-    baseUrl: `${process.env.baseUrl}/image/show`
+    baseImageUrl: `${process.env.baseImageUrl}/show`
   })
 }
 </script>

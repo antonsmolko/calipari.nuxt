@@ -147,7 +147,7 @@ export default {
       return this.filter.flipV ? -1 : 1
     },
     imageUrl () {
-      return `${process.env.baseUrl}/image/show/${this.image.path}`
+      return `${process.env.baseImageUrl}/show/${this.image.path}`
     }
   },
   watch: {
@@ -235,7 +235,7 @@ export default {
       addListener(this.cropBox, EVENT_POINTER_DOWN, (this.startCropMove = this.onStartCropMove.bind(this)))
       addListener(this.cropBox.ownerDocument, EVENT_POINTER_UP, (this.endCropMove = this.onEndCropMove.bind(this)))
 
-      await this.loadImage(`${process.env.baseUrl}/image/show/${this.image.path}`)
+      await this.loadImage(`${process.env.baseImageUrl}/show/${this.image.path}`)
         .then(() => {
           this.setImageSizes()
           this.imageLoad = true

@@ -50,7 +50,7 @@ export default {
   }),
   computed: {
     url () {
-      return `${process.env.baseUrl}/image/heighten/400/${this.image.path}`
+      return `${process.env.baseImageUrl}/heighten/400/${this.image.path}`
     },
     liked () {
       return this.$store.getters['wishList/liked'](this.image.id)

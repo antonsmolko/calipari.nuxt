@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     getImageFullPath (thumbPath) {
-      return `${process.env.baseUrl}${thumbPath}`
+      return `${process.env.baseImageUrl}${thumbPath}`
     },
     getDataCaption (item) {
       /* eslint-disable */

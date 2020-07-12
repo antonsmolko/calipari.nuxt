@@ -80,7 +80,7 @@ export default {
     },
     url () {
       return this.backgroundPath
-        ? `${process.env.baseUrl}/image/grayscale/${this.backgroundPath}`
+        ? `${process.env.baseImageUrl}/grayscale/${this.backgroundPath}`
         : ''
     }
   },

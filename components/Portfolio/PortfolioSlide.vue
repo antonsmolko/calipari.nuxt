@@ -25,10 +25,10 @@ export default {
   }),
   computed: {
     fitUrl () {
-      return `${process.env.baseUrl}/image/fit/800/600/${this.item.path}`
+      return `${process.env.baseImageUrl}/fit/800/600/${this.item.path}`
     },
     showUrl () {
-      return `${process.env.baseUrl}/image/show/${this.item.path}`
+      return `${process.env.baseImageUrl}/show/${this.item.path}`
     }
   },
   created () {

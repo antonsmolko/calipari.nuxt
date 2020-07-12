@@ -10,7 +10,7 @@ export const mutations = {
 
 export const actions = {
   getItems ({ commit }) {
-    return this.$api.$get('/manager/textures')
+    return this.$api.$get('/textures')
       .then(response => commit('SET_ITEMS', response))
   },
   clearItems ({ commit }) {

@@ -75,7 +75,8 @@ export default {
     { src: '~/plugins/ymap.js', mode: 'client' }
   ],
   env: {
-    baseUrl
+    baseUrl,
+    baseImageUrl: `${baseUrl}/api/image`
   },
   /*
   ** Nuxt.js dev-modules
@@ -158,18 +159,19 @@ export default {
           },
           register: {
             url: '/auth/register',
-            method: 'post',
-            propertyName: 'data'
+            method: 'post'
           },
           user: {
             url: '/auth/me',
-            method: 'post',
-            propertyName: 'data'
+            method: 'post'
           },
           logout: {
             url: '/auth/logout',
             method: 'post'
           }
+        },
+        user: {
+          property: 'data'
         },
         token: {
           property: 'access_token',
@@ -178,8 +180,7 @@ export default {
         refreshToken: {
           maxAge: 20160 * 60,
           tokenRequired: true
-        },
-        autoRefresh: true
+        }
       }
     },
     redirect: {

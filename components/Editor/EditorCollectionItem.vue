@@ -28,7 +28,7 @@ export default {
     }
   },
   data: () => ({
-    baseUrl: `${process.env.baseUrl}/image`
+    baseImageUrl: `${process.env.baseImageUrl}`
   }),
   computed: {
     isActive () {
@@ -36,8 +36,8 @@ export default {
     },
     thumbPath () {
       return this.type === 'art'
-        ? `${this.baseUrl}/heighten/100/${this.item.path}`
-        : `${this.baseUrl}/widen/200/${this.item.path}`
+        ? `${this.baseImageUrl}/heighten/100/${this.item.path}`
+        : `${this.baseImageUrl}/widen/200/${this.item.path}`
     },
     thumbStyle () {
       return this.type === 'art'

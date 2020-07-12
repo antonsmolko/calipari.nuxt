@@ -33,7 +33,7 @@
                     :price="item.price")
                     template(slot-scope="{ index, isCurrent, leftIndex, rightIndex }")
                         figure
-                            img(:src="`${baseUrl}/${item.sample_path}`"
+                            img(:src="`${baseImageUrl}/${item.sample_path}`"
                                 :alt="item.name")
                             .tm-carousel-3d__slide-vignette
                         FadeTransition(mode="out-in")
@@ -59,8 +59,8 @@ export default {
     ...mapState('textures', [
       'items'
     ]),
-    baseUrl () {
-      return `${process.env.baseUrl}/image/widen/600`
+    baseImageUrl () {
+      return `${process.env.baseImageUrl}/widen/600`
     }
   }
 }
