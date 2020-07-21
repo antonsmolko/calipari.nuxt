@@ -21,11 +21,12 @@
                                             VInput(
                                                 title="Имя"
                                                 :label="true"
-                                                icon="person"
+                                                icon="user"
                                                 name="name"
                                                 :controlBtn="true"
                                                 :controlBtnIcon="nameIsEdited ? 'check' : 'pencil'"
                                                 :disabled="!nameIsEdited"
+                                                :trim="false"
                                                 :min="2"
                                                 :value="account.name"
                                                 :vField="$v.account.name"
@@ -148,6 +149,7 @@ import setLayout from '~/components/mixins/setLayout'
 import scrollToTop from '~/components/mixins/scrollToTop'
 const _debounce = debounce(value => value(), 300)
 export default {
+  name: 'Personal',
   middleware: 'auth',
   scrollToTop: true,
   components: {
@@ -264,6 +266,9 @@ export default {
     nameControl () {
       if (this.nameIsEdited) {
         this.updateAccountNameAction()
+          .then(() => {
+            this.$auth.fetchUser()
+          })
       }
       this.nameIsEdited = !this.nameIsEdited
     },

@@ -33,14 +33,14 @@ export default {
     }
   },
   data: () => ({
-    baseUrl: `${process.env.baseUrl}/image/fit`,
+    baseImageUrl: `${process.env.baseImageUrl}/fit`,
     initImgSrc: '/img/bg/category/category-init-thumb.jpg',
     imgLoaded: true,
     img: null
   }),
   computed: {
     url () {
-      return `${this.baseUrl}/${this.width}/${this.height}/${this.item.image_path}`
+      return `${this.baseImageUrl}/${this.width}/${this.height}/${this.item.image_path}`
     }
   },
   async mounted () {

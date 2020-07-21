@@ -1,17 +1,16 @@
 <template lang="pug">
     .tm-editor__sizes.tm-editor__panel
-        h5.uk-h5.uk-margin-small-bottom Размеры
+        editor-panel-heading(title="Размеры")
         .uk-flex
             .uk-flex-1
-                editor-range.uk-margin-bottom(
+                editor-range.uk-margin-small-bottom(
                     css="range-width"
                     :min="minWidth"
                     :max="maxWidth"
                     :value="model.width"
                     :defaultValue="defaultWidth"
                     :invalid="widthInvalid"
-                    @input="handleInputWidth"
-                )
+                    @input="handleInputWidth")
                 editor-range(
                     css="range-height"
                     :min="minHeight"
@@ -19,18 +18,19 @@
                     :value="model.height"
                     :defaultValue="defaultHeight"
                     :invalid="heightInvalid"
-                    @input="handleInputHeight"
-                )
+                    @input="handleInputHeight")
             .uk-margin-small-left.ratio-link
-                editor-ratio-lock(v-model="ratioLocked" @change="handleRatioLockedChange")
+                editor-ratio-lock(:checked="locked" @change="handleRatioLockedChange")
 </template>
 
 <script>
+import EditorPanelHeading from './EditorPanelHeading'
 import EditorRange from './EditorRange'
 import EditorRatioLock from './EditorRatioLock'
 export default {
   name: 'EditorSizes',
   components: {
+    EditorPanelHeading,
     EditorRange,
     EditorRatioLock
   },
@@ -58,11 +58,15 @@ export default {
     ratio: {
       type: Number,
       required: true
+    },
+    locked: {
+      type: Boolean,
+      default: true
     }
   },
-  data: () => ({
-    ratioLocked: true
-  }),
+  // data: () => ({
+  //   ratioLocked: true
+  // }),
   computed: {
     widthInvalid () {
       return this.model.width < this.minWidth || this.model.width > this.maxWidth
@@ -71,14 +75,14 @@ export default {
       return this.model.height < this.minHeight || this.model.height > this.maxHeight
     },
     minWidth () {
-      return this.ratioLocked
+      return this.locked
         ? this.ratio > 1
           ? Math.round(this.minValue * this.ratio)
           : this.minValue
         : this.minValue
     },
     minHeight () {
-      return this.ratioLocked
+      return this.locked
         ? this.ratio > 1
           ? this.minValue
           : Math.round(this.minValue / this.ratio)
@@ -90,6 +94,9 @@ export default {
     defaultHeight () {
       return Math.round(this.defaultWidth / this.ratio)
     }
+  },
+  watch: {
+
   },
   methods: {
     handleInputWidth (value) {
@@ -104,7 +111,7 @@ export default {
       const model = { ...this.model }
       model.width = value
 
-      if (this.ratioLocked) {
+      if (this.locked) {
         model.height = Math.round(value / this.ratio)
       }
 
@@ -114,18 +121,18 @@ export default {
       const model = { ...this.model }
       model.height = value
 
-      if (this.ratioLocked) {
+      if (this.locked) {
         model.width = Math.round(value * this.ratio)
       }
 
       return model
     },
     handleRatioLockedChange () {
-      if (this.ratioLocked) {
-        this.handleInputWidth(this.defaultWidth)
-      }
+      // if (this.ratioLocked) {
+      //   this.handleInputWidth(this.defaultWidth)
+      // }
 
-      this.$emit('ratio-locked-change', this.ratioLocked)
+      this.$emit('ratio-locked-change')
     }
   }
 }

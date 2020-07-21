@@ -5,7 +5,8 @@ export const state = () => ({
   footer: true,
   timePeriod: false,
   editorEnable: false,
-  scrollTo: null
+  scrollTo: null,
+  breakPoint: {}
 })
 
 export const mutations = {

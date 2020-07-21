@@ -10,26 +10,30 @@
 <script>
 export default {
   name: 'EditorRatioLock',
-  model: {
-    prop: 'model',
-    event: 'change'
-  },
+  // model: {
+  //   prop: 'model',
+  //   event: 'change'
+  // },
   props: {
-    model: {
+    // model: {
+    //   type: Boolean,
+    //   default: true
+    // },
+    checked: {
       type: Boolean,
       default: true
     }
   },
-  data: () => ({
-    checked: true
-  }),
-  created () {
-    this.checked = this.model
-  },
+  // data: () => ({
+  //   checked: true
+  // }),
+  // created () {
+  //   this.checked = this.model
+  // },
   methods: {
     onChange () {
-      this.checked = !this.checked
-      this.$emit('change', this.checked)
+      // this.checked = !this.checked
+      this.$emit('change')
     }
   }
 }

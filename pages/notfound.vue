@@ -18,6 +18,8 @@ import TopBar from '~/components/layout/TopBar.vue'
 import setLayout from '~/components/mixins/setLayout'
 import scrollToTop from '~/components/mixins/scrollToTop'
 export default {
+  layout: '404',
+  name: 'Notfound',
   components: {
     Page,
     TopBar
@@ -28,7 +30,7 @@ export default {
   },
   methods: {
     onClose () {
-      window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
+      this.$router.push('/')
     }
   }
 }

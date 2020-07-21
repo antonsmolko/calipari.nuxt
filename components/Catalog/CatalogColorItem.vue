@@ -17,3 +17,17 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.tm-catalog__colors {
+    &-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    &-sample {
+        display: block;
+        width: 70px;
+        height: 70px;
+    }
+}
+</style>

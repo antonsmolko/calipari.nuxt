@@ -25,25 +25,33 @@ export default function ({ $axios, store, redirect }, inject) {
 
   api.onError((err) => {
     const error = err.response
+
     switch (error.status) {
       case 404:
-        return redirect('/notfound')
-      case 500:
-        return store.dispatch('notifications/addItem', {
-          message: errorsLibrary.ERROR_DEFAULT,
-          status: 'danger'
+        redirect('/notfound')
+        store.dispatch('notifications/addItem', {
+          message: errorsLibrary.ERROR_NOTFOUND
         })
+        break
       case 422:
         for (const message of Object.values(error.data.errors)) {
           store.dispatch('notifications/addItem', { message, status: 'danger' })
         }
-        return Promise.reject(error)
+        break
+      case (error.status >= 500):
+        store.dispatch('notifications/addItem', {
+          message: errorsLibrary.ERROR_DEFAULT,
+          status: 'danger'
+        })
+        break
       default:
-        return store.dispatch('notifications/addItem', {
+        store.dispatch('notifications/addItem', {
           message: error.data.message,
-          status: error.data.status
+          status: 'danger'
         })
     }
+
+    return Promise.reject(error)
   })
 
   api.onRequest(() => {

@@ -7,16 +7,20 @@ import Vue from 'vue'
  */
 
 const lib = Object.freeze({
-  // Delivery
+
+  /** Delivery */
   DELIVERY_PICKUP: 'Самовывоз',
   DELIVERY_PICKUPS: 'Пункты самовывоза',
   DELIVERY_CDEK: 'Компания CDEK',
   DELIVERY_CDEK_COURIER: 'Курьер CDEK',
-  // Editor | Checkout
-  FILTER_FLIP: 'Отражение',
+
+  /** Editor | Checkout */
+  FILTER_FLIP_H: 'Отразить гор.',
+  FILTER_FLIP_V: 'Отразить вер.',
   FILTER_GRAYSCALE: 'ЧБ',
   FILTER_SEPIA: 'Сепия',
-  // Profile | Personal
+
+  /** Profile | Personal */
   NOTICE_PERSONAL_FIELDS_VALIDATION: 'Для продолжения оформления заказа заполните все поля ЛИЧНЫХ ДАННЫХ. Допустимые значения для текстовых полей не менее двух символов.'
 })
 

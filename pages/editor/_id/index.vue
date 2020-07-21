@@ -1,57 +1,82 @@
 <template lang="pug">
-    .tm-editor.uk-light(v-if="onLoad")
-        .tm-editor__frame(data-uk-height-viewport="offset-top: true")
-            .tm-editor__left-bar(data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 100")
-                EditorCollection(
-                    v-if="collection.length"
-                    v-model="orderSettings.currentImage"
-                    :items="collection")
-                EditorSizes(
-                    :maxWidth="maxWidth"
-                    :maxHeight="maxHeight"
-                    :minValue="minInputValue"
-                    :ratio="image.ratio"
-                    v-model="orderSettings.sizes"
-                    @ratio-locked-change="handleRatioLockedChange")
-                EditorFilter(v-model="orderSettings.filter")
-                EditorTexture(
-                    v-model="orderSettings.texture"
-                    :items="textures")
-            .tm-editor__workspace
-                .tm-editor__workspace-header.uk-flex.uk-flex-between.uk-margin
-                    .uk-flex
-                        span.uk-h5.uk-margin-remove Изображение
-                        .tm-editor__workspace-article.uk-margin-small-left {{ orderSettings.currentImage.article }}
-                    ImageLike.tm-editor__like(
-                        :liked="liked"
-                        @like="onLike")
-                Cropper.tm-editor__image-cropper(
-                    :image="orderSettings.currentImage"
-                    :ratio="sizesRatio"
-                    :active="!ratioLocked"
-                    :filter="orderSettings.filter"
-                    @cropped="getCropData")
-            .tm-editor__right-bar(data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 100")
-                EditorPreview(
-                    :image="orderSettings.currentImage"
-                    :orderSizes="orderSettings.sizes"
-                    :cropData="cropData"
-                    :ratioLocked="ratioLocked"
-                    :filter="orderSettings.filter"
-                    :texture="orderTexture.name")
-                EditorInfo(
-                    :article="image.article"
-                    :width="orderSettings.sizes.width"
-                    :height="orderSettings.sizes.height"
-                    :flip="orderSettings.filter.flip"
-                    :colorEffect="orderColorEffectName"
-                    :texture="orderTexture.name")
-                EditorPurchase(:price="orderPrice" @confirm="onConfirm")
-        EditorBottomBar(:price="orderPrice" @confirm="onConfirm")
+    div
+        .tm-editor.uk-light.uk-position-relative(
+            v-if="$fetchState.pending"
+            data-uk-height-viewport="offset-top: true")
+            .uk-position-center.uk-flex.uk-flex-column.uk-flex-middle.uk-padding.uk-text-center.uk-text-muted
+                span.uk-text-large Загружается редактор...
+                .uk-margin-top.uk-tex-muted(data-uk-spinner="ratio: 3")
+        .tm-editor.uk-light.uk-position-relative(
+            v-else-if="$fetchState.error"
+            data-uk-height-viewport="offset-top: true")
+            .uk-position-center.uk-flex.uk-flex-column.uk-flex-middle.uk-padding.uk-text-center.uk-text-muted
+                p.uk-text-large {{ $fetchState.error.message }}
+        .tm-editor.uk-light(v-else)
+            .tm-editor__frame(data-uk-height-viewport="offset-top: true")
+                .tm-editor__left-bar(data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 100")
+                    editor-collection(
+                        v-if="artCollection.length"
+                        title="Арт-коллекция"
+                        v-model="orderSettings.currentImage"
+                        @click="changeArtCollectionItem"
+                        :loading="artCollectionLoading"
+                        :items="artCollection")
+                    editor-collection(
+                        v-if="colorCollection.length"
+                        title="Цветовая коллекция"
+                        v-model="orderSettings.currentImage"
+                        @click="changeColorCollection"
+                        :loading="colorCollectionLoading"
+                        :items="colorCollection")
+                    editor-sizes(
+                        :maxWidth="maxWidth"
+                        :maxHeight="maxHeight"
+                        :minValue="minInputValue"
+                        :ratio="orderSettings.currentImage.ratio"
+                        :locked="ratioLocked"
+                        v-model="orderSettings.sizes"
+                        @ratio-locked-change="handleRatioLockedChange")
+                    editor-filter(v-model="orderSettings.filter")
+                    editor-texture(
+                        v-model="orderSettings.texture"
+                        :items="textures")
+                .tm-editor__workspace
+                    .tm-editor__workspace-header.uk-flex.uk-flex-between.uk-margin
+                        .uk-flex
+                            editor-panel-heading.uk-margin-remove(title="Изображение")
+                            .tm-editor__workspace-article.uk-margin-small-left {{ orderSettings.currentImage.article }}
+                        image-like.tm-editor__like(
+                            :liked="liked"
+                            @like="onLike")
+                    cropper.tm-editor__image-cropper(
+                        :image="orderSettings.currentImage"
+                        :ratio="sizesRatio"
+                        :active="!ratioLocked"
+                        :filter="orderSettings.filter"
+                        @cropped="getCropData")
+                .tm-editor__right-bar(data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 100")
+                    editor-preview(
+                        :image="orderSettings.currentImage"
+                        :orderSizes="orderSettings.sizes"
+                        :cropData="cropData"
+                        :ratioLocked="ratioLocked"
+                        :filter="orderSettings.filter"
+                        :texture="orderTexture.name")
+                    editor-info(
+                        :article="orderSettings.currentImage.article"
+                        :width="orderSettings.sizes.width"
+                        :height="orderSettings.sizes.height"
+                        :flipH="orderSettings.filter.flipH"
+                        :flipV="orderSettings.filter.flipV"
+                        :colorEffect="orderColorEffectName"
+                        :texture="orderTexture.name")
+                    editor-purchase(:price="orderPrice" @confirm="onConfirm")
+            editor-bottom-bar(:price="orderPrice" @confirm="onConfirm")
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import some from 'lodash/some'
 
 import EditorSizes from '~/components/Editor/EditorSizes'
 import EditorFilter from '~/components/Editor/EditorFilter'
@@ -63,6 +88,7 @@ import EditorInfo from '~/components/Editor/EditorInfo'
 import EditorPurchase from '~/components/Editor/EditorPurchase'
 import EditorBottomBar from '~/components/Editor/EditorBottomBar'
 import ImageLike from '~/components/Gallery/ImageLike'
+import EditorPanelHeading from '~/components/Editor/EditorPanelHeading'
 import scrollToTop from '~/components/mixins/scrollToTop'
 import closeEditorMethods from '~/components/mixins/closeEditorMethods'
 import { filterSet, hash } from '~/helpers'
@@ -78,23 +104,38 @@ export default {
     EditorInfo,
     EditorPurchase,
     EditorBottomBar,
-    ImageLike
+    ImageLike,
+    EditorPanelHeading
   },
   mixins: [scrollToTop, closeEditorMethods],
-  async fetch ({ store, params }) {
-    await store.dispatch('images/getItemFromEditor', params.id)
-    store.commit('SET_FIELDS', {
+  async fetch () {
+    this.$store.dispatch('setFields', {
       pageTitle: 'Редактор',
       bottomBar: false,
       footer: false,
       editorEnable: true
     })
+    if (!this.$route.params.id) {
+      await this.$router.push('/notfound')
+    }
+    await this.$store.dispatch('images/getItemFromEditor', this.$route.params.id)
+      .then(() => {
+        this.orderSettings.currentImage = this.image
+        this.setCropData(this.image)
+        this.orderSettings.texture = this.textures[0].id
+      })
+      .catch((error) => {
+        if (error.status === 404) {
+          this.$router.push('/notfound')
+        }
+      })
   },
   data: () => ({
     orderSettings: {
       currentImage: null,
       filter: {
-        flip: false,
+        flipH: false,
+        flipV: false,
         colorize: false
       },
       texture: null,
@@ -111,24 +152,27 @@ export default {
       height: null,
       x: 0,
       y: 0
-    }
+    },
+    colorCollectionLoading: false,
+    artCollectionLoading: false
   }),
   computed: {
     ...mapState({
       image: state => state.images.item,
-      collection: state => state.images.collection,
+      colorCollection: state => state.images.colorCollection,
+      artCollection: state => state.images.artCollection,
       textures: state => state.textures.items,
       fromWishList: state => state.images.isWishList
     }),
-    onLoad () {
-      return this.textures.length &&
-        this.orderSettings.texture &&
-        this.image &&
-        this.image.ratio
-    },
+    // onLoad () {
+    //   return this.textures.length &&
+    //     this.orderSettings.texture &&
+    //     this.image &&
+    //     this.image.ratio
+    // },
     maxWidth () {
-      return this.image.max_print_width
-        ? this.image.max_print_width
+      return this.orderSettings.currentImage.max_print_width
+        ? this.orderSettings.currentImage.max_print_width
         : Math.round(this.orderSettings.currentImage.width / this.sizeFactor)
     },
     maxHeight () {
@@ -141,7 +185,9 @@ export default {
       return this.$store.getters['textures/getItemById'](this.orderSettings.texture)
     },
     orderColorEffectName () {
-      return filterSet[this.orderSettings.filter.colorize] ? filterSet[this.orderSettings.filter.colorize] : '-'
+      return filterSet[this.orderSettings.filter.colorize]
+        ? filterSet[this.orderSettings.filter.colorize]
+        : '—'
     },
     orderPrice () {
       const textureTax = this.orderTexture.price
@@ -149,19 +195,19 @@ export default {
 
       return Math.round(orderArea * textureTax / 100) * 100
     },
-    cartGoodData () {
+    cartItemData () {
       return {
         id: hash(),
-        imageId: this.orderSettings.currentImage.id,
-        imageName: this.orderSettings.currentImage.path,
-        width: this.orderSettings.sizes.width,
-        height: this.orderSettings.sizes.height,
-        texture: this.orderSettings.texture,
+        image_id: this.orderSettings.currentImage.id,
+        image_path: this.orderSettings.currentImage.path,
+        width_cm: this.orderSettings.sizes.width,
+        height_cm: this.orderSettings.sizes.height,
+        texture_id: this.orderSettings.texture,
         filter: this.orderSettings.filter,
         x: Math.round(this.cropData.x),
         y: Math.round(this.cropData.y),
-        cropWidth: Math.round(this.cropData.width) || this.orderSettings.currentImage.width,
-        cropHeight: Math.round(this.cropData.height) || this.orderSettings.currentImage.height,
+        width_px: Math.round(this.cropData.width) || this.orderSettings.currentImage.width,
+        height_px: Math.round(this.cropData.height) || this.orderSettings.currentImage.height,
         qty: 1
       }
     },
@@ -169,17 +215,28 @@ export default {
       return this.$store.getters['wishList/liked'](this.orderSettings.currentImage.id)
     }
   },
-  created () {
-    this.orderSettings.currentImage = this.image
-    this.orderSettings.texture = this.textures[0].id
-    this.cropData.width = this.image.width
-    this.cropData.height = this.image.height
-  },
+  // created () {
+  // await this.$store.dispatch('images/getItemFromEditor', this.$route.params.id)
+  //   .catch((error) => {
+  //     console.log(error.status)
+  //   })
+  // await this.$store.dispatch('setFields', {
+  //   pageTitle: 'Редактор',
+  //   bottomBar: false,
+  //   footer: false,
+  //   editorEnable: true
+  // })
+  //   console.log(this.image)
+  //   this.orderSettings.currentImage = this.image
+  //   this.orderSettings.texture = this.textures[0].id
+  //   this.cropData.width = this.image.width
+  //   this.cropData.height = this.image.height
+  // },
   beforeDestroy () {
     this.setFieldAction({ field: 'editorEnable', value: false })
     this.setImagesFieldsAction({
       item: null,
-      collection: [],
+      colorCollection: [],
       isWishList: false
     })
   },
@@ -192,16 +249,46 @@ export default {
       setFieldsAction: 'setFields',
       toggleLikeAction: 'wishList/toggle',
       removeImageAction: 'images/removeItem',
-      addImageAction: 'images/addItem'
+      addImageAction: 'images/addItem',
+      getImageColorCollectionImagesAction: 'images/getItemColorCollectionImages',
+      getImageArtCollectionImagesAction: 'images/getItemArtCollectionImages'
     }),
-    handleRatioLockedChange (value) {
-      this.ratioLocked = value
+    handleRatioLockedChange () {
+      this.ratioLocked = !this.ratioLocked
     },
     getCropData (value) {
       this.cropData = value
     },
+    changeArtCollectionItem (image) {
+      if (!some(this.colorCollection, { id: image.id })) {
+        this.ratioLocked = true
+        this.setCropData(image)
+        if (image.hasColorCollection) {
+          this.colorCollectionLoading = true
+          this.getImageColorCollectionImagesAction(image.id)
+            .then(() => {
+              this.colorCollectionLoading = false
+            })
+        }
+      }
+      if (!image.hasColorCollection) {
+        this.setImagesFieldAction({ field: 'colorCollection', value: [] })
+      }
+    },
+    changeColorCollection (image) {
+      if (image.hasArtCollection && !some(this.artCollection, { id: image.id })) {
+        this.artCollectionLoading = true
+        this.getImageArtCollectionImagesAction(image.id)
+          .then(() => {
+            this.artCollectionLoading = false
+          })
+      }
+      if (!image.hasArtCollection) {
+        this.setImagesFieldAction({ field: 'artCollection', value: [] })
+      }
+    },
     onConfirm () {
-      this.addToCartAction(this.cartGoodData)
+      this.addToCartAction(this.cartItemData)
       this.addNotificationAction({
         message: 'Ваш товар добавлен в корзину!',
         status: 'success'
@@ -216,6 +303,12 @@ export default {
           ? this.addImageAction(image)
           : this.removeImageAction(image.id)
       }
+    },
+    setCropData (image) {
+      this.$set(this.cropData, 'width', image.width)
+      this.$set(this.cropData, 'height', image.height)
+      this.$set(this.cropData, 'x', 0)
+      this.$set(this.cropData, 'y', 0)
     }
   },
   beforeRouteEnter (to, from, next) {
@@ -280,7 +373,7 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
         }
 
         @include media_mob($xs) {
-            padding: $global-margin;
+            padding: $global-small-gutter $global-margin;
         }
         @include media_mob($qhd) {
             padding-top: $global-medium-margin;
@@ -438,77 +531,6 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
         }
     }
 
-    /* Filter
-    ========================================================================== */
-
-    &__filter {
-        &-button {
-            width: 100%;
-            background-color: rgba(#fff, .1);
-            height: 40px;
-            border: 1px solid transparent;
-            border-radius: 0;
-            padding: 0 20px;
-            line-height: inherit;
-            @include media-mob($m) {
-                padding: 0 25px;
-            }
-
-            &.active {
-                border-color: $global-inverse-color;
-                color: $global-inverse-color;
-            }
-        }
-    }
-
-    /* Texture
-    ========================================================================== */
-
-    &__texture {
-        flex-grow: 1;
-
-        &-item {
-            cursor: pointer;
-            width: 25%;
-            @include media_mob($s) {
-                width: 95px;
-            }
-            @include media_mob($l) {
-                width: 85px;
-            }
-            @include media_mob($xl) {
-                width: 110px;
-            }
-
-            > .active, &:hover {
-                opacity: 1;
-
-                .tm-editor__texture-thumb {
-                    opacity: 1;
-                }
-
-                .tm-editor__texture-title {
-                    color: #fff;
-                }
-            }
-        }
-
-        &-thumb {
-            display: block;
-            width: 100%;
-            height: auto;
-            opacity: .5;
-            transition: opacity .25s ease;
-        }
-
-        &-title {
-            display: block;
-            transition: color .25s ease;
-            font-size: $global-small-font-size;
-            margin-top: 5px;
-        }
-    }
-
     /* Workspace
     ========================================================================== */
 
@@ -530,6 +552,7 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
             background-color: $global-secondary-background;
             padding: $global-small-margin / 2 $global-small-margin;
             line-height: 1;
+            margin-top: -2px;
         }
 
         @include media_device(mobile-portrait) {
@@ -556,16 +579,6 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
         }
         @include media_mob($qhd) {
             padding: $global-medium-margin $global-margin $global-gutter * 2 $global-margin;
-        }
-    }
-
-    &__like {
-        &.uk-active {
-            .uk-icon {
-                svg path {
-                    /*stroke: tomato !important;*/
-                }
-            }
         }
     }
 
@@ -638,9 +651,6 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
             overflow: hidden;
             margin: 0 auto;
             box-shadow: 0 7px 20px -10px #000;
-            // @include media_mob($se) {
-            //     margin: 0;
-            // }
             @include media_mob($l) {
                 margin: 0 auto;
             }
@@ -672,7 +682,6 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
 
         &-item {
             display: flex;
-            align-items: center;
             line-height: 1.2;
 
             &:not(:last-child) {
@@ -738,10 +747,6 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
             img {
                 filter: brightness(0.95) grayscale(1) sepia(0.4);
             }
-        }
-
-        .scale-x {
-            transform: scaleX(-1);
         }
     }
 

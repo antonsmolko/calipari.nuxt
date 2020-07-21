@@ -14,29 +14,31 @@
                 data-no-mosaic="true")
             span.tm-mosaic__inside-top
                 span.tm-mosaic__article {{ image.article }}
-                nuxt-link.tm-mosaic__collection(
-                    v-if="image.collection"
-                    :to="`/catalog/collections/${image.collection.alias}`"
-                    data-no-mosaic="true")
-                    span(data-uk-icon="thumbnails")
-                //span.tm-mosaic__logo
-                    span(data-uk-icon="icon: instagram; ratio: 1.2")
+                .tm-mosaic__collections(data-no-mosaic="true")
+                    image-color-collection-badge(
+                        v-if="image.colorCollection"
+                        :url="`/catalog/color-collections/${image.colorCollection.alias}`")
+                    image-art-collection-badge(
+                        v-if="image.artCollection"
+                        :url="`/catalog/art-collections/${image.artCollection.alias}`")
             span.tm-mosaic__inside-bottom
-                //span.tm-mosaic__like.uk-active
-                    //span(data-uk-icon="heart")
                 ImageLike.tm-mosaic__like(
                     :liked="liked"
                     @like="onLike")
-                //nuxt-link.tm-mosaic__settings.uk-background-primary.uk-light(:to="`/editor/${image.id}`" data-no-mosaic="true")
-                    span(data-uk-icon="settings")
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 import ImageLike from './ImageLike'
+import ImageColorCollectionBadge from '~/components/Gallery/ImageColorCollectionBadge'
+import ImageArtCollectionBadge from '~/components/Gallery/ImageArtCollectionBadge'
 export default {
   name: 'GalleryImage',
-  components: { ImageLike },
+  components: {
+    ImageLike,
+    ImageColorCollectionBadge,
+    ImageArtCollectionBadge
+  },
   props: {
     image: {
       type: Object,
@@ -48,7 +50,7 @@ export default {
   }),
   computed: {
     url () {
-      return `${process.env.baseUrl}/image/heighten/400/${this.image.path}`
+      return `${process.env.baseImageUrl}/heighten/400/${this.image.path}`
     },
     liked () {
       return this.$store.getters['wishList/liked'](this.image.id)
@@ -87,10 +89,6 @@ export default {
 
 <style lang="scss">
 .tm-mosaic {
-    $base-mosaic-margin: 8px;
-    $base-mosaic-button-size: 36px;
-    $mosaic-logo-size: 40px;
-
     &__image {
         position: relative;
         background-color: rgba($global-secondary-background, .2);
@@ -129,21 +127,22 @@ export default {
         }
     }
 
-    &__article, &__collection {
+    &__article, &__color-collection, &__art-collection {
         line-height: 1;
         background: rgba($global-secondary-background, .5);
-        margin: $base-mosaic-margin;
     }
 
     &__article {
         font-size: 13px;
         color: $global-inverse-color;
         font-weight: normal;
-        padding: 3px 5px;
+        padding: 3px 4px;
+        margin: $base-mosaic-badge-margin;
     }
 
-    &__collection {
-        padding: 2px;
+    &__color-collection, &__art-collection {
+        display: block;
+        padding: 1px;
     }
 
     &__logo, &__like {
@@ -151,38 +150,17 @@ export default {
         user-select: none;
     }
 
-    &__logo {
-        height: $mosaic-logo-size;
-        border-radius: 0 0 50px 50px;
-        color: $accent-color;
-        transform: rotate(45deg);
-        transform-origin: top center;
-        margin-right: -20px;
-        padding: 0 $base-mosaic-margin $base-mosaic-margin;
-        background-color: rgba($global-secondary-background, .8);
-
-        .uk-icon {
-            transform: rotate(-45deg);
-            margin: auto auto 0;
-        }
-    }
-
-    &__settings {
-        width: $base-mosaic-button-size;
-        height: $base-mosaic-button-size;
-    }
-
-    &__like, &__collection {
-        margin: $base-mosaic-margin;
-        color: $inverse-global-color;
+    &__art-collection, &__color-collection {
+        margin: $base-mosaic-badge-margin;
         cursor: pointer;
-        &:hover, &:focus, &:active {
-            color: $inverse-global-emphasis-color;
-        }
 
         .uk-icon {
             margin: auto;
         }
+    }
+
+    &__like {
+        margin: $base-mosaic-badge-margin + 2px;
     }
 
     &__overlay-link {

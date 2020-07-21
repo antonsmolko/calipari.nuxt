@@ -44,7 +44,6 @@ import CartList from '~/components/Cart/CartList'
 import setLayout from '~/components/mixins/setLayout'
 import scrollToTop from '~/components/mixins/scrollToTop'
 export default {
-  scrollToTop: true,
   components: {
     Page,
     CartList,
@@ -57,9 +56,9 @@ export default {
       title: 'Корзина'
     }
   },
-  async fetch ({ store, params }) {
+  async fetch () {
     await new Promise((resolve) => {
-      store.commit('SET_FIELDS', { bottomBar: false, footer: false })
+      this.$store.dispatch('setFields', { bottomBar: false, footer: false })
       resolve()
     })
   },

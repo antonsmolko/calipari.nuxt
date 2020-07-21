@@ -34,18 +34,23 @@
             .tm-orders__info-item
                 span.tm-orders__info-heading.uk-text-muted Цена
                 span.tm-orders__info-value.tm-orders__price.uk-text-emphasis {{ formatPrice }}
-        .tm-orders__thumbs.uk-margin-top(data-uk-slider="finite: true" tabindex="-1")
-            ul.uk-slider-items.uk-grid.uk-grid-small(data-uk-lightbox)
-                li(v-for="item in order.items" :key="item.number")
+        .tm-orders__thumbs.uk-margin-top.uk-position-relative.uk-visible-toggle(
+            v-if="order.items.length"
+            data-uk-slider="finite: true"
+            tabindex="-1")
+            ul.uk-slider-items.uk-grid.uk-grid-small(data-uk-lightbox="animation: slide")
+                li(v-for="(item, index) in order.items" :key="index")
                     a.uk-inline.uk-transition-toggle(
-                        tabindex="0"
                         :data-caption="getDataCaption(item)"
-                        :href="getImageFullPath(item.imagePath)")
-                        img.uk-box-shadow-small(:data-src="getImageFullPath(item.imagePath)" alt="item.imageId" data-uk-img)
+                        :href="item.image_path")
+                        img.uk-box-shadow-small(
+                            :data-src="item.thumb_path"
+                            :alt="item.article"
+                            data-uk-img)
 </template>
 
 <script>
-import { getArticle, getFormatPrice, getFilterString } from '~/helpers'
+import { getFormatPrice } from '~/helpers'
 
 export default {
   name: 'OrderListItem',
@@ -62,16 +67,16 @@ export default {
   },
   methods: {
     getImageFullPath (thumbPath) {
-      return `${process.env.baseUrl}${thumbPath}`
+      return `${process.env.baseImageUrl}${thumbPath}`
     },
     getDataCaption (item) {
       /* eslint-disable */
       return `
-        Изображение: ${getArticle(item.imageId)} |
-        Ширина: ${item.width} см |
+        Изображение: ${item.article} |
+        Ширина: ${item.width} см |
         Высота: ${item.height} см |
-        Фактура: «${item.texture.name}» |
-        Эффекты: ${getFilterString(item.filter)} |
+        Фактура: «${item.texture}» |
+        Эффекты: ${item.filter} |
         Цена: ${getFormatPrice(item.price)}`
       /* eslint-enable */
     },

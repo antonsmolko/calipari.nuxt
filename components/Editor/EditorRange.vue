@@ -56,6 +56,11 @@ export default {
       return this.value < this.min || this.value > this.max
     }
   },
+  watch: {
+    defaultValue () {
+      this.onInput(this.defaultValue)
+    }
+  },
   created () {
     this.onInput(this.defaultValue)
   },

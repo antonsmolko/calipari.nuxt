@@ -1,6 +1,5 @@
-import { isFieldLengthValid } from '~/helpers'
+import { isFieldLengthValid, isPhoneValid } from '../helpers'
 import { form } from '~/plugins/config'
-
 const isLengthValid = isFieldLengthValid(form.BASE_MIN_LENGTH)
 
 export const state = () => ({
@@ -61,7 +60,7 @@ export const mutations = {
 
 export const actions = {
   getDetails ({ commit }) {
-    const token = this.$auth.token.get()
+    const token = this.$auth.strategy.token.get()
 
     return this.$api.$get('/profile/details', {
       headers: { Authorization: token }
@@ -69,14 +68,14 @@ export const actions = {
       .then(response => commit('RESPONSE_SET_FIELDS', response))
   },
   update ({ state }) {
-    const token = this.$auth.token.get()
+    const token = this.$auth.strategy.token.get()
 
     return this.$api.$post('/profile/details', state.fields, {
       headers: { Authorization: token }
     })
   },
   updateAccountName ({ commit, state }) {
-    const token = this.$auth.token.get()
+    const token = this.$auth.strategy.token.get()
 
     return this.$api.$post('/profile/name', { name: state.account.name }, {
       headers: { Authorization: token }
@@ -87,14 +86,14 @@ export const actions = {
       }, { root: true }))
   },
   updateAccountEmail ({ state }) {
-    const token = this.$auth.token.get()
+    const token = this.$auth.strategy.token.get()
 
     return this.$api.$post('/profile/email', { email: state.account.email }, {
       headers: { Authorization: token }
     })
   },
   getOrders ({ commit }) {
-    const token = this.$auth.token.get()
+    const token = this.$auth.strategy.token.get()
 
     return this.$api.$get('/profile/orders', {
       headers: { Authorization: token }
@@ -102,7 +101,7 @@ export const actions = {
       .then(response => commit('SET_ORDERS', response))
   },
   getOrder ({ commit }, number) {
-    const token = this.$auth.token.get()
+    const token = this.$auth.strategy.token.get()
 
     return this.$api.$get(`/profile/orders/${number}`, {
       headers: { Authorization: token }
@@ -110,7 +109,7 @@ export const actions = {
       .then(response => commit('SET_ORDER', response))
   },
   cancelOrder ({ commit }, number) {
-    const token = this.$auth.token.get()
+    const token = this.$auth.strategy.token.get()
 
     return this.$api.$get(`/profile/orders/${number}/cancel`, {
       headers: { Authorization: token }
@@ -133,7 +132,7 @@ export const getters = {
     return !isLengthValid(state.fields.first_name) ||
       !isLengthValid(state.fields.last_name) ||
       !isLengthValid(state.fields.middle_name) ||
-      !state.fields.phone.match(form.PHONE_REGEXP)
+      !isPhoneValid(state.fields.phone)
   },
   localityIsInvalid: state => !state.fields.locality ||
     !Object.hasOwnProperty.call(state.fields.locality, 'name') ||

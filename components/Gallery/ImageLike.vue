@@ -2,7 +2,7 @@
     span.tm-image__like(
         :class="{ 'uk-active': liked }"
         @click="like")
-        span(data-uk-icon="heart")
+        span(data-uk-icon="icon: heart; ratio: 0.9")
 </template>
 
 <script>
@@ -25,17 +25,25 @@ export default {
 <style lang="scss">
 .tm-image__like {
     position: relative;
-    color: $inverse-global-color;
     cursor: pointer;
     svg path {
-        fill: rgba($global-secondary-background, .3);
+        stroke: transparent !important;
+        fill: lightgray;
+        transition: fill .25s ease;
+    }
+
+    &:hover {
+        .uk-icon {
+            svg path {
+                fill: whitesmoke;
+            }
+        }
     }
 
     &.uk-active {
-        color: $inverse-global-emphasis-color;
         .uk-icon {
             svg path {
-                fill: tomato;
+                fill: orangered;
             }
         }
     }

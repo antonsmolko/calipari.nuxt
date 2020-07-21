@@ -5,25 +5,39 @@
             data-uk-spinner="ratio: 2"
             data-no-mosaic="true")
         span.tm-mosaic__article {{ item.article }}
-        ImageLike.tm-mosaic__like(
+        image-like.tm-mosaic__like(
             :liked="liked"
             @like="onLike")
+        image-color-collection-badge(
+            v-if="colorBadge && item.colorCollection"
+            :url="`/catalog/color-collections/${item.colorCollection}`")
+        image-art-collection-badge(
+            v-if="artBadge && item.artCollection"
+            :url="`/catalog/art-collections/${item.artCollection}`")
         nuxt-link.uk-link-reset(
             :to="editorUrl")
             .tm-mosaic__container.uk-position-relative
                 img.uk-box-shadow-medium(
                     :data-src="imageUrl"
                     :alt="item.title"
+                    :width="500"
+                    :height="500 / this.imageRatio"
                     data-uk-img)
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 import ImageLike from '~/components/Gallery/ImageLike'
+import ImageColorCollectionBadge from '~/components/Gallery/ImageColorCollectionBadge'
+import ImageArtCollectionBadge from '~/components/Gallery/ImageArtCollectionBadge'
 
 export default {
-  name: 'CollectionImageSection',
-  components: { ImageLike },
+  name: 'CollectionImageItem',
+  components: {
+    ImageLike,
+    ImageColorCollectionBadge,
+    ImageArtCollectionBadge
+  },
   props: {
     item: {
       type: Object,
@@ -32,21 +46,32 @@ export default {
     anchor: {
       type: String,
       default: null
+    },
+    colorBadge: {
+      type: Boolean,
+      default: false
+    },
+    artBadge: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({
     imgLoaded: true,
-    baseUrl: `${process.env.baseUrl}/image/widen`
+    baseImageUrl: `${process.env.baseImageUrl}/widen`
   }),
   computed: {
     imageUrl () {
-      return `${this.baseUrl}/500/${this.item.path}`
+      return `${this.baseImageUrl}/500/${this.item.path}`
     },
     editorUrl () {
       return this.anchor ? `/editor/${this.item.id}?anchor=${this.anchor}` : `/editor/${this.item.id}`
     },
     liked () {
       return this.$store.getters['wishList/liked'](this.item.id)
+    },
+    imageRatio () {
+      return Math.round(this.item.width / this.item.height * 100) / 100
     }
   },
   watch: {
@@ -83,7 +108,7 @@ export default {
     &__image {
         position: relative;
     }
-    &__article, &__like {
+    &__article, &__like, &__color-collection, &__art-collection {
         position: absolute;
         z-index: 1;
     }
@@ -94,6 +119,10 @@ export default {
     &__like {
         right: 0;
         bottom: 0;
+    }
+    &__color-collection, &__art-collection {
+        top: 0;
+        right: 0;
     }
 }
 </style>

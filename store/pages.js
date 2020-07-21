@@ -2,7 +2,7 @@ export const state = () => ({
   title: '',
   alias: '',
   long_title: '',
-  intro: '',
+  content: '',
   image_path: '',
   description: '',
   keywords: ''

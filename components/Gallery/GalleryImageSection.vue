@@ -49,7 +49,7 @@ export default {
       maxRowHeightPolicy: 'tail',
       highResImagesWidthThreshold: 850,
       responsiveWidthThreshold: 340,
-      innerGap: 10
+      innerGap: 1
     },
     initialized: false,
     mosaicTmt: null

@@ -1,5 +1,5 @@
 <template lang="pug">
-    Page
+    Page(v-if="!$fetchState.pending")
         template(#main)
             main(:class="{ 'uk-light': darkPeriod }")
                 GalleryLayout(
@@ -28,21 +28,20 @@ export default {
     GalleryLayout
   },
   mixins: [setLayout, scrollToTop],
-  async fetch ({ store, params, redirect }) {
-    const category = await store.getters['categories/getItemByAlias'](params.category)
+  async fetch () {
+    const category = await this.$store.getters['categories/getItemByAlias'](this.$route.params.category)
     if (!category) {
-      return redirect('/notfound')
+      await this.$router.push('/notfound')
+    } else {
+      this.$store.dispatch('categories/setField', { field: 'item', value: category })
+      await this.$store.dispatch('tags/getItemsByCategoryId', category.id)
+      this.$store.dispatch('setField', { field: 'pageTitle', value: category.title })
     }
-    store.commit('categories/SET_FIELD', { field: 'item', value: category })
-    await store.dispatch('tags/getItemsByCategoryId', category.id)
   },
   computed: {
     ...mapState({
       item: state => state.categories.item
     })
-  },
-  created () {
-    this.setFieldAction({ field: 'pageTitle', value: this.item.title })
   },
   methods: {
     ...mapActions({

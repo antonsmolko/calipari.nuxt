@@ -98,6 +98,13 @@ export default {
         right: 0;
         transform: translate(20%, 5%);
         opacity: .5;
+        line-height: 40px;
+        @include media_mob($se) {
+            line-height: 41px;
+        }
+        @include media_mob($l) {
+            line-height: 43px;
+        }
     }
     &__heading {
         position: relative;

@@ -96,13 +96,6 @@ export default {
       this.selected.type === 'category'
         ? this.getCategoryTagsAction(selected.id)
         : this.clearTags()
-      // switch (this.selected.type) {
-      //   case 'category':
-      //     this.getCategoryTagsAction(selected.id)
-      //     break
-      //   case 'collection':
-      //     this.getCollectionTagsAction(selected.id)
-      // }
     },
     clearImagePaginationState () {
       this.resetPaginationAction()

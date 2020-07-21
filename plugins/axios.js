@@ -12,51 +12,33 @@ export default function ({ $axios, store, redirect }) {
 
   $axios.onError((err) => {
     const error = err.response
+
     switch (error.status) {
       case 404:
-        return redirect('/notfound')
-      case 500:
-        return store.dispatch('notifications/addItem', {
-          message: errorsLibrary.ERROR_DEFAULT,
-          status: 'danger'
+        redirect('/notfound')
+        store.dispatch('notifications/addItem', {
+          message: errorsLibrary.ERROR_NOTFOUND
         })
+        break
       case 422:
         for (const message of Object.values(error.data.errors)) {
           store.dispatch('notifications/addItem', { message, status: 'danger' })
         }
-        return Promise.reject(error)
+        break
+      case (error.status >= 500):
+        store.dispatch('notifications/addItem', {
+          message: errorsLibrary.ERROR_DEFAULT,
+          status: 'danger'
+        })
+        break
       default:
-        return store.dispatch('notifications/addItem', {
+        store.dispatch('notifications/addItem', {
           message: error.data.message,
-          status: error.data.status
+          status: 'danger'
         })
     }
-    // return Promise.reject(error)
 
-    // if (error.response.status === 404) {
-    //   return redirect('/notfound')
-    // }
-    // if (error.response.status === 500) {
-    //   return store.dispatch('notifications/addItem', {
-    //     message: errorsLibrary.ERROR_DEFAULT,
-    //     status: 'danger'
-    //   })
-    // }
-    // if (error.response.status === 422) {
-    //   for (const message of Object.values(error.response.data.errors)) {
-    //     store.dispatch('notifications/addItem', {
-    //       message,
-    //       status: 'danger'
-    //     })
-    //   }
-    // } else if (error.response.status !== 500) {
-    //   store.dispatch('notifications/addItem', {
-    //     message: error.response.data.message,
-    //     status: error.response.data.status
-    //   })
-    // }
-
-    // return Promise.reject(error)
+    return Promise.reject(error)
   })
 
   $axios.onRequest(() => {

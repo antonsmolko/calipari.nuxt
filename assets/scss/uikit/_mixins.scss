@@ -349,24 +349,24 @@
 }
 
 // Heading
-
+@mixin hook-base-heading() {
+  letter-spacing: $base-heading-letter-spacing;
+}
 @mixin hook-heading-misc() {
   .uk-heading-small {
-    font-weight: 200;
+    font-weight: 100;
+    letter-spacing: $base-heading-letter-spacing;
+    line-height: $heading-line-height;
     @include media-mob($s) {
       font-weight: 100;
     }
-    // @include media-desk($s) {
-    //     & + .uk-divider-small {
-    //         margin-top: $global-small-margin;
-    //     }
-    // }
   }
   .uk-heading-medium,
   .uk-heading-large,
   .uk-heading-xlarge,
   .uk-heading-2xlarge {
     font-weight: 100;
+    letter-spacing: $base-heading-letter-spacing;
   }
   .uk-heading-xlarge {
     // font-size: 4rem;

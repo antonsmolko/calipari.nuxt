@@ -63,6 +63,9 @@ $editor-background-color: rgb(27, 27, 29);
 $form-radio-checked-border: #eaeaea;
 $form-line-height: $global-control-height;
 
+/** Mosaic image */
+$base-mosaic-badge-margin: 6px;
+
 // Transition
 $transition-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
 $background-time-transition: 2s;
@@ -82,15 +85,17 @@ $global-xxlarge-font-size: 3rem;
 //$global-secondary-background: #313338;
 $global-success-background: #19BA38;
 
-$global-font-family: "OpenSans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+$global-font-family: "Roboto Condensed", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 $base-body-font-weight: 300;
 $global-font-size: 20px;
 $global-small-font-size: 14px;
-$base-strong-font-weight: normal;
-$base-heading-font-family: "Lato", $global-font-family;
-$base-heading-font-weight: 300;
+$base-strong-font-weight: 400;
+$base-heading-font-family: "Oswald", $global-font-family;
+$base-heading-font-weight: 200;
+$base-heading-letter-spacing: .05em; // custom
 $base-heading-text-transform: uppercase;
 $base-h5-font-size: 1rem;
+$heading-line-height: 1.4;
 $card-small-body-padding-horizontal: $global-margin;
 $card-small-body-padding-vertical: $global-margin;
 $card-secondary-background: $secondary-section-gradient;

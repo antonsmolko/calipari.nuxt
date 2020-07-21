@@ -67,8 +67,8 @@ export default {
     }
   },
   data: () => ({
-    baseInteriorImageUrl: `${process.env.baseUrl}/image/show`,
-    baseImageUrl: `${process.env.baseUrl}/image/widen/500`,
+    baseInteriorImageUrl: `${process.env.baseImageUrl}/show`,
+    baseImageUrl: `${process.env.baseImageUrl}/widen/500`,
     slideOn: false,
     tabOn: false,
     sliderElem: null
@@ -122,7 +122,6 @@ export default {
           currentSlide: slide
         })
         this.slideOn = false
-        // this.tabOn = false
       }
     },
     async setNextInterior (interior, index) {

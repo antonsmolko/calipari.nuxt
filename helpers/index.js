@@ -1,10 +1,12 @@
 import forOwn from 'lodash/forOwn'
 import isEmpty from 'lodash/isEmpty'
 import isInteger from 'lodash/isInteger'
+import maxBy from 'lodash/maxBy'
 import crc32 from 'crc-32'
 import lib from '~/plugins/lang/ru/lib'
+import { form } from '~/plugins/config'
 
-export const getFilterString = (filter) => {
+export const getFilterDetailsString = (filter) => {
   const activeFilters = getActiveFilters(filter)
 
   return activeFilters.length
@@ -17,7 +19,7 @@ export const getFilterString = (filter) => {
         }
       })
       .join(', ')
-    : '-'
+    : '—'
 }
 
 function getActiveFilters (filter) {
@@ -60,7 +62,8 @@ export const hash = () => {
 }
 
 export const filterSet = {
-  flip: lib.FILTER_FLIP,
+  flipH: lib.FILTER_FLIP_H,
+  flipV: lib.FILTER_FLIP_V,
   grayscale: lib.FILTER_GRAYSCALE,
   sepia: lib.FILTER_SEPIA
 }
@@ -73,7 +76,14 @@ export const getArticle = (id) => {
  * @param length
  * @returns {function(string|null): boolean|boolean}
  */
-export const isFieldLengthValid = length => field => !!field && (field.length >= length)
+export const isFieldLengthValid = length => field => Boolean(field) && (field.length >= length)
+
+/**
+ * Check customer phone number
+ * @param phone
+ * @returns {boolean|*}
+ */
+export const isPhoneValid = phone => Boolean(phone) && phone.match(form.PHONE_REGEXP)
 
 /**
  * Get Params String
@@ -93,4 +103,58 @@ export const getParamsString = (payload) => {
   })
 
   return params.length ? `?${params.join('&')}` : null
+}
+
+export const getPhoneFormat = (str) => {
+  if (!str) {
+    return str
+  }
+  const pattern = /^([8]{1})[-( ]?([0-9]{3})[-) ]?([0-9]{3})[- ]?([0-9]{4})$/
+
+  return str.replace(pattern, (match, p1, p2, p3, p4) => `+7 ${p2} ${p3} ${p4}`)
+}
+
+export const refreshTokens = async ($auth) => {
+  const isTokenExpired = $auth.strategy.token.status().expired()
+  const isRefreshExpired = $auth.strategy.refreshToken.status().expired()
+
+  if (!$auth.loggedIn) {
+    return
+  }
+
+  if (isRefreshExpired) {
+    console.log('REFRESH EXPIRED !!!')
+    await $auth.logout()
+
+    return
+  }
+
+  if (isTokenExpired) {
+    await $auth.refreshTokens()
+  }
+}
+
+export const breakPoints = [
+  { key: 'qhd', value: 1921 },
+  { key: 'xxl', value: 1800 },
+  { key: 'xl', value: 1600 },
+  { key: 'hxl', value: 1400 },
+  { key: 'l', value: 1200 },
+  { key: 'm', value: 960 },
+  { key: 'hm', value: 768 },
+  { key: 's', value: 640 },
+  { key: 'xs', value: 560 },
+  { key: 'se', value: 340 }
+]
+
+export const getBreakPointByKey = (key) => {
+  return breakPoints.find(breakPoint => breakPoint.key === key)
+}
+
+export const getCurrentBreakPoint = (viewportWidth) => {
+  const filteredBreaks = breakPoints.filter(breakPoint => breakPoint.value <= viewportWidth)
+
+  return filteredBreaks.length
+    ? maxBy(filteredBreaks, 'value')
+    : maxBy(breakPoints, 'value')
 }

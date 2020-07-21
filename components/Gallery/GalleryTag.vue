@@ -1,8 +1,8 @@
 <template lang="pug">
     .tm-gallery__tag
-        span.tm-gallery__tag-active.uk-h6.uk-text-primary.uk-margin-right(
+        span.tm-gallery__tag-active.tm-text-xsmall.uk-text-uppercase.uk-text-primary.uk-margin-small-right(
             v-if="active") {{ title }}
-        a.uk-h6.uk-link.uk-text-emphasis.uk-link-heading.uk-margin-right(
+        a.tm-text-xsmall.uk-text-uppercase.uk-link.uk-text-emphasis.uk-link-heading.uk-margin-small-right(
             v-else
             href="#"
             @click.prevent="onClick") {{ title }}

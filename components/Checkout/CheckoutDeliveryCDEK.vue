@@ -32,6 +32,7 @@
                     :value="pvz"
                     :placeholder="pvzs.length ? 'Выберите пункт вывоза заказа' : ''"
                     :options="pvzs"
+                    optionKey="code"
                     noOptionsText="Нет совпадений с поиском")
                     template(#footer v-if="pvzsNotFound")
                         span.uk-text-small.uk-text-danger В данном н.п. пункте нет пунктов самовывоза CDEK

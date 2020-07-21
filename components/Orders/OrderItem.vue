@@ -6,25 +6,25 @@
             a.tm-order-table__lightbox.uk-inline.uk-transition-toggle(
                 tabindex="0"
                 :data-caption="dataCaption"
-                :href="imageUrl")
+                :href="item.image_path")
                 img.uk-box-shadow-medium(
-                    :src="imageUrl"
-                    :alt="article")
+                    :src="item.thumb_path"
+                    :alt="item.article")
         td.tm-order-table__params(class="uk-width-1-2 uk-width-1-4@s uk-width-1-3@m")
             .tm-order-table__params-item
                 span.tm-order-table__params-heading.uk-text-muted Артикул
                 nuxt-link.tm-order-table__params-value.uk-link.uk-link-text(
-                    :to="`/editor/${item.imageId}`"
-                ) {{ article }}
+                    :to="`/editor/${item.image_id}`"
+                ) {{ item.article }}
             .tm-order-table__params-item
                 span.tm-order-table__params-heading.uk-text-muted Размеры
                 span.tm-order-table__params-value.uk-text-emphasis {{ item.width }} см × {{ item.height }} см
             .tm-order-table__params-item
                 span.tm-order-table__params-heading.uk-text-muted Материал
-                span.tm-order-table__params-value.uk-text-emphasis {{ item.texture.name }}
+                span.tm-order-table__params-value.uk-text-emphasis {{ item.texture }}
             .tm-order-table__params-item
                 span.tm-order-table__params-heading.uk-text-muted Эффекты
-                span.tm-order-table__params-value.uk-text-emphasis {{ filterString }}
+                span.tm-order-table__params-value.uk-text-emphasis {{ item.filter }}
         td.tm-order-table__count
             span.uk-box-shadow-small.tm-text-medium.uk-background-default
                 span.tm-order-table__count-x ×
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { getArticle, getFilterString, getFormatPrice } from '~/helpers'
+import { getFormatPrice } from '~/helpers'
 
 export default {
   name: 'OrderItem',
@@ -46,26 +46,17 @@ export default {
     }
   },
   computed: {
-    imageUrl () {
-      return `${process.env.baseUrl}${this.item.imagePath}`
-    },
-    article () {
-      return getArticle(this.item.imageId)
-    },
     formatPrice () {
       return getFormatPrice(this.item.price)
-    },
-    filterString () {
-      return getFilterString(this.item.filter)
     },
     dataCaption () {
       /* eslint-disable */
       return `
-        Изображение: ${this.article} |
+        Изображение: ${this.item.article} |
         Ширина: ${this.item.width} см |
         Высота: ${this.item.height} см |
-        Фактура: «${this.item.texture.name}» |
-        Эффекты: ${this.filterString} |
+        Фактура: «${this.item.texture}» |
+        Эффекты: ${this.filter} |
         Цена: ${this.formatPrice}`
       /* eslint-enable */
     }
@@ -77,3 +68,7 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+    @import '../../assets/scss/modules/order';
+</style>

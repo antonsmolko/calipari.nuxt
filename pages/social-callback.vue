@@ -126,12 +126,8 @@ export default {
     if (this.token) {
       this.loaded = true
       this.loadedMessage = 'Выполняется авторизация...'
-      this.$auth.setUserToken({
-        access_token: this.token,
-        token_type: this.tokenType,
-        expires_in: this.expiresIn
-      })
-      this.$auth.setStrategy('laravelJWT')
+      this.$auth.setUserToken(this.token, true)
+        .then(() => this.$auth.setStrategy('laravelJWT'))
 
       this.$auth.fetchUser()
         .then(() => {

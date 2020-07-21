@@ -91,7 +91,8 @@ sw.*
 *.swp
 
 # Nuxt Config file
-nuxt.config.js
+#nuxt.config.js
 
+# Certs
 localhost.crt
 localhost.key

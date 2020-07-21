@@ -8,7 +8,7 @@
                             v-for="item in items"
                             :key="item.id"
                             :item="item"
-                            :texture="getTexture(item.texture)"
+                            :texture="getTexture(item.texture_id)"
                             :price="getPrice(item)"
                             @delete="onDelete")
         CartModal

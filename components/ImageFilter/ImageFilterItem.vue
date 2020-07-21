@@ -3,7 +3,7 @@
         .tm-filter__preview(v-if="type")
             template(v-if="type === 'image'")
                 img.uk-box-shadow-medium(
-                    :data-src="`${baseUrl}${filter['image_path']}`"
+                    :data-src="`${baseImageUrl}${filter['image_path']}`"
                     :alt="filter.title"
                     data-uk-img)
             template(v-else-if="type === 'color'")
@@ -48,7 +48,7 @@ export default {
     model: [String, Boolean, Object, Number, Array]
   },
   data: () => ({
-    baseUrl: `${process.env.baseUrl}/image/fit/120/80/`
+    baseImageUrl: `${process.env.baseImageUrl}/fit/120/80/`
   }),
   computed: {
     isSelected () {

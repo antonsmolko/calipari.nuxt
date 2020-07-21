@@ -1,7 +1,7 @@
 <template lang="pug">
-    Page
+    Page(v-if="!$fetchState.pending && page")
         template(#main)
-            main(v-show="page")
+            main
                 TopBar(:title="pageTitle")
                     .uk-navbar-item(v-if="availableTypes.length")
                         ul.tm-navbar__tab(data-uk-tab)
@@ -16,7 +16,7 @@
                         .uk-margin-large-top.uk-margin-medium-bottom
                             h1.uk-heading-medium {{ pageTitle }}
                             .uk-divider-small.uk-margin-large-bottom
-                            .tm-text-medium(v-if="page.intro" v-html="page.intro")
+                            .tm-text-medium(v-if="page.content" v-html="page.content")
                 section.uk-section.uk-section-default
                     .uk-container.uk-container-large
                         .uk-flex.uk-flex-center.uk-margin-medium-bottom
@@ -35,7 +35,7 @@
                                 .uk-card.uk-card-default.uk-box-shadow-medium
                                     .uk-card-media-top
                                         nuxt-link.uk-link-reset(:to="`/blog/${item.alias}`")
-                                            img(:data-src="`${imgBaseUrl}/${item.image_path}`"
+                                            img(:data-src="`${baseImageUrl}/${item.image_path}`"
                                                 :alt="item.title"
                                                 data-uk-img)
                                     .uk-card-body
@@ -70,19 +70,21 @@ export default {
     Observer
   },
   mixins: [setLayout, scrollToTop],
-  async fetch ({ store }) {
+  async fetch () {
     await Promise.all([
-      store.dispatch('pages/getItem', 'blog'),
-      store.dispatch('posts/getTypes')
+      this.$store.dispatch('pages/getItem', 'blog'),
+      this.$store.dispatch('posts/getTypes')
     ])
-    const defaultPostType = store.getters['posts/defaultType']
+    const defaultPostType = this.$store.getters['posts/defaultType']
 
     if (defaultPostType) {
-      await store.dispatch('resources/getItems', {
+      await this.$store.dispatch('resources/getItems', {
         url: `/posts/${defaultPostType.index}/list`,
         clear: true
       })
     }
+    this.currentTypeIndex = this.defaultType ? this.defaultType.index : null
+    this.setFieldAction({ field: 'pageTitle', value: this.page.title })
   },
   data: () => ({
     observerOptions: {
@@ -101,13 +103,9 @@ export default {
       'availableTypes',
       'defaultType'
     ]),
-    imgBaseUrl () {
-      return `${process.env.baseUrl}/image/fit/600/400`
+    baseImageUrl () {
+      return `${process.env.baseImageUrl}/fit/600/400`
     }
-  },
-  created () {
-    this.currentTypeIndex = this.defaultType ? this.defaultType.index : null
-    this.setFieldAction({ field: 'pageTitle', value: this.page.title })
   },
   methods: {
     ...mapActions({

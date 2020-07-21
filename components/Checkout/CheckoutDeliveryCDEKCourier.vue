@@ -61,7 +61,7 @@ import { getFormatPrice } from '~/components/helpers'
 import VSelect from '~/components/form/Select/VSelect'
 import VInput from '~/components/form/VInput'
 
-const _debounce = debounce(value => value(), 500)
+const _debounce = debounce(fn => fn(), 500)
 
 export default {
   name: 'CheckoutDeliveryCDEKCourier',

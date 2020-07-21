@@ -1,6 +1,5 @@
 import omit from 'lodash/omit'
-import { getFilterString } from '../helpers'
-import { isFieldLengthValid } from '~/helpers'
+import { getFilterDetailsString, isFieldLengthValid } from '../helpers'
 import { form } from '~/plugins/config'
 
 const isLengthValid = isFieldLengthValid(form.BASE_MIN_LENGTH)
@@ -72,7 +71,7 @@ export const actions = {
   },
   orderConfirm ({ commit, getters }) {
     const headers = this.$auth.loggedIn
-      ? { Authorization: this.$auth.token.get() }
+      ? { Authorization: this.$auth.strategy.token.get() }
       : {}
 
     return this.$api.$post('/orders', getters.orderDetails, { headers })
@@ -123,8 +122,8 @@ export const getters = {
     return {
       userId: rootState.auth.user ? rootState.auth.user.id : null,
       items: JSON.stringify(rootState.cart.items.map((item) => {
-        const filterString = getFilterString(item.filter)
-        return { ...omit(item, ['id', 'imageName']), filterString }
+        const filterDetails = getFilterDetailsString(item.filter)
+        return { ...omit(item, ['id', 'image_path']), filter_details: filterDetails }
       })),
       customer: JSON.stringify(state.customer),
       delivery: JSON.stringify(getters.deliveryDetails),

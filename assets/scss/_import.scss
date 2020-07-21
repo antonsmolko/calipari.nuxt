@@ -2,44 +2,32 @@
 @import './modules/background';
 @import './modules/base';
 @import './modules/button';
-//@import './modules/footer';
 @import './modules/logo';
-//@import './modules/header';
-//@import './modules/socials';
 @import './modules/text';
 @import './modules/clock';
 @import './modules/tab';
 @import './modules/navbar';
-//@import './modules/navbar-mobile';
 @import './modules/card';
-//@import './modules/albums';
-//@import './modules/filters';
 @import './modules/iconnav';
 @import './modules/frontispiece';
-@import './modules/catalog';
+//@import './modules/catalog';
 @import './modules/form';
 @import './modules/section';
 @import './modules/image';
 @import './modules/login';
 @import './modules/notification';
 @import './modules/resize-observer';
-@import './modules/order';
 @import './modules/flex';
 @import './modules/visibility-hidden';
 
 // Pages
 @import './pages/main';
 @import './pages/page';
-@import './pages/catalog';
+//@import './pages/catalog';
 @import './pages/profile';
 @import './pages/checkout';
-@import './pages/order-list';
-//@import './pages/login';
 @import './pages/textures';
 
 // Transition
 @import './modules/transition.scss';
-
-//
-//@import "~mathsass/dist/math.scss";
 

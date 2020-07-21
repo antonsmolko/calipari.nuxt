@@ -1,3 +1,5 @@
+import { refreshTokens } from '~/helpers'
+
 export const state = () => ({
   items: [],
   version: 1
@@ -15,21 +17,27 @@ export const mutations = {
 }
 
 export const actions = {
-  toggle ({ commit, dispatch }, id) {
+  async toggle ({ commit, dispatch }, id) {
+    if (this.$auth.loggedIn) {
+      await refreshTokens(this.$auth)
+    }
     this.$auth.loggedIn
       ? dispatch('toggleAuth', id)
       : commit('TOGGLE', id)
   },
-  sync ({ state, commit }) {
-    const token = this.$auth.token.get()
-    const items = state.items
-    const headers = { Authorization: token }
+  async sync ({ state, commit }) {
+    if (this.$auth.loggedIn) {
+      await refreshTokens(this.$auth)
+    }
+    const token = this.$auth.strategy.token.get()
+    const likes = state.items
+    const headers = token ? { Authorization: token } : {}
 
-    return this.$api.$post('/profile/wishlist/sync', { items }, { headers })
+    return this.$api.$post('/profile/wishlist/sync', { likes }, { headers })
       .then(response => commit('SET_ITEMS', response))
   },
   toggleAuth ({ commit }, id) {
-    const token = this.$auth.token.get()
+    const token = this.$auth.strategy.token.get()
     const headers = { Authorization: token }
 
     return this.$api.$get(`/profile/wishlist/${id}/toggle`, { headers })

@@ -3,7 +3,8 @@
         data-uk-offcanvas="overlay: true"
         ref="menu")
         .uk-offcanvas-bar
-            ul.uk-nav.uk-nav-primary.uk-text-left
+            ul.uk-nav.uk-nav-primary.uk-text-left(
+                data-uk-scrollspy="cls:uk-animation-slide-left-medium")
                 li.uk-nav-header: span.uk-h4 Главное меню
                 menu-link(to="/catalog" title="Каталог" @click="onClose")
                 menu-link(to="/textures" title="Материалы" @click="onClose")

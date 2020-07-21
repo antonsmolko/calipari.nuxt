@@ -2,9 +2,8 @@
     .cropper(:class="[filter.colorize]")
         .cropper__container(ref="container")
             .cropper__canvas(v-show="isCropperSet" ref="canvas")
-                img(
-                    ref="image"
-                    :class="{'scale-x': filter.flip}",
+                img(ref="image"
+                    :style="canvasStyle",
                     :src="imageUrl",
                     :alt="image.article")
                 .cropper__crop-box(
@@ -71,7 +70,8 @@ export default {
       height: 0,
       translateX: 0,
       translateY: 0,
-      scaleX: 1
+      scaleX: 1,
+      scaleY: 1
     },
     naturalCropData: {
       width: 0,
@@ -115,6 +115,11 @@ export default {
     scaleImage () {
       return this.image.width / this.imageStyles.width
     },
+    canvasStyle () {
+      return {
+        transform: `scale(${this.scaleX}, ${this.scaleY})`
+      }
+    },
     cropBoxStyle () {
       const transX = this.viewBoxStyles.translateX !== 0 ? `${this.viewBoxStyles.translateX}px` : 0
       const transY = this.viewBoxStyles.translateY !== 0 ? `${this.viewBoxStyles.translateY}px` : 0
@@ -132,14 +137,17 @@ export default {
       return {
         width: `${this.imageStyles.width}px`,
         height: `${this.imageStyles.height}px`,
-        transform: `translateX(${transX}) scaleX(${this.scaleX}) translateY(${transY})`
+        transform: `translateX(${transX}) scaleX(${this.scaleX}) translateY(${transY}) scaleY(${this.scaleY})`
       }
     },
     scaleX () {
-      return this.filter.flip ? -1 : 1
+      return this.filter.flipH ? -1 : 1
+    },
+    scaleY () {
+      return this.filter.flipV ? -1 : 1
     },
     imageUrl () {
-      return `${process.env.baseUrl}/image/show/${this.image.path}`
+      return `${process.env.baseImageUrl}/show/${this.image.path}`
     }
   },
   watch: {
@@ -162,6 +170,11 @@ export default {
         }
       }
     },
+    async image () {
+      await this.removeListeners()
+      await this.init()
+      this.handleResize()
+    },
     active () {
       if (this.active) {
         this.viewBoxStyles.width = this.imageStyles.width
@@ -175,20 +188,28 @@ export default {
       this.imageStyles.translateX = 0
       this.imageStyles.translateY = 0
 
-      this.setNaturalCrop()
+      this.setNaturalCrop({
+        width: this.image.width,
+        height: this.image.height,
+        x: 0,
+        y: 0
+      })
 
       this.resetCropMove()
 
       this.$emit('cropped', this.naturalCropData)
     },
-    translateX () {
-      this.setNaturalCrop()
-    },
-    translateY () {
-      this.setNaturalCrop()
-    },
+    // translateX () {
+    //   this.setNaturalCrop()
+    // },
+    // translateY () {
+    //   this.setNaturalCrop()
+    // },
     scaleX () {
       this.imageStyles.scaleX = this.scaleX ? -1 : 1
+    },
+    scaleY () {
+      this.imageStyles.scaleY = this.scaleY ? -1 : 1
     },
     responsive () {
       if (this.responsive) {
@@ -202,8 +223,7 @@ export default {
     window.addEventListener('resize', this.handleResize)
   },
   beforeDestroy () {
-    removeListener(this.cropBox, EVENT_POINTER_DOWN, this.startCropMove)
-    removeListener(this.cropBox.ownerDocument, EVENT_POINTER_UP, this.endCropMove)
+    this.removeListeners()
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
@@ -215,7 +235,7 @@ export default {
       addListener(this.cropBox, EVENT_POINTER_DOWN, (this.startCropMove = this.onStartCropMove.bind(this)))
       addListener(this.cropBox.ownerDocument, EVENT_POINTER_UP, (this.endCropMove = this.onEndCropMove.bind(this)))
 
-      await this.loadImage(`${process.env.baseUrl}/image/show/${this.image.path}`)
+      await this.loadImage(`${process.env.baseImageUrl}/show/${this.image.path}`)
         .then(() => {
           this.setImageSizes()
           this.imageLoad = true
@@ -330,11 +350,16 @@ export default {
       this.imageStyles.translateX = -this.viewBoxStyles.translateX
       this.imageStyles.translateY = -this.viewBoxStyles.translateY
     },
-    setNaturalCrop () {
-      this.naturalCropData.width = this.viewBoxStyles.width * this.scaleImage
-      this.naturalCropData.height = this.viewBoxStyles.height * this.scaleImage
-      this.naturalCropData.x = this.viewBoxStyles.translateX * this.scaleImage
-      this.naturalCropData.y = this.viewBoxStyles.translateY * this.scaleImage
+    setNaturalCrop (cropData = null) {
+      const width = cropData ? cropData.width : this.viewBoxStyles.width * this.scaleImage
+      const height = cropData ? cropData.height : this.viewBoxStyles.height * this.scaleImage
+      const x = cropData ? cropData.x : this.viewBoxStyles.translateX * this.scaleImage
+      const y = cropData ? cropData.y : this.viewBoxStyles.translateY * this.scaleImage
+
+      this.$set(this.naturalCropData, 'width', width)
+      this.$set(this.naturalCropData, 'height', height)
+      this.$set(this.naturalCropData, 'x', x)
+      this.$set(this.naturalCropData, 'y', y)
     },
     resetCropMove () {
       this.lastTranslateX = 0
@@ -354,6 +379,10 @@ export default {
         img.src = url
         img.onload = resolve
       })
+    },
+    removeListeners () {
+      removeListener(this.cropBox, EVENT_POINTER_DOWN, this.startCropMove)
+      removeListener(this.cropBox.ownerDocument, EVENT_POINTER_UP, this.endCropMove)
     }
   }
 }

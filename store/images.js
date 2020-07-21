@@ -5,7 +5,8 @@ import action from './mixins/action'
 export const state = () => ({
   item: null,
   items: [],
-  collection: [],
+  artCollection: [],
+  colorCollection: [],
   pagination: {
     per_page: 30,
     total: 0,
@@ -76,11 +77,21 @@ export const actions = {
     return action(this.$api, 'get', commit, {
       url: `/catalog/images/${id}/editor`,
       thenContent: (response) => {
-        const { item, collection } = response.data
-        collection
-          ? commit('SET_FIELDS', { item, collection: [...[item], ...collection] })
-          : commit('SET_FIELD', { field: 'item', value: item })
+        const { item, colorCollection, artCollection } = response.data
+        commit('SET_FIELDS', { item, colorCollection, artCollection })
       }
+    })
+  },
+  getItemColorCollectionImages ({ commit }, id) {
+    return action(this.$api, 'get', commit, {
+      url: `/catalog/images/${id}/color-collection-images`,
+      thenContent: response => commit('SET_FIELD', { field: 'colorCollection', value: response.data })
+    })
+  },
+  getItemArtCollectionImages ({ commit }, id) {
+    return action(this.$api, 'get', commit, {
+      url: `/catalog/images/${id}/art-collection-images`,
+      thenContent: response => commit('SET_FIELD', { field: 'artCollection', value: response.data })
     })
   },
   getItems ({ state, commit, rootState }, { restrictiveElement, increasePage = false, clear = false }) {
