@@ -2,6 +2,7 @@ import path from 'path'
 import fs from 'fs'
 import imageminMozjpeg from 'imagemin-mozjpeg'
 const ImageminPlugin = require('imagemin-webpack-plugin').default
+
 const isDev = process.env.NODE_ENV !== 'production'
 const baseApiUrl = !isDev ? process.env.API_BASE_URL : 'https://manager.local.calipari.ru'
 const imageProvider = !isDev ? process.env.IMAGE_PROVIDER : 's3' // s3, local
