@@ -21,8 +21,8 @@
                         v-for="interior in interiors"
                         :key="interior.id"
                         :item="interior"
-                        :width="500"
-                        :height="500")
+                        :width="400"
+                        :height="400")
 </template>
 
 <script>

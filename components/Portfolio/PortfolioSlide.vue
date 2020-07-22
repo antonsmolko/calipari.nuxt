@@ -1,17 +1,20 @@
 <template lang="pug">
     li
         a.uk-inline.uk-link-toggle.uk-width-1-1(
-            :href="showUrl"
+            :href="url"
             :data-caption="item.title")
-            img.uk-position-relative.uk-position-z-index(
-                :data-src="fitUrl"
-                :alt="item.title"
-                data-uk-img)
+            uk-image.uk-position-relative.uk-position-z-index(
+                :name="item.path"
+                :width="800"
+                :height="600"
+                :alt="item.title")
             .uk-position-cover.uk-flex.uk-flex-middle.uk-flex-center(v-if="imgLoaded")
                 .uk-text-muted(data-uk-spinner="ratio: 2")
 </template>
 
 <script>
+import { getS3ImageUrl } from '~/helpers'
+
 export default {
   name: 'PortfolioSlide',
   props: {
@@ -24,15 +27,19 @@ export default {
     imgLoaded: true
   }),
   computed: {
-    fitUrl () {
-      return `${process.env.baseImageUrl}/fit/800/600/${this.item.path}`
+    url () {
+      return getS3ImageUrl({ name: this.item.path })
     },
-    showUrl () {
-      return `${process.env.baseImageUrl}/show/${this.item.path}`
+    thumbUrl () {
+      return getS3ImageUrl({
+        name: this.item.path,
+        width: 800,
+        height: 600
+      })
     }
   },
   created () {
-    this.loadImgAsync(this.fitUrl)
+    this.loadImgAsync(this.thumbUrl)
       .then(() => {
         this.imgLoaded = false
       })

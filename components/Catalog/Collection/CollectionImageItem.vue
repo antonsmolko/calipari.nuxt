@@ -17,12 +17,11 @@
         nuxt-link.uk-link-reset(
             :to="editorUrl")
             .tm-mosaic__container.uk-position-relative
-                img.uk-box-shadow-medium(
-                    :data-src="imageUrl"
-                    :alt="item.title"
-                    :width="500"
-                    :height="500 / this.imageRatio"
-                    data-uk-img)
+                uk-image.uk-box-shadow-medium(
+                    :name="item.path"
+                    :width="600"
+                    :height="600 / this.imageRatio"
+                    :alt="item.title")
 </template>
 
 <script>
@@ -30,6 +29,7 @@ import { mapActions } from 'vuex'
 import ImageLike from '~/components/Gallery/ImageLike'
 import ImageColorCollectionBadge from '~/components/Gallery/ImageColorCollectionBadge'
 import ImageArtCollectionBadge from '~/components/Gallery/ImageArtCollectionBadge'
+import { getS3ImageUrl } from '~/helpers'
 
 export default {
   name: 'CollectionImageItem',
@@ -57,12 +57,15 @@ export default {
     }
   },
   data: () => ({
-    imgLoaded: true,
-    baseImageUrl: `${process.env.baseImageUrl}/widen`
+    imgLoaded: true
   }),
   computed: {
     imageUrl () {
-      return `${this.baseImageUrl}/500/${this.item.path}`
+      return getS3ImageUrl({
+        name: this.item.path,
+        width: 600,
+        height: 600 / this.imageRatio
+      })
     },
     editorUrl () {
       return this.anchor ? `/editor/${this.item.id}?anchor=${this.anchor}` : `/editor/${this.item.id}`

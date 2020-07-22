@@ -18,14 +18,19 @@
                                 span.tm-textures__spec-value.uk-text-large {{ cost }} ₽/м<sup>2</sup>
                     .tm-textures__pattern(class="uk-width-3-4 uk-width-2-5@s" data-uk-lightbox data-uk-scrollspy="cls:uk-animation-slide-bottom-small; delay: 700")
                         div
-                            a.uk-inline.uk-transition-toggle(:href="`${baseImageUrl}/show/${textureSrc}`" tabindex="0" :data-caption="title")
-                                img.uk-box-shadow-large(:data-src="`${baseImageUrl}/widen/600/${textureSrc}`" data-uk-img)
+                            a.uk-inline.uk-transition-toggle(:href="textureUrl" tabindex="0" :data-caption="title")
+                                uk-image.uk-box-shadow-large(
+                                    :name="textureSrc"
+                                    :width="600"
+                                    :alt="title")
         section.tm-textures__sample.uk-section.uk-background-fixed.uk-background-cover(
             :data-uk-height-viewport="`offset-top: ${true}; offset-bottom: ${sampleBottomOffset}`"
-            :data-src="`${baseImageUrl}/show/${exampleSrc}`" data-uk-img)
+            :data-src="exampleUrl" data-uk-img)
 </template>
 
 <script>
+import { getS3ImageUrl } from '~/helpers'
+
 export default {
   props: {
     title: {
@@ -59,7 +64,15 @@ export default {
   },
   data: () => ({
     baseImageUrl: `${process.env.baseImageUrl}`
-  })
+  }),
+  computed: {
+    textureUrl () {
+      return getS3ImageUrl({ name: this.textureSrc })
+    },
+    exampleUrl () {
+      return getS3ImageUrl({ name: this.exampleSrc })
+    }
+  }
 }
 </script>
 <style lang="scss">

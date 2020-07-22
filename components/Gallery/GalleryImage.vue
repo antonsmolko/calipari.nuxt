@@ -32,6 +32,8 @@ import { mapActions } from 'vuex'
 import ImageLike from './ImageLike'
 import ImageColorCollectionBadge from '~/components/Gallery/ImageColorCollectionBadge'
 import ImageArtCollectionBadge from '~/components/Gallery/ImageArtCollectionBadge'
+import { getS3ImageUrl } from '~/helpers'
+
 export default {
   name: 'GalleryImage',
   components: {
@@ -46,11 +48,15 @@ export default {
     }
   },
   data: () => ({
-    imgLoaded: true
+    imgLoaded: true,
+    imageHeight: 400
   }),
   computed: {
     url () {
-      return `${process.env.baseImageUrl}/heighten/400/${this.image.path}`
+      return getS3ImageUrl({
+        name: this.image.path,
+        height: this.imageHeight
+      })
     },
     liked () {
       return this.$store.getters['wishList/liked'](this.image.id)

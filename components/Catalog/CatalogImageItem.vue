@@ -3,11 +3,12 @@
         nuxt-link.uk-link-reset(
             :to="{ name: 'catalog-category', params: { category: item.alias } }")
             .tm-catalog__image-container.uk-position-relative
-                img.uk-box-shadow-medium(
+                uk-image.uk-box-shadow-medium(
                     v-show="!imgLoaded"
-                    :data-src="url"
-                    :alt="item.title"
-                    data-uk-img)
+                    :name="item.image_path"
+                    :width="width"
+                    :height="height"
+                    :alt="item.title")
                 .uk-flex.uk-flex-center.uk-flex-middle.uk-text-muted.uk-box-shadow-medium(
                     v-show="imgLoaded")
                     .uk-position-center.uk-position-z-index(data-uk-spinner="ratio: 2")
@@ -16,6 +17,8 @@
 </template>
 
 <script>
+import { getS3ImageUrl } from '~/helpers'
+
 export default {
   name: 'CatalogImageItem',
   props: {
@@ -25,24 +28,18 @@ export default {
     },
     width: {
       type: Number,
-      default: 400
+      default: 300
     },
     height: {
       type: Number,
-      default: 250
+      default: 200
     }
   },
   data: () => ({
-    baseImageUrl: `${process.env.baseImageUrl}/fit`,
     initImgSrc: '/img/bg/category/category-init-thumb.jpg',
     imgLoaded: true,
     img: null
   }),
-  computed: {
-    url () {
-      return `${this.baseImageUrl}/${this.width}/${this.height}/${this.item.image_path}`
-    }
-  },
   async mounted () {
     await this.loadImageAsync()
     this.imgLoaded = false
@@ -50,7 +47,12 @@ export default {
   methods: {
     loadImageAsync () {
       this.img = new Image()
-      this.img.src = this.url
+      this.img.src = getS3ImageUrl({
+        name: this.item.image_path,
+        width: this.width,
+        height: this.height
+      })
+
       return new Promise((resolve) => {
         this.img.onload = resolve
       })

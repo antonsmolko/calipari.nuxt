@@ -32,6 +32,7 @@ import {
   addListener,
   removeListener
 } from './utilities'
+import { getS3ImageUrl } from '~/helpers'
 
 export default {
   name: 'Cropper',
@@ -147,7 +148,7 @@ export default {
       return this.filter.flipV ? -1 : 1
     },
     imageUrl () {
-      return `${process.env.baseImageUrl}/show/${this.image.path}`
+      return getS3ImageUrl({ name: this.image.path })
     }
   },
   watch: {
@@ -235,7 +236,7 @@ export default {
       addListener(this.cropBox, EVENT_POINTER_DOWN, (this.startCropMove = this.onStartCropMove.bind(this)))
       addListener(this.cropBox.ownerDocument, EVENT_POINTER_UP, (this.endCropMove = this.onEndCropMove.bind(this)))
 
-      await this.loadImage(`${process.env.baseImageUrl}/show/${this.image.path}`)
+      await this.loadImage(this.imageUrl)
         .then(() => {
           this.setImageSizes()
           this.imageLoad = true

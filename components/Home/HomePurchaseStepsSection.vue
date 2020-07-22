@@ -12,9 +12,9 @@
                         data-uk-grid)
                         div(data-uk-scrollspy="cls: uk-animation-fade; delay: 300"
                             :class="{ 'uk-flex-last@s': !(item.id % 2) }")
-                            img.uk-box-shadow-large(:data-src="`${baseImageUrl}/${item.image_path}`"
-                                :alt="item.title"
-                                data-uk-img)
+                            uk-image.uk-box-shadow-large(
+                                :name="item.image_path"
+                                :alt="item.title")
                         .uk-card-body.tm-card__number(
                             data-uk-scrollspy="cls: uk-animation-slide-bottom-small; delay: 500"
                             :data-num="index + 1")
@@ -30,9 +30,6 @@ export default {
       type: Array,
       default: () => ([])
     }
-  },
-  data: () => ({
-    baseImageUrl: `${process.env.baseImageUrl}/show`
-  })
+  }
 }
 </script>

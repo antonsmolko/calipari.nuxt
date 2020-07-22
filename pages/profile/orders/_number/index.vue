@@ -83,7 +83,7 @@ export default {
   async fetch ({ params, store }) {
     const orderNumber = params.number
     await store.dispatch('profile/getOrder', orderNumber)
-    store.commit('SET_FIELDS', { pageTitle: `Заказ # ${orderNumber}` })
+    store.commit('SET_FIELDS', { pageTitle: `Заказ № ${orderNumber}` })
   },
   computed: {
     ...mapState('profile', {

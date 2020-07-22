@@ -34,10 +34,10 @@
         .tm-category__background.uk-position-fixed.uk-width-1-1.uk-height-viewport.uk-position-z-index.uk-position-top(
             data-uk-scrollspy="cls: uk-animation-fade; delay: 50")
             .tm-section__semitransparent-background.uk-position-cover.uk-background-cover.uk-background-fixed(
-                v-show="backgroundPath"
-                :data-src="url" data-uk-img)
+                v-show="backgroundUrl"
+                :data-src="backgroundUrl" data-uk-img)
             .tm-category__background-default(
-                v-if="!backgroundPath")
+                v-if="!backgroundUrl")
 </template>
 
 <script>
@@ -48,6 +48,7 @@ import Gallery from '~/components/Gallery/Gallery'
 import GalleryHero from '~/components/Gallery/GalleryHero'
 import GalleryTag from '~/components/Gallery/GalleryTag'
 import ImageFilter from '~/components/ImageFilter/ImageFilter'
+import { getS3ImageUrl } from '~/helpers'
 
 export default {
   name: 'GalleryLayout',
@@ -93,15 +94,13 @@ export default {
       filterQty: 'filter/currentQty',
       activeTag: 'filter/activeTag'
     }),
-    url () {
-      return this.backgroundPath
-        ? `${process.env.baseImageUrl}/grayscale/${this.backgroundPath}`
-        : ''
-    },
     restrictiveFilterElement () {
       return this.mode === 'imageKeys'
         ? { restrictive_keys: this.keyValue }
         : { [`restrictive_${this.mode}`]: this.keyValue }
+    },
+    backgroundUrl () {
+      return getS3ImageUrl({ name: this.backgroundPath, grayscale: true })
     }
   },
   async mounted () {

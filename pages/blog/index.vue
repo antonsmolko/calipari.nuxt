@@ -35,9 +35,10 @@
                                 .uk-card.uk-card-default.uk-box-shadow-medium
                                     .uk-card-media-top
                                         nuxt-link.uk-link-reset(:to="`/blog/${item.alias}`")
-                                            img(:data-src="`${baseImageUrl}/${item.image_path}`"
-                                                :alt="item.title"
-                                                data-uk-img)
+                                            uk-image(
+                                                :name="item.image_path"
+                                                :width="600"
+                                                :alt="item.title")
                                     .uk-card-body
                                         h3.uk-card-title
                                             nuxt-link.uk-link-heading(:to="`/blog/${item.alias}`") {{ item.title }}

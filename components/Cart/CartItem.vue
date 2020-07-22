@@ -67,8 +67,8 @@ export default {
   },
   data: () => ({
     count: 1,
-    fullBaseUrl: `${process.env.baseImageUrl}/order-full`,
-    thumbBaseUrl: `${process.env.baseImageUrl}/thumb`
+    fullBaseUrl: `${process.env.localImageEndpoint}/order-full`,
+    thumbBaseUrl: `${process.env.localImageEndpoint}/thumb`
   }),
   computed: {
     formatPrice () {

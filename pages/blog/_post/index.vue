@@ -17,11 +17,11 @@
                                 .tm-text-medium.uk-text-left(v-if="item.intro" v-html="item.intro")
                     section.uk-section.uk-section-default.uk-padding-remove-top.uk-margin-xlarge-top.tm-flex-grow
                         .tm-post__main-image-container.uk-container.uk-margin-medium-bottom
-                            img.uk-width-1-1.uk-box-shadow-large(
-                                :data-src="`${baseImageUrl}/${item.image_path}`"
+                            uk-image.uk-width-1-1.uk-box-shadow-large(
+                                :name="item.image_path"
+                                :width="1200"
                                 :alt="item.title"
-                                data-uk-scrollspy="cls: uk-animation-slide-bottom-small; delay: 300"
-                                data-uk-img)
+                                data-uk-scrollspy="cls: uk-animation-slide-bottom-small; delay: 300")
                         .uk-container.uk-container-small
                             .tm-post__content(
                                 data-uk-scrollspy="cls: uk-animation-slide-bottom-small; delay: 300"

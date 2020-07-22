@@ -8,8 +8,9 @@
                 :data-caption="dataCaption"
                 :href="item.image_path")
                 img.uk-box-shadow-medium(
-                    :src="item.thumb_path"
-                    :alt="item.article")
+                    :data-src="item.thumb_path"
+                    :alt="item.article"
+                    data-uk-img)
         td.tm-order-table__params(class="uk-width-1-2 uk-width-1-4@s uk-width-1-3@m")
             .tm-order-table__params-item
                 span.tm-order-table__params-heading.uk-text-muted Артикул

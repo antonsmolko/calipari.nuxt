@@ -36,7 +36,7 @@
                                         :data-slide-index="index"
                                         :data-slide-id="slide.id")
                                         .tm-interiors__background.uk-background-cover(
-                                            :data-src="`${baseInteriorImageUrl}/${slide.background_path}`"
+                                            :data-src="getBackgroundUrl(slide)"
                                             data-uk-img)
                             .uk-margin-top.uk-position-relative.uk-position-z-index
                                 a.uk-padding-small.uk-link-text(data-uk-slidenav-previous data-uk-slideshow-item="previous" href="#")
@@ -53,6 +53,7 @@ import debounce from 'lodash/debounce'
 import head from 'lodash/head'
 import find from 'lodash/find'
 import CollectionImageItem from '~/components/Catalog/Collection/CollectionImageItem'
+import { getS3ImageUrl } from '~/helpers'
 
 const _debounce = debounce(fn => fn(), 500)
 
@@ -67,8 +68,6 @@ export default {
     }
   },
   data: () => ({
-    baseInteriorImageUrl: `${process.env.baseImageUrl}/show`,
-    baseImageUrl: `${process.env.baseImageUrl}/widen/500`,
     slideOn: false,
     tabOn: false,
     sliderElem: null
@@ -162,6 +161,11 @@ export default {
     clearLastPreview () {
       this.setImageFieldAction({ field: 'lastPreview', value: null })
       this.slideOn = false
+    },
+    getBackgroundUrl (slide) {
+      return getS3ImageUrl({
+        name: slide.background_path
+      })
     }
   }
 }

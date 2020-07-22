@@ -6,10 +6,10 @@
                 id="preview-crop"
                 tabindex="0"
                 :data-caption="imageDataCaption"
-                :href="`${baseImageUrl}/order-full/${preview.width}/${preview.height}/${preview.x}/${preview.y}/${flipH}/${flipV}/${colorize}/${image.path}`"
+                :href="`${localImageEndpoint}/order-full/${preview.width}/${preview.height}/${preview.x}/${preview.y}/${flipH}/${flipV}/${colorize}/${image.path}`"
                 :class="[filter.colorize]",
                 :style="cropStyles")
-                img(:src="`${baseImageUrl}/widen/500/${image.path}`",
+                img(:src="`${localImageEndpoint}/widen/500/${image.path}`",
                     :style="imageStyles"
                     :alt="image.article")
 </template>
@@ -53,7 +53,7 @@ export default {
     container: null,
     maxWidth: null,
     maxHeight: null,
-    baseImageUrl: `${process.env.baseImageUrl}`
+    localImageEndpoint: `${process.env.localImageEndpoint}`
   }),
   computed: {
     orderRatio () {

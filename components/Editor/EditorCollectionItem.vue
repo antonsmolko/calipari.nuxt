@@ -2,11 +2,14 @@
     li.tm-editor__collection-item
         .uk-panel(:class="{'active': isActive }", @click="onClick")
             img(:class="thumbStyle"
-                :src="thumbPath",
-                :alt="item.article")
+                :data-src="thumbPath",
+                :alt="item.article"
+                data-uk-img)
 </template>
 
 <script>
+import { getS3ImageUrl } from '~/helpers'
+
 export default {
   name: 'EditorCollectionItem',
   model: {
@@ -27,17 +30,14 @@ export default {
       default: 'color'
     }
   },
-  data: () => ({
-    baseImageUrl: `${process.env.baseImageUrl}`
-  }),
   computed: {
     isActive () {
       return this.item.id === this.model.id
     },
     thumbPath () {
       return this.type === 'art'
-        ? `${this.baseImageUrl}/heighten/100/${this.item.path}`
-        : `${this.baseImageUrl}/widen/200/${this.item.path}`
+        ? getS3ImageUrl({ name: this.item.path, height: 100 })
+        : getS3ImageUrl({ name: this.item.path, width: 200 })
     },
     thumbStyle () {
       return this.type === 'art'

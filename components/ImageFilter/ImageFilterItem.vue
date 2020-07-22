@@ -2,10 +2,11 @@
     label.tm-filter__item
         .tm-filter__preview(v-if="type")
             template(v-if="type === 'image'")
-                img.uk-box-shadow-medium(
-                    :data-src="`${baseImageUrl}${filter['image_path']}`"
-                    :alt="filter.title"
-                    data-uk-img)
+                uk-image.uk-box-shadow-medium(
+                    :name="filter['image_path']"
+                    :width="120"
+                    :height="80"
+                    :alt="filter.title")
             template(v-else-if="type === 'color'")
                 .tm-filter__color.uk-box-shadow-medium(:style="`background-color: ${filter.alias}`")
             template(v-else-if="type === 'icon'")
