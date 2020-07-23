@@ -599,10 +599,12 @@ $form-range-thumb-background-height: url("data:image/svg+xml,%3Csvg width='20' h
 @mixin thumbWidth() {
   @include thumb();
   background: no-repeat center #444 $form-range-thumb-background-width;
+  background-size: 70%;
 }
 @mixin thumbHeight() {
   @include thumb();
   background: no-repeat center #444 $form-range-thumb-background-height;
+  background-size: 70%;
 }
 
 @mixin hook-form-range-misc() {
@@ -627,6 +629,10 @@ $form-range-thumb-background-height: url("data:image/svg+xml,%3Csvg width='20' h
   }
 
   /* Webkit */
+  .uk-range.range-width::-webkit-slider-thumb {
+    @include thumbWidth();
+  }
+
   .uk-range.range-width::-webkit-slider-thumb {
     @include thumbWidth();
   }

@@ -9,7 +9,9 @@
                 :href="`${localImageEndpoint}/order-full/${preview.width}/${preview.height}/${preview.x}/${preview.y}/${flipH}/${flipV}/${colorize}/${image.path}`"
                 :class="[filter.colorize]",
                 :style="cropStyles")
-                img(:src="`${localImageEndpoint}/widen/500/${image.path}`",
+                uk-image(
+                    :name="image.path"
+                    :width="500"
                     :style="imageStyles"
                     :alt="image.article")
 </template>

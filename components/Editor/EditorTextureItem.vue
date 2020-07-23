@@ -2,7 +2,7 @@
     li.tm-editor__texture-item
         .uk-panel(:class="{'active': isActive }", @click="onClick")
             img.tm-editor__texture-thumb(
-                :data-src="`${localImageEndpoint}/crop/200/200/${item.sample_path}`",
+                :data-src="`${localImageEndpoint}/crop/150/150/${item.sample_path}`",
                 :alt="item.name"
                 data-uk-img)
             span.tm-editor__texture-title.uk-text-truncate {{ item.name }}
