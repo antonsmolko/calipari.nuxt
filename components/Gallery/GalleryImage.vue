@@ -5,7 +5,7 @@
         :data-aspect-ratio="image.ratio"
         :style="`background-image: url('${url}')`")
         .tm-mosaic__image-spinner.uk-text-muted(
-            v-show="1"
+            v-show="true"
             data-uk-spinner="ratio: 2"
             data-no-mosaic="true")
         span.tm-mosaic__inside(v-show="!imgLoaded")
