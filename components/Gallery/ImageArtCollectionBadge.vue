@@ -29,22 +29,22 @@ export default {
         svg {
             rect {
                 &.r1 {
-                    animation: rect-spinner-1 2s infinite linear forwards;
+                    animation: art-mosaic-1 2s infinite linear forwards;
                 }
                 &.r2 {
-                    animation: rect-spinner-2 2s infinite linear forwards;
+                    animation: art-mosaic-2 2s infinite linear forwards;
                 }
                 &.r3 {
-                    animation: rect-spinner-3 2s infinite linear forwards;
+                    animation: art-mosaic-3 2s infinite linear forwards;
                 }
                 &.r4 {
-                    animation: rect-spinner-4 2s infinite linear forwards;
+                    animation: art-mosaic-4 2s infinite linear forwards;
                 }
             }
         }
     }
 }
-@keyframes rect-spinner-1 {
+@keyframes art-mosaic-1 {
     from, to {
         fill: seashell;
     }
@@ -58,7 +58,7 @@ export default {
         fill: darkgrey;
     }
 }
-@keyframes rect-spinner-2 {
+@keyframes art-mosaic-2 {
     from, to {
         fill: darkgrey;
     }
@@ -72,7 +72,7 @@ export default {
         fill: seashell;
     }
 }
-@keyframes rect-spinner-3 {
+@keyframes art-mosaic-3 {
     from, to {
         fill: darkgrey;
     }
@@ -86,7 +86,7 @@ export default {
         fill: darkgrey;
     }
 }
-@keyframes rect-spinner-4 {
+@keyframes art-mosaic-4 {
     from, to {
         fill: darkgrey;
     }

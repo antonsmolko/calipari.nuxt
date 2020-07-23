@@ -33,22 +33,22 @@ export default {
         svg {
             circle {
                 &.c1 {
-                    animation: color-spinner-1 2s infinite linear forwards;
+                    animation: color-mosaic-1 2s infinite linear forwards;
                 }
                 &.c2 {
-                    animation: color-spinner-2 2s infinite linear forwards;
+                    animation: color-mosaic-2 2s infinite linear forwards;
                 }
                 &.c3 {
-                    animation: color-spinner-3 2s infinite linear forwards;
+                    animation: color-mosaic-3 2s infinite linear forwards;
                 }
                 &.c4 {
-                    animation: color-spinner-4 2s infinite linear forwards;
+                    animation: color-mosaic-4 2s infinite linear forwards;
                 }
             }
         }
     }
 }
-@keyframes color-spinner-1 {
+@keyframes color-mosaic-1 {
     from, to {
         fill: deeppink;
     }
@@ -62,7 +62,7 @@ export default {
         fill: yellow;
     }
 }
-@keyframes color-spinner-2 {
+@keyframes color-mosaic-2 {
     from, to {
         fill: yellow;
     }
@@ -76,7 +76,7 @@ export default {
         fill: mediumspringgreen;
     }
 }
-@keyframes color-spinner-3 {
+@keyframes color-mosaic-3 {
     from, to {
         fill: mediumspringgreen;
     }
@@ -90,7 +90,7 @@ export default {
         fill: deepskyblue;
     }
 }
-@keyframes color-spinner-4 {
+@keyframes color-mosaic-4 {
     from, to {
         fill: deepskyblue;
     }
