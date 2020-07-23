@@ -278,7 +278,8 @@ export default {
               zindex: false,
               discardComments: {
                 removeAll: true
-              }
+              },
+              reduceIdents: false
             }]
           }
         })

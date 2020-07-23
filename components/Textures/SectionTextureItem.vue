@@ -16,9 +16,9 @@
                             .tm-textures__spec
                                 span.tm-textures__spec-heading.uk-h4.uk-text-muted Цена —
                                 span.tm-textures__spec-value.uk-text-large {{ cost }} ₽/м<sup>2</sup>
-                    .tm-textures__pattern(class="uk-width-3-4 uk-width-2-5@s" data-uk-lightbox data-uk-scrollspy="cls:uk-animation-slide-bottom-small; delay: 700")
-                        div
-                            a.uk-inline.uk-transition-toggle(:href="textureUrl" tabindex="0" :data-caption="title")
+                    .tm-textures__pattern(class="uk-width-3-4 uk-width-2-5@s" data-uk-scrollspy="cls:uk-animation-slide-bottom-small; delay: 700")
+                        div(data-uk-lightbox)
+                            a.uk-inline.uk-transition-toggle(:href="textureUrl" data-type="image" tabindex="1" :data-caption="title")
                                 uk-image.uk-box-shadow-large(
                                     :name="textureSrc"
                                     :width="600"

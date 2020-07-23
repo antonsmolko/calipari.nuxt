@@ -28,23 +28,24 @@ export default {
         cursor: pointer;
         svg {
             rect {
+                fill: darkgrey;
                 &.r1 {
-                    animation: art-mosaic-1 2s infinite linear forwards;
+                    animation: art-mosaic 2s infinite linear forwards;
                 }
                 &.r2 {
-                    animation: art-mosaic-2 2s infinite linear forwards;
+                    animation: art-mosaic 2s 1s infinite linear forwards;
                 }
                 &.r3 {
-                    animation: art-mosaic-3 2s infinite linear forwards;
+                    animation: art-mosaic 2s .5s infinite linear forwards;
                 }
                 &.r4 {
-                    animation: art-mosaic-4 2s infinite linear forwards;
+                    animation: art-mosaic 2s 1.5s infinite linear forwards;
                 }
             }
         }
     }
 }
-@keyframes art-mosaic-1 {
+@keyframes art-mosaic {
     from, to {
         fill: seashell;
     }
@@ -53,48 +54,6 @@ export default {
     }
     50% {
         fill: darkgrey;
-    }
-    75% {
-        fill: darkgrey;
-    }
-}
-@keyframes art-mosaic-2 {
-    from, to {
-        fill: darkgrey;
-    }
-    25% {
-        fill: darkgrey;
-    }
-    50% {
-        fill: darkgrey;
-    }
-    75% {
-        fill: seashell;
-    }
-}
-@keyframes art-mosaic-3 {
-    from, to {
-        fill: darkgrey;
-    }
-    25% {
-        fill: seashell;
-    }
-    50% {
-        fill: darkgrey;
-    }
-    75% {
-        fill: darkgrey;
-    }
-}
-@keyframes art-mosaic-4 {
-    from, to {
-        fill: darkgrey;
-    }
-    25% {
-        fill: darkgrey;
-    }
-    50% {
-        fill: seashell;
     }
     75% {
         fill: darkgrey;

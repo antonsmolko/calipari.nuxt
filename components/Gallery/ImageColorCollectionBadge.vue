@@ -30,78 +30,36 @@ export default {
         .uk-icon {
             margin: auto;
         }
-        /*svg {*/
-        /*    circle {*/
-                /*&.c1 {*/
-                /*    animation: color-mosaic-1 2s infinite linear forwards;*/
-                /*}*/
-                /*&.c2 {*/
-                /*    animation: color-mosaic-2 2s infinite linear forwards;*/
-                /*}*/
-                /*&.c3 {*/
-                /*    animation: color-mosaic-3 2s infinite linear forwards;*/
-                /*}*/
-                /*&.c4 {*/
-                /*    animation: color-mosaic-4 2s infinite linear forwards;*/
-                /*}*/
-        /*    }*/
-        /*}*/
+        svg {
+            circle {
+                &.c1 {
+                    animation: color-mosaic 2s infinite linear forwards;
+                }
+                &.c2 {
+                    animation: color-mosaic 2s .5s infinite linear forwards;
+                }
+                &.c3 {
+                    animation: color-mosaic 2s 1s infinite linear forwards;
+                }
+                &.c4 {
+                    animation: color-mosaic 2s 1.5s infinite linear forwards;
+                }
+            }
+        }
     }
 }
-/*@keyframes color-mosaic-1 {*/
-/*    from, to {*/
-/*        fill: deeppink;*/
-/*    }*/
-/*    25% {*/
-/*        fill: deepskyblue;*/
-/*    }*/
-/*    50% {*/
-/*        fill: mediumspringgreen;*/
-/*    }*/
-/*    75% {*/
-/*        fill: yellow;*/
-/*    }*/
-/*}*/
-/*@keyframes color-mosaic-2 {*/
-/*    from, to {*/
-/*        fill: yellow;*/
-/*    }*/
-/*    25% {*/
-/*        fill: deeppink;*/
-/*    }*/
-/*    50% {*/
-/*        fill: deepskyblue;*/
-/*    }*/
-/*    75% {*/
-/*        fill: mediumspringgreen;*/
-/*    }*/
-/*}*/
-/*@keyframes color-mosaic-3 {*/
-/*    from, to {*/
-/*        fill: mediumspringgreen;*/
-/*    }*/
-/*    25% {*/
-/*        fill: yellow;*/
-/*    }*/
-/*    50% {*/
-/*        fill: deeppink;*/
-/*    }*/
-/*    75% {*/
-/*        fill: deepskyblue;*/
-/*    }*/
-/*}*/
-/*@keyframes color-mosaic-4 {*/
-/*    from, to {*/
-/*        fill: deepskyblue;*/
-/*    }*/
-/*    25% {*/
-/*        fill: mediumspringgreen;*/
-/*    }*/
-/*    50% {*/
-/*        fill: yellow;*/
-/*    }*/
-/*    75% {*/
-/*        fill: deeppink;*/
-/*    }*/
-/*}*/
+@keyframes color-mosaic {
+    from, to {
+        fill: deeppink;
+    }
+    25% {
+        fill: deepskyblue;
+    }
+    50% {
+        fill: mediumspringgreen;
+    }
+    75% {
+        fill: yellow;
+    }
+}
 </style>
