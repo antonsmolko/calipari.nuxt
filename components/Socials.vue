@@ -10,7 +10,7 @@
 export default {
   methods: {
     socialLogin (service) {
-      window.location.href = `${process.env.baseUrl}auth/login/${service}`
+      window.location.href = `${process.env.baseApiUrl}auth/login/${service}`
     }
   }
 }

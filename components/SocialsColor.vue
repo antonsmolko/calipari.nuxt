@@ -10,7 +10,7 @@ export default {
   methods: {
     onSubmit (service) {
       this.$emit('submit')
-      window.location.href = `${process.env.baseUrl}/api/auth/login/${service}`
+      window.location.href = `${process.env.baseApiUrl}/api/auth/login/${service}`
     }
   }
 }
