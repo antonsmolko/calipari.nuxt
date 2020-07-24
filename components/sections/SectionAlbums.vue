@@ -7,7 +7,7 @@
           h2.uk-heading-small.uk-margin-remove Более 10 000 изображений
           .uk-divider-small
           p.uk-text-large.uk-margin-large-top Каталог по 30 темам, интерьерам и цветовым гаммам на любой вкус
-          a.tm-albums__button.uk-button.uk-button-secondary.uk-button-large.uk-margin-top(href="") Каталог
+          a.tm-albums__button.uk-button.uk-button-secondary.uk-margin-top(href="") Каталог
       .albums-side.albums-right(class="uk-width-expand@s" ref="albumsRight")
 </template>
 

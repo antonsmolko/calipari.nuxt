@@ -24,8 +24,7 @@
                                             module="login"
                                             :vField="$v.form.email"
                                             :vRules="{ required: true, email: true }"
-                                            :vDelay="true"
-                                        )
+                                            :vDelay="true")
                                     .uk-inline.uk-margin.uk-margin-medium-top.uk-width-1-1
                                         .uk-text-center(class="uk-text-left@s")
                                             button.uk-button.uk-button-primary(

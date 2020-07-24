@@ -17,5 +17,5 @@
                 | Нажимая кнопку «Получить макет», я даю согласие на обработку персональных данных и соглашаюсь с&nbsp;
                 nuxt-link(to="/policy") политикой конфиденциальности
               div(class="uk-width-auto@s")
-                button.uk-button.uk-button-large.uk-button-secondary(type="submit") Отправить
+                button.uk-button.uk-button-secondary(type="submit") Отправить
 </template>

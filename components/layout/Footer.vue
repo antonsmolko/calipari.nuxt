@@ -16,7 +16,7 @@
                     a.uk-link-muted(href="#") Использование cookies
                     a.uk-link-muted(href="#") Продажа и возврат
                     a.uk-link-muted(href="#") Карта сайта
-                span.tm-footer__copyright © Aura, 2019. Все права защищены.
+                span.tm-footer__copyright © Calipari, 2020. Все права защищены.
 </template>
 
 <style lang="scss">
