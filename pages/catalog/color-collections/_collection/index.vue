@@ -39,6 +39,7 @@ import CollectionImageItem from '~/components/Catalog/Collection/CollectionImage
 import setLayout from '~/components/mixins/setLayout'
 import scrollToTop from '~/components/mixins/scrollToTop'
 import scrollToImage from '~/components/mixins/scrollToImage'
+import { getS3ImageUrl } from '~/helpers'
 
 export default {
   name: 'ColorCollection',
@@ -84,7 +85,7 @@ export default {
     },
     url () {
       return this.backgroundPath
-        ? `${process.env.baseImageUrl}/grayscale/${this.backgroundPath}`
+        ? getS3ImageUrl({ name: this.backgroundPath, grayscale: true })
         : ''
     }
   },

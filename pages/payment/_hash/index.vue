@@ -44,11 +44,10 @@ export default {
     await this.createPaymentAction(hash)
     this.checkout = await new window.YandexCheckout({
       confirmation_token: this.payment.confirmation.confirmation_token, // Токен, который перед проведением оплаты нужно получить от Яндекс.Кассы
-      return_url: 'http://localhost:3000/payment/complete' // Ссылка на страницу завершения оплаты
-      // error_callback (error) {
-      // Обработка ошибок инициализации
-      // console.log(error)
-      // }
+      return_url: 'https://localhost:3000/payment/complete', // Ссылка на страницу завершения оплаты
+      error_callback (error) {
+        throw error
+      }
     })
 
     await this.checkout.render('payment-form')
