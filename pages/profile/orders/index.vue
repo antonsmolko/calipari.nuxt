@@ -62,7 +62,7 @@ export default {
       createPaymentAction: 'payment/create'
     }),
     onPay (hash) {
-      this.$router.push(`/payment/${hash}`)
+      this.$router.push({ path: '/payment', query: { hash } })
     },
     onCancel (number) {
       this.cancelOrderAction(number)

@@ -103,7 +103,8 @@ export default {
   methods: {
     ...mapActions({
       cancelOrderAction: 'profile/cancelOrder',
-      addNotificationAction: 'notifications/addItem'
+      addNotificationAction: 'notifications/addItem',
+      setProcessFieldAction: 'payment/setProcessField'
     }),
     onClose () {
       this.$router.push('/profile/orders')
@@ -112,7 +113,9 @@ export default {
       return getFormatPrice(price)
     },
     onPay () {
-      this.$router.push(`/payment/${this.order.hash_number}`)
+      this.setProcessFieldAction({ field: 'paymentHash', value: this.order.hash_number })
+      this.setProcessFieldAction({ field: 'status', value: 'enabled' })
+      this.$router.push('/payment/')
     },
     onCancel () {
       this.cancelOrderAction(this.order.number)

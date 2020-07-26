@@ -15,10 +15,11 @@ export default function ({ $axios, store, redirect }, inject) {
   inject('api', api)
 
   api.onResponse((response) => {
-    if (response.data.message) {
+    if (response.data.message && response.data.type !== 'modal') {
       store.dispatch('notifications/addItem', {
         message: response.data.message,
-        status: response.data.status
+        status: response.data.status,
+        timeout: response.data.timeout || null
       })
     }
   })
@@ -51,7 +52,7 @@ export default function ({ $axios, store, redirect }, inject) {
         })
     }
 
-    return Promise.reject(error)
+    // return Promise.reject(error)
   })
 
   api.onRequest(() => {

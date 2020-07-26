@@ -43,6 +43,7 @@ export default {
     const hash = this.$route.params.hash
     await this.createPaymentAction(hash)
     this.checkout = await new window.YandexCheckout({
+      language: 'ru',
       confirmation_token: this.payment.confirmation.confirmation_token, // Токен, который перед проведением оплаты нужно получить от Яндекс.Кассы
       return_url: `${process.env.baseUrl}/payment/complete`, // Ссылка на страницу завершения оплаты
       error_callback (error) {

@@ -1,4 +1,4 @@
-import { isFieldLengthValid, isPhoneValid } from '../helpers'
+import { isFieldLengthValid, isPhoneValid } from '~/helpers'
 import { form } from '~/plugins/config'
 const isLengthValid = isFieldLengthValid(form.BASE_MIN_LENGTH)
 

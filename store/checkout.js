@@ -23,7 +23,9 @@ export const state = () => ({
   pickup: null,
   comment: '',
   deliveryPrice: 0,
-  version: 1
+  defaultCreditCard: null,
+  paymentMethodId: null,
+  version: 2
 })
 
 export const mutations = {

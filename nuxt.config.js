@@ -148,7 +148,6 @@ export default {
     baseURL: `${baseApiUrl}/api`,
     https: true,
     credentials: true
-    // proxy: true
   },
   // proxy: {
   //   '/api/': 'https://manager.calipari.ru/api'

@@ -28,6 +28,9 @@ const _throttle = throttle(fn => fn(), 50)
 
 export default {
   name: 'Default',
+  middleware: ({ $auth }) => {
+    refreshTokens($auth)
+  },
   components: {
     EditorNavbarContent,
     TopBar,
@@ -76,13 +79,10 @@ export default {
       }
     }
   },
-  async mounted () {
+  mounted () {
     this.handleResize()
     window.addEventListener('resize', this.handleResize)
 
-    if (this.$auth.loggedIn) {
-      await refreshTokens(this.$auth)
-    }
     this.setThemeByTimePeriod()
     this.timeInterval = setInterval(() => {
       this.setThemeByTimePeriod()

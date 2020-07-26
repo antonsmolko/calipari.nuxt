@@ -17,11 +17,7 @@ const Responsive = {
       },
       methods: {
         onResponsiveInverted () {
-          if (window.innerWidth < 1200) {
-            this.responsive = true
-          } else {
-            this.responsive = false
-          }
+          this.responsive = window.innerWidth < 1200
         }
       }
     })

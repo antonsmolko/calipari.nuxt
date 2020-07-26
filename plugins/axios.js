@@ -2,10 +2,11 @@ import errorsLibrary from '~/plugins/lang/ru/errorsLib'
 
 export default function ({ $axios, store, redirect }) {
   $axios.onResponse((response) => {
-    if (response.data.message) {
+    if (response.data.message && response.data.type !== 'modal') {
       store.dispatch('notifications/addItem', {
         message: response.data.message,
-        status: response.data.status
+        status: response.data.status,
+        timeout: response.data.timeout || null
       })
     }
   })
@@ -37,8 +38,6 @@ export default function ({ $axios, store, redirect }) {
           status: 'danger'
         })
     }
-
-    return Promise.reject(error)
   })
 
   $axios.onRequest(() => {
