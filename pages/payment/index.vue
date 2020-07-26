@@ -63,6 +63,17 @@ export default {
     },
     created () {
       return this.paymentStatus === 'created'
+    },
+    colorScheme () {
+      return this.darkPeriod
+        ? {
+          background: '#222222',
+          controlPrimaryContent: '#FFFFFF',
+          controlSecondary: '#666666',
+          border: '#444444',
+          text: '#DBDCE0'
+        }
+        : {}
     }
   },
   watch: {
@@ -82,8 +93,14 @@ export default {
 
       this.checkout = await new window.YandexCheckout({
         language: 'ru',
-        confirmation_token: confirmationToken, // Токен, который перед проведением оплаты нужно получить от Яндекс.Кассы
-        return_url: `${process.env.baseUrl}/payment/complete?token=${confirmationToken}&id=${this.payment.id}`, // Ссылка на страницу завершения оплаты
+        confirmation_token: confirmationToken,
+        return_url: `${process.env.baseUrl}/payment/complete?token=${confirmationToken}&id=${this.payment.id}`,
+        customization: {
+          colors: {
+            controlPrimary: '#1E90FF',
+            ...this.colorScheme
+          }
+        },
         error_callback (error) {
           throw error
         }
