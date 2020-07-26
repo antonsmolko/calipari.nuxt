@@ -31,13 +31,14 @@ export const actions = {
   getPaymentRespond ({ commit }, id) {
     return this.$api.$get(`payment/${id}`)
       .then((response) => {
-        if (response.paymentMethodId) {
-          commit('checkout/SET_FIELD', {
-            field: 'paymentMethodId',
-            value: response.paymentMethodId
-          }, { root: true })
-        }
-        return response
+        console.log(response)
+        // if (response.paymentMethodId) {
+        //   commit('checkout/SET_FIELD', {
+        //     field: 'paymentMethodId',
+        //     value: response.paymentMethodId
+        //   }, { root: true })
+        // }
+        // return response
       })
   },
   setField ({ commit }, payload) {
