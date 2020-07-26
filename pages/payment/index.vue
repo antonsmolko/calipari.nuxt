@@ -67,10 +67,10 @@ export default {
     colorScheme () {
       return this.darkPeriod
         ? {
-          background: '#222222',
+          background: '#343434',
           controlPrimaryContent: '#FFFFFF',
           controlSecondary: '#666666',
-          border: '#444444',
+          border: '#666666',
           text: '#DBDCE0'
         }
         : {}
