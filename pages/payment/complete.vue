@@ -54,8 +54,9 @@ export default {
     dialogOpen (response) {
       const modal = this.$uikit.modal
       const content = `
-        <p class="uk-text-large uk-text-danger">${response.title}</p>
-        <p class="tm-text-medium uk-text-danger">${response.content}</p>`
+        <h2 class="uk-modal-title uk-text-danger">${response.title}</h2>
+        <span class="tm-text-medium uk-text-danger">${response.content}</span>
+        `
 
       modal.labels = {
         ok: 'Повторить',
