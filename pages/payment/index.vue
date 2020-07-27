@@ -68,7 +68,6 @@ export default {
       return this.darkPeriod
         ? {
           background: '#343434',
-          controlPrimaryContent: '#FFFFFF',
           controlSecondary: '#666666',
           border: '#666666',
           text: '#DBDCE0'
@@ -98,6 +97,7 @@ export default {
         customization: {
           colors: {
             controlPrimary: '#1E90FF',
+            controlPrimaryContent: '#FFFFFF',
             ...this.colorScheme
           }
         },

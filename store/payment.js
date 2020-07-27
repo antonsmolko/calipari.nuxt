@@ -38,7 +38,7 @@ export const actions = {
         //     value: response.paymentMethodId
         //   }, { root: true })
         // }
-        // return response
+        return response
       })
   },
   setField ({ commit }, payload) {
