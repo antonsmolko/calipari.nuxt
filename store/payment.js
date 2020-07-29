@@ -17,15 +17,15 @@ export const mutations = {
 }
 
 export const actions = {
-  create ({ commit }, { hash, paymentMethodId = null }) {
-    return this.$api.$post('/payment/create', { hash, paymentMethodId })
+  pay ({ commit }, { hash, paymentMethodId = null }) {
+    return this.$api.$post('/orders/pay', { hash, paymentMethodId })
       .then((response) => {
         commit('SET_FIELD', { field: 'status', value: response.status })
         commit('SET_ITEM', response.payment)
       })
   },
-  confirmCompleted ({ commit }, token) {
-    return this.$api.$get(`payment/completion-confirmation/${token}`)
+  confirmation ({ commit }, token) {
+    return this.$api.$get(`orders/payment-confirmation/${token}`)
       .then(response => commit('SET_FIELD', { field: 'orderNumber', value: response }))
   },
   getPaymentRespond ({ commit }, id) {

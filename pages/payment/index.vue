@@ -41,7 +41,7 @@ export default {
     }
   },
   async fetch () {
-    await this.$store.dispatch('payment/create', {
+    await this.$store.dispatch('payment/pay', {
       hash: this.$route.query.hash,
       paymentMethodId: this.$store.state.checkout.paymentMethodId
     })

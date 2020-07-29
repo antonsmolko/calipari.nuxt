@@ -25,7 +25,7 @@ export default {
   async fetch () {
     const routeQuery = this.$route.query
 
-    await this.$store.dispatch('payment/confirmCompleted', routeQuery.token)
+    await this.$store.dispatch('payment/confirmation', routeQuery.token)
     await this.$store.dispatch('payment/getPaymentRespond', routeQuery.id)
       .then((response) => {
         if (response.status === 'canceled') {
