@@ -42,10 +42,10 @@
                                 p {{ getSettingValueByKey('pickup_1') }}
                                 p {{ getSettingValueByKey('pickup_2') }}
                                 h3.uk-h3.uk-text-primary Свяжитесь с нами
-                                a.uk-link.uk-link-muted.uk-display-block(
+                                a.uk-link.uk-link-muted.uk-display-block.tm-text-medium(
                                     :href="`tel:${phone}`")
                                     | {{ phoneFormat }}
-                                a.uk-link.uk-link-muted.uk-display-block(
+                                a.uk-link.uk-link-muted.uk-display-block.tm-text-medium(
                                     :href="`mail:${getSettingValueByKey('company_email')}`")
                                     | {{ getSettingValueByKey('company_email') }}
                                 h3.uk-h3.uk-text-primary Подписывайтесь на нас
