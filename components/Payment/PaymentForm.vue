@@ -36,8 +36,8 @@ export default {
       return this.darkPeriod
         ? {
           background: '#343434',
-          controlSecondary: '#666666',
-          border: '#666666',
+          controlSecondary: '#444444',
+          border: '#444444',
           text: '#DBDCE0'
         }
         : {}
