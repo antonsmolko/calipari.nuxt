@@ -1,8 +1,7 @@
 <template lang="pug">
   .uk-position-relative
     #payment-form
-    .uk-position-top.uk-flex.uk-flex-center.uk-flex-column(v-show="creating")
-      span.uk-text-large.uk-text-muted Подождите. Загружается форма...
+    .uk-position-top.uk-flex.uk-flex-middle(v-show="creating")
       .uk-margin-auto.uk-text-muted(data-uk-spinner="ratio: 3")
 </template>
 

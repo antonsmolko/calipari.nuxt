@@ -3,7 +3,7 @@
     template(#main)
       main(:class="{ 'uk-light': darkPeriod }")
         SlideYDownTransition
-          section.uk-section.uk-text-center(v-show="!$fetchState.pending")
+          section.uk-section.uk-text-center(v-show="!$fetchState.pending && order")
             .uk-container
               .uk-margin-large-bottom
                 h1.uk-heading-small.uk-margin-remove Оплата
