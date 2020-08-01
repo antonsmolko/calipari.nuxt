@@ -1,7 +1,7 @@
 <template lang="pug">
   .uk-position-relative
     #payment-form
-    .uk-position-top.uk-flex.uk-flex-center.uk-flex-column(v-show="!initiated")
+    .uk-position-top.uk-flex.uk-flex-center.uk-flex-column(v-show="creating")
       span.uk-text-large.uk-text-muted Подождите. Загружается форма...
       .uk-margin-auto.uk-text-muted(data-uk-spinner="ratio: 3")
 </template>
@@ -30,8 +30,8 @@ export default {
       paymentStatus: state => state.payment.status,
       cards: state => state.checkout.savedPayments
     }),
-    initiated () {
-      return this.paymentStatus === 'initiated'
+    creating () {
+      return this.paymentStatus === 'creating'
     },
     colorScheme () {
       return this.darkPeriod
@@ -84,6 +84,7 @@ export default {
     },
     async formEnabled () {
       if (this.enable && this.paymentStatus === 'enabled') {
+        this.setPaymentFieldAction({ field: 'status', value: 'creating' })
         await this.createAction(this.orderNumber)
         await this.initializeYandexWidget()
       }
