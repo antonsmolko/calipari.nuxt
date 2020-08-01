@@ -85,7 +85,7 @@ export default {
     }
   },
   watch: {
-    cardsLength () {
+    cardLength () {
       if (!this.cardLength && this.paymentStatus === 'enabled') {
         this.formEnable = true
       }
