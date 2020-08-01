@@ -5,13 +5,21 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'Page',
   computed: {
     ...mapState({
       footer: state => state.footer
+    })
+  },
+  beforeDestroy () {
+    this.clearItemFieldsAction()
+  },
+  methods: {
+    ...mapActions('pages', {
+      clearItemFieldsAction: 'clearItemFields'
     })
   }
 }

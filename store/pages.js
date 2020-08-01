@@ -1,27 +1,29 @@
 export const state = () => ({
-  title: '',
-  alias: '',
-  long_title: '',
-  content: '',
-  image_path: '',
-  description: '',
-  keywords: ''
+  fields: {
+    title: '',
+    alias: '',
+    long_title: '',
+    content: '',
+    image_path: '',
+    description: '',
+    keywords: ''
+  }
 })
 
 export const mutations = {
-  SET_FIELDS (state, payload) {
+  SET_ITEM_FIELDS (state, payload) {
     for (const [field, value] of Object.entries(payload)) {
-      if (Object.hasOwnProperty.call(state, field)) {
-        state[field] = value !== null ? value : ''
+      if (Object.hasOwnProperty.call(state.fields, field)) {
+        state.fields[field] = value !== null ? value : ''
       }
     }
   },
-  SET_FIELD (state, { field, value }) {
-    state[field] = value
+  SET_ITEM_FIELD (state, { field, value }) {
+    state.fields[field] = value
   },
-  CLEAR_FIELDS (state) {
-    for (const field of Object.keys(state)) {
-      state[field] = ''
+  CLEAR_ITEM_FIELDS (state) {
+    for (const field of Object.keys(state.fields)) {
+      state.fields[field] = ''
     }
   }
 }
@@ -29,10 +31,10 @@ export const mutations = {
 export const actions = {
   getItem ({ commit }, page) {
     return this.$api.$get(`/pages/${page}`)
-      .then(response => commit('SET_FIELDS', response))
+      .then(response => commit('SET_ITEM_FIELDS', response))
   },
-  clearFields ({ commit }) {
-    commit('CLEAR_FIELDS')
+  clearItemFields ({ commit }) {
+    commit('CLEAR_ITEM_FIELDS')
   }
 }
 

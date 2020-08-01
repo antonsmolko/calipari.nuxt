@@ -33,9 +33,9 @@ export default {
     if (!category) {
       await this.$router.push('/notfound')
     } else {
-      this.$store.dispatch('categories/setField', { field: 'item', value: category })
+      await this.$store.dispatch('categories/setField', { field: 'item', value: category })
       await this.$store.dispatch('tags/getItemsByCategoryId', category.id)
-      this.$store.dispatch('setField', { field: 'pageTitle', value: category.title })
+      await this.$store.dispatch('setField', { field: 'pageTitle', value: category.title })
     }
   },
   computed: {

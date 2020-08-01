@@ -57,7 +57,7 @@ export default {
     if (!this.$route.params.collection) {
       await this.$router.push('/notfound')
     }
-    this.$store.dispatch('artCollections/setField', { field: 'item', value: null })
+    await this.$store.dispatch('artCollections/setField', { field: 'item', value: null })
     await this.$store.dispatch('artCollections/getItem', this.$route.params.collection)
       .then((response) => {
         this.setFieldAction({ field: 'pageTitle', value: response.title })

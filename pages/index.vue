@@ -78,7 +78,7 @@ export default {
     ...mapState({
       purchaseSteps: state => state.home.purchaseSteps,
       interiors: state => state.home.interiors,
-      page: state => state.pages,
+      page: state => state.pages.fields,
       scrollTo: state => state.scrollTo
     })
   },

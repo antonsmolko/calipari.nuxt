@@ -1,26 +1,48 @@
 <template lang="pug">
-    Page
-        template(#main)
-            main(:class="{ 'uk-light': darkPeriod }")
-                section.uk-section.uk-text-center
-                    .uk-container
-                        .uk-margin-large-bottom
-                            h1.uk-heading-small.uk-margin-remove Оплата
-                            span.uk-text-lead(v-if="initiated") {{ payment.description }}
-                            .uk-divider-small
-                        .uk-position-relative
-                            #payment-form(v-show="initiated")
-                            .uk-position-top.uk-flex.uk-flex-middle(v-show="!initiated && !paid")
-                                .uk-margin-auto.uk-text-muted(data-uk-spinner="ratio: 3")
-                            SlideYDownTransition
-                                div(v-if="paid")
-                                    p.tm-text-medium Заказ уже оплачен!
-                                    nuxt-link.uk-button.uk-button-primary.uk-margin-medium-top(to="/") На главную
+  Page
+    template(#main)
+      main(:class="{ 'uk-light': darkPeriod }")
+        SlideYDownTransition
+          section.uk-section.uk-text-center(v-show="!$fetchState.pending")
+            .uk-container
+              .uk-margin-large-bottom
+                h1.uk-heading-small.uk-margin-remove Оплата
+                span.uk-text-lead Заказ № {{ order.number }}
+                .uk-divider-small
+              .uk-position-relative
+                template(v-if="!paid")
+                  .uk-flex.uk-flex-center(v-if="cardLength")
+                    ul.uk-tab(data-uk-tab="connect: #payments-tab-content; animation: uk-animation-fade")
+                      li.tm-tab__item(@click="handleTabClick('cards')")
+                        a(href="#") Мои карты
+                      li.tm-tab__item(@click="handleTabClick('kassa')")
+                        a(href="#") Яндекс.Касса
+                  ul.uk-switcher(v-if="cardLength" id="payments-tab-content")
+                    li
+                      payment-cards(
+                        v-if="order.price"
+                        :cards="cards"
+                        :amount="order.price"
+                        :paymentProcess="paymentProcess"
+                        @pay="payWithId")
+                    li(v-if="order.number")
+                      payment-form(:enable="formEnable" :orderNumber="order.number")
+                  payment-form(
+                    v-if="!cardLength && order.number"
+                    :orderNumber="order.number"
+                    :enable="formEnable")
+                SlideYDownTransition
+                  div(v-if="paid")
+                    p.tm-text-medium Заказ уже оплачен!
+                    nuxt-link.uk-button.uk-button-primary.uk-margin-medium-top(to="/") На главную
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import Page from '~/components/layout/Page.vue'
+import head from 'lodash/head'
+import Page from '@/components/layout/Page.vue'
+import PaymentCards from '@/components/Payment/Cards/PaymentCards'
+import PaymentForm from '@/components/Payment/PaymentForm'
 
 export default {
   middleware ({ route, redirect }) {
@@ -31,7 +53,7 @@ export default {
     }
   },
   scrollToTop: true,
-  components: { Page },
+  components: { Page, PaymentCards, PaymentForm },
   metaInfo () {
     return {
       script: [
@@ -41,76 +63,65 @@ export default {
     }
   },
   async fetch () {
-    await this.$store.dispatch('payment/pay', {
-      hash: this.$route.query.hash,
-      paymentMethodId: this.$store.state.checkout.paymentMethodId
-    })
+    await this.$store.dispatch('profile/getOrderByHashForPayment', this.$route.query.hash)
   },
   data: () => ({
-    checkout: null,
-    responseData: false
+    formEnable: false,
+    paymentProcess: false
   }),
   computed: {
-    ...mapState('payment', {
-      payment: state => state.item,
-      paymentStatus: state => state.status
+    ...mapState({
+      payment: state => state.payment.item,
+      cards: state => state.checkout.savedPayments,
+      tabName: state => state.payment.tabName,
+      order: state => state.profile.order,
+      paymentStatus: state => state.payment.status
     }),
-    initiated () {
-      return this.paymentStatus === 'initiated'
-    },
     paid () {
       return this.paymentStatus === 'paid'
     },
-    created () {
-      return this.paymentStatus === 'created'
-    },
-    colorScheme () {
-      return this.darkPeriod
-        ? {
-          background: '#343434',
-          controlSecondary: '#666666',
-          border: '#666666',
-          text: '#DBDCE0'
-        }
-        : {}
+    cardLength () {
+      return this.cards.length
     }
   },
   watch: {
-    paymentStatus () {
-      if (this.created) {
-        this.initializeYandexWidget()
+    cardsLength () {
+      if (!this.cardLength && this.paymentStatus === 'enabled') {
+        this.formEnable = true
       }
+    }
+  },
+  created () {
+    if (this.cardLength) {
+      const value = head(this.cards).id
+      this.setPaymentFieldAction({ field: 'selectedPaymentId', value })
+      this.setPaymentFieldAction({ field: 'tabName', value: 'cards' })
+    } else {
+      this.formEnable = true
     }
   },
   methods: {
     ...mapActions('payment', {
-      createPaymentAction: 'create',
-      setPaymentFieldAction: 'setField'
+      setPaymentFieldAction: 'setField',
+      payWithIdAction: 'createWithId'
     }),
-    async initializeYandexWidget () {
-      const confirmationToken = this.payment.confirmation.confirmation_token
-
-      this.checkout = await new window.YandexCheckout({
-        language: 'ru',
-        confirmation_token: confirmationToken,
-        return_url: `${process.env.baseUrl}/payment/complete?token=${confirmationToken}&id=${this.payment.id}`,
-        customization: {
-          colors: {
-            controlPrimary: '#1E90FF',
-            controlPrimaryContent: '#FFFFFF',
-            ...this.colorScheme
+    handleTabClick (value) {
+      if (value === 'kassa' && this.paymentStatus !== 'initiated') {
+        this.formEnable = true
+      }
+    },
+    payWithId () {
+      this.paymentProcess = true
+      this.payWithIdAction(this.order.number)
+        .then((response) => {
+          this.paymentProcess = false
+          if (response.status === 'success') {
+            this.$router.push('/')
           }
-        },
-        error_callback (error) {
-          throw error
-        }
-      })
-      await this.checkout.render('payment-form')
-      this.setPaymentFieldAction({ field: 'status', value: 'initiated' })
+        })
     }
   },
   beforeRouteLeave (to, from, next) {
-    this.setPaymentFieldAction({ field: 'item', value: null })
     this.setPaymentFieldAction({ field: 'status', value: null })
     next()
   }

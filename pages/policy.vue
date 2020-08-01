@@ -51,7 +51,7 @@ export default {
   },
   computed: {
     ...mapState({
-      page: state => state.pages
+      page: state => state.pages.fields
     })
   },
   created () {

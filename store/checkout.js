@@ -1,6 +1,9 @@
 import omit from 'lodash/omit'
+import uniqWith from 'lodash/uniqWith'
+import isEqual from 'lodash/isEqual'
 import { getFilterDetailsString, isFieldLengthValid } from '../helpers'
 import { form } from '~/plugins/config'
+const isCardEqual = (object, other) => isEqual(omit(object, 'id'), omit(other, 'id'))
 
 const isLengthValid = isFieldLengthValid(form.BASE_MIN_LENGTH)
 
@@ -24,7 +27,7 @@ export const state = () => ({
   comment: '',
   deliveryPrice: 0,
   defaultCreditCard: null,
-  paymentMethodId: null,
+  savedPayments: [],
   version: 2
 })
 
@@ -52,6 +55,12 @@ export const mutations = {
   ENABLE (state, { createdAt, price }) {
     state.enabled = true
     state.createdAt = createdAt
+  },
+  ADD_PAYMENT (state, payment) {
+    state.savedPayments = uniqWith([...state.savedPayments, payment], isCardEqual)
+  },
+  DELETE_PAYMENT (state, id) {
+    state.savedPayments = state.savedPayments.filter(payment => payment.id !== id)
   }
 }
 
@@ -81,6 +90,9 @@ export const actions = {
         status: 'success',
         message: `Поздравляем! Ваш заказ № ${response} создан. Мы скоро с Вами свяжемся для уточнения деталей.`
       }, { root: true }))
+  },
+  deletePayment ({ commit }, id) {
+    commit('DELETE_PAYMENT', id)
   }
 }
 

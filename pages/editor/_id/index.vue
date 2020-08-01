@@ -109,7 +109,7 @@ export default {
   },
   mixins: [scrollToTop, closeEditorMethods],
   async fetch () {
-    this.$store.dispatch('setFields', {
+    await this.$store.dispatch('setFields', {
       pageTitle: 'Редактор',
       bottomBar: false,
       footer: false,

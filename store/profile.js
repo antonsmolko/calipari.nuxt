@@ -108,6 +108,13 @@ export const actions = {
     })
       .then(response => commit('SET_ORDER', response))
   },
+  getOrderByHashForPayment ({ commit }, hash) {
+    return this.$api.$get(`/orders/${hash}`)
+      .then((response) => {
+        commit('SET_ORDER', response.order)
+        commit('payment/SET_FIELD', { field: 'status', value: response.status }, { root: true })
+      })
+  },
   cancelOrder ({ commit }, number) {
     const token = this.$auth.strategy.token.get()
 

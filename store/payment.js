@@ -2,7 +2,9 @@ export const state = () => ({
   item: {},
   status: null,
   orderNumber: null,
-  info: {}
+  info: {},
+  tabName: 'kassa',
+  selectedPaymentId: null
 })
 
 export const mutations = {
@@ -17,12 +19,16 @@ export const mutations = {
 }
 
 export const actions = {
-  pay ({ commit }, { hash, paymentMethodId = null }) {
-    return this.$api.$post('/orders/pay', { hash, paymentMethodId })
+  create ({ commit }, number) {
+    return this.$api.$get(`/orders/${number}/pay`)
       .then((response) => {
         commit('SET_FIELD', { field: 'status', value: response.status })
         commit('SET_ITEM', response.payment)
       })
+  },
+  createWithId ({ state }, orderNumber) {
+    return this.$api.$get(`/orders/${orderNumber}/pay-with-id/${state.selectedPaymentId}`)
+      .then(response => response)
   },
   confirmation ({ commit }, token) {
     return this.$api.$get(`orders/payment-confirmation/${token}`)
@@ -31,13 +37,9 @@ export const actions = {
   getPaymentRespond ({ commit }, id) {
     return this.$api.$get(`payment/${id}`)
       .then((response) => {
-        console.log(response)
-        // if (response.paymentMethodId) {
-        //   commit('checkout/SET_FIELD', {
-        //     field: 'paymentMethodId',
-        //     value: response.paymentMethodId
-        //   }, { root: true })
-        // }
+        if (response.payment) {
+          commit('checkout/ADD_PAYMENT', response.payment, { root: true })
+        }
         return response
       })
   },

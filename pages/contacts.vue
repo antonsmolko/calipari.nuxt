@@ -43,7 +43,7 @@
                                 p {{ getSettingValueByKey('pickup_2') }}
                                 h3.uk-h3.uk-text-primary Свяжитесь с нами
                                 a.uk-link.uk-link-muted.uk-display-block.tm-text-medium(
-                                    :href="`tel:${phone}`")
+                                    :href="`tel:${getSettingValueByKey('company_phone')}`")
                                     | {{ phoneFormat }}
                                 a.uk-link.uk-link-muted.uk-display-block.tm-text-medium(
                                     :href="`mail:${getSettingValueByKey('company_email')}`")
