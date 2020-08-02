@@ -1,7 +1,7 @@
 <template lang="pug">
-  .tm-payment-card-list
+  .tm-payment__cards
     .uk-grid.uk-grid-small.uk-flex-column.uk-flex-middle(data-uk-grid)
-      payment-card(
+      payment-card.uk-width-xlarge(
         v-for="card in cards"
         :key="cards.id"
         :item="card"
@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      deletePaymentActions: 'checkout/deletePayment',
+      deleteCardAction: 'checkout/deleteCard',
       setPaymentFieldAction: 'payment/setField'
     }),
     handleChange (id) {
@@ -77,7 +77,7 @@ export default {
 
       modal.confirm(this.confirmContent)
         .then(() => {
-          this.deletePaymentActions(id)
+          this.deleteCardAction(id)
           if (this.cards.length && this.selectedPaymentId === id) {
             const value = head(this.cards).id
             this.setPaymentFieldAction({ field: 'selectedPaymentId', value })
@@ -88,8 +88,13 @@ export default {
 }
 </script>
 
-<style scoped>
-.tm-payment-card-list {
+<style lang="scss" scoped>
+.tm-payment__cards {
   padding-top: 5px;
+}
+.tm-payment-card {
+  &:not(:first-child) {
+    margin-top: $global-small-gutter;
+  }
 }
 </style>

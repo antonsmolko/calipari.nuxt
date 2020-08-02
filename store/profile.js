@@ -48,8 +48,10 @@ export const mutations = {
   SET_ORDERS (state, payload) {
     state.orders = payload
   },
-  SET_ORDER (state, payload) {
-    state.order = payload
+  SET_FIELD (state, { field, value }) {
+    if (Object.hasOwnProperty.call(state, field)) {
+      state[field] = value
+    }
   },
   UPDATE_ORDERS (state, payload) {
     state.orders = state.orders.map((order) => {
@@ -106,13 +108,13 @@ export const actions = {
     return this.$api.$get(`/profile/orders/${number}`, {
       headers: { Authorization: token }
     })
-      .then(response => commit('SET_ORDER', response))
+      .then(response => commit('SET_FIELD', { field: 'order', value: response }))
   },
   getOrderByHashForPayment ({ commit }, hash) {
     return this.$api.$get(`/orders/${hash}`)
       .then((response) => {
-        commit('SET_ORDER', response.order)
-        commit('payment/SET_FIELD', { field: 'status', value: response.status }, { root: true })
+        commit('SET_FIELD', { field: 'order', value: response.order })
+        return response
       })
   },
   cancelOrder ({ commit }, number) {
@@ -122,7 +124,7 @@ export const actions = {
       headers: { Authorization: token }
     })
       .then((response) => {
-        commit('SET_ORDER', response)
+        commit('SET_FIELD', { field: 'order', value: response })
         commit('UPDATE_ORDERS', response)
       })
   },

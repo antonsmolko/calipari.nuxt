@@ -11,13 +11,13 @@
                 .uk-divider-small
               .uk-position-relative
                 template(v-if="!paid")
-                  .uk-flex.uk-flex-center(v-if="cardLength")
+                  .uk-flex.uk-flex-center(v-if="cardsLength")
                     ul.uk-tab(data-uk-tab="connect: #payments-tab-content; animation: uk-animation-fade")
                       li.tm-tab__item(@click="handleTabClick('cards')")
                         a(href="#") Мои карты
-                      li.tm-tab__item(@click="handleTabClick('kassa')")
+                      li.tm-tab__item(@click="handleTabClick('form')")
                         a(href="#") Яндекс.Касса
-                  ul.uk-switcher(v-if="cardLength" id="payments-tab-content")
+                  ul.uk-switcher(v-if="cardsLength" id="payments-tab-content")
                     li
                       payment-cards(
                         v-if="order.price"
@@ -28,7 +28,7 @@
                     li(v-if="order.number")
                       payment-form(:enable="formEnable" :orderNumber="order.number")
                   payment-form(
-                    v-if="!cardLength && order.number"
+                    v-if="!cardsLength && order.number"
                     :orderNumber="order.number"
                     :enable="formEnable")
                 SlideYDownTransition
@@ -64,6 +64,10 @@ export default {
   },
   async fetch () {
     await this.$store.dispatch('profile/getOrderByHashForPayment', this.$route.query.hash)
+      .then(response => this.$store.commit('payment/SET_FIELD', {
+        field: 'status',
+        value: response.status
+      }))
   },
   data: () => ({
     formEnable: false,
@@ -72,30 +76,29 @@ export default {
   computed: {
     ...mapState({
       payment: state => state.payment.item,
-      cards: state => state.checkout.savedPayments,
-      tabName: state => state.payment.tabName,
+      cards: state => state.checkout.cards,
       order: state => state.profile.order,
       paymentStatus: state => state.payment.status
     }),
     paid () {
       return this.paymentStatus === 'paid'
     },
-    cardLength () {
+    cardsLength () {
       return this.cards.length
     }
   },
   watch: {
-    cardLength () {
-      if (!this.cardLength && this.paymentStatus === 'enabled') {
+    cardsLength () {
+      if (!this.cardsLength) {
+        this.setPaymentFieldAction({ field: 'status', value: 'enabled' })
         this.formEnable = true
       }
     }
   },
   created () {
-    if (this.cardLength) {
+    if (this.cardsLength) {
       const value = head(this.cards).id
       this.setPaymentFieldAction({ field: 'selectedPaymentId', value })
-      this.setPaymentFieldAction({ field: 'tabName', value: 'cards' })
     } else {
       this.formEnable = true
     }
@@ -106,7 +109,7 @@ export default {
       payWithIdAction: 'createWithId'
     }),
     handleTabClick (value) {
-      if (value === 'kassa' && this.paymentStatus !== 'initiated') {
+      if (value === 'form' && this.paymentStatus !== 'initiated') {
         this.formEnable = true
       }
     },

@@ -1,7 +1,7 @@
 <template lang="pug">
   .uk-position-relative
     #payment-form
-    .uk-position-top.uk-flex.uk-flex-middle(v-show="creating")
+    .uk-position-top.uk-flex.uk-flex-middle.uk-margin-medium-top(v-show="creating")
       .uk-margin-auto.uk-text-muted(data-uk-spinner="ratio: 3")
 </template>
 
@@ -27,7 +27,7 @@ export default {
     ...mapState({
       payment: state => state.payment.item,
       paymentStatus: state => state.payment.status,
-      cards: state => state.checkout.savedPayments
+      cards: state => state.checkout.cards
     }),
     creating () {
       return this.paymentStatus === 'creating'

@@ -98,6 +98,7 @@ export default {
     ...mapActions({
       syncCartAction: 'cart/sync',
       syncWishListAction: 'wishList/sync',
+      syncCardsAction: 'checkout/syncCards',
       addNotificationAction: 'notifications/addItem'
     }),
     async onSubmit () {
@@ -116,6 +117,12 @@ export default {
       }
     },
     syncResources () {
+      console.log('sync cards start')
+      this.syncCardsAction()
+        .then(() => this.addNotificationAction({
+          message: 'Банковские карты синхронизированы!',
+          status: 'success'
+        }))
       this.syncCartAction()
         .then(() => this.addNotificationAction({
           message: 'Корзина товаров синхронизирована!',

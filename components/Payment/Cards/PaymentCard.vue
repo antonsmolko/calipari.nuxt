@@ -1,22 +1,22 @@
 <template lang="pug">
-  .tm-payment-card.uk-width-xlarge
-    .tm-payment-card__container.uk-box-shadow-medium.tm-background__smoke
-      label.uk-flex.uk-flex-middle.uk-flex-between
+  .tm-payment-card
+    .tm-payment-card__container.uk-box-shadow-medium.tm-background__smoke.uk-flex.uk-flex-between.uk-flex-middle
+      label.tm-payment-card__label.uk-flex.uk-flex-middle.uk-flex-between
         input.uk-radio(
+          v-if="selectable"
           name="card"
           type="radio"
           :value="item.id"
           :checked="selected"
           @click="change")
         .tm-payment-card__info.uk-text-left
-          span.tm-payment-card__number.uk-h4 {{ formatCardNumber }}
+          span.tm-payment-card__number.uk-text-emphasis {{ formatCardNumber }}
           .tm-payment-card__info-footer
-            span.tm-payment-card__expire.uk-h5.uk-text-muted {{ cardExpiry }}
-            //img.payment-card__bank-logo
+            span.tm-payment-card__expire.uk-text-muted {{ cardExpiry }}
         .tm-payment-card__type
           svg-icon(:name="`payment/${cardType}`")
-        .tm-payment-card__trash
-          button.uk-icon-button(data-uk-icon="trash" @click="onDelete")
+      .tm-payment-card__trash
+        button.uk-icon-button(data-uk-icon="trash" @click="onDelete")
 </template>
 
 <script>
@@ -32,6 +32,10 @@ export default {
     checked: {
       type: Boolean,
       default: false
+    },
+    selectable: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {
@@ -44,7 +48,7 @@ export default {
       return cardNumber.match(/.{1,4}/g).join(' ')
     },
     cardExpiry () {
-      return `${this.item.expiry_month}  /${this.item.expiry_year}`
+      return `${this.item.expiry_month} / ${this.item.expiry_year}`
     },
     cardType () {
       return this.item.card_type.toLowerCase()
@@ -66,15 +70,18 @@ export default {
 
 <style lang="scss">
   .tm-payment-card {
-    cursor: pointer;
-    &:not(:first-child) {
-      margin-top: $global-small-gutter;
-    }
     &__container {
       padding: 0 $global-small-gutter;
     }
+    &__label {
+      flex-grow: 1;
+      margin-right: $global-margin;
+    }
     &__info {
       padding: $global-small-gutter 0;
+    }
+    &__number {
+      font-size: 1.2rem;
     }
     &__type {
       svg {
@@ -83,11 +90,17 @@ export default {
       }
     }
     @include media-desk($se) {
+      &__label {
+        margin-right: $global-gutter;
+      }
       &__type {
         display: none;
       }
     }
     @include media-mob($s) {
+      &__label {
+        margin-right: $global-medium-margin;
+      }
       &__container {
         padding: 0 $global-gutter;
       }

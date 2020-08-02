@@ -3,7 +3,6 @@ export const state = () => ({
   status: null,
   orderNumber: null,
   info: {},
-  tabName: 'kassa',
   selectedPaymentId: null
 })
 
@@ -20,7 +19,7 @@ export const mutations = {
 
 export const actions = {
   create ({ commit }, number) {
-    return this.$api.$get(`/orders/${number}/pay`)
+    return this.$api.$get(`/orders/${number}/payment-create`)
       .then((response) => {
         commit('SET_FIELD', { field: 'status', value: response.status })
         commit('SET_ITEM', response.payment)
@@ -38,7 +37,7 @@ export const actions = {
     return this.$api.$get(`payment/${id}`)
       .then((response) => {
         if (response.payment) {
-          commit('checkout/ADD_PAYMENT', response.payment, { root: true })
+          commit('checkout/ADD_CARD', response.payment, { root: true })
         }
         return response
       })

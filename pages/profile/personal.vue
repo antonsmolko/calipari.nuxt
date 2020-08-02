@@ -133,20 +133,30 @@
                                                     icon="home"
                                                     :value="fields.apartments"
                                                     @input="handleInput")
+                                    .uk-margin-large-top(v-if="cards.length")
+                                      h2.uk-h2.uk-margin-bottom Привязанные карты
+                                      .uk-grid(data-uk-grid class="uk-child-width-1-2@m")
+                                        payment-card(
+                                          v-for="card in cards"
+                                          :key="card.id"
+                                          :item="card"
+                                          :selectable="false"
+                                          @delete="handleCardDelete")
 </template>
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 import { email, minLength, required } from 'vuelidate/lib/validators'
 import { mask } from 'vue-the-mask'
 import debounce from 'lodash/debounce'
-import Page from '~/components/layout/Page'
-import TopBar from '~/components/layout/TopBar'
-import VInput from '~/components/form/VInput'
-import UkInput from '~/components/form/Input/UkInput'
-import VSelect from '~/components/form/Select/VSelect'
+import Page from '@/components/layout/Page'
+import TopBar from '@/components/layout/TopBar'
+import VInput from '@/components/form/VInput'
+import UkInput from '@/components/form/Input/UkInput'
+import VSelect from '@/components/form/Select/VSelect'
+import PaymentCard from '@/components/Payment/Cards/PaymentCard'
 import { InputNotificationPhone } from '~/components/form/input-notifications'
-import setLayout from '~/components/mixins/setLayout'
-import scrollToTop from '~/components/mixins/scrollToTop'
+import setLayout from '@/components/mixins/setLayout'
+import scrollToTop from '@/components/mixins/scrollToTop'
 const _debounce = debounce(value => value(), 300)
 export default {
   name: 'Personal',
@@ -158,7 +168,8 @@ export default {
     VInput,
     UkInput,
     VSelect,
-    InputNotificationPhone
+    InputNotificationPhone,
+    PaymentCard
   },
   directives: { mask },
   mixins: [setLayout, scrollToTop],
@@ -219,7 +230,8 @@ export default {
       account: state => state.profile.account,
       fields: state => state.profile.fields,
       settlements: state => state.delivery.settlements,
-      settlementsLoading: state => state.delivery.settlementsLoading
+      settlementsLoading: state => state.delivery.settlementsLoading,
+      cards: state => state.checkout.cards
     }),
     ...mapGetters('profile', [
       'localityIsInvalid'
@@ -252,7 +264,8 @@ export default {
       updateAccountEmailAction: 'profile/updateAccountEmail',
       setDeliveryFieldsAction: 'delivery/setFields',
       getSettlementsAction: 'delivery/getSettlements',
-      setCheckoutFieldsAction: 'checkout/setFields'
+      setCheckoutFieldsAction: 'checkout/setFields',
+      deleteCardAction: 'checkout/deleteCard'
     }),
     handleVInput ({ field, value }) {
       this.setProfileFieldsAction({ [field]: value })
@@ -332,6 +345,17 @@ export default {
       this.fromRoute
         ? this.$router.push(this.fromRoute)
         : window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/profile')
+    },
+    handleCardDelete (id) {
+      const modal = this.$uikit.modal
+
+      modal.labels = {
+        ok: 'Удалить',
+        cancel: 'Отменить'
+      }
+
+      modal.confirm('<p class="tm-text-medium">Вы уверены что хотите удалить карту?</p>')
+        .then(() => this.deleteCardAction(id))
     }
   }
 }

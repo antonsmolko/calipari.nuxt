@@ -91,6 +91,7 @@ export default {
 
     this.syncCartAction()
     this.syncWishListAction()
+    this.syncCardsAction()
   },
   beforeDestroy () {
     window.removeEventListener('resize', this.handleResize)
@@ -99,7 +100,8 @@ export default {
   methods: {
     ...mapActions({
       syncCartAction: 'cart/sync',
-      syncWishListAction: 'wishList/sync'
+      syncWishListAction: 'wishList/sync',
+      syncCardsAction: 'checkout/syncCards'
     }),
     handleResize () {
       _throttle(this.setCurrentBreakPoint)

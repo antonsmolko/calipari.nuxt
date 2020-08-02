@@ -4,7 +4,6 @@ import isEqual from 'lodash/isEqual'
 import { getFilterDetailsString, isFieldLengthValid } from '../helpers'
 import { form } from '~/plugins/config'
 const isCardEqual = (object, other) => isEqual(omit(object, 'id'), omit(other, 'id'))
-
 const isLengthValid = isFieldLengthValid(form.BASE_MIN_LENGTH)
 
 export const state = () => ({
@@ -27,7 +26,7 @@ export const state = () => ({
   comment: '',
   deliveryPrice: 0,
   defaultCreditCard: null,
-  savedPayments: [],
+  cards: [],
   version: 2
 })
 
@@ -56,11 +55,11 @@ export const mutations = {
     state.enabled = true
     state.createdAt = createdAt
   },
-  ADD_PAYMENT (state, payment) {
-    state.savedPayments = uniqWith([...state.savedPayments, payment], isCardEqual)
+  ADD_CARD (state, payment) {
+    state.cards = uniqWith([...state.cards, payment], isCardEqual)
   },
-  DELETE_PAYMENT (state, id) {
-    state.savedPayments = state.savedPayments.filter(payment => payment.id !== id)
+  DELETE_CARD (state, id) {
+    state.cards = state.cards.filter(payment => payment.id !== id)
   }
 }
 
@@ -91,8 +90,16 @@ export const actions = {
         message: `Поздравляем! Ваш заказ № ${response} создан. Мы скоро с Вами свяжемся для уточнения деталей.`
       }, { root: true }))
   },
-  deletePayment ({ commit }, id) {
-    commit('DELETE_PAYMENT', id)
+  syncCards ({ state, commit }) {
+    const token = this.$auth.strategy.token.get()
+    console.log(state.cards)
+    return this.$api.$post('/profile/cards/sync', state.cards, {
+      headers: { Authorization: token }
+    })
+    // .then(response => commit('SET_FIELD', { field: 'cards', value: response }))
+  },
+  deleteCard ({ commit }, id) {
+    commit('DELETE_CARD', id)
   }
 }
 
