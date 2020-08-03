@@ -1,7 +1,7 @@
 import omit from 'lodash/omit'
 import uniqWith from 'lodash/uniqWith'
 import isEqual from 'lodash/isEqual'
-import { getFilterDetailsString, isFieldLengthValid } from '../helpers'
+import { getFilterDetailsString, isFieldLengthValid, refreshTokens } from '../helpers'
 import { form } from '~/plugins/config'
 const isCardEqual = (object, other) => isEqual(omit(object, 'id'), omit(other, 'id'))
 const isLengthValid = isFieldLengthValid(form.BASE_MIN_LENGTH)
@@ -90,16 +90,30 @@ export const actions = {
         message: `Поздравляем! Ваш заказ № ${response} создан. Мы скоро с Вами свяжемся для уточнения деталей.`
       }, { root: true }))
   },
-  syncCards ({ state, commit }) {
+  async syncCards ({ state, commit }) {
+    if (this.$auth.loggedIn) {
+      await refreshTokens(this.$auth)
+    }
     const token = this.$auth.strategy.token.get()
-    console.log(state.cards)
     return this.$api.$post('/profile/cards/sync', state.cards, {
       headers: { Authorization: token }
     })
-    // .then(response => commit('SET_FIELD', { field: 'cards', value: response }))
+      .then(response => commit('SET_FIELD', { field: 'cards', value: response }))
   },
-  deleteCard ({ commit }, id) {
-    commit('DELETE_CARD', id)
+  async deleteCard ({ commit, dispatch }, id) {
+    if (this.$auth.loggedIn) {
+      await refreshTokens(this.$auth)
+    }
+    this.$auth.loggedIn
+      ? dispatch('deleteCardAuth', id)
+      : commit('DELETE_CARD', id)
+  },
+  deleteCardAuth ({ commit }, id) {
+    const token = this.$auth.strategy.token.get()
+    const headers = { Authorization: token }
+
+    return this.$api.$get(`/profile/cards/${id}/remove`, { headers })
+      .then(response => commit('DELETE_CARD', id))
   }
 }
 

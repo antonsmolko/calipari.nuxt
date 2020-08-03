@@ -65,7 +65,11 @@ import VInput from '~/components/form/VInput'
 import setLayout from '~/components/mixins/setLayout'
 
 export default {
-  middleware: 'guest',
+  middleware ({ route, redirect }) {
+    if (!route.params.token) {
+      redirect('/notfound')
+    }
+  },
   components: { Page, VInput },
   mixins: [form, setLayout],
   metaInfo () {

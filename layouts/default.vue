@@ -91,7 +91,9 @@ export default {
 
     this.syncCartAction()
     this.syncWishListAction()
-    this.syncCardsAction()
+    if (this.$auth.loggedIn) {
+      this.syncCardsAction()
+    }
   },
   beforeDestroy () {
     window.removeEventListener('resize', this.handleResize)
