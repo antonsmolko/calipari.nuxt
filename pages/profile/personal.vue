@@ -157,6 +157,7 @@ import PaymentCard from '@/components/Payment/Cards/PaymentCard'
 import { InputNotificationPhone } from '~/components/form/input-notifications'
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
+import syncProfile from '@/components/mixins/syncProfile'
 const _debounce = debounce(value => value(), 300)
 export default {
   name: 'Personal',
@@ -172,7 +173,7 @@ export default {
     PaymentCard
   },
   directives: { mask },
-  mixins: [setLayout, scrollToTop],
+  mixins: [setLayout, scrollToTop, syncProfile],
   metaInfo () {
     return {
       title: this.pageTitle
@@ -252,7 +253,10 @@ export default {
       })
     }
     this.getDetailsAction()
-      .then(() => (this.responseData = true))
+      .then(() => {
+        this.syncCardsAction()
+        this.responseData = true
+      })
   },
   methods: {
     ...mapActions({
@@ -265,7 +269,8 @@ export default {
       setDeliveryFieldsAction: 'delivery/setFields',
       getSettlementsAction: 'delivery/getSettlements',
       setCheckoutFieldsAction: 'checkout/setFields',
-      deleteCardAction: 'checkout/deleteCard'
+      deleteCardAction: 'checkout/deleteCard',
+      syncCardsAction: 'checkout/syncCards'
     }),
     handleVInput ({ field, value }) {
       this.setProfileFieldsAction({ [field]: value })

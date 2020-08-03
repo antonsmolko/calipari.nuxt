@@ -96,6 +96,7 @@ export default {
     }
   },
   created () {
+    this.syncCardsAction()
     if (this.cardsLength) {
       const value = head(this.cards).id
       this.setPaymentFieldAction({ field: 'selectedPaymentId', value })
@@ -104,9 +105,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions('payment', {
-      setPaymentFieldAction: 'setField',
-      payWithIdAction: 'createWithId'
+    ...mapActions({
+      setPaymentFieldAction: 'payment/setField',
+      payWithIdAction: 'payment/createWithId',
+      syncCardsAction: 'checkout/syncCards'
     }),
     handleTabClick (value) {
       if (value === 'form' && this.paymentStatus !== 'initiated') {

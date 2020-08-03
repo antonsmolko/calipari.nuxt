@@ -14,14 +14,15 @@
         Menu
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import throttle from 'lodash/throttle'
-import TopBar from '~/components/layout/TopBar.vue'
-import BottomBar from '~/components/layout/BottomBar.vue'
-import Notification from '~/components/notifications/Notification'
-import Menu from '~/components/layout/OffCanvas/OffCanvasMenu.vue'
-import EditorNavbarContent from '~/components/Editor/EditorNavbarContent'
-import notifications from '~/components/mixins/notifications'
+import TopBar from '@/components/layout/TopBar.vue'
+import BottomBar from '@/components/layout/BottomBar.vue'
+import Notification from '@/components/notifications/Notification'
+import Menu from '@/components/layout/OffCanvas/OffCanvasMenu.vue'
+import EditorNavbarContent from '@/components/Editor/EditorNavbarContent'
+import notifications from '@/components/mixins/notifications'
+import syncProfile from '@/components/mixins/syncProfile'
 import layoutTimePeriod from '~/components/mixins/layoutTimePeriod'
 import { refreshTokens, getCurrentBreakPoint } from '~/helpers'
 const _throttle = throttle(fn => fn(), 50)
@@ -38,7 +39,7 @@ export default {
     Notification,
     Menu
   },
-  mixins: [notifications, layoutTimePeriod],
+  mixins: [notifications, layoutTimePeriod, syncProfile],
   metaInfo () {
     return {
       title: 'Главная',
@@ -89,22 +90,13 @@ export default {
     }, 10 * 60 * 1000)
     this.onLoad = true
 
-    this.syncCartAction()
-    this.syncWishListAction()
-    if (this.$auth.loggedIn) {
-      this.syncCardsAction()
-    }
+    this.syncProfile() // @mixin: "syncProfile"
   },
   beforeDestroy () {
     window.removeEventListener('resize', this.handleResize)
     clearInterval(this.timeInterval)
   },
   methods: {
-    ...mapActions({
-      syncCartAction: 'cart/sync',
-      syncWishListAction: 'wishList/sync',
-      syncCardsAction: 'checkout/syncCards'
-    }),
     handleResize () {
       _throttle(this.setCurrentBreakPoint)
     },

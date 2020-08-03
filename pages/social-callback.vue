@@ -72,15 +72,16 @@
 import { mapActions } from 'vuex'
 import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
 
-import Page from '~/components/layout/Page.vue'
-import form from '~/components/mixins/form'
-import routerParams from '~/components/mixins/routerParams'
-import VInput from '~/components/form/VInput'
-import setLayout from '~/components/mixins/setLayout'
+import Page from '@/components/layout/Page.vue'
+import form from '@/components/mixins/form'
+import routerParams from '@/components/mixins/routerParams'
+import VInput from '@/components/form/VInput'
+import setLayout from '@/components/mixins/setLayout'
+import syncProfile from '@/components/mixins/syncProfile'
 
 export default {
   components: { Page, VInput },
-  mixins: [form, routerParams, setLayout],
+  mixins: [form, routerParams, setLayout, syncProfile],
   metaInfo () {
     return {
       title: 'Уточнение регистрационных данных'
@@ -132,7 +133,7 @@ export default {
       this.$auth.fetchUser()
         .then(() => {
           this.$router.push({ name: 'index' })
-          this.syncResources()
+          this.syncProfile() // @mixin: "syncProfile"
         })
         .catch((e) => {
           this.$auth.logout()
@@ -157,28 +158,11 @@ export default {
       try {
         await this.$axios.post(`/auth/login/${this.form.service}/register`, this.form)
         await this.$router.push({ name: 'index' })
-        this.syncResources()
+        this.syncProfile() // @mixin: "syncProfile"
       } catch (e) {
         this.loaded = false
         return e
       }
-    },
-    syncResources () {
-      this.syncCardsAction()
-        .then(() => this.addNotificationAction({
-          message: 'Банковские карты синхронизированы!',
-          status: 'success'
-        }))
-      this.syncCartAction()
-        .then(() => this.addNotificationAction({
-          message: 'Корзина товаров синхронизирована!',
-          status: 'success'
-        }))
-      this.syncWishListAction()
-        .then(() => this.addNotificationAction({
-          message: 'Раздел «Избранное» синхронизирован!',
-          status: 'success'
-        }))
     }
   }
 }

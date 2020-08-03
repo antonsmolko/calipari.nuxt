@@ -55,12 +55,13 @@
 import { mapActions } from 'vuex'
 import { required, minLength, email } from 'vuelidate/lib/validators'
 
-import Page from '~/components/layout/Page.vue'
-import SocialsColor from '~/components/SocialsColor.vue'
-import form from '~/components/mixins/form'
-import routerParams from '~/components/mixins/routerParams'
-import VInput from '~/components/form/VInput'
-import setLayout from '~/components/mixins/setLayout'
+import Page from '@/components/layout/Page.vue'
+import SocialsColor from '@/components/SocialsColor.vue'
+import form from '@/components/mixins/form'
+import routerParams from '@/components/mixins/routerParams'
+import VInput from '@/components/form/VInput'
+import setLayout from '@/components/mixins/setLayout'
+import syncProfile from '@/components/mixins/syncProfile'
 
 export default {
   middleware: 'guest',
@@ -69,7 +70,7 @@ export default {
     SocialsColor,
     VInput
   },
-  mixins: [form, routerParams, setLayout],
+  mixins: [form, routerParams, setLayout, syncProfile],
   metaInfo () {
     return {
       title: 'Вход'
@@ -110,29 +111,11 @@ export default {
             password: this.form.password
           }
         })
-        this.syncResources()
+        this.syncProfile() // @mixin: "syncProfile"
       } catch (e) {
         this.loaded = false
         return e
       }
-    },
-    syncResources () {
-      console.log('sync cards start')
-      this.syncCardsAction()
-        .then(() => this.addNotificationAction({
-          message: 'Банковские карты синхронизированы!',
-          status: 'success'
-        }))
-      this.syncCartAction()
-        .then(() => this.addNotificationAction({
-          message: 'Корзина товаров синхронизирована!',
-          status: 'success'
-        }))
-      this.syncWishListAction()
-        .then(() => this.addNotificationAction({
-          message: 'Раздел «Избранное» синхронизирован!',
-          status: 'success'
-        }))
     }
   }
 }

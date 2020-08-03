@@ -91,9 +91,10 @@ export const actions = {
       }, { root: true }))
   },
   async syncCards ({ state, commit }) {
-    if (this.$auth.loggedIn) {
-      await refreshTokens(this.$auth)
+    if (!this.$auth.loggedIn) {
+      return
     }
+    await refreshTokens(this.$auth)
     const token = this.$auth.strategy.token.get()
     return this.$api.$post('/profile/cards/sync', state.cards, {
       headers: { Authorization: token }
