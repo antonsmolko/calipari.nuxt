@@ -14,16 +14,18 @@
           .tm-payment-card__info-footer
             span.tm-payment-card__expire.uk-text-muted {{ cardExpiry }}
         .tm-payment-card__type
-          svg-icon(:name="`payment/${cardType}`")
+          svg-static-sprite(:name="cardType" module="payment")
       .tm-payment-card__trash
         button.uk-icon-button(data-uk-icon="trash" @click="onDelete")
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import SvgStaticSprite from '@/components/Svg/SvgStaticSprite'
 
 export default {
   name: 'PaymentCard',
+  components: { SvgStaticSprite },
   props: {
     item: {
       type: Object,

@@ -138,6 +138,7 @@ export default {
   },
   svgSprite: {
     // manipulate module options
+    output: '~/static/img/svg/sprite'
   },
   /*
     /*
