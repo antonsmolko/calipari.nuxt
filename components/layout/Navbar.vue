@@ -70,6 +70,7 @@ export default {
   .tm-logo {
     width: 72px;
     height: 24px;
+    margin-top: 4px;
   }
   &__gravatar {
       width: 24px;
@@ -88,6 +89,7 @@ export default {
     .tm-logo {
       width: 60px;
       height: 20px;
+      margin-top: 3px;
     }
   }
 }

@@ -17,3 +17,16 @@ export default {
   mixins: [closeEditorMethods]
 }
 </script>
+
+<style lang="scss" scoped>
+.tm-logo {
+  width: 72px;
+  height: 24px;
+  margin-top: 4px;
+  @include media-desk($m) {
+    width: 60px;
+    height: 20px;
+    margin-top: 3px;
+  }
+}
+</style>
