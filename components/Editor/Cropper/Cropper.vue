@@ -1,6 +1,6 @@
 <template lang="pug">
-  div
-    .cropper(:class="[filter.colorize]" ref="cropper")
+  div(:class="[filter.colorize]")
+    .cropper(ref="cropper")
       .cropper__container
         .cropper__canvas(v-show="isCropperSet" ref="canvas")
           img(ref="image"

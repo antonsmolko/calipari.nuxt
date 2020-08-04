@@ -1,15 +1,15 @@
 <template lang="pug">
-    section.uk-section.tm-gallery__section
-        .uk-container.uk-container-expand
-            div(ref="mosaic")
-                GalleryImage(
-                    v-for="image in images"
-                    :key="image.id"
-                    :image="image"
-                    @dislike="dislike")
-        Observer(
-            :options="observerOptions"
-            @intersect="intersected")
+  section.tm-gallery__section.uk-section
+    .uk-container.uk-container-expand
+      div(ref="mosaic")
+        GalleryImage(
+          v-for="image in images"
+          :key="image.id"
+          :image="image"
+          @dislike="dislike")
+    Observer(
+      :options="observerOptions"
+      @intersect="intersected")
 </template>
 
 <script>
@@ -19,7 +19,6 @@ import debounce from 'lodash/debounce'
 import GalleryImage from '~/components/Gallery/GalleryImage'
 import Observer from '~/components/Observer'
 import Mosaic from '~/plugins/mosaic'
-
 const _debounce = debounce(fn => fn(), 2000)
 
 export default {
@@ -49,7 +48,7 @@ export default {
       maxRowHeightPolicy: 'tail',
       highResImagesWidthThreshold: 850,
       responsiveWidthThreshold: 340,
-      innerGap: 1
+      innerGap: 4
     },
     initialized: false,
     mosaicTmt: null
@@ -71,11 +70,17 @@ export default {
         : this.initMosaic()
     },
     paginateEnd () {
-      this.setFieldAction({ field: 'footer', value: this.paginateEnd })
+      this.setFieldAction({
+        field: 'footer',
+        value: this.paginateEnd
+      })
     }
   },
   async mounted () {
-    this.setFieldAction({ field: 'footer', value: this.paginateEnd })
+    this.setFieldAction({
+      field: 'footer',
+      value: this.paginateEnd
+    })
     const mosaicEl = this.$refs.mosaic
     this.mosaic = new Mosaic(mosaicEl, this.mosaicOptions)
 
@@ -122,16 +127,23 @@ export default {
       VueScrollTo.scrollTo(`#image-${this.lastPreview}`, 300, options)
     },
     clearLastPreview () {
-      this.setImageFieldAction({ field: 'lastPreview', value: null })
+      this.setImageFieldAction({
+        field: 'lastPreview',
+        value: null
+      })
     }
   }
 }
 </script>
 
-<style>
+<style lang="scss">
 @import '../../assets/scss/modules/_mosaic-gallery.scss';
+
 .tm-gallery__section {
-    position: relative;
-    z-index: 2;
+  position: relative;
+  z-index: 2;
+  .uk-container {
+    padding: 0 4px;
+  }
 }
 </style>
