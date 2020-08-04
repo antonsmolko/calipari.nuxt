@@ -1,5 +1,5 @@
 <template lang="pug">
-    Page
+    Page(v-if="!$fetchState.pending && page")
         template(#main)
             main(v-show="page")
                 TopBar(:title="pageTitle")
@@ -57,12 +57,13 @@ export default {
       ]
     }
   },
-  async fetch ({ store }) {
-    await store.dispatch('resources/getItems', {
+  async fetch () {
+    await this.$store.dispatch('resources/getItems', {
       url: '/work-examples/list',
       clear: true
     })
-    await store.dispatch('pages/getItem', 'portfolio')
+    await this.$store.dispatch('pages/getItem', 'portfolio')
+    this.setFieldAction({ field: 'pageTitle', value: this.page.title })
   },
   data: () => ({
     observerOptions: {
@@ -71,14 +72,11 @@ export default {
   }),
   computed: {
     ...mapState({
-      page: state => state.pages,
+      page: state => state.pages.fields,
       items: state => state.resources.items,
       pagination: state => state.resources.pagination,
       lastPreview: state => state.images.lastPreview
     })
-  },
-  created () {
-    this.setFieldAction({ field: 'pageTitle', value: this.page.title })
   },
   mounted () {
     if (this.lastPreview) {

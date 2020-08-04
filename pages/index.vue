@@ -2,42 +2,42 @@
     Page
         template(#main)
             main
-                SectionHero
+                home-hero-section
                 SectionAlbums
-                HomeTexturesSection
-                HomeWatchSection
-                HomeInteriorsSection(
+                home-textures-section
+                home-watch-section
+                home-interiors-section(
                     v-if="interiors.length"
                     :items="interiors")
                 SectionConsultation
                 //SectionTopics
                 SectionAdvantages
-                HomePurchaseStepsSection(
+                home-purchase-steps-section(
                     v-if="purchaseSteps.length"
                     :items="purchaseSteps")
 </template>
 <script>
 import { mapState } from 'vuex'
-import Page from '~/components/layout/Page.vue'
-import SectionHero from '~/components/sections/SectionHero.vue'
-import SectionAlbums from '~/components/sections/SectionAlbums.vue'
-import SectionMaterials from '~/components/sections/SectionMaterials.vue'
-import SectionPlacements from '~/components/sections/SectionPlacements.vue'
-import SectionConsultation from '~/components/sections/SectionConsultation.vue'
-import SectionTopics from '~/components/sections/SectionTopics.vue'
-import SectionAdvantages from '~/components/sections/SectionAdvantages.vue'
-import HomeTexturesSection from '~/components/Home/HomeTexturesSection'
-import HomeWatchSection from '~/components/Home/HomeWatchSection'
-import HomeInteriorsSection from '~/components/Home/HomeInteriorsSection'
-import HomePurchaseStepsSection from '~/components/Home/HomePurchaseStepsSection'
-import setLayout from '~/components/mixins/setLayout'
-import scrollToTop from '~/components/mixins/scrollToTop'
-import scrollToTarget from '~/components/mixins/scrollToTarget'
+import Page from '@/components/layout/Page.vue'
+import HomeHeroSection from '@/components/Home/HomeHeroSection.vue'
+import SectionAlbums from '@/components/sections/SectionAlbums.vue'
+import SectionMaterials from '@/components/sections/SectionMaterials.vue'
+import SectionPlacements from '@/components/sections/SectionPlacements.vue'
+import SectionConsultation from '@/components/sections/SectionConsultation.vue'
+import SectionTopics from '@/components/sections/SectionTopics.vue'
+import SectionAdvantages from '@/components/sections/SectionAdvantages.vue'
+import HomeTexturesSection from '@/components/Home/HomeTexturesSection'
+import HomeWatchSection from '@/components/Home/HomeWatchSection'
+import HomeInteriorsSection from '@/components/Home/HomeInteriorsSection'
+import HomePurchaseStepsSection from '@/components/Home/HomePurchaseStepsSection'
+import setLayout from '@/components/mixins/setLayout'
+import scrollToTop from '@/components/mixins/scrollToTop'
+import scrollToTarget from '@/components/mixins/scrollToTarget'
 
 export default {
   components: {
     Page,
-    SectionHero,
+    HomeHeroSection,
     SectionAlbums,
     SectionMaterials,
     SectionPlacements,

@@ -108,10 +108,10 @@
       font-size: 2.8rem;
     }
     @include media-mob($xl) {
-      font-size: $global-xxlarge-font-size * .85;
+      font-size: $global-2xlarge-font-size * .85;
     }
     @include media-mob($xxl) {
-      font-size: $global-xxlarge-font-size;
+      font-size: $global-2xlarge-font-size;
     }
   }
    h2, .uk-h2 {

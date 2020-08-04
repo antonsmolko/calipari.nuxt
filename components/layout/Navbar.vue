@@ -1,5 +1,5 @@
 <template lang="pug">
-    .tm-navbar.uk-box-shadow-medium
+    .tm-navbar.uk-box-shadow-medium(data-uk-sticky)
         .tm-navbar__background
         .uk-navbar-container.uk-light.uk-navbar-transparent
             slot(name="content")
@@ -37,7 +37,7 @@
                                         nuxt-link(to="/login" data-uk-icon="user")
                             button.uk-navbar-toggle(
                                 data-uk-toggle="target: #off-canvas-menu"
-                                data-uk-icon="menu"
+                                data-uk-icon="ll-menu"
                                 class="uk-hidden@m")
 </template>
 
@@ -54,14 +54,41 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .tm-navbar {
-    z-index: 10;
-    &__gravatar {
-        width: 36px;
-        height: 36px;
-        border-radius: 500px;
-        overflow: hidden;
+  z-index: 10;
+  height: 36px;
+  .uk-navbar {
+    max-height: 36px;
+  }
+  .uk-navbar-nav > li > a,
+  .uk-navbar-nav > li > span,
+  .uk-navbar-item,
+  .uk-navbar-toggle {
+    min-height: 36px;
+  }
+  .tm-logo {
+    width: 72px;
+    height: 24px;
+  }
+  &__gravatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 500px;
+      overflow: hidden;
+  }
+  @include media-desk ($m){
+    height: 36px;
+    .uk-navbar {
+      max-height: 36px;
     }
+    .uk-navbar-item, .uk-navbar-toggle {
+      min-height: 36px;
+    }
+    .tm-logo {
+      width: 60px;
+      height: 20px;
+    }
+  }
 }
 </style>

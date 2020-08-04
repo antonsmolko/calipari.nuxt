@@ -1,5 +1,5 @@
 <template lang="pug">
-    .tm-topbar(data-uk-sticky)
+    .tm-topbar(data-uk-sticky="offset: 36")
         .uk-navbar-container
             .uk-container
                 div(data-uk-navbar)
@@ -42,7 +42,7 @@ export default {
             max-width: $width-xlarge-width;
         }
         @include media_mob($l) {
-            max-width: $width-xxlarge-width;
+            max-width: $width-2xlarge-width;
         }
     }
 

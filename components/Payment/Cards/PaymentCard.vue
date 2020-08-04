@@ -21,11 +21,9 @@
 
 <script>
 import { mapState } from 'vuex'
-import SvgStaticSprite from '@/components/Svg/SvgStaticSprite'
 
 export default {
   name: 'PaymentCard',
-  components: { SvgStaticSprite },
   props: {
     item: {
       type: Object,
