@@ -1,28 +1,31 @@
 <template lang="pug">
-    .cropper(:class="[filter.colorize]")
-        .cropper__container(ref="container")
-            .cropper__canvas(v-show="isCropperSet" ref="canvas")
-                img(ref="image"
-                    :style="canvasStyle",
-                    :src="imageUrl",
-                    :alt="image.article")
-                .cropper__crop-box(
-                    ref="cropBox"
-                    :class="{active: active}",
-                    :style="cropBoxStyle")
-                    .cropper__view-box
-                       FadeTransition
-                            img(v-show="imageLoad"
-                                :src="imageUrl",
-                                :alt="image.article",
-                                :style="viewBoxStyle")
-                    span.cropper__dashed.dashed-h
-                    .cropper__dashed.dashed-v
-                    span.cropper__center
-                    span.cropper__facade
+  ScaleTransition
+    .cropper(:class="[filter.colorize]" ref="cropper")
+      .cropper__container
+        .cropper__canvas(v-show="isCropperSet" ref="canvas")
+          img(ref="image"
+            :style="canvasStyle",
+            :src="imageUrl",
+            :alt="image.article")
+          .cropper__crop-box(
+            ref="cropBox"
+            :class="{active: active}",
+            :style="cropBoxStyle")
+            .cropper__view-box
+              FadeTransition
+                img(v-show="imageLoad"
+                  :src="imageUrl",
+                  :alt="image.article",
+                  :style="viewBoxStyle")
+            span.cropper__dashed.dashed-h
+            .cropper__dashed.dashed-v
+            span.cropper__center
+            span.cropper__facade
 </template>
 
 <script>
+import { getS3ImageUrl } from '@/helpers'
+import debounce from 'lodash/debounce'
 import {
   EVENT_POINTER_DOWN,
   EVENT_POINTER_MOVE,
@@ -32,7 +35,7 @@ import {
   addListener,
   removeListener
 } from './utilities'
-import { getS3ImageUrl } from '~/helpers'
+const _debounce = debounce(fn => fn(), 1)
 
 export default {
   name: 'Cropper',
@@ -51,12 +54,13 @@ export default {
     },
     filter: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   data: () => ({
     isCropperSet: false,
-    container: null,
+    cropper: null,
     canvas: null,
     canvasImage: null,
     cropBox: null,
@@ -159,14 +163,12 @@ export default {
           this.viewBoxStyles.height = this.viewBoxStyles.width / this.ratio
 
           this.setNaturalCrop()
-
           this.setTranslate()
         } else {
           this.viewBoxStyles.height = this.imageStyles.height
           this.viewBoxStyles.width = this.viewBoxStyles.height * this.ratio
 
           this.setNaturalCrop()
-
           this.setTranslate('X', 'Y', 'width')
         }
       }
@@ -220,7 +222,7 @@ export default {
   },
   async mounted () {
     await this.init()
-    this.handleResize()
+    await _debounce(this.handleResize)
     window.addEventListener('resize', this.handleResize)
   },
   beforeDestroy () {
@@ -230,8 +232,7 @@ export default {
   methods: {
     async init () {
       await this.setCropperElements()
-
-      await this.setCropperMaxHeight(this.container.offsetHeight)
+      await this.setCropperMaxHeight(this.cropper.offsetHeight)
 
       addListener(this.cropBox, EVENT_POINTER_DOWN, (this.startCropMove = this.onStartCropMove.bind(this)))
       addListener(this.cropBox.ownerDocument, EVENT_POINTER_UP, (this.endCropMove = this.onEndCropMove.bind(this)))
@@ -244,7 +245,7 @@ export default {
     },
     setCropperElements () {
       return new Promise((resolve) => {
-        this.container = this.$refs.container
+        this.cropper = this.$refs.cropper
         this.canvasImage = this.$refs.image
         this.cropBox = this.$refs.cropBox
         this.canvas = this.$refs.canvas
@@ -260,7 +261,7 @@ export default {
         this.setResponsive()
         const maxHeight = this.responsive
           ? this.responsiveMaxHeight
-          : this.container.offsetHeight
+          : this.cropper.offsetHeight
         this.setCropperMaxHeight(maxHeight)
         this.setImageSizes()
         if (this.active) {
@@ -395,151 +396,155 @@ Component: Cropper
 ========================================================================== */
 
 .cropper {
+  &__container {
+    width: 100%;
+    height: 100%;
+    direction: ltr;
+    font-size: 0;
+    line-height: 0;
+    position: relative;
+    touch-action: none;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-    &__container {
-        width: 100%;
-        height: 100%;
-        direction: ltr;
-        font-size: 0;
-        line-height: 0;
-        position: relative;
-        touch-action: none;
-        user-select: none;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+  &__canvas {
+    position: relative;
+
+    > img {
+      display: block;
+      width: auto;
+      height: auto;
+      margin: auto;
     }
 
-    &__canvas {
-        position: relative;
-        > img {
-            display: block;
-            width:  auto;
-            height: auto;
-            margin: auto;
-        }
-        &::before {
-            content: '';
-            position: absolute;
-            display: block;
-            top: 0;
-            right: 0;
-            left: 0;
-            bottom: 0;
-            background-color: lighten($editor-background-color, 5%);
-            opacity: 0.8;
-            z-index: 1;
-        }
-        &::after {
-            content: '';
-            position: absolute;
-            display: block;
-            top: -1px;
-            right: -1px;
-            left: -1px;
-            bottom: -1px;
-            border: 1px solid rgba($global-border, .5);
-        }
+    &::before {
+      content: '';
+      position: absolute;
+      display: block;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      background-color: lighten($editor-background-color, 5%);
+      opacity: 0.8;
+      z-index: 1;
     }
 
-    &__crop-box {
-        position: absolute;
-        display: block;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        outline: 1px solid rgba(#aaa, 1);
-        overflow: hidden;
-        z-index: 1;
-        &.active {
-            outline-color: #fff;
-        }
+    &::after {
+      content: '';
+      position: absolute;
+      display: block;
+      top: -1px;
+      right: -1px;
+      left: -1px;
+      bottom: -1px;
+      border: 1px solid rgba($global-border, .5);
+    }
+  }
+
+  &__crop-box {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    outline: 1px solid rgba(#aaa, 1);
+    overflow: hidden;
+    z-index: 1;
+
+    &.active {
+      outline-color: #fff;
+    }
+  }
+
+  &__view-box {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: $global-secondary-background;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      max-height: none !important;
+      max-width: none !important;
+      min-height: 0 !important;
+      min-width: 0 !important;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+
+  &__facade {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__dashed {
+    border: 0 dashed #eee;
+    display: block;
+    opacity: 0.5;
+    position: absolute;
+
+    &.dashed-h {
+      border-bottom-width: 1px;
+      border-top-width: 1px;
+      height: calc(100% / 3);
+      left: 0;
+      top: calc(100% / 3);
+      width: 100%;
     }
 
-    &__view-box {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background: $global-secondary-background;
-        img {
-            display: block;
-            width: 100%;
-            height: 100%;
-            max-height: none !important;
-            max-width: none !important;
-            min-height: 0 !important;
-            min-width: 0 !important;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
+    &.dashed-v {
+      border-left-width: 1px;
+      border-right-width: 1px;
+      height: 100%;
+      left: calc(100% / 3);
+      top: 0;
+      width: calc(100% / 3);
+    }
+  }
+
+  &__center {
+    display: block;
+    height: 0;
+    left: 50%;
+    opacity: 0.75;
+    position: absolute;
+    top: 50%;
+    width: 0;
+
+    &::before,
+    &::after {
+      background-color: #eee;
+      content: ' ';
+      display: block;
+      position: absolute;
     }
 
-    &__facade {
-        position: absolute;
-        display: block;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+    &::before {
+      height: 1px;
+      left: -3px;
+      top: 0;
+      width: 7px;
     }
 
-    &__dashed {
-        border: 0 dashed #eee;
-        display: block;
-        opacity: 0.5;
-        position: absolute;
-
-        &.dashed-h {
-            border-bottom-width: 1px;
-            border-top-width: 1px;
-            height: calc(100% / 3);
-            left: 0;
-            top: calc(100% / 3);
-            width: 100%;
-        }
-
-        &.dashed-v {
-            border-left-width: 1px;
-            border-right-width: 1px;
-            height: 100%;
-            left: calc(100% / 3);
-            top: 0;
-            width: calc(100% / 3);
-        }
+    &::after {
+      height: 7px;
+      left: 0;
+      top: -3px;
+      width: 1px;
     }
-
-    &__center {
-        display: block;
-        height: 0;
-        left: 50%;
-        opacity: 0.75;
-        position: absolute;
-        top: 50%;
-        width: 0;
-
-        &::before,
-        &::after {
-            background-color: #eee;
-            content: ' ';
-            display: block;
-            position: absolute;
-        }
-
-        &::before {
-            height: 1px;
-            left: -3px;
-            top: 0;
-            width: 7px;
-        }
-
-        &::after {
-            height: 7px;
-            left: 0;
-            top: -3px;
-            width: 1px;
-        }
-    }
+  }
 }
 </style>

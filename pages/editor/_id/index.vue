@@ -1,77 +1,77 @@
 <template lang="pug">
-    div
-        .tm-editor.uk-light.uk-position-relative(
-            v-if="$fetchState.pending"
-            data-uk-height-viewport="offset-top: true")
-            .uk-position-center.uk-flex.uk-flex-column.uk-flex-middle.uk-padding.uk-text-center.uk-text-muted
-                span.uk-text-large Загружается редактор...
-                .uk-margin-top.uk-tex-muted(data-uk-spinner="ratio: 3")
-        .tm-editor.uk-light.uk-position-relative(
-            v-else-if="$fetchState.error"
-            data-uk-height-viewport="offset-top: true")
-            .uk-position-center.uk-flex.uk-flex-column.uk-flex-middle.uk-padding.uk-text-center.uk-text-muted
-                p.uk-text-large {{ $fetchState.error.message }}
-        .tm-editor.uk-light(v-else)
-            .tm-editor__frame(data-uk-height-viewport="offset-top: true")
-                .tm-editor__left-bar(data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 100")
-                    editor-collection(
-                        v-if="artCollection.length"
-                        title="Арт-коллекция"
-                        v-model="orderSettings.currentImage"
-                        @click="changeArtCollectionItem"
-                        :loading="artCollectionLoading"
-                        :items="artCollection")
-                    editor-collection(
-                        v-if="colorCollection.length"
-                        title="Цветовая коллекция"
-                        v-model="orderSettings.currentImage"
-                        @click="changeColorCollection"
-                        :loading="colorCollectionLoading"
-                        :items="colorCollection")
-                    editor-sizes(
-                        :maxWidth="maxWidth"
-                        :maxHeight="maxHeight"
-                        :minValue="minInputValue"
-                        :ratio="orderSettings.currentImage.ratio"
-                        :locked="ratioLocked"
-                        v-model="orderSettings.sizes"
-                        @ratio-locked-change="handleRatioLockedChange")
-                    editor-filter(v-model="orderSettings.filter")
-                    editor-texture(
-                        v-model="orderSettings.texture"
-                        :items="textures")
-                .tm-editor__workspace
-                    .tm-editor__workspace-header.uk-flex.uk-flex-between.uk-margin
-                        .uk-flex
-                            editor-panel-heading.uk-margin-remove(title="Изображение")
-                            .tm-editor__workspace-article.uk-margin-small-left {{ orderSettings.currentImage.article }}
-                        image-like.tm-editor__like(
-                            :liked="liked"
-                            @like="onLike")
-                    cropper.tm-editor__image-cropper(
-                        :image="orderSettings.currentImage"
-                        :ratio="sizesRatio"
-                        :active="!ratioLocked"
-                        :filter="orderSettings.filter"
-                        @cropped="getCropData")
-                .tm-editor__right-bar(data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 100")
-                    editor-preview(
-                        :image="orderSettings.currentImage"
-                        :orderSizes="orderSettings.sizes"
-                        :cropData="cropData"
-                        :ratioLocked="ratioLocked"
-                        :filter="orderSettings.filter"
-                        :texture="orderTexture.name")
-                    editor-info(
-                        :article="orderSettings.currentImage.article"
-                        :width="orderSettings.sizes.width"
-                        :height="orderSettings.sizes.height"
-                        :flipH="orderSettings.filter.flipH"
-                        :flipV="orderSettings.filter.flipV"
-                        :colorEffect="orderColorEffectName"
-                        :texture="orderTexture.name")
-                    editor-purchase(:price="orderPrice" @confirm="onConfirm")
-            editor-bottom-bar(:price="orderPrice" @confirm="onConfirm")
+  div
+    .tm-editor.uk-light.uk-position-relative(
+      v-if="$fetchState.pending"
+      data-uk-height-viewport="offset-top: true")
+      .uk-position-center.uk-flex.uk-flex-column.uk-flex-middle.uk-padding.uk-text-center.uk-text-muted
+        span.uk-text-large Загружается редактор...
+        .uk-margin-top.uk-tex-muted(data-uk-spinner="ratio: 3")
+    .tm-editor.uk-light.uk-position-relative(
+      v-else-if="$fetchState.error"
+      data-uk-height-viewport="offset-top: true")
+      .uk-position-center.uk-flex.uk-flex-column.uk-flex-middle.uk-padding.uk-text-center.uk-text-muted
+        p.uk-text-large {{ $fetchState.error.message }}
+    .tm-editor.uk-light(v-else)
+      .tm-editor__frame(data-uk-height-viewport="offset-top: true")
+        .tm-editor__left-bar(data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 100")
+          editor-collection(
+            v-if="artCollection.length"
+            title="Арт-коллекция"
+            v-model="orderSettings.currentImage"
+            @click="changeArtCollectionItem"
+            :loading="artCollectionLoading"
+            :items="artCollection")
+          editor-collection(
+            v-if="colorCollection.length"
+            title="Цветовая коллекция"
+            v-model="orderSettings.currentImage"
+            @click="changeColorCollection"
+            :loading="colorCollectionLoading"
+            :items="colorCollection")
+          editor-sizes(
+            :maxWidth="maxWidth"
+            :maxHeight="maxHeight"
+            :minValue="minInputValue"
+            :ratio="orderSettings.currentImage.ratio"
+            :locked="ratioLocked"
+            v-model="orderSettings.sizes"
+            @ratio-locked-change="handleRatioLockedChange")
+          editor-filter(v-model="orderSettings.filter")
+          editor-texture(
+            v-model="orderSettings.texture"
+            :items="textures")
+        .tm-editor__workspace
+          .tm-editor__workspace-header.uk-flex.uk-flex-between.uk-margin
+            .uk-flex
+              editor-panel-heading.uk-margin-remove(title="Изображение")
+              .tm-editor__workspace-article.uk-margin-small-left {{ orderSettings.currentImage.article }}
+            image-like.tm-editor__like(
+              :liked="liked"
+              @like="onLike")
+          cropper.tm-editor__image-cropper(
+            :image="orderSettings.currentImage"
+            :ratio="sizesRatio"
+            :active="!ratioLocked"
+            :filter="orderSettings.filter"
+            @cropped="getCropData")
+        .tm-editor__right-bar(data-uk-scrollspy="target: > div; cls: uk-animation-fade; delay: 100")
+          editor-preview(
+            :image="orderSettings.currentImage"
+            :orderSizes="orderSettings.sizes"
+            :cropData="cropData"
+            :ratioLocked="ratioLocked"
+            :filter="orderSettings.filter"
+            :texture="orderTexture.name")
+          editor-info(
+            :article="orderSettings.currentImage.article"
+            :width="orderSettings.sizes.width"
+            :height="orderSettings.sizes.height"
+            :flipH="orderSettings.filter.flipH"
+            :flipV="orderSettings.filter.flipV"
+            :colorEffect="orderColorEffectName"
+            :texture="orderTexture.name")
+          editor-purchase(:price="orderPrice" @confirm="onConfirm")
+      editor-bottom-bar(:price="orderPrice" @confirm="onConfirm")
 </template>
 
 <script>
@@ -164,12 +164,12 @@ export default {
       textures: state => state.textures.items,
       fromWishList: state => state.images.isWishList
     }),
-    // onLoad () {
-    //   return this.textures.length &&
-    //     this.orderSettings.texture &&
-    //     this.image &&
-    //     this.image.ratio
-    // },
+    onLoad () {
+      return this.textures.length &&
+        this.orderSettings.texture &&
+        this.image &&
+        this.image.ratio
+    },
     maxWidth () {
       return this.orderSettings.currentImage.max_print_width
         ? this.orderSettings.currentImage.max_print_width
@@ -233,7 +233,10 @@ export default {
   //   this.cropData.height = this.image.height
   // },
   beforeDestroy () {
-    this.setFieldAction({ field: 'editorEnable', value: false })
+    this.setFieldAction({
+      field: 'editorEnable',
+      value: false
+    })
     this.setImagesFieldsAction({
       item: null,
       colorCollection: [],
@@ -272,7 +275,10 @@ export default {
         }
       }
       if (!image.hasColorCollection) {
-        this.setImagesFieldAction({ field: 'colorCollection', value: [] })
+        this.setImagesFieldAction({
+          field: 'colorCollection',
+          value: []
+        })
       }
     },
     changeColorCollection (image) {
@@ -284,7 +290,10 @@ export default {
           })
       }
       if (!image.hasArtCollection) {
-        this.setImagesFieldAction({ field: 'artCollection', value: [] })
+        this.setImagesFieldAction({
+          field: 'artCollection',
+          value: []
+        })
       }
     },
     onConfirm () {
@@ -314,7 +323,10 @@ export default {
   beforeRouteEnter (to, from, next) {
     next((vm) => {
       if (from.name === 'wishlist') {
-        vm.setImagesFieldAction({ field: 'isWishList', value: true })
+        vm.setImagesFieldAction({
+          field: 'isWishList',
+          value: true
+        })
       }
     })
   }
@@ -331,453 +343,454 @@ $editor-bottom-bar-box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.16);
 $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
 
 .tm-editor {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  background-color: $editor-background;
+
+  /* Top Bar
+  ========================================================================== */
+
+  &__top-bar {
+    box-shadow: $editor-top-bar-box-shadow;
+  }
+
+  /* Frame
+  ========================================================================== */
+
+  &__frame {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: space-between;
+    padding-top: $editor-gutter;
+    @include media_mob($s) {
+      flex-direction: row;
+    }
+    @include media_mob($l) {
+      flex-wrap: nowrap;
+    }
+  }
+
+  /* Panel
+  ========================================================================== */
+
+  &__panel {
     width: 100%;
-    max-width: 100%;
-    overflow: hidden;
-    background-color: $editor-background;
+    background-color: $editor-background-color;
+    padding: $global-small-gutter;
+    box-sizing: border-box;
 
-    /* Top Bar
+    &:not(:last-child) {
+      margin-bottom: $editor-gutter;
+    }
+
+    @include media_mob($xs) {
+      padding: $global-small-gutter $global-margin;
+    }
+    @include media_mob($qhd) {
+      padding-top: $global-medium-margin;
+      padding-bottom: $global-medium-margin;
+    }
+
+    .tm-editor__left-bar & {
+      @include media_mob($s) {
+        padding-left: $global-gutter;
+      }
+      @include media_mob($m) {
+        padding-left: $global-medium-margin;
+      }
+    }
+
+    .tm-editor__right-bar & {
+      @include media_mob($l) {
+        padding-right: $global-medium-margin;
+      }
+    }
+  }
+
+  /* Left Bar
+  ========================================================================== */
+
+  &__left-bar {
+    display: flex;
+    flex-direction: column;
+    order: 2;
+    width: 100%;
+    @include media_mob($s) {
+      order: 1;
+      width: 320px;
+      max-width: calc(50% - 1px);
+    }
+    @include media_mob($m) {
+      width: 350px;
+    }
+    @include media_mob($xl) {
+      width: 430px;
+    }
+
+    &-slider {
+      margin-left: -$global-small-gutter;
+      padding: 0 $global-small-gutter;
+      @include media-mob($s) {
+        margin-left: -$global-gutter;
+        padding: 0 $global-margin 0 $global-gutter;
+      }
+      @include media-mob($m) {
+        margin-left: -$global-medium-margin;
+        padding: 0 $global-margin 0 $global-medium-margin;
+      }
+    }
+  }
+
+  /* Sizes
+  ========================================================================== */
+
+  &__sizes {
+    &-input {
+      border: 1px solid $inverse-global-border;
+      box-sizing: border-box;
+      padding: 0;
+      width: 72px;
+
+      .uk-inline {
+        width: inherit;
+      }
+
+      &.uk-form-danger {
+        background: transparent;
+        border-color: $form-danger-border;
+
+        .uk-input {
+          color: $form-danger-color;
+        }
+      }
+
+      .uk-input {
+        font-size: .9em;
+        font-weight: normal;
+        text-align: right;
+        padding-right: 30px !important;
+      }
+
+      .uk-form-icon {
+        font-weight: normal;
+        width: 32px;
+        font-size: 16px;
+      }
+
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      input[type='number'] {
+        -moz-appearance: textfield;
+      }
+    }
+  }
+
+  /* Ratio Lock */
+
+  $vueboxW: 12;
+  $vueboxH: $vueboxW * 2;
+  $background-image: url("data:image/svg+xml,%3Csvg width='" + $vueboxW + "' height='" + $vueboxH + "' viewBox='0 0 10 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='none' stroke='black' stroke-width='1.1' d='M7.2,11.2v4.4c0,1-0.6,1.6-1.6,1.6h-1c-1,0-1.6-0.6-1.6-1.6v-4.4'/%3E%3Cpath fill='none' stroke='black' stroke-width='1.1' d='M2.8,8.6V4.2c0-1,0.6-1.6,1.6-1.6h1c1,0,1.6,0.6,1.6,1.6v4.4'/%3E%3Cpath fill='none' stroke='black' stroke-width='1.1' d='M4.9,12.7L5,7.1'/%3E%3C/svg%3E");
+  $inverse-background-image: url("data:image/svg+xml,%3Csvg width='" + $vueboxW + "' height='" + $vueboxH + "' viewBox='0 0 10 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='none' stroke='white' stroke-width='1.1' d='M7.2,11.2v4.4c0,1-0.6,1.6-1.6,1.6h-1c-1,0-1.6-0.6-1.6-1.6v-4.4'/%3E%3Cpath fill='none' stroke='white' stroke-width='1.1' d='M2.8,8.6V4.2c0-1,0.6-1.6,1.6-1.6h1c1,0,1.6,0.6,1.6,1.6v4.4'/%3E%3Cpath fill='none' stroke='white' stroke-width='1.1' d='M4.9,12.7L5,7.1'/%3E%3C/svg%3E");
+
+  &__ratio-lock {
+    width: $vueboxW + px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &::before, &::after {
+      content: '';
+      display: block;
+      width: $vueboxW / 2 + px;
+      height: $vueboxH / 2 + px;
+      border-right: 1px solid dimgray;
+    }
+
+    &::before {
+      border-top: 1px solid dimgray;
+    }
+
+    &::after {
+      border-bottom: 1px solid dimgray;
+    }
+
+    &-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+
+      &:checked + .tm-editor__ratio-lock-icon {
+        opacity: .8;
+      }
+    }
+
+    &-icon {
+      display: block;
+      width: $vueboxW + px;
+      height: $vueboxH + px;
+      margin: 5px 0;
+      opacity: .3;
+      background-image: $inverse-background-image;
+      cursor: pointer;
+      transition: opacity .25s ease;
+    }
+  }
+
+  /* Workspace
+  ========================================================================== */
+
+  &__workspace {
+    z-index: 1;
+    display: flex;
+    width: 100%;
+    order: 1;
+    flex-grow: 1;
+    flex-direction: column;
+    background-color: lighten($editor-background-color, 5%);
+    box-sizing: border-box;
+    padding: $global-small-gutter $global-small-gutter $global-margin $global-small-gutter;
+    margin-bottom: $editor-gutter;
+
+    &-article {
+      font-size: 0.9em;
+      font-weight: normal;
+      background-color: $global-secondary-background;
+      padding: $global-small-margin / 2 $global-small-margin;
+      line-height: 1;
+      margin-top: -2px;
+    }
+
+    @include media_device(mobile-portrait) {
+      height: 340px;
+    }
+    @include media_mob($se) {
+      height: 340px;
+    }
+    @include media_mob($s) {
+      width: 310px;
+      height: auto;
+      order: 2;
+      min-width: calc(50% - 1px);
+      margin-bottom: 0;
+      margin-left: $editor-gutter;
+      padding: $global-margin $global-gutter $global-margin $global-margin;
+    }
+    @include media_mob($m) {
+      padding: $global-margin $global-medium-margin $global-margin $global-margin;
+    }
+    @include media_mob($l) {
+      padding: $global-margin $global-margin $global-medium-margin $global-margin;
+      margin: 0 $editor-gutter;
+    }
+    @include media_mob($qhd) {
+      padding: $global-medium-margin $global-margin $global-gutter * 2 $global-margin;
+    }
+  }
+
+  /* Right Bar
+  ========================================================================== */
+
+  &__right-bar {
+    width: 100%;
+    height: inherit;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    order: 3;
+    margin-top: $editor-gutter;
+    margin-bottom: $bottom-bar-height;
+    @include media_mob($s) {
+      order: 3;
+      width: 100%;
+      flex-direction: row;
+    }
+    @include media_mob($l) {
+      width: 320px;
+      flex-direction: column;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  /* Preview
+  ========================================================================== */
+
+  &__preview {
+    width: 100%;
+    @include media_mob($s) {
+      width: 320px;
+      max-width: calc(50% - 1px);
+      margin-right: $editor-gutter;
+      padding-left: $global-gutter;
+    }
+    @include media_mob($m) {
+      width: 350px;
+      padding-left: $global-medium-margin;
+    }
+    @include media_mob($l) {
+      width: 100%;
+      max-width: inherit;
+      margin-right: 0;
+      padding-left: $global-margin;
+    }
+
+    #preview-container {
+      width: 100%;
+      max-height: 240px;
+      height: 240px;
+      @include media_mob($l) {
+        max-height: 160px;
+        height: 160px;
+      }
+      @include media_mob($xl) {
+        max-height: 200px;
+        height: 200px;
+      }
+      @include media_mob($qhd) {
+        max-height: 300px;
+        height: 300px;
+      }
+    }
+
+    #preview-crop {
+      overflow: hidden;
+      margin: 0 auto;
+      box-shadow: 0 7px 20px -10px #000;
+      @include media_mob($l) {
+        margin: 0 auto;
+      }
+
+      img {
+        max-width: inherit;
+      }
+    }
+  }
+
+  /* Info
     ========================================================================== */
 
-    &__top-bar {
-        box-shadow: $editor-top-bar-box-shadow;
+  &__info {
+    width: 100%;
+    @include media_mob($s) {
+      width: 310px;
+      flex-grow: 1;
+      min-width: calc(50% - 1px);
+      padding-right: $global-gutter;
+    }
+    @include media_mob($m) {
+      padding-right: $global-medium-margin;
+    }
+    @include media_mob($l) {
+      width: 100%;
+      margin-bottom: $editor-gutter !important;
     }
 
-    /* Frame
-    ========================================================================== */
+    &-item {
+      display: flex;
+      line-height: 1.2;
 
-    &__frame {
-        display: flex;
-        flex-flow: column wrap;
-        justify-content: space-between;
-        padding-top: $editor-gutter;
-        @include media_mob($s) {
-            flex-direction: row;
-        }
-        @include media_mob($l) {
-            flex-wrap: nowrap;
-        }
+      &:not(:last-child) {
+        margin-bottom: 7px;
+      }
+
+      color: rgba(#fff, .5);
     }
 
-    /* Panel
-    ========================================================================== */
+    &-value {
+      color: $global-inverse-color;
+    }
+  }
 
-    &__panel {
-        width: 100%;
-        background-color: $editor-background-color;
-        padding: $global-small-gutter;
-        box-sizing: border-box;
+  /* Purchase
+  ========================================================================== */
 
-        &:not(:last-child) {
-            margin-bottom: $editor-gutter;
-        }
+  &__purchase {
+    width: 100%;
+    padding: $global-medium-margin $global-medium-margin $global-medium-margin $global-margin;
+    line-height: 1;
 
-        @include media_mob($xs) {
-            padding: $global-small-gutter $global-margin;
-        }
-        @include media_mob($qhd) {
-            padding-top: $global-medium-margin;
-            padding-bottom: $global-medium-margin;
-        }
-
-        .tm-editor__left-bar & {
-            @include media_mob($s) {
-                padding-left: $global-gutter;
-            }
-            @include media_mob($m) {
-                padding-left: $global-medium-margin;
-            }
-        }
-
-        .tm-editor__right-bar & {
-            @include media_mob($l) {
-                padding-right: $global-medium-margin;
-            }
-        }
+    &-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    /* Left Bar
-    ========================================================================== */
-
-    &__left-bar {
-        display: flex;
-        flex-direction: column;
-        order: 2;
-        width: 100%;
-        @include media_mob($s) {
-            order: 1;
-            width: 320px;
-            max-width: calc(50% - 1px);
-        }
-        @include media_mob($m) {
-            width: 350px;
-        }
-        @include media_mob($xl) {
-            width: 430px;
-        }
-        &-slider {
-            margin-left: -$global-small-gutter;
-            padding: 0 $global-small-gutter;
-            @include media-mob($s) {
-                margin-left: -$global-gutter;
-                padding: 0 $global-margin 0 $global-gutter;
-            }
-            @include media-mob($m) {
-                margin-left: -$global-medium-margin;
-                padding: 0 $global-margin 0 $global-medium-margin;
-            }
-        }
+    &-price {
+      display: block;
+      font-size: 1.8em;
     }
 
-    /* Sizes
-    ========================================================================== */
+    &-rub {
+      font-weight: $base-body-font-weight;
+      padding-left: $global-small-margin / 2;
+    }
+  }
 
-    &__sizes {
-        &-input {
-            border: 1px solid $inverse-global-border;
-            box-sizing: border-box;
-            padding: 0;
-            width: 72px;
+  /* Image Cropper
+  ========================================================================== */
 
-            .uk-inline {
-                width: inherit;
-            }
+  &__image-cropper {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    flex-grow: 1;
+    transition: transform .5s ease;
+  }
 
-            &.uk-form-danger {
-                background: transparent;
-                border-color: $form-danger-border;
-
-                .uk-input {
-                    color: $form-danger-color;
-                }
-            }
-
-            .uk-input {
-                font-size: .9em;
-                font-weight: normal;
-                text-align: right;
-                padding-right: 30px !important;
-            }
-
-            .uk-form-icon {
-                font-weight: normal;
-                width: 32px;
-                font-size: 16px;
-            }
-
-            input::-webkit-outer-spin-button,
-            input::-webkit-inner-spin-button {
-                -webkit-appearance: none;
-                margin: 0;
-            }
-
-            input[type='number'] {
-                -moz-appearance: textfield;
-            }
-        }
+  &__image-cropper, &__preview #preview-crop {
+    img {
+      transition: filter .25s ease;
     }
 
-    /* Ratio Lock */
-
-    $vueboxW: 12;
-    $vueboxH: $vueboxW * 2;
-    $background-image: url("data:image/svg+xml,%3Csvg width='" + $vueboxW + "' height='" + $vueboxH + "' viewBox='0 0 10 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='none' stroke='black' stroke-width='1.1' d='M7.2,11.2v4.4c0,1-0.6,1.6-1.6,1.6h-1c-1,0-1.6-0.6-1.6-1.6v-4.4'/%3E%3Cpath fill='none' stroke='black' stroke-width='1.1' d='M2.8,8.6V4.2c0-1,0.6-1.6,1.6-1.6h1c1,0,1.6,0.6,1.6,1.6v4.4'/%3E%3Cpath fill='none' stroke='black' stroke-width='1.1' d='M4.9,12.7L5,7.1'/%3E%3C/svg%3E");
-    $inverse-background-image: url("data:image/svg+xml,%3Csvg width='" + $vueboxW + "' height='" + $vueboxH + "' viewBox='0 0 10 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='none' stroke='white' stroke-width='1.1' d='M7.2,11.2v4.4c0,1-0.6,1.6-1.6,1.6h-1c-1,0-1.6-0.6-1.6-1.6v-4.4'/%3E%3Cpath fill='none' stroke='white' stroke-width='1.1' d='M2.8,8.6V4.2c0-1,0.6-1.6,1.6-1.6h1c1,0,1.6,0.6,1.6,1.6v4.4'/%3E%3Cpath fill='none' stroke='white' stroke-width='1.1' d='M4.9,12.7L5,7.1'/%3E%3C/svg%3E");
-
-    &__ratio-lock {
-        width: $vueboxW + px;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-
-        &::before, &::after {
-            content: '';
-            display: block;
-            width: $vueboxW / 2 + px;
-            height: $vueboxH / 2 + px;
-            border-right: 1px solid dimgray;
-        }
-
-        &::before {
-            border-top: 1px solid dimgray;
-        }
-
-        &::after {
-            border-bottom: 1px solid dimgray;
-        }
-
-        &-input {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
-            clip: rect(0 0 0 0);
-
-            &:checked + .tm-editor__ratio-lock-icon {
-                opacity: .8;
-            }
-        }
-
-        &-icon {
-            display: block;
-            width: $vueboxW + px;
-            height: $vueboxH + px;
-            margin: 5px 0;
-            opacity: .3;
-            background-image: $inverse-background-image;
-            cursor: pointer;
-            transition: opacity .25s ease;
-        }
+    &.grayscale {
+      img {
+        filter: grayscale(1);
+      }
     }
 
-    /* Workspace
-    ========================================================================== */
+    &.sepia {
+      img {
+        filter: brightness(0.95) grayscale(1) sepia(0.4);
+      }
+    }
+  }
 
-    &__workspace {
-        z-index: 1;
-        display: flex;
-        width: 100%;
-        order: 1;
-        flex-grow: 1;
-        flex-direction: column;
-        background-color: lighten($editor-background-color, 5%);
-        box-sizing: border-box;
-        padding: $global-small-gutter $global-small-gutter $global-margin $global-small-gutter;
-        margin-bottom: $editor-gutter;
+  /* Bottom Bar
+  ========================================================================== */
 
-        &-article {
-            font-size: 0.9em;
-            font-weight: normal;
-            background-color: $global-secondary-background;
-            padding: $global-small-margin / 2 $global-small-margin;
-            line-height: 1;
-            margin-top: -2px;
-        }
+  &__bottom-bar {
+    box-shadow: $editor-bottom-bar-box-shadow;
 
-        @include media_device(mobile-portrait) {
-            height: 340px;
-        }
-        @include media_mob($se) {
-            height: 340px;
-        }
-        @include media_mob($s) {
-            width: 310px;
-            height: auto;
-            order: 2;
-            min-width: calc(50% - 1px);
-            margin-bottom: 0;
-            margin-left: $editor-gutter;
-            padding: $global-margin $global-gutter $global-margin $global-margin;
-        }
-        @include media_mob($m) {
-            padding: $global-margin $global-medium-margin $global-margin $global-margin;
-        }
-        @include media_mob($l) {
-            padding: $global-margin $global-margin $global-medium-margin $global-margin;
-            margin: 0 $editor-gutter;
-        }
-        @include media_mob($qhd) {
-            padding: $global-medium-margin $global-margin $global-gutter * 2 $global-margin;
-        }
+    .uk-navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      min-height: $bottom-bar-height;
     }
 
-    /* Right Bar
-    ========================================================================== */
+    &-price {
+      font-size: $global-large-font-size;
+      color: $global-inverse-color;
+      font-weight: normal;
+      margin-left: $global-small-margin;
 
-    &__right-bar {
-        width: 100%;
-        height: inherit;
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: column;
-        order: 3;
-        margin-top: $editor-gutter;
-        margin-bottom: $bottom-bar-height;
-        @include media_mob($s) {
-            order: 3;
-            width: 100%;
-            flex-direction: row;
-        }
-        @include media_mob($l) {
-            width: 320px;
-            flex-direction: column;
-            margin-top: 0;
-            margin-bottom: 0;
-        }
+      &-rub {
+        padding-left: 3px;
+        font-weight: 200;
+      }
     }
-
-    /* Preview
-    ========================================================================== */
-
-    &__preview {
-        width: 100%;
-        @include media_mob($s) {
-            width: 320px;
-            max-width: calc(50% - 1px);
-            margin-right: $editor-gutter;
-            padding-left: $global-gutter;
-        }
-        @include media_mob($m) {
-            width: 350px;
-            padding-left: $global-medium-margin;
-        }
-        @include media_mob($l) {
-            width: 100%;
-            max-width: inherit;
-            margin-right: 0;
-            padding-left: $global-margin;
-        }
-
-        #preview-container {
-            width: 100%;
-            max-height: 240px;
-            height: 240px;
-            @include media_mob($l) {
-                max-height: 160px;
-                height: 160px;
-            }
-            @include media_mob($xl) {
-                max-height: 200px;
-                height: 200px;
-            }
-            @include media_mob($qhd) {
-                max-height: 300px;
-                height: 300px;
-            }
-        }
-
-        #preview-crop {
-            overflow: hidden;
-            margin: 0 auto;
-            box-shadow: 0 7px 20px -10px #000;
-            @include media_mob($l) {
-                margin: 0 auto;
-            }
-
-            img {
-                max-width: inherit;
-            }
-        }
-    }
-
-    /* Info
-      ========================================================================== */
-
-    &__info {
-        width: 100%;
-        @include media_mob($s) {
-            width: 310px;
-            flex-grow: 1;
-            min-width: calc(50% - 1px);
-            padding-right: $global-gutter;
-        }
-        @include media_mob($m) {
-            padding-right: $global-medium-margin;
-        }
-        @include media_mob($l) {
-            width: 100%;
-            margin-bottom: $editor-gutter !important;
-        }
-
-        &-item {
-            display: flex;
-            line-height: 1.2;
-
-            &:not(:last-child) {
-                margin-bottom: 7px;
-            }
-
-            color: rgba(#fff, .5);
-        }
-
-        &-value {
-            color: $global-inverse-color;
-        }
-    }
-
-    /* Purchase
-    ========================================================================== */
-
-    &__purchase {
-        width: 100%;
-        padding: $global-medium-margin $global-medium-margin $global-medium-margin $global-margin;
-        line-height: 1;
-
-        &-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        &-price {
-            display: block;
-            font-size: 1.8em;
-        }
-
-        &-rub {
-            font-weight: $base-body-font-weight;
-            padding-left: $global-small-margin / 2;
-        }
-    }
-
-    /* Image Cropper
-    ========================================================================== */
-
-    &__image-cropper {
-        display: flex;
-        align-items: stretch;
-        justify-content: center;
-        flex-grow: 1;
-        transition: transform .5s ease;
-    }
-
-    &__image-cropper, &__preview #preview-crop {
-        img {
-            transition: filter .25s ease;
-        }
-
-        &.grayscale {
-            img {
-                filter: grayscale(1);
-            }
-        }
-
-        &.sepia {
-            img {
-                filter: brightness(0.95) grayscale(1) sepia(0.4);
-            }
-        }
-    }
-
-    /* Bottom Bar
-    ========================================================================== */
-
-    &__bottom-bar {
-        box-shadow: $editor-bottom-bar-box-shadow;
-
-        .uk-navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            min-height: $bottom-bar-height;
-        }
-
-        &-price {
-            font-size: $global-large-font-size;
-            color: $global-inverse-color;
-            font-weight: normal;
-            margin-left: $global-small-margin;
-
-            &-rub {
-                padding-left: 3px;
-                font-weight: 200;
-            }
-        }
-    }
+  }
 }
 
 #image {
-    max-width: 100%;
+  max-width: 100%;
 }
 </style>
