@@ -1,5 +1,5 @@
 <template lang="pug">
-  ScaleTransition
+  div
     .cropper(:class="[filter.colorize]" ref="cropper")
       .cropper__container
         .cropper__canvas(v-show="isCropperSet" ref="canvas")
