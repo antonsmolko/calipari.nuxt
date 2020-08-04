@@ -45,7 +45,7 @@ export default {
     }
   },
   data: () => ({
-    confirmContent: '<p class="tm-text-medium">Вы уверены что хотите удалить карту?</p>'
+    confirmContent: '<p class="tm-text-medium">Вы уверены, что хотите удалить карту?</p>'
   }),
   computed: {
     ...mapState('payment', {

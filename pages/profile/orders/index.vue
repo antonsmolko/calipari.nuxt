@@ -65,11 +65,21 @@ export default {
       this.$router.push({ path: '/payment', query: { hash } })
     },
     onCancel (number) {
-      this.cancelOrderAction(number)
-        .then(() => this.addNotificationAction({
-          message: `Заказ № ${number} успешно отменен.`,
-          status: 'success'
-        }))
+      const modal = this.$uikit.modal
+
+      modal.labels = {
+        ok: 'Подтвердить',
+        cancel: 'Отменить'
+      }
+
+      modal.confirm('<p class="tm-text-medium">Вы уверены, что хотите отменить заказ?</p>')
+        .then(() => {
+          this.cancelOrderAction(number)
+            .then(() => this.addNotificationAction({
+              message: `Заказ № ${number} успешно отменен.`,
+              status: 'success'
+            }))
+        })
     },
     onClose () {
       this.$router.push('/profile')

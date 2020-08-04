@@ -103,8 +103,7 @@ export default {
   methods: {
     ...mapActions({
       cancelOrderAction: 'profile/cancelOrder',
-      addNotificationAction: 'notifications/addItem',
-      setProcessFieldAction: 'payment/setProcessField'
+      addNotificationAction: 'notifications/addItem'
     }),
     onClose () {
       this.$router.push('/profile/orders')
@@ -113,17 +112,25 @@ export default {
       return getFormatPrice(price)
     },
     onPay () {
-      this.setProcessFieldAction({ field: 'paymentHash', value: this.order.hash_number })
-      this.setProcessFieldAction({ field: 'status', value: 'enabled' })
-      this.$router.push('/payment/')
+      this.$router.push({ path: '/payment', query: { hash: this.order.hash_number } })
     },
     onCancel () {
-      this.cancelOrderAction(this.order.number)
+      const modal = this.$uikit.modal
+
+      modal.labels = {
+        ok: 'Подтвердить',
+        cancel: 'Отменить'
+      }
+
+      modal.confirm('<p class="tm-text-medium">Вы уверены, что хотите отменить заказ?</p>')
         .then(() => {
-          this.addNotificationAction({
-            message: `Заказ № ${this.order.number} успешно отменен.`,
-            status: 'success'
-          })
+          this.cancelOrderAction(this.order.number)
+            .then(() => {
+              this.addNotificationAction({
+                message: `Заказ № ${this.order.number} успешно отменен.`,
+                status: 'success'
+              })
+            })
         })
     }
   }
