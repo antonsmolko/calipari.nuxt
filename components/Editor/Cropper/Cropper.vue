@@ -237,7 +237,7 @@ export default {
       addListener(this.cropBox.ownerDocument, EVENT_POINTER_UP, (this.endCropMove = this.onEndCropMove.bind(this)))
       this.$store.dispatch('notifications/addItem', {
         message: `${EVENT_POINTER_DOWN} ${EVENT_POINTER_UP} ${EVENT_POINTER_MOVE}`,
-        timeout: 30
+        timeout: 30000
       })
       await this.loadImage(this.imageUrl)
         .then(() => {
