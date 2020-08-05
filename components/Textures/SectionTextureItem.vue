@@ -127,6 +127,7 @@ export default {
     position: relative;
     overflow: hidden;
     z-index: 0;
+    // from Safari !!!
     .uk-background-cover {
       position: fixed;
       display: block;
