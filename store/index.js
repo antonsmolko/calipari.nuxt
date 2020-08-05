@@ -6,7 +6,8 @@ export const state = () => ({
   timePeriod: false,
   editorEnable: false,
   scrollTo: null,
-  breakPoint: {}
+  breakPoint: {},
+  browser: null
 })
 
 export const mutations = {
@@ -23,13 +24,14 @@ export const mutations = {
 }
 
 export const actions = {
-  async nuxtServerInit ({ dispatch }) {
+  async nuxtServerInit ({ commit, dispatch }) {
     await Promise.all([
       dispatch('textures/getItems'),
       dispatch('categories/getItems'),
       dispatch('settings/getItems'),
       dispatch('delivery/getItems')
     ])
+    commit('SET_FIELD', { field: 'browser', value: this.$ua.browser() })
   },
   setFields ({ commit }, payload) {
     commit('SET_FIELDS', payload)

@@ -108,6 +108,7 @@ export default {
     'nuxt-trailingslash-module',
     'nuxt-webfontloader',
     'cookie-universal-nuxt',
+    'nuxt-user-agent',
     ['nuxt-vuex-localstorage', {
       ...(isDev && {
         mode: 'debug'
