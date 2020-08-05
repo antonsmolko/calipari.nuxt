@@ -1,5 +1,5 @@
 <template lang="pug">
-  section.uk-section.uk-padding-remove-vertical.uk-overflow-hidden
+  section.uk-section.uk-padding-remove-vertical
     .tm-hero.uk-container(:class="{ 'uk-light': darkPeriod }")
       .tm-hero__container(data-uk-grid)
         .tm-hero__strip-block(class="uk-width-1-2@m")
