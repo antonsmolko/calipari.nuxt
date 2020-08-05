@@ -456,6 +456,7 @@ Component: Cropper
     left: 0;
     outline: 1px solid rgba(#aaa, 1);
     overflow: hidden;
+    transition: top 1s, left 1s;
     z-index: 1;
 
     &.active {
