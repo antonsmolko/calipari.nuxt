@@ -235,10 +235,6 @@ export default {
       await this.setCropperMaxHeight(this.cropper.offsetHeight)
       addListener(this.cropBox, EVENT_POINTER_DOWN, (this.startCropMove = this.onStartCropMove.bind(this)))
       addListener(this.cropBox.ownerDocument, EVENT_POINTER_UP, (this.endCropMove = this.onEndCropMove.bind(this)))
-      this.$store.dispatch('notifications/addItem', {
-        message: `${EVENT_POINTER_DOWN} ${EVENT_POINTER_UP} ${EVENT_POINTER_MOVE}`,
-        timeout: 30000
-      })
       await this.loadImage(this.imageUrl)
         .then(() => {
           this.setImageSizes()
@@ -278,7 +274,7 @@ export default {
         this.startMoveY = e.clientY
       }
     },
-    onEndCropMove (e) {
+    onEndCropMove () {
       this.lastTranslateX += this.moveX
       this.moveX = 0
       this.lastTranslateY += this.moveY

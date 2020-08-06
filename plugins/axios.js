@@ -1,6 +1,6 @@
 import errorsLibrary from '~/plugins/lang/ru/errorsLib'
 
-export default function ({ $axios, store, redirect }) {
+export default function ({ $auth, $axios, store, redirect }) {
   $axios.onResponse((response) => {
     if (response.data.message && response.data.type !== 'modal') {
       store.dispatch('notifications/addItem', {
@@ -15,6 +15,9 @@ export default function ({ $axios, store, redirect }) {
     const error = err.response
 
     switch (error.status) {
+      case 401:
+        $auth.logout()
+        break
       case 404:
         redirect('/notfound')
         store.dispatch('notifications/addItem', {
