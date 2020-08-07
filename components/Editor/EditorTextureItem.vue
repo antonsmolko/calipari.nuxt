@@ -1,11 +1,12 @@
 <template lang="pug">
-    li.tm-editor__texture-item
-        .uk-panel(:class="{'active': isActive }", @click="onClick")
-            img.tm-editor__texture-thumb(
-                :data-src="`${localImageEndpoint}/crop/150/150/${item.sample_path}`",
-                :alt="item.name"
-                data-uk-img)
-            span.tm-editor__texture-title.uk-text-truncate {{ item.name }}
+  li.tm-editor__texture-item
+    .uk-panel.uk-position-relative(:class="{'active': isActive }", @click="onClick")
+      i.tm-editor__texture-icon.uk-icon(:data-uk-icon="textureIcon" :data-uk-tooltip="tooltipText")
+      img.tm-editor__texture-thumb(
+        :data-src="`${localImageEndpoint}/crop/150/150/${item.sample_path}`",
+        :alt="item.name"
+        data-uk-img)
+      span.tm-editor__texture-title.uk-text-truncate {{ item.name }}
 </template>
 
 <script>
@@ -31,6 +32,12 @@ export default {
   computed: {
     isActive () {
       return this.item.id === this.model
+    },
+    textureIcon () {
+      return this.item.seamless ? 'seamless' : 'stripes'
+    },
+    tooltipText () {
+      return this.item.seamless ? 'Бесшовное полотно' : 'Стыковка полос'
     }
   },
   methods: {
@@ -41,9 +48,17 @@ export default {
 }
 </script>
 <style lang="scss">
-    .tm-editor {
-        &__texture-item {
-            user-select: none;
-        }
-    }
+.tm-editor {
+  &__texture-item {
+    user-select: none;
+  }
+  &__texture-icon {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 20px;
+    height: auto;
+    color: #BCBCBC;
+  }
+}
 </style>

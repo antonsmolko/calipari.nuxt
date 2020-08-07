@@ -12,7 +12,7 @@
             .tm-textures__bottom.tm-text-medium
               .tm-textures__spec
                 span.tm-textures__spec-heading.uk-h4.uk-text-muted Ширина —
-                span.tm-textures__spec-value.uk-text-large {{ width }} см
+                span.tm-textures__spec-value.uk-text-large {{ widthText }}
               .tm-textures__spec
                 span.tm-textures__spec-heading.uk-h4.uk-text-muted Цена —
                 span.tm-textures__spec-value.uk-text-large {{ cost }} ₽/м<sup>2</sup>
@@ -67,6 +67,10 @@ export default {
     sampleBottomOffset: {
       type: [String, Number],
       default: 0
+    },
+    seamless: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({
@@ -84,6 +88,9 @@ export default {
     },
     exampleUrl () {
       return getS3ImageUrl({ name: this.exampleSrc })
+    },
+    widthText () {
+      return this.seamless ? 'Бесшовное полотно' : `${this.width} см`
     }
   }
 }

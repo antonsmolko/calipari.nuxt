@@ -25,7 +25,8 @@
                     :cost="item.price"
                     :sampleBottomOffset="bottomOffset"
                     :textureSrc="item.sample_path"
-                    :exampleSrc="item.background_path")
+                    :exampleSrc="item.background_path"
+                    :seamless="Boolean(item.seamless)")
 </template>
 
 <script>
