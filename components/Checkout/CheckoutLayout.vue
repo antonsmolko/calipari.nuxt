@@ -1,7 +1,6 @@
 <template lang="pug">
     div(v-show="isEnabled")
         TopBar(
-            lead="Оформление заказа"
             :title="title")
             //.uk-navbar-item(class="uk-visible@l")
                 //span.uk-h5.tm-total-price__heading Цена

@@ -58,15 +58,12 @@ $xl: '1600px';
 $xxl: '1800px';
 $qhd: '1921px';
 
-// Editor
-$editor-background-color: rgb(27, 27, 29);
-
 // Form
 $form-radio-checked-border: #eaeaea;
 $form-line-height: $global-control-height;
 
 /** Mosaic image */
-$base-mosaic-badge-margin: 6px;
+$base-mosaic-badge-margin: 4px;
 
 /** Modal */
 $modal-footer-background: #f1f1f1;
@@ -137,3 +134,6 @@ $notification-position: $navbar-nav-item-height + $global-small-margin;
 $notification-message-font-size: $global-font-size;
 $notification-close-top: $notification-message-padding;
 $notification-close-right: $notification-message-padding;
+
+// Editor
+$editor-background-color: $global-secondary-background;

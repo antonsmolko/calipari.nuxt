@@ -2,8 +2,8 @@
     .uk-container.uk-container-expand
         nav(data-uk-navbar)
             .uk-navbar-left
-                .uk-navbar-item
-                    span.tm-logo.uk-logo.uk-icon.uk-margin-small-right(data-uk-icon="calipari")
+                .uk-navbar-item.uk-grid-divider.uk-grid-small(data-uk-grid)
+                    span.tm-logo.uk-logo.uk-icon(data-uk-icon="calipari")
                     h1.uk-h4.uk-margin-remove.uk-text-muted Редактор
             .uk-navbar-right
                 .uk-navbar-item

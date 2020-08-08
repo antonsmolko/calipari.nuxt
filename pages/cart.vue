@@ -62,11 +62,6 @@ export default {
       resolve()
     })
   },
-  data: () => ({
-    confirmContent: `
-        <p>Вы уверены?</p>
-        <p>Данное действие удалит товар безвозвратно!</p>`
-  }),
   computed: {
     ...mapState({
       items: state => state.cart.items

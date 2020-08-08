@@ -1,6 +1,8 @@
 <template lang="pug">
     img(:data-src="url"
         :alt="alt"
+        :width="width"
+        :height="height"
         data-uk-img)
 </template>
 

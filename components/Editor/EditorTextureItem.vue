@@ -1,5 +1,5 @@
 <template lang="pug">
-  li.tm-editor__texture-item
+  li.tm-editor__texture-item(:data-seamless="item.seamless")
     .uk-panel.uk-position-relative(:class="{'active': isActive }", @click="onClick")
       i.tm-editor__texture-icon.uk-icon(:data-uk-icon="textureIcon" :data-uk-tooltip="tooltipText")
       img.tm-editor__texture-thumb(
@@ -37,7 +37,7 @@ export default {
       return this.item.seamless ? 'seamless' : 'stripes'
     },
     tooltipText () {
-      return this.item.seamless ? 'Бесшовное полотно' : 'Стыковка полос'
+      return this.item.seamless ? 'Бесшовная' : 'Полоса'
     }
   },
   methods: {

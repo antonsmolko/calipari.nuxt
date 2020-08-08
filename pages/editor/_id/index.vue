@@ -375,7 +375,7 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
   ========================================================================== */
 
   &__panel {
-    width: 100%;
+    width: inherit;
     background-color: $editor-background-color;
     padding: $global-small-gutter;
     box-sizing: border-box;
@@ -563,18 +563,20 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
       font-size: 0.9em;
       font-weight: normal;
       background-color: $global-secondary-background;
-      padding: $global-small-margin / 2 $global-small-margin;
-      line-height: 1;
+      padding: 0 7px;
+      height: 24px;
+      line-height: 24px;
       margin-top: -2px;
+      border-radius: 2px;
     }
 
-    @include media_device(mobile-portrait) {
+    @include media-device(mobile-portrait) {
       height: 340px;
     }
-    @include media_mob($se) {
+    @include media-mob($se) {
       height: 340px;
     }
-    @include media_mob($s) {
+    @include media-mob($s) {
       width: 310px;
       height: auto;
       order: 2;
@@ -583,14 +585,14 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
       margin-left: $editor-gutter;
       padding: $global-margin $global-gutter $global-margin $global-margin;
     }
-    @include media_mob($m) {
+    @include media-mob($m) {
       padding: $global-margin $global-medium-margin $global-margin $global-margin;
     }
-    @include media_mob($l) {
+    @include media-mob($l) {
       padding: $global-margin $global-margin $global-medium-margin $global-margin;
       margin: 0 $editor-gutter;
     }
-    @include media_mob($qhd) {
+    @include media-mob($qhd) {
       padding: $global-medium-margin $global-margin $global-gutter * 2 $global-margin;
     }
   }
