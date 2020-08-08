@@ -114,7 +114,7 @@ export default {
       height: 80vh;
     }
     @include media-portrait() {
-      height: 35vh;
+      height: 33vh;
     }
     @include media-mob-portrait($s) {
       height: 40vh;
@@ -127,6 +127,7 @@ export default {
   &__strip-roll {
     position: absolute;
     bottom: 0;
+    width: 383px;
     max-width: inherit;
     height: auto;
     left: 50%;
@@ -160,7 +161,8 @@ export default {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      margin-top: 9vh !important;
+      margin-top: 6vh !important;
+      z-index: -1;
     }
     @include media-mob-portrait($m) {
       width: 440px;
@@ -200,36 +202,10 @@ export default {
     display: block;
   }
 
-  //&__brand-name {
-  //    margin-bottom: $global-small-gutter;
-  //    @include media-mob-portrait($s) {
-  //        font-size: 92px;
-  //    }
-  //    @include media-mob-portrait($m) {
-  //        font-size: 102px;
-  //    }
-  //    @include media-mob($l) {
-  //        font-size: 85.5px;
-  //    }
-  //    @include media-mob($xl) {
-  //        font-size: 110px;
-  //    }
-  //    @include media-desk-landscape($m) {
-  //        font-size: 90px;
-  //    }
-  //    @include media-desk-portrait($xs) {
-  //        font-size: 65px;
-  //    }
-  //    @include media-desk-portrait($se) {
-  //        font-size: 55px;
-  //    }
-  //}
-
   &__title {
     margin-bottom: $global-small-margin;
     white-space: nowrap;
     line-height: 1.3;
-    //font-weight: $base-body-font-weight;
     @include media-mob-portrait($s) {
       font-size: 45.3px;
     }

@@ -144,7 +144,8 @@ export const breakPoints = [
   { key: 'hm', value: 768 },
   { key: 's', value: 640 },
   { key: 'xs', value: 560 },
-  { key: 'se', value: 340 }
+  { key: 'se', value: 340 },
+  { key: 'min', value: 0 }
 ]
 
 export const getBreakPointByKey = (key) => {
