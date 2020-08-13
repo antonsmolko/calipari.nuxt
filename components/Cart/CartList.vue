@@ -8,8 +8,8 @@
                             v-for="item in items"
                             :key="item.id"
                             :item="item"
-                            :texture="getTexture(item.texture_id)"
-                            :price="getPrice(item)"
+                            :texture="getTexture(item.details.texture_id)"
+                            :price="getPrice(item.details)"
                             @delete="onDelete")
         CartModal
 </template>
@@ -48,8 +48,8 @@ export default {
     getTexture (id) {
       return this.$store.getters['textures/getItemById'](id)
     },
-    getPrice (item) {
-      return this.$store.getters['cart/itemPrice'](item)
+    getPrice (itemDetails) {
+      return this.$store.getters['cart/itemPrice'](itemDetails)
     },
     onDelete (id) {
       const modal = this.$uikit.modal

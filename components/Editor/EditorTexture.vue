@@ -2,7 +2,7 @@
   .tm-editor__texture.tm-editor__panel.uk-light(data-uk-filter="target: .js-filter")
     .tm-editor__texture-header.uk-flex.uk-flex-middle.uk-margin-small-bottom
       h6.uk-h6.uk-margin-remove Фактуры
-      .tm-editor__texture-filter-controls.uk-background-secondary.uk-margin-small-left
+      .tm-editor__texture-filter-controls.uk-background-secondary.uk-margin-small-left(v-if="filterEnable")
         .uk-grid-small.uk-grid-divider.uk-child-width-auto.uk-text-small(data-uk-grid)
           div
             ul.uk-subnav(data-uk-margin)
@@ -27,6 +27,7 @@
           v-for="item in filteringItems"
           :key="item.id"
           :item="item"
+          :showBadge="filterEnable"
           v-model="activeItem"
           @click="onClick")
 </template>
@@ -64,6 +65,9 @@ export default {
     filtering: false
   }),
   computed: {
+    filterEnable () {
+      return Boolean(this.items.find(item => item.seamless === 1))
+    },
     filteringItems () {
       switch (this.filterControl) {
         case 'stripes':

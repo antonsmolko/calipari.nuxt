@@ -1,7 +1,10 @@
 <template lang="pug">
   li.tm-editor__texture-item(:data-seamless="item.seamless")
     .uk-panel.uk-position-relative(:class="{'active': isActive }", @click="onClick")
-      i.tm-editor__texture-icon.uk-icon(:data-uk-icon="textureIcon" :data-uk-tooltip="tooltipText")
+      i.tm-editor__texture-badge.uk-icon(
+        v-if="showBadge"
+        :data-uk-icon="textureIcon"
+        :data-uk-tooltip="tooltipText")
       img.tm-editor__texture-thumb(
         :data-src="`${localImageEndpoint}/crop/150/150/${item.sample_path}`",
         :alt="item.name"
@@ -24,6 +27,10 @@ export default {
     model: {
       type: Number,
       default: null
+    },
+    showBadge: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({
@@ -52,7 +59,7 @@ export default {
   &__texture-item {
     user-select: none;
   }
-  &__texture-icon {
+  &__texture-badge {
     position: absolute;
     top: 4px;
     right: 4px;

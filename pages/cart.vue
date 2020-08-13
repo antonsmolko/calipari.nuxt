@@ -1,5 +1,5 @@
 <template lang="pug">
-    Page
+    Page(v-if="!$fetchState.pending && responseData")
         template(#main)
             main
                 TopBar(title="Корзина")
@@ -14,8 +14,7 @@
                     v-if="items.length"
                     :class="{ 'uk-light': darkPeriod }"
                     data-uk-height-viewport="offset-top: true; offset-bottom: true")
-                    CartList(
-                        :items="items")
+                    CartList(:items="items")
                     .uk-container(class="uk-visible@l")
                         .tm-checkout__footer
                             span.tm-total-price__heading Цена
@@ -57,11 +56,19 @@ export default {
     }
   },
   async fetch () {
+    const key = this.$route.query.key
+    if (key) {
+      await this.getItemsWithProjectAction({ key })
+    }
     await new Promise((resolve) => {
       this.$store.dispatch('setFields', { bottomBar: false, footer: false })
       resolve()
     })
+    this.responseData = true
   },
+  data: () => ({
+    responseData: false
+  }),
   computed: {
     ...mapState({
       items: state => state.cart.items
@@ -86,7 +93,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      checkoutEnableAction: 'checkout/enable'
+      checkoutEnableAction: 'checkout/enable',
+      getItemsWithProjectAction: 'cart/getItemsWithProject'
     }),
     checkout () {
       this.checkoutEnableAction({

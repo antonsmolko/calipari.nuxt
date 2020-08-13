@@ -9,19 +9,19 @@
                 a.tm-order-table__lightbox.uk-inline.uk-transition-toggle(
                     tabindex="0"
                     :data-caption="imageDataCaption"
-                    :href="`${fullBaseUrl}/${item.width_px}/${item.height_px}/${item.x}/${item.y}/${flipH}/${flipV}/${colorize}/${item.image_path}`")
+                    :href="`${fullBaseUrl}/${details.width_px}/${details.height_px}/${details.x}/${details.y}/${flipH}/${flipV}/${colorize}/${details.image_path}`")
                     img.uk-box-shadow-medium(
-                        :src="`${thumbBaseUrl}/${item.width_px}/${item.height_px}/${item.x}/${item.y}/${flipH}/${flipV}/${colorize}/${item.image_path}`"
+                        :src="`${thumbBaseUrl}/${details.width_px}/${details.height_px}/${details.x}/${details.y}/${flipH}/${flipV}/${colorize}/${details.image_path}`"
                         :alt="article")
             td.tm-order-table__params(class="uk-width-1-2 uk-width-1-4@s uk-width-1-3@m")
                 .tm-order-table__params-item
                     span.tm-order-table__params-heading.uk-text-muted Артикул
                     nuxt-link.tm-order-table__params-value.uk-link.uk-link-text(
-                        :to="`/editor/${item.image_id}`"
+                        :to="`/editor/${details.image_id}`"
                     ) {{ article }}
                 .tm-order-table__params-item
                     span.tm-order-table__params-heading.uk-text-muted Размеры
-                    span.tm-order-table__params-value.uk-text-emphasis {{ item.width_cm }} см × {{ item.height_cm }} см
+                    span.tm-order-table__params-value.uk-text-emphasis {{ details.width_cm }} см × {{ details.height_cm }} см
                 .tm-order-table__params-item
                     span.tm-order-table__params-heading.uk-text-muted Материал
                     span.tm-order-table__params-value.uk-text-emphasis {{ texture.name }}
@@ -32,7 +32,7 @@
                 CartCounter(@count="onCount" v-model="count")
             td.tm-order-table__price(class="uk-width-1-2 uk-width-1-4@s uk-width-auto@m")
                 span.tm-order-table__price-heading.uk-text-muted Цена
-                span.tm-order-table__price-value.uk-text-emphasis {{ formatPrice }}
+                span.tm-order-table__price-value.uk-text-emphasis(data-uk-tooltip="<div>image search - 1000</div><div>image purchase - 3000</div>") {{ formatPrice }}
             td.tm-order-table__trash: button.uk-icon-button(data-uk-icon="trash" @click="onDelete")
 </template>
 
@@ -71,30 +71,33 @@ export default {
     thumbBaseUrl: `${process.env.localImageEndpoint}/thumb`
   }),
   computed: {
+    details () {
+      return this.item.details
+    },
     formatPrice () {
       return getFormatPrice(this.price)
     },
     article () {
-      return this.item.image_id.toString().padStart(5, '0')
+      return this.details.image_id.toString().padStart(5, '0')
     },
     flipH () {
-      return Number(this.item.filter.flipH)
+      return Number(this.details.filter.flipH)
     },
     flipV () {
-      return Number(this.item.filter.flipV)
+      return Number(this.details.filter.flipV)
     },
     colorize () {
-      return this.item.filter.colorize ? this.item.filter.colorize : 0
+      return this.details.filter.colorize ? this.details.filter.colorize : 0
     },
     filterDetailsString () {
-      return getFilterDetailsString(this.item.filter)
+      return getFilterDetailsString(this.details.filter)
     },
     imageDataCaption () {
       /* eslint-disable */
       return `
         Изображение: ${this.article} |
-        Ширина: ${this.item.width_cm} см |
-        Высота: ${this.item.height_cm} см |
+        Ширина: ${this.details.width_cm} см |
+        Высота: ${this.details.height_cm} см |
         Фактура: «${this.texture.name}» |
         Эффекты: ${this.filterDetailsString} |
         Цена: ${this.formatPrice}`
@@ -102,7 +105,7 @@ export default {
     }
   },
   created () {
-    this.count = this.item.qty
+    this.count = this.details.qty
   },
   methods: {
     ...mapActions('cart', {

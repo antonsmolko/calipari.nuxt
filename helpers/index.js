@@ -3,8 +3,8 @@ import isEmpty from 'lodash/isEmpty'
 import isInteger from 'lodash/isInteger'
 import maxBy from 'lodash/maxBy'
 import crc32 from 'crc-32'
-import lib from '~/plugins/lang/ru/lib'
-import { form } from '~/plugins/config'
+import lib from '@/plugins/lang/ru/lib'
+import { form } from '@/plugins/config'
 
 export const getFilterDetailsString = (filter) => {
   const activeFilters = getActiveFilters(filter)

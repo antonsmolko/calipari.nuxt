@@ -78,20 +78,20 @@
 import { mapState, mapActions } from 'vuex'
 import some from 'lodash/some'
 
-import EditorSizes from '~/components/Editor/EditorSizes'
-import EditorFilter from '~/components/Editor/EditorFilter'
-import EditorTexture from '~/components/Editor/EditorTexture'
-import EditorCollection from '~/components/Editor/EditorCollection'
-import Cropper from '~/components/Editor/Cropper/Cropper'
-import EditorPreview from '~/components/Editor/EditorPreview'
-import EditorInfo from '~/components/Editor/EditorInfo'
-import EditorPurchase from '~/components/Editor/EditorPurchase'
-import EditorBottomBar from '~/components/Editor/EditorBottomBar'
-import ImageLike from '~/components/Gallery/ImageLike'
-import EditorPanelHeading from '~/components/Editor/EditorPanelHeading'
-import scrollToTop from '~/components/mixins/scrollToTop'
-import closeEditorMethods from '~/components/mixins/closeEditorMethods'
-import { filterSet, hash } from '~/helpers'
+import EditorSizes from '@/components/Editor/EditorSizes'
+import EditorFilter from '@/components/Editor/EditorFilter'
+import EditorTexture from '@/components/Editor/EditorTexture'
+import EditorCollection from '@/components/Editor/EditorCollection'
+import Cropper from '@/components/Editor/Cropper/Cropper'
+import EditorPreview from '@/components/Editor/EditorPreview'
+import EditorInfo from '@/components/Editor/EditorInfo'
+import EditorPurchase from '@/components/Editor/EditorPurchase'
+import EditorBottomBar from '@/components/Editor/EditorBottomBar'
+import ImageLike from '@/components/Gallery/ImageLike'
+import EditorPanelHeading from '@/components/Editor/EditorPanelHeading'
+import scrollToTop from '@/components/mixins/scrollToTop'
+import closeEditorMethods from '@/components/mixins/closeEditorMethods'
+import { filterSet, hash } from '@/helpers'
 
 export default {
   components: {
@@ -197,18 +197,14 @@ export default {
     },
     cartItemData () {
       return {
-        id: hash(),
+        hash: hash(),
         image_id: this.orderSettings.currentImage.id,
-        image_path: this.orderSettings.currentImage.path,
         width_cm: this.orderSettings.sizes.width,
         height_cm: this.orderSettings.sizes.height,
         texture_id: this.orderSettings.texture,
         filter: this.orderSettings.filter,
         x: Math.round(this.cropData.x),
-        y: Math.round(this.cropData.y),
-        width_px: Math.round(this.cropData.width) || this.orderSettings.currentImage.width,
-        height_px: Math.round(this.cropData.height) || this.orderSettings.currentImage.height,
-        qty: 1
+        y: Math.round(this.cropData.y)
       }
     },
     liked () {

@@ -1,4 +1,5 @@
-import { refreshTokens } from '~/helpers'
+import unionBy from 'lodash/unionBy'
+import { refreshTokens } from '@/helpers'
 
 export const state = () => ({
   items: [],
@@ -10,13 +11,10 @@ export const mutations = {
   SET_ITEMS (state, payload) {
     state.items = payload
   },
-  ADD_ITEM (state, payload) {
-    state.items.push(payload)
-  },
   SET_ITEM_QTY (state, { id, qty }) {
     state.items.map((item) => {
       if (item.id === id) {
-        item.qty = qty
+        item.details.qty = qty
       }
     })
   },
@@ -29,80 +27,79 @@ export const mutations = {
         state[field] = value
       }
     }
+  },
+  UNION_ITEMS (state, payload) {
+    state.items = unionBy(state.items, payload, 'id')
   }
 }
 
 export const actions = {
-  async addItem ({ commit, dispatch }, item) {
+  async addItem ({ dispatch }, item) {
     if (this.$auth.loggedIn) {
       await refreshTokens(this.$auth)
     }
     this.$auth.loggedIn
-      ? dispatch('add', { item })
-      : commit('ADD_ITEM', item)
+      ? dispatch('add', item)
+      : dispatch('createItem', item)
   },
-  async setItemQty ({ commit, dispatch }, payload) {
+  setItemQty ({ commit }, { id, qty }) {
+    return this.$api.$patch(`/cart-items/${id}`, { qty })
+      .then(() => commit('SET_ITEM_QTY', { id, qty }))
+  },
+  async syncItems ({ state, dispatch }) {
     if (this.$auth.loggedIn) {
       await refreshTokens(this.$auth)
     }
-    return this.$auth.loggedIn
-      ? dispatch('setQty', payload)
-      : commit('SET_ITEM_QTY', payload)
-  },
-  async deleteItem ({ commit, dispatch }, id) {
-    if (this.$auth.loggedIn) {
-      await refreshTokens(this.$auth)
-    }
+    const items = state.items.map(item => item.id)
+
     this.$auth.loggedIn
-      ? dispatch('delete', id)
-      : commit('DELETE_ITEM', id)
+      ? dispatch('syncItemsAuth', items)
+      : dispatch('sync', items)
   },
-  setFields ({ commit }, payload) {
-    commit('SET_FIELDS', payload)
-  },
-  async sync ({ state, commit }) {
-    if (this.$auth.loggedIn) {
-      await refreshTokens(this.$auth)
-    }
+  syncItemsAuth ({ state, commit }, items) {
     const token = this.$auth.strategy.token.get()
-    const items = state.items
     const headers = token ? { Authorization: token } : {}
 
     return this.$api.$post('/carts/sync', { items }, { headers })
+      .then(response => commit('SET_ITEMS', response))
+  },
+  sync ({ state, commit }, items) {
+    return this.$api.$post('/cart-items/sync', { items })
       .then(response => commit('SET_ITEMS', response))
   },
   add ({ commit }, item) {
     const token = this.$auth.strategy.token.get()
     const headers = { Authorization: token }
 
-    return this.$api.$post('/carts/add', { item }, { headers })
+    return this.$api.$post('/carts/add', item, { headers })
       .then(response => commit('SET_ITEMS', response))
   },
-  delete ({ commit }, id) {
-    const token = this.$auth.strategy.token.get()
-    const headers = { Authorization: token }
-
-    return this.$api.$delete(`/carts/${id}`, { headers })
-      .then(response => commit('SET_ITEMS', response))
+  createItem ({ commit }, item) {
+    return this.$api.$post('/cart-items', item)
+      .then(response => commit('UNION_ITEMS', [response]))
   },
-  setQty ({ commit }, payload) {
-    const token = this.$auth.strategy.token.get()
-    const headers = { Authorization: token }
-
-    return this.$api.$post('/carts/set-qty', payload, { headers })
-      .then(() => commit('SET_ITEM_QTY', payload))
+  deleteItem ({ commit }, id) {
+    return this.$api.$delete(`/cart-items/${id}`)
+      .then(response => commit('DELETE_ITEM', id))
+  },
+  getItemsWithProject ({ commit }, payload) {
+    return this.$api.$post('/carts/with-project', payload)
+      .then(response => commit('UNION_ITEMS', response))
+  },
+  setFields ({ commit }, payload) {
+    commit('SET_FIELDS', payload)
   }
 }
 
 export const getters = {
-  qty: state => state.items.reduce((qty, item) => qty + item.qty, 0),
-  totalPrice: (state, getters) => state.items.reduce((total, item) => total + getters.itemPrice(item), 0),
-  itemPrice: (state, getters, rootState, rootGetters) => (item) => {
-    const texture = rootGetters['textures/getItemById'](item.texture_id)
+  qty: state => state.items.reduce((qty, item) => qty + item.details.qty, 0),
+  totalPrice: (state, getters) => state.items.reduce((total, item) => total + getters.itemPrice(item.details), 0),
+  itemPrice: (state, getters, rootState, rootGetters) => (itemDetails) => {
+    const texture = rootGetters['textures/getItemById'](itemDetails.texture_id)
     const textureTax = texture.price
-    const orderArea = Math.round(item.width_cm * item.height_cm / 100) / 100
+    const orderArea = Math.round(itemDetails.width_cm * itemDetails.height_cm / 100) / 100
     const price = Math.round(orderArea * textureTax / 100) * 100
 
-    return price * item.qty
+    return price * itemDetails.qty
   }
 }
