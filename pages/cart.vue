@@ -58,7 +58,7 @@ export default {
   async fetch () {
     const key = this.$route.query.key
     if (key) {
-      await this.getItemsWithProjectAction({ key })
+      await this.getProjectAction(key)
     }
     await new Promise((resolve) => {
       this.$store.dispatch('setFields', { bottomBar: false, footer: false })
@@ -94,7 +94,7 @@ export default {
   methods: {
     ...mapActions({
       checkoutEnableAction: 'checkout/enable',
-      getItemsWithProjectAction: 'cart/getItemsWithProject'
+      getProjectAction: 'cart/getProject'
     }),
     checkout () {
       this.checkoutEnableAction({

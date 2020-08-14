@@ -82,9 +82,9 @@ export const actions = {
     return this.$api.$delete(`/cart-items/${id}`)
       .then(response => commit('DELETE_ITEM', id))
   },
-  getItemsWithProject ({ commit }, payload) {
-    return this.$api.$post('/carts/with-project', payload)
-      .then(response => commit('UNION_ITEMS', response))
+  getProject ({ commit }, key) {
+    return this.$api.$post('/cart-items/get-project', { key })
+      .then(response => commit('UNION_ITEMS', [response]))
   },
   setFields ({ commit }, payload) {
     commit('SET_FIELDS', payload)
