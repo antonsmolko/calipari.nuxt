@@ -32,14 +32,17 @@
                 CartCounter(@count="onCount" v-model="count")
             td.tm-order-table__price(class="uk-width-1-2 uk-width-1-4@s uk-width-auto@m")
                 span.tm-order-table__price-heading.uk-text-muted Цена
-                span.tm-order-table__price-value.uk-text-emphasis(data-uk-tooltip="<div>image search - 1000</div><div>image purchase - 3000</div>") {{ formatPrice }}
+                span.tm-order-table__price-value.uk-text-emphasis {{ formatPrice }}
+                  sup.uk-text-primary.tm-order-table__price-note(v-if="addedCostsContent"
+                    :data-uk-tooltip="addedCostsContent") *
             td.tm-order-table__trash: button.uk-icon-button(data-uk-icon="trash" @click="onDelete")
 </template>
 
 <script>
 import { mapActions } from 'vuex'
-import CartCounter from './CartCounter'
-import { getFilterDetailsString, getFormatPrice } from '~/helpers'
+import CartCounter from '@/components/Cart/CartCounter'
+import { getFilterDetailsString, getFormatPrice } from '@/helpers'
+import toPairs from 'lodash/toPairs'
 
 export default {
   components: { CartCounter },
@@ -102,6 +105,11 @@ export default {
         Эффекты: ${this.filterDetailsString} |
         Цена: ${this.formatPrice}`
       /* eslint-enable */
+    },
+    addedCostsContent () {
+      return this.item.details.added_costs
+        ? this.getAddedCostsContent(this.item.details.added_costs)
+        : null
     }
   },
   created () {
@@ -117,6 +125,11 @@ export default {
     },
     onDelete () {
       this.$emit('delete', this.item.id)
+    },
+    getAddedCostsContent (addedCosts) {
+      return toPairs(addedCosts).reduce((acc, item) => {
+        return `${acc}<div class="uk-flex uk-flex-between"><span>${item[0]}&nbsp;&nbsp;&nbsp;</span><span>+ ${getFormatPrice(Number(item[1]))}</span></div>`
+      }, '')
     }
   }
 }

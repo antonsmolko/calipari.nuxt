@@ -1,4 +1,6 @@
 import unionBy from 'lodash/unionBy'
+import values from 'lodash/values'
+import sum from 'lodash/sum'
 import { refreshTokens } from '@/helpers'
 
 export const state = () => ({
@@ -97,9 +99,10 @@ export const getters = {
   itemPrice: (state, getters, rootState, rootGetters) => (itemDetails) => {
     const texture = rootGetters['textures/getItemById'](itemDetails.texture_id)
     const textureTax = texture.price
+    const addedCosts = itemDetails.added_costs ? sum(values(itemDetails.added_costs)) : 0
     const orderArea = Math.round(itemDetails.width_cm * itemDetails.height_cm / 100) / 100
     const price = Math.round(orderArea * textureTax / 100) * 100
 
-    return price * itemDetails.qty
+    return price * itemDetails.qty + addedCosts
   }
 }

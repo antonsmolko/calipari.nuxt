@@ -1,7 +1,7 @@
 import omit from 'lodash/omit'
 import uniqWith from 'lodash/uniqWith'
 import isEqual from 'lodash/isEqual'
-import { getFilterDetailsString, isFieldLengthValid, refreshTokens } from '../helpers'
+import { isFieldLengthValid, refreshTokens } from '../helpers'
 import { form } from '~/plugins/config'
 const isCardEqual = (object, other) => isEqual(omit(object, 'id'), omit(other, 'id'))
 const isLengthValid = isFieldLengthValid(form.BASE_MIN_LENGTH)
@@ -157,10 +157,7 @@ export const getters = {
   orderDetails: (state, getters, rootState) => {
     return {
       userId: rootState.auth.user ? rootState.auth.user.id : null,
-      items: JSON.stringify(rootState.cart.items.map((item) => {
-        const filterDetails = getFilterDetailsString(item.filter)
-        return { ...omit(item, ['id', 'image_path']), filter_details: filterDetails }
-      })),
+      items: rootState.cart.items.map(item => item.id),
       customer: JSON.stringify(state.customer),
       delivery: JSON.stringify(getters.deliveryDetails),
       comment: state.comment

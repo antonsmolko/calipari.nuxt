@@ -704,6 +704,9 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
 
     &-value {
       color: $global-inverse-color;
+      @include media_mob($l) {
+        width: 150px;
+      }
     }
   }
 
