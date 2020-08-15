@@ -145,15 +145,15 @@ export default {
       this.pending = true
       this.orderConfirmAction()
         .then(() => {
+          this.setCartFieldsAction({
+            items: [],
+            totalPrice: null
+          })
           this.pending = false
           this.$router.push('/')
           this.setCheckoutFieldsAction({
             enabled: false,
             comment: ''
-          })
-          this.setCartFieldsAction({
-            items: [],
-            totalPrice: null
           })
         })
     },
