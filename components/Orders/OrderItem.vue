@@ -25,7 +25,7 @@
                 span.tm-order-table__params-value.uk-text-emphasis {{ item.texture }}
             .tm-order-table__params-item
                 span.tm-order-table__params-heading.uk-text-muted Эффекты
-                span.tm-order-table__params-value.uk-text-emphasis {{ item.filter }}
+                span.tm-order-table__params-value.uk-text-emphasis {{ filterString }}
         td.tm-order-table__count
             span.uk-box-shadow-small.tm-text-medium.uk-background-default
                 span.tm-order-table__count-x ×
@@ -33,10 +33,13 @@
         td.tm-order-table__price(class="uk-width-1-2 uk-width-1-4@s uk-width-auto@m")
             span.tm-order-table__price-heading.uk-text-muted Цена
             span.tm-order-table__price-value.uk-text-emphasis {{ formatPrice }}
+              sup.uk-text-primary.tm-order-table__price-note(
+                v-if="addedCostsContent"
+                :data-uk-tooltip="addedCostsContent") *
 </template>
 
 <script>
-import { getFormatPrice } from '~/helpers'
+import { getFormatPrice, getAddedCostsContent } from '@/helpers'
 
 export default {
   name: 'OrderItem',
@@ -47,6 +50,9 @@ export default {
     }
   },
   computed: {
+    filterString () {
+      return this.item.filter || '—'
+    },
     formatPrice () {
       return getFormatPrice(this.item.price)
     },
@@ -60,6 +66,11 @@ export default {
         Эффекты: ${this.filter} |
         Цена: ${this.formatPrice}`
       /* eslint-enable */
+    },
+    addedCostsContent () {
+      return this.item.added_costs
+        ? getAddedCostsContent(this.item.added_costs)
+        : null
     }
   },
   methods: {

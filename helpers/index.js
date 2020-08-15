@@ -1,5 +1,6 @@
 import forOwn from 'lodash/forOwn'
 import isEmpty from 'lodash/isEmpty'
+import toPairs from 'lodash/toPairs'
 import isInteger from 'lodash/isInteger'
 import maxBy from 'lodash/maxBy'
 import crc32 from 'crc-32'
@@ -199,4 +200,14 @@ export const getS3ImageUrl = ({ name, fit = 'cover', width = null, height = null
   const encodeRequest = btoa(JSON.stringify(request))
 
   return `${process.env.s3ImageEndpoint}/${encodeRequest}`
+}
+
+export const getAddedCostsContent = (addedCosts) => {
+  return toPairs(addedCosts).reduce((acc, item) => {
+    return `${acc}
+            <div class="uk-flex uk-flex-between">
+                <span>${item[0]}&nbsp;&nbsp;&nbsp;</span>
+                <span>+ ${getFormatPrice(Number(item[1]))}</span>
+            </div>`
+  }, '')
 }

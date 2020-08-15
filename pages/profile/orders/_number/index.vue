@@ -36,7 +36,7 @@
                                         OrderDetailsItem(heading="Доставка" :content="order.delivery.title")
                                         OrderDetailsItem(heading="Адрес" :content="order.delivery.address")
                                         OrderDetailsItem(heading="Получатель" :content="order.customer.name")
-                                        OrderDetailsItem(heading="Телефон" :content="order.customer.phone")
+                                        OrderDetailsItem(heading="Телефон" :content="phoneFormat")
                                 .tm-order-details__block.tm-order-details__comment(v-if="order.comment")
                                     .uk-card.uk-card-small.uk-card-body
                                         h4.uk-h4.uk-text-background Комментарий
@@ -65,11 +65,11 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import Page from '~/components/layout/Page.vue'
-import TopBar from '~/components/layout/TopBar'
-import OrderItem from '~/components/Orders/OrderItem'
-import OrderDetailsItem from '~/components/Orders/OrderDetailsItem'
-import { getFormatPrice } from '~/helpers'
+import Page from '@/components/layout/Page.vue'
+import TopBar from '@/components/layout/TopBar'
+import OrderItem from '@/components/Orders/OrderItem'
+import OrderDetailsItem from '@/components/Orders/OrderDetailsItem'
+import { getFormatPrice, getPhoneFormat } from '@/helpers'
 
 export default {
   scrollToTop: true,
@@ -98,6 +98,9 @@ export default {
         default:
           return 'uk-label tm-text-medium'
       }
+    },
+    phoneFormat () {
+      return getPhoneFormat(this.order.customer.phone)
     }
   },
   methods: {
