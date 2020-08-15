@@ -141,21 +141,19 @@ export default {
     onPrev () {
       this.$router.push('/checkout/delivery')
     },
-    onNext () {
+    async onNext () {
       this.pending = true
-      this.orderConfirmAction()
-        .then(() => {
-          this.setCartFieldsAction({
-            items: [],
-            totalPrice: null
-          })
-          this.pending = false
-          this.$router.push('/')
-          this.setCheckoutFieldsAction({
-            enabled: false,
-            comment: ''
-          })
-        })
+      await this.orderConfirmAction()
+      await this.setCartFieldsAction({
+        items: [],
+        totalPrice: null
+      })
+      await this.$router.push('/')
+      this.pending = false
+      this.setCheckoutFieldsAction({
+        enabled: false,
+        comment: ''
+      })
     },
     onInputComment (e) {
       const value = e.target.value
