@@ -1,7 +1,11 @@
 <template lang="pug">
   div(:class="[filter.colorize]")
     .uk-margin-top.uk-position-relative
-      .uk-position-bottom event: {{ event }}
+      .uk-position-bottom
+        span x_point:&nbsp;
+        span {{ xPoint }}
+        span &nbsp;&nbsp;event:&nbsp;
+        span {{ event }}
     .cropper(ref="cropper")
       .cropper__container
         .cropper__canvas(v-show="isCropperSet" ref="canvas")
@@ -98,7 +102,8 @@ export default {
     responsiveMaxHeight: 263,
     imageLoad: false,
 
-    event: null
+    event: null,
+    xPoint: 0
   }),
   computed: {
     translateX () {
@@ -238,6 +243,7 @@ export default {
       await this.setCropperElements()
       await this.setCropperMaxHeight(this.cropper.offsetHeight)
       addListener(this.cropBox, EVENT_POINTER_DOWN, (this.startCropMove = this.onStartCropMove.bind(this)))
+      addListener(this.cropBox, EVENT_POINTER_DOWN, (this.startCropMove = this.onStartCropMove.bind(this)))
       addListener(this.cropBox.ownerDocument, EVENT_POINTER_UP, (this.endCropMove = this.onEndCropMove.bind(this)))
       await this.loadImage(this.imageUrl)
         .then(() => {
@@ -272,11 +278,13 @@ export default {
       }
     },
     onStartCropMove (e) {
+      this.event = EVENT_POINTER_DOWN
+      this.xPoint = e.clientX
+
       if (this.active) {
         addListener(this.cropBox.ownerDocument, EVENT_POINTER_MOVE, (this.cropMove = this.onCropMove.bind(this)))
         this.startMoveX = e.clientX
         this.startMoveY = e.clientY
-        this.event = e.clientX
       }
     },
     onEndCropMove () {
