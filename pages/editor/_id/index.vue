@@ -204,7 +204,9 @@ export default {
         texture_id: this.orderSettings.texture,
         filter: this.orderSettings.filter,
         x: Math.round(this.cropData.x),
-        y: Math.round(this.cropData.y)
+        y: Math.round(this.cropData.y),
+        width_px: Math.round(this.cropData.width),
+        height_px: Math.round(this.cropData.height)
       }
     },
     liked () {
