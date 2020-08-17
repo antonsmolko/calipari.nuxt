@@ -1,11 +1,5 @@
 <template lang="pug">
   div(:class="[filter.colorize]")
-    .uk-margin-top.uk-position-relative
-      .uk-position-bottom
-        span x_point:&nbsp;
-        span {{ xPoint }}
-        span &nbsp;&nbsp;event:&nbsp;
-        span {{ event }}
     .cropper(ref="cropper")
       .cropper__container
         .cropper__canvas(v-show="isCropperSet" ref="canvas")
@@ -96,14 +90,13 @@ export default {
     startMoveY: 0,
     lastTranslateX: 0,
     lastTranslateY: 0,
-    lastClientX: 0,
-    lastClientY: 0,
+    lastPageX: 0,
+    lastPageY: 0,
     responsive: false,
     responsiveMaxHeight: 263,
     imageLoad: false,
 
-    event: null,
-    xPoint: 0
+    event: null
   }),
   computed: {
     translateX () {
@@ -243,7 +236,6 @@ export default {
       await this.setCropperElements()
       await this.setCropperMaxHeight(this.cropper.offsetHeight)
       addListener(this.cropBox, EVENT_POINTER_DOWN, (this.startCropMove = this.onStartCropMove.bind(this)))
-      addListener(this.cropBox, EVENT_POINTER_DOWN, (this.startCropMove = this.onStartCropMove.bind(this)))
       addListener(this.cropBox.ownerDocument, EVENT_POINTER_UP, (this.endCropMove = this.onEndCropMove.bind(this)))
       await this.loadImage(this.imageUrl)
         .then(() => {
@@ -278,14 +270,11 @@ export default {
       }
     },
     onStartCropMove (e) {
-      console.log(e)
-      this.event = e.x
-      this.xPoint = e.pageX
-
       if (this.active) {
         addListener(this.cropBox.ownerDocument, EVENT_POINTER_MOVE, (this.cropMove = this.onCropMove.bind(this)))
-        this.startMoveX = e.clientX
-        this.startMoveY = e.clientY
+        this.startMoveX = e.pageX
+        this.startMoveY = e.pageY
+        this.event = e.pageX
       }
     },
     onEndCropMove () {
@@ -297,41 +286,41 @@ export default {
       removeListener(this.cropBox.ownerDocument, EVENT_POINTER_MOVE, this.cropMove)
     },
     onCropMove (e) {
-      if (e.clientX < this.lastClientX) {
+      if (e.pageX < this.lastPageX) {
         if (this.translateX > 0) {
-          this.moveX += e.clientX - this.startMoveX
+          this.moveX += e.pageX - this.startMoveX
         }
-        this.startMoveX = e.clientX
+        this.startMoveX = e.pageX
       }
 
-      if (e.clientX > this.lastClientX) {
+      if (e.pageX > this.lastPageX) {
         if ((this.translateX + this.viewBoxStyles.width) < this.imageStyles.width) {
-          this.moveX += e.clientX - this.startMoveX
+          this.moveX += e.pageX - this.startMoveX
         }
-        this.startMoveX = e.clientX
+        this.startMoveX = e.pageX
       }
 
-      this.lastClientX = e.clientX
+      this.lastPageX = e.pageX
 
       this.imageStyles.translateX = -this.translateX
       this.viewBoxStyles.translateX = this.translateX
 
       // Y axis
-      if (e.clientY < this.lastClientY) {
+      if (e.pageY < this.lastPageY) {
         if (this.translateY > 0) {
-          this.moveY += e.clientY - this.startMoveY
+          this.moveY += e.pageY - this.startMoveY
         }
-        this.startMoveY = e.clientY
+        this.startMoveY = e.pageY
       }
 
-      if (e.clientY > this.lastClientY) {
+      if (e.pageY > this.lastPageY) {
         if ((this.translateY + this.viewBoxStyles.height) < this.imageStyles.height) {
-          this.moveY += e.clientY - this.startMoveY
+          this.moveY += e.pageY - this.startMoveY
         }
-        this.startMoveY = e.clientY
+        this.startMoveY = e.pageY
       }
 
-      this.lastClientY = e.clientY
+      this.lastPageY = e.pageY
 
       this.imageStyles.translateY = -this.translateY
       this.viewBoxStyles.translateY = this.translateY
@@ -376,11 +365,11 @@ export default {
     },
     resetCropMove () {
       this.lastTranslateX = 0
-      this.lastClientX = 0
+      this.lastPageX = 0
       this.startMoveX = 0
 
       this.lastTranslateY = 0
-      this.lastClientY = 0
+      this.lastPageY = 0
       this.startMoveY = 0
     },
     setResponsive () {
