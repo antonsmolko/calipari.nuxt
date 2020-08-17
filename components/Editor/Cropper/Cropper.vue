@@ -1,7 +1,7 @@
 <template lang="pug">
   div(:class="[filter.colorize]")
     .uk-margin-top.uk-position-relative
-      .uk-position-bottom {{ event }}
+      .uk-position-bottom event: {{ event }}
     .cropper(ref="cropper")
       .cropper__container
         .cropper__canvas(v-show="isCropperSet" ref="canvas")
