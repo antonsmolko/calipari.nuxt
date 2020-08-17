@@ -278,8 +278,9 @@ export default {
       }
     },
     onStartCropMove (e) {
-      this.event = EVENT_POINTER_DOWN
-      this.xPoint = e.clientX
+      console.log(e)
+      this.event = e.x
+      this.xPoint = e.pageX
 
       if (this.active) {
         addListener(this.cropBox.ownerDocument, EVENT_POINTER_MOVE, (this.cropMove = this.onCropMove.bind(this)))
