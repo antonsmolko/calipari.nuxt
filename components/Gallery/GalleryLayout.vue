@@ -4,7 +4,7 @@
             v-if="!filterOpen"
             :title="title"
             :images="images"
-            :enabled="!!keyValue"
+            :enabled="Boolean(keyValue)"
             @filterOpen="handleFilterOpen"
             @paginate="paginate"
             @dislike="dislike")
@@ -43,12 +43,12 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 
-import TopBar from '~/components/layout/TopBar.vue'
-import Gallery from '~/components/Gallery/Gallery'
-import GalleryHero from '~/components/Gallery/GalleryHero'
-import GalleryTag from '~/components/Gallery/GalleryTag'
-import ImageFilter from '~/components/ImageFilter/ImageFilter'
-import { getS3ImageUrl } from '~/helpers'
+import TopBar from '@/components/layout/TopBar.vue'
+import Gallery from '@/components/Gallery/Gallery'
+import GalleryHero from '@/components/Gallery/GalleryHero'
+import GalleryTag from '@/components/Gallery/GalleryTag'
+import ImageFilter from '@/components/ImageFilter/ImageFilter'
+import { getS3ImageUrl } from '@/helpers'
 
 export default {
   name: 'GalleryLayout',
@@ -103,9 +103,9 @@ export default {
       return getS3ImageUrl({ name: this.backgroundPath, grayscale: true })
     }
   },
-  async mounted () {
+  mounted () {
     if ((!this.lastPreview || !this.images.length) && this.keyValue) {
-      await this.refreshItems()
+      this.refreshItems()
     }
   },
   methods: {
@@ -134,13 +134,13 @@ export default {
     async paginate () {
       await this.getItems({ increasePage: true })
     },
-    async refreshItems () {
+    refreshItems () {
       this.clearFilterFieldsAction()
       this.resetPaginationAction()
-      await this.getItems({ clear: true })
+      this.getItems({ clear: true })
     },
-    async getItems (options = null) {
-      await this.getItemsAction({
+    getItems (options = null) {
+      this.getItemsAction({
         restrictiveElement: this.restrictiveFilterElement,
         increasePage: options.increasePage || false,
         clear: options.clear || false

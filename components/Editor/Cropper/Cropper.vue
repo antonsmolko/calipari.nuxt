@@ -1,5 +1,7 @@
 <template lang="pug">
   div(:class="[filter.colorize]")
+    .uk-margin-top.uk-position-relative
+      .uk-position-bottom {{ event }}
     .cropper(ref="cropper")
       .cropper__container
         .cropper__canvas(v-show="isCropperSet" ref="canvas")
@@ -94,7 +96,9 @@ export default {
     lastClientY: 0,
     responsive: false,
     responsiveMaxHeight: 263,
-    imageLoad: false
+    imageLoad: false,
+
+    event: null
   }),
   computed: {
     translateX () {
@@ -272,6 +276,7 @@ export default {
         addListener(this.cropBox.ownerDocument, EVENT_POINTER_MOVE, (this.cropMove = this.onCropMove.bind(this)))
         this.startMoveX = e.clientX
         this.startMoveY = e.clientY
+        this.event = e.clientX
       }
     },
     onEndCropMove () {
@@ -283,7 +288,6 @@ export default {
       removeListener(this.cropBox.ownerDocument, EVENT_POINTER_MOVE, this.cropMove)
     },
     onCropMove (e) {
-      // X axis
       if (e.clientX < this.lastClientX) {
         if (this.translateX > 0) {
           this.moveX += e.clientX - this.startMoveX

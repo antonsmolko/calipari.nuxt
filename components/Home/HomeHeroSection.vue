@@ -99,6 +99,7 @@ export default {
   }
 
   &__strip-block {
+    z-index: 1;
     @include media-mob-portrait($m) {
       width: 440px;
     }
@@ -162,7 +163,6 @@ export default {
       flex-direction: column;
       justify-content: space-between;
       margin-top: 6vh !important;
-      z-index: -1;
     }
     @include media-mob-portrait($m) {
       width: 440px;

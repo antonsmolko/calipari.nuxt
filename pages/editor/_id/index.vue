@@ -1,7 +1,7 @@
 <template lang="pug">
   div
     .tm-editor.uk-light.uk-position-relative(
-      v-if="$fetchState.pending"
+      v-if="$fetchState.pending || !responseData"
       data-uk-height-viewport="offset-top: true")
       .uk-position-center.uk-flex.uk-flex-column.uk-flex-middle.uk-padding.uk-text-center.uk-text-muted
         span.uk-text-large Загружается редактор...
@@ -121,8 +121,9 @@ export default {
     await this.$store.dispatch('images/getItemFromEditor', this.$route.params.id)
       .then(() => {
         this.orderSettings.currentImage = this.image
-        this.setCropData(this.image)
         this.orderSettings.texture = this.textures[0].id
+        this.setCropData(this.image)
+        this.responseData = true
       })
       .catch((error) => {
         if (error.status === 404) {
@@ -154,7 +155,8 @@ export default {
       y: 0
     },
     colorCollectionLoading: false,
-    artCollectionLoading: false
+    artCollectionLoading: false,
+    responseData: false
   }),
   computed: {
     ...mapState({
