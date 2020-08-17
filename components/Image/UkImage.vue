@@ -1,9 +1,9 @@
 <template lang="pug">
-    img(:data-src="url"
-        :alt="alt"
-        :width="width"
-        :height="height"
-        data-uk-img)
+  img(:data-src="url"
+    :alt="alt"
+    :width="width"
+    :height="height"
+    data-uk-img)
 </template>
 
 <script>
@@ -50,3 +50,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+img {
+  border-radius: 1px;
+}
+</style>

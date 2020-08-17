@@ -235,8 +235,8 @@ export default {
     async init () {
       await this.setCropperElements()
       await this.setCropperMaxHeight(this.cropper.offsetHeight)
-      addListener(this.cropBox, EVENT_POINTER_DOWN, (this.startCropMove = this.onStartCropMove.bind(this)), true)
-      addListener(this.cropBox.ownerDocument, EVENT_POINTER_UP, (this.endCropMove = this.onEndCropMove.bind(this)), true)
+      addListener(this.cropBox, EVENT_POINTER_DOWN, (this.startCropMove = this.onStartCropMove.bind(this)))
+      addListener(this.cropBox.ownerDocument, EVENT_POINTER_UP, (this.endCropMove = this.onEndCropMove.bind(this)))
       await this.loadImage(this.imageUrl)
         .then(() => {
           this.setImageSizes()
@@ -272,7 +272,7 @@ export default {
     onStartCropMove (e) {
       e.preventDefault()
       if (this.active) {
-        addListener(this.cropBox.ownerDocument, EVENT_POINTER_MOVE, (this.cropMove = this.onCropMove.bind(this)), true)
+        addListener(this.cropBox.ownerDocument, EVENT_POINTER_MOVE, (this.cropMove = this.onCropMove.bind(this)))
         this.startMoveX = e.pageX
         this.startMoveY = e.pageY
       }
@@ -283,7 +283,7 @@ export default {
       this.lastTranslateY += this.moveY
       this.moveY = 0
 
-      removeListener(this.cropBox.ownerDocument, EVENT_POINTER_MOVE, this.cropMove, true)
+      removeListener(this.cropBox.ownerDocument, EVENT_POINTER_MOVE, this.cropMove)
     },
     onCropMove (e) {
       e.preventDefault()
