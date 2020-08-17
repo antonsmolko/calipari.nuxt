@@ -270,7 +270,7 @@ export default {
       }
     },
     onStartCropMove (e) {
-      e.stopPropagation()
+      e.preventDefault()
       if (this.active) {
         addListener(this.cropBox.ownerDocument, EVENT_POINTER_MOVE, (this.cropMove = this.onCropMove.bind(this)), true)
         this.startMoveX = e.pageX
@@ -286,7 +286,7 @@ export default {
       removeListener(this.cropBox.ownerDocument, EVENT_POINTER_MOVE, this.cropMove, true)
     },
     onCropMove (e) {
-      e.stopPropagation()
+      e.preventDefault()
       if (e.pageX < this.lastPageX) {
         if (this.translateX > 0) {
           this.moveX += e.pageX - this.startMoveX
