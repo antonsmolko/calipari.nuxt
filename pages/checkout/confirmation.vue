@@ -149,11 +149,11 @@ export default {
         totalPrice: null
       })
       await this.$router.push('/')
-      this.pending = false
-      this.setCheckoutFieldsAction({
+      await this.setCheckoutFieldsAction({
         enabled: false,
         comment: ''
       })
+      this.pending = false
     },
     onInputComment (e) {
       const value = e.target.value

@@ -8,11 +8,11 @@
         @change="handleChange"
         @delete="handleDelete")
     .tm-payment__footer.uk-margin-medium-top
-      button.uk-button.uk-button-primary(
-        :disabled="!selectedPaymentId"
+      button.tm-payment__pay-button.uk-button.uk-button-primary.uk-margin-auto(
+        :disabled="!selectedPaymentId || paymentProcess"
         @click="pay")
         span(v-html="payButtonText")
-        i.uk-margin-small-left.uk-text-muted.uk-animation-fade(
+        i.tm-payment__pay-button-spinner.uk-margin-small-left.uk-text-muted.uk-animation-fade(
           v-if="paymentProcess"
           data-uk-spinner="ratio: 0.7")
       .tm-payment__notice.uk-margin-top
@@ -95,6 +95,23 @@ export default {
 .tm-payment-card {
   &:not(:first-child) {
     margin-top: $global-small-gutter;
+  }
+}
+.tm-payment__pay-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background .25s ease, color .25s ease;
+  &:disabled {
+    background: lighten($global-primary-background, 3%);
+    color: $inverse-global-muted-color;
+    &:hover {
+      background: lighten($global-primary-background, 3%);
+      color: $inverse-global-muted-color;
+    }
+  }
+  &-spinner {
+    margin-right: -10px;
   }
 }
 </style>

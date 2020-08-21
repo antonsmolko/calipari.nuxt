@@ -119,7 +119,6 @@ export default {
       this.paymentProcess = true
       this.payWithIdAction(this.order.number)
         .then((response) => {
-          this.paymentProcess = false
           if (response.status === 'success') {
             this.$router.push('/')
           }

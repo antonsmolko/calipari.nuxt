@@ -16,6 +16,12 @@ export default function ({ $auth, $axios, store, redirect }) {
 
     switch (error.status) {
       case 401:
+        if (error.data.message) {
+          store.dispatch('notifications/addItem', {
+            message: error.data.message,
+            status: 'danger'
+          })
+        }
         $auth.logout()
         break
       case 404:
@@ -36,10 +42,12 @@ export default function ({ $auth, $axios, store, redirect }) {
         })
         break
       default:
-        store.dispatch('notifications/addItem', {
-          message: error.data.message,
-          status: 'danger'
-        })
+        if (error.data.message) {
+          store.dispatch('notifications/addItem', {
+            message: error.data.message,
+            status: 'danger'
+          })
+        }
     }
   })
 

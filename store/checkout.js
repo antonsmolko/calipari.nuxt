@@ -87,7 +87,7 @@ export const actions = {
     return this.$api.$post('/orders', getters.orderDetails, { headers })
       .then(response => commit('notifications/ADD_ITEM', {
         status: 'success',
-        message: `Поздравляем! Ваш заказ № ${response} создан. Мы скоро с Вами свяжемся для уточнения деталей.`
+        message: `Поздравляем! Ваш заказ № ${response} размещен. Мы скоро с Вами свяжемся для уточнения деталей.`
       }, { root: true }))
   },
   async syncCards ({ state, commit }) {
