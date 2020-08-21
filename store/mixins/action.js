@@ -6,7 +6,5 @@ export default (axios, method, commit, { url, payload = null, thenContent = null
       }
       // commit('CLEAR_ERRORS', null, { root: true })
     })
-    .catch((error) => {
-      throw error
-    })
+    .catch(error => error)
 }

@@ -21,6 +21,7 @@
                                             icon="user"
                                             name="name"
                                             :value="form.name"
+                                            :trim="false"
                                             module="login"
                                             :vField="$v.form.name"
                                             :vRules="{ required: true, minLength: true }"

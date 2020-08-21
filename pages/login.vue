@@ -97,7 +97,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      syncCartAction: 'cart/sync',
+      syncCartAction: 'cart/syncItems',
       syncWishListAction: 'wishList/sync',
       syncCardsAction: 'checkout/syncCards',
       addNotificationAction: 'notifications/addItem'

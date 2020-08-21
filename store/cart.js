@@ -2,6 +2,7 @@ import unionBy from 'lodash/unionBy'
 import values from 'lodash/values'
 import sum from 'lodash/sum'
 import { refreshTokens } from '@/helpers'
+import axios from '@/store/mixins/action'
 
 export const state = () => ({
   items: [],
@@ -40,7 +41,7 @@ export const actions = {
     if (this.$auth.loggedIn) {
       await refreshTokens(this.$auth)
     }
-    this.$auth.loggedIn
+    return this.$auth.loggedIn
       ? dispatch('add', item)
       : dispatch('createItem', item)
   },
@@ -52,9 +53,10 @@ export const actions = {
     if (this.$auth.loggedIn) {
       await refreshTokens(this.$auth)
     }
+
     const items = state.items.map(item => item.id)
 
-    this.$auth.loggedIn
+    this.$auth.loggedIn && items
       ? dispatch('syncItemsAuth', items)
       : dispatch('sync', items)
   },
@@ -73,12 +75,19 @@ export const actions = {
     const token = this.$auth.strategy.token.get()
     const headers = { Authorization: token }
 
-    return this.$api.$post('/carts/add', item, { headers })
-      .then(response => commit('SET_ITEMS', response))
+    return axios(this.$api, 'post', commit, {
+      url: '/carts/add',
+      payload: item,
+      options: { headers },
+      thenContent: response => commit('SET_ITEMS', response)
+    })
   },
   createItem ({ commit }, item) {
-    return this.$api.$post('/cart-items', item)
-      .then(response => commit('UNION_ITEMS', [response]))
+    return axios(this.$api, 'post', commit, {
+      url: '/cart-items',
+      payload: item,
+      thenContent: response => commit('UNION_ITEMS', [response.data])
+    })
   },
   deleteItem ({ commit }, id) {
     return this.$api.$delete(`/cart-items/${id}`)

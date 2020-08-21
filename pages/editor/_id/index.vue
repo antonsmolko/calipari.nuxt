@@ -296,13 +296,17 @@ export default {
         })
       }
     },
-    onConfirm () {
-      this.addToCartAction(this.cartItemData)
-      this.addNotificationAction({
-        message: 'Ваш товар добавлен в корзину!',
-        status: 'success'
-      })
-      this.onClose()
+    async onConfirm () {
+      try {
+        await this.addToCartAction(this.cartItemData)
+        await this.addNotificationAction({
+          message: 'Ваш товар добавлен в корзину!',
+          status: 'success'
+        })
+        this.onClose()
+      } catch (e) {
+        return e
+      }
     },
     onLike () {
       const image = this.orderSettings.currentImage
