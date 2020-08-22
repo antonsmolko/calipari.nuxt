@@ -1,6 +1,6 @@
 <template lang="pug">
-  .tm-mosaic__image-inside
-    .tm-mosaic__image-spinner.uk-text-muted.uk-position-z-index(
+  .tm-mosaic__image-inside.uk-position-relative
+    .tm-mosaic__image-spinner.uk-text-muted.uk-position-center.uk-position-z-index(
       v-show="imgLoaded"
       data-uk-spinner="ratio: 2"
       data-no-mosaic="true")

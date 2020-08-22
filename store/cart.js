@@ -79,7 +79,7 @@ export const actions = {
       url: '/carts/add',
       payload: item,
       config: { headers },
-      thenContent: response => commit('SET_ITEMS', response)
+      thenContent: response => commit('SET_ITEMS', response.data)
     })
   },
   createItem ({ commit }, item) {

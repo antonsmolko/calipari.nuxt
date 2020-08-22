@@ -15,7 +15,7 @@
   float: left;
   object-fit: cover;
   transition: opasity .4s;
-  background: $global-muted-background;
+  background-color: rgba($global-muted-background, .08);
 }
 
 .mosaic-gallery > .item {

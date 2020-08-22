@@ -97,7 +97,6 @@ export default {
 .tm-mosaic {
   &__image {
     position: relative;
-    background-color: rgba($global-secondary-background, .2);
     border-radius: 1px;
     z-index: 1;
 
