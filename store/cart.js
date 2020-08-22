@@ -78,7 +78,7 @@ export const actions = {
     return axios(this.$api, 'post', commit, {
       url: '/carts/add',
       payload: item,
-      options: { headers },
+      config: { headers },
       thenContent: response => commit('SET_ITEMS', response)
     })
   },
