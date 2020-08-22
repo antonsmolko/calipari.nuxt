@@ -161,7 +161,7 @@ export const getCurrentBreakPoint = (viewportWidth) => {
     : maxBy(breakPoints, 'value')
 }
 
-const getS3ImageRequest = ({ name, fit, width, height, grayscale }) => {
+const getS3ImageRequest = ({ name, fit = 'cover', width, height, grayscale }) => {
   const key = `${name.slice(0, 1)}/${name.slice(0, 3)}/${name}`
 
   const request = {
@@ -169,14 +169,12 @@ const getS3ImageRequest = ({ name, fit, width, height, grayscale }) => {
     key,
     edits: {
       resize: {
-        fit: 'cover'
+        fit
       }
     }
   }
 
   if (width || height) {
-    request.edits.resize.fit = fit
-
     if (width) {
       request.edits.resize.width = width
     }
@@ -191,12 +189,13 @@ const getS3ImageRequest = ({ name, fit, width, height, grayscale }) => {
   return request
 }
 
-export const getS3ImageUrl = ({ name, fit = 'cover', width = null, height = null, grayscale = false }) => {
+export const getS3ImageUrl = ({ name, fit, width = null, height = null, grayscale = false }) => {
   if (!name) {
     return ''
   }
 
   const request = getS3ImageRequest({ name, fit, width, height, grayscale })
+
   const encodeRequest = btoa(JSON.stringify(request))
 
   return `${process.env.s3ImageEndpoint}/${encodeRequest}`
