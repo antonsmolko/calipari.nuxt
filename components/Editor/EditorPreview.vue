@@ -12,7 +12,7 @@
                 uk-image(
                     :name="image.path"
                     :width="500"
-                    :style="imageStyles"
+                    :imgStyle="imageStyles"
                     :alt="image.article")
 </template>
 

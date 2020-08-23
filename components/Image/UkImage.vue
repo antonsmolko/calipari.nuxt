@@ -8,6 +8,7 @@
       :alt="alt"
       :width="width"
       :height="height"
+      :style="imgStyle"
       data-uk-img)
 </template>
 
@@ -40,6 +41,10 @@ export default {
     alt: {
       type: String,
       default: ''
+    },
+    imgStyle: {
+      type: Object,
+      default: () => ({})
     }
   },
   data: () => ({
