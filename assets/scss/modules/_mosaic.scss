@@ -1,84 +1,81 @@
-.tm-mosaic {
-  $base-mosaic-margin: 8px;
-  $base-mosaic-border-radius: $border-radius-small;
-  $base-mosaic-button-size: 36px;
-  $mosaic-logo-size: 40px;
-  &__inside {
-    width: inherit;
-    height: inherit;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    overflow: hidden;
-    &-top, &-bottom {
-      width: inherit;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-    }
-  }
-  &__article {
-    font-size: 13px;
-    font-weight: normal;
-    background: rgba($global-secondary-background, .5);
-    border-radius: $base-mosaic-border-radius;
-    color: $global-inverse-color;
-    padding: 3px 5px;
-    line-height: 1;
-    margin: $base-mosaic-margin;
-  }
-  &__logo, &__like, &__bag {
-    display: flex;
-    user-select: none;
-  }
-  &__logo {
-    height: $mosaic-logo-size;
-    border-radius: 0 0 50px 50px;
-    color: $accent-color;
-    transform: rotate(45deg);
-    transform-origin: top center;
-    margin-right: -20px;
-    padding: 0 $base-mosaic-margin $base-mosaic-margin;
-    background-color: rgba($global-secondary-background, .8);
-    .uk-icon {
-      transform: rotate(-45deg);
-      margin: auto auto 0;
-    }
-  }
-  &__like, &__bag {
-    width: $base-mosaic-button-size;
-    height: $base-mosaic-button-size;
-    border-radius: $base-mosaic-border-radius;
-    margin: $base-mosaic-margin;
-    cursor: pointer;
-    .uk-icon {
-      margin: auto;
-    }
-  }
-  &__like {
-    background-color: $global-secondary-background;
-  }
-  &__bag {
-    background-color: $global-muted-background;
-  }
-  &__like {
-    position: relative;
-    color: $global-muted-color;
-    &-count {
-      position: absolute;
-      top: -$global-small-margin;
-      left: 50%;
-      transform: translateX(-50%);
-      display: block;
-      height: 15px;
-      font-size: 10px;
-      font-weight: normal;
-      background: $global-border;
-      padding: 3px 5px 2px;
-      line-height: 1;
-      border-radius: 7px;
-      color: $global-emphasis-color;
-      box-sizing: border-box;
-    }
-  }
-}
+//.tm-mosaic {
+//  $base-mosaic-margin: 8px;
+//  $base-mosaic-border-radius: $border-radius-small;
+//  $base-mosaic-button-size: 36px;
+//  $mosaic-logo-size: 40px;
+//  &__inside {
+//    width: inherit;
+//    height: inherit;
+//    display: flex;
+//    flex-direction: column;
+//    justify-content: space-between;
+//    overflow: hidden;
+    //&-top, &-bottom {
+    //  width: inherit;
+    //  display: flex;
+    //  justify-content: space-between;
+    //  align-items: flex-start;
+    //}
+  //}
+  //&__article {
+  //  font-size: 13px;
+  //  font-weight: normal;
+  //  background: rgba($global-secondary-background, .5);
+  //  border-radius: $base-mosaic-border-radius;
+  //  color: $global-inverse-color;
+  //  padding: 3px 5px;
+  //  line-height: 1;
+  //  margin: $base-mosaic-margin;
+  //}
+  //&__logo, &__like {
+  //  display: flex;
+  //  user-select: none;
+  //}
+  //&__logo {
+  //  height: $mosaic-logo-size;
+  //  border-radius: 0 0 50px 50px;
+  //  color: $accent-color;
+  //  transform: rotate(45deg);
+  //  transform-origin: top center;
+  //  margin-right: -20px;
+  //  padding: 0 $base-mosaic-margin $base-mosaic-margin;
+  //  background-color: rgba($global-secondary-background, .8);
+  //  .uk-icon {
+  //    transform: rotate(-45deg);
+  //    margin: auto auto 0;
+  //  }
+  //}
+  //&__like {
+  //  width: $base-mosaic-button-size;
+  //  height: $base-mosaic-button-size;
+  //  border-radius: $base-mosaic-border-radius;
+  //  margin: $base-mosaic-margin;
+  //  cursor: pointer;
+  //  .uk-icon {
+  //    margin: auto;
+  //  }
+  //}
+  //&__like {
+  //  background-color: $global-secondary-background;
+  //}
+  //&__like {
+  //  position: relative;
+  //  color: $global-muted-color;
+  //  &-count {
+  //    position: absolute;
+  //    top: -$global-small-margin;
+  //    left: 50%;
+  //    transform: translateX(-50%);
+  //    display: block;
+  //    height: 15px;
+  //    font-size: 10px;
+  //    font-weight: normal;
+  //    background: $global-border;
+  //    padding: 3px 5px 2px;
+  //    line-height: 1;
+  //    border-radius: 7px;
+  //    color: $global-emphasis-color;
+  //    box-sizing: border-box;
+  //  }
+  //}
+//}

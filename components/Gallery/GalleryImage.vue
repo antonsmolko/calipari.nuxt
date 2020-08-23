@@ -12,19 +12,17 @@
       nuxt-link.tm-mosaic__overlay-link(
         :to="`/editor/${image.id}`"
         data-no-mosaic="true")
-      span.tm-mosaic__inside-top
-        span.tm-mosaic__article {{ image.article }}
-        .tm-mosaic__collections(data-no-mosaic="true")
-          image-color-collection-badge(
-            v-if="image.colorCollection"
-            :url="`/catalog/color-collections/${image.colorCollection.alias}`")
-          image-art-collection-badge(
-            v-if="image.artCollection"
-            :url="`/catalog/art-collections/${image.artCollection.alias}`")
-      span.tm-mosaic__inside-bottom
-        ImageLike.tm-mosaic__like(
-          :liked="liked"
-          @like="onLike")
+      span.tm-mosaic__article {{ image.article }}
+      .tm-mosaic__collections(data-no-mosaic="true")
+        image-color-collection-badge(
+          v-if="image.colorCollection"
+          :url="`/catalog/color-collections/${image.colorCollection.alias}`")
+        image-art-collection-badge(
+          v-if="image.artCollection"
+          :url="`/catalog/art-collections/${image.artCollection.alias}`")
+      ImageLike.tm-mosaic__like(
+        :liked="liked"
+        @like="onLike")
 </template>
 
 <script>
@@ -118,29 +116,31 @@ export default {
     justify-content: space-between;
     overflow: hidden;
     z-index: 1;
-
-    &-top, &-bottom {
-      width: inherit;
-      display: flex;
-      align-items: flex-start;
-    }
-
-    &-top {
-      justify-content: space-between;
-    }
-
-    &-bottom {
-      justify-content: flex-end;
-    }
-  }
-
-  &__article, &__color-collection, &__art-collection {
-    line-height: 1;
-    background: rgba($global-secondary-background, .5);
-    border-radius: 2px;
+    //
+    //&-top, &-bottom {
+    //  width: inherit;
+    //  display: flex;
+    //  align-items: flex-start;
+    //  z-index: 1;
+    //}
+    //
+    //&-top {
+    //  justify-content: space-between;
+    //}
+    //
+    //&-bottom {
+    //  justify-content: flex-end;
+    //}
   }
 
   &__article {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    line-height: 1;
+    background: rgba($global-secondary-background, .5);
+    border-radius: 2px;
     font-size: 13px;
     color: $global-inverse-color;
     font-weight: normal;
@@ -148,27 +148,22 @@ export default {
     margin: $base-mosaic-badge-margin;
   }
 
-  &__color-collection, &__art-collection {
-    display: block;
-    padding: 1px;
+  &__collections {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
   }
 
-  &__logo, &__like {
-    display: flex;
-    user-select: none;
-  }
-
-  &__art-collection, &__color-collection {
-    margin: $base-mosaic-badge-margin;
-    cursor: pointer;
-
-    .uk-icon {
-      margin: auto;
-    }
-  }
-
+  //&__logo, &__like {
+  //  display: flex;
+  //  user-select: none;
+  //}
+  //
   &__like {
-    margin: $base-mosaic-badge-margin + 2px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
   }
 
   &__overlay-link {
