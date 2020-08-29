@@ -1,27 +1,27 @@
 <template lang="pug">
-    div
-        .tm-checkout__header
-            span.uk-h2.uk-margin-remove {{ $lib.DELIVERY_PICKUPS }}
-            .uk-divider-small
-        .tm-form.uk-margin-medium-top
-            .uk-fieldset
-                CheckoutDeliveryPickupItem(
-                    v-for="item in items"
-                    :key="item.key_name"
-                    :item="item"
-                    v-model="currentPickup"
-                    :checked="item.key_name === value.key_name"
-                    @input="onInput"
-                )
-            .uk-margin
-                span Стоимость доставки:
-                span.uk-text-emphasis.uk-margin-small-left.uk-text-large {{ formatDeliveryPrice }}
+  div
+    .tm-checkout__header
+      span.uk-h2.uk-margin-remove {{ $lib.DELIVERY_PICKUPS }}
+      .uk-divider-small
+    .tm-form.uk-margin-medium-top
+      .uk-fieldset
+        CheckoutDeliveryPickupItem(
+          v-for="item in items"
+          :key="item.id"
+          :item="item"
+          v-model="currentPickup"
+          :checked="item.id === value.id"
+          @input="onInput")
+      .uk-margin
+        span Стоимость доставки:
+        span.uk-text-emphasis.uk-margin-small-left.uk-text-large {{ formatDeliveryPrice }}
 </template>
 
 <script>
 import { mapActions } from 'vuex'
-import CheckoutDeliveryPickupItem from './CheckoutDeliveryPickupItem'
-import { getFormatPrice } from '~/components/helpers'
+import head from 'lodash/head'
+import CheckoutDeliveryPickupItem from '@/components/Checkout/CheckoutDeliveryPickupItem'
+import { getFormatPrice } from '@/components/helpers'
 
 export default {
   name: 'CheckoutDeliveryPickup',
@@ -33,7 +33,7 @@ export default {
     },
     value: {
       type: Object,
-      required: true
+      default: null
     }
   },
   data: () => ({
@@ -45,14 +45,22 @@ export default {
     }
   },
   created () {
-    this.currentPickup = this.value
-    this.setCheckoutFieldsAction({ deliveryPrice: 0 })
+    if (this.value) {
+      this.currentPickup = this.value
+    } else {
+      this.setDefaultPickup()
+    }
+    this.setCheckoutFieldAction({ field: 'deliveryPrice', value: 0 })
   },
   methods: {
     ...mapActions({
-      setCheckoutFieldsAction: 'checkout/setFields'
+      setCheckoutFieldAction: 'checkout/setField'
     }),
     onInput () {
+      this.$emit('change', this.currentPickup)
+    },
+    setDefaultPickup () {
+      this.currentPickup = head(this.items)
       this.$emit('change', this.currentPickup)
     }
   }

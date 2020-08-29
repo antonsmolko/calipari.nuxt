@@ -1,3 +1,5 @@
+import head from 'lodash/head'
+
 export const state = () => ({
   items: [],
   settlements: [],
@@ -59,6 +61,6 @@ export const actions = {
 }
 
 export const getters = {
-  defaultItemId: state => state.items.length > 0 ? state.items[0].id : null,
+  defaultItemId: state => state.items.length > 0 ? head(state.items).id : null,
   getItemById: state => id => state.items.find(item => item.id === id)
 }

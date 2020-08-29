@@ -51,7 +51,7 @@ export const mutations = {
   SET_FIELD (state, { field, value }) {
     state[field] = value
   },
-  ENABLE (state, { createdAt, price }) {
+  ENABLE (state, { createdAt }) {
     state.enabled = true
     state.createdAt = createdAt
   },
@@ -166,32 +166,37 @@ export const getters = {
   deliveryDetails: (state, getters, rootState, rootGetters) => {
     const delivery = rootGetters['delivery/getItemById'](state.delivery)
 
+    if (!delivery) {
+      return null
+    }
+
     let details = {}
 
-    if (delivery !== null && delivery) {
+    if (delivery.pickup) {
+      details = {
+        pickup: state.pickup.id
+      }
+    } else {
       switch (delivery.alias) {
-        case 'pickup':
-          details = { pickup: state.pickup.value }
-          break
         case 'cdek':
           details = {
             locality: state.locality,
-            pvz: state.pvz,
-            price: state.deliveryPrice
+            pvz: state.pvz
           }
           break
-        case 'cdek_courier':
+        case 'cdek-courier':
           details = {
             locality: state.locality,
-            street: state.street,
-            apartments: state.apartments,
-            price: state.deliveryPrice
+            address: `${state.street}, ${state.apartments}`
           }
-          break
       }
     }
 
-    return { id: state.delivery, ...details }
+    return {
+      id: state.delivery,
+      price: state.deliveryPrice,
+      ...details
+    }
   },
   localityString: (state, getters) => {
     const delivery = getters.deliveryDetails

@@ -88,12 +88,12 @@ export default {
     pvzIsInvalid () {
       this.pvzIsInvalid
         ? this.clearPvzs()
-        : this.setDeliveryPrice(this.pvz)
+        : this.getDeliveryPrice(this.pvz)
     }
   },
   created () {
     this.initCdekFields()
-    this.setDeliveryPrice(this.pvz)
+    this.getDeliveryPrice(this.pvz)
   },
   methods: {
     ...mapActions({
@@ -126,9 +126,9 @@ export default {
     },
     setPvz (value) {
       this.setCheckoutFieldsAction({ pvz: value })
-      this.setDeliveryPrice(value)
+      this.getDeliveryPrice(value)
     },
-    setDeliveryPrice (pvzs) {
+    getDeliveryPrice (pvzs) {
       pvzs && Object.hasOwnProperty.call(pvzs, 'postal_code')
         ? this.getDeliveryPriceAction({ query: pvzs.postal_code })
         : this.clearDeliveryPrice()

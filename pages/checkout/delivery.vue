@@ -1,53 +1,50 @@
 <template lang="pug">
-    Page
-        template(#main)
-            CheckoutLayout(
-                v-show="!personalIsInvalid && enabled"
-                title="Способы доставки"
-                :price="totalPrice"
-                @confirm="onNext")
-                template(#content)
-                    SlideYDownTransition(v-show="pageTitle")
-                        .uk-grid.uk-grid-divider.uk-flex-center(data-uk-grid)
-                            div(class="uk-width-xlarge@s uk-width-1-2@m")
-                                CheckoutDeliveryList(
-                                    :items="items"
-                                    @change="changeDelivery"
-                                    :defaultValue="selectDeliveryId")
-                            div(class="uk-width-xlarge@s uk-width-1-2@m")
-                                CheckoutDeliveryPickup(
-                                    v-if="selectDelivery.alias === 'pickup'"
-                                    key="pickup.key_name"
-                                    :items="pickups"
-                                    :value="pickup"
-                                    @change="changePickup")
-                                CheckoutDeliveryCDEK(
-                                    v-else-if="selectDelivery.alias === 'cdek'"
-                                    key="cdek")
-                                CheckoutDeliveryCDEKCourier(
-                                    v-else-if="selectDelivery.alias === 'cdek_courier'"
-                                    key="cdek_courier")
-                            .uk-inline.uk-margin-medium-top.uk-margin-auto-left(
-                                class="uk-width-xlarge@s uk-width-1-2@m uk-visible@l")
-                                .uk-flex.uk-flex-between
-                                    button.uk-button.uk-button-danger(
-                                        @click.prevent="onPrev") Назад
-                                    button.uk-button.uk-button-primary(
-                                        :disabled="invalid"
-                                        @click.prevent="onNext"
-                                        type="submit") Продолжить
+  Page
+    template(#main)
+      CheckoutLayout(
+        v-show="!personalIsInvalid && enabled"
+        title="Способы доставки"
+        :price="totalPrice"
+        @confirm="onNext")
+        template(#content)
+          SlideYDownTransition(v-show="pageTitle")
+            .uk-grid.uk-grid-divider.uk-flex-center(data-uk-grid)
+              div(class="uk-width-xlarge@s uk-width-1-2@m")
+                CheckoutDeliveryList(
+                  :items="items"
+                  @change="changeDelivery"
+                  :defaultValue="selectDeliveryId")
+              div(class="uk-width-xlarge@s uk-width-1-2@m")
+                CheckoutDeliveryPickup(
+                  v-if="selectDelivery.alias === 'pickup-bryansk'"
+                  :items="selectDelivery.pickups"
+                  :value="pickup"
+                  @change="changePickup")
+                CheckoutDeliveryCDEK(
+                  v-else-if="selectDelivery.alias === 'cdek'")
+                CheckoutDeliveryCDEKCourier(
+                  v-else-if="selectDelivery.alias === 'cdek-courier'")
+              .uk-inline.uk-margin-medium-top.uk-margin-auto-left(
+                class="uk-width-xlarge@s uk-width-1-2@m uk-visible@l")
+                .uk-flex.uk-flex-between
+                  button.uk-button.uk-button-danger(
+                    @click.prevent="onPrev") Назад
+                  button.uk-button.uk-button-primary(
+                    :disabled="invalid"
+                    @click.prevent="onNext"
+                    type="submit") Продолжить
 </template>
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 
-import Page from '~/components/layout/Page.vue'
-import CheckoutLayout from '~/components/Checkout/CheckoutLayout'
-import CheckoutDeliveryList from '~/components/Checkout/CheckoutDeliveryList'
-import CheckoutDeliveryPickup from '~/components/Checkout/CheckoutDeliveryPickup'
-import CheckoutDeliveryCDEK from '~/components/Checkout/CheckoutDeliveryCDEK'
-import CheckoutDeliveryCDEKCourier from '~/components/Checkout/CheckoutDeliveryCDEKCourier'
-import setLayout from '~/components/mixins/setLayout'
-import scrollToTop from '~/components/mixins/scrollToTop'
+import Page from '@/components/layout/Page.vue'
+import CheckoutLayout from '@/components/Checkout/CheckoutLayout'
+import CheckoutDeliveryList from '@/components/Checkout/CheckoutDeliveryList'
+import CheckoutDeliveryPickup from '@/components/Checkout/CheckoutDeliveryPickup'
+import CheckoutDeliveryCDEK from '@/components/Checkout/CheckoutDeliveryCDEK'
+import CheckoutDeliveryCDEKCourier from '@/components/Checkout/CheckoutDeliveryCDEKCourier'
+import setLayout from '@/components/mixins/setLayout'
+import scrollToTop from '@/components/mixins/scrollToTop'
 
 export default {
   name: 'Delivery',
@@ -69,7 +66,6 @@ export default {
   computed: {
     ...mapState({
       items: state => state.delivery.items,
-      pickups: state => state.settings.items.pickups,
       selectDeliveryId: state => state.checkout.delivery,
       pickup: state => state.checkout.pickup,
       enabled: state => state.checkout.enabled,
@@ -77,7 +73,6 @@ export default {
     }),
     ...mapGetters({
       defaultDeliveryId: 'delivery/defaultItemId',
-      defaultPickup: 'settings/defaultPickup',
       totalPrice: 'checkout/totalPrice',
       deliveryIsInvalid: 'checkout/deliveryIsInvalid',
       personalIsInvalid: 'checkout/personalIsInvalid'
@@ -94,12 +89,12 @@ export default {
   created () {
     if (this.personalIsInvalid) {
       const path = this.$auth.loggedIn
-        ? { path: '/profile/personal', query: { from: '/checkout/delivery' } }
+        ? {
+          path: '/profile/personal',
+          query: { from: '/checkout/delivery' }
+        }
         : '/checkout/personal'
       this.$router.push(path)
-    }
-    if (!this.pickup) {
-      this.setCheckoutFieldAction({ field: 'pickup', value: this.defaultPickup })
     }
     this.setDefaultDelivery()
     this.setCheckoutInvalid(this.deliveryIsInvalid)
@@ -111,7 +106,10 @@ export default {
     }),
     setDefaultDelivery () {
       if (this.selectDeliveryId === null || this.selectDelivery === undefined) {
-        this.setCheckoutFieldAction({ field: 'delivery', value: this.defaultDeliveryId })
+        this.setCheckoutFieldAction({
+          field: 'delivery',
+          value: this.defaultDeliveryId
+        })
       }
     },
     onPrev () {
@@ -123,55 +121,70 @@ export default {
       this.$router.push('/checkout/confirmation')
     },
     changeDelivery (value) {
-      this.setCheckoutFieldAction({ field: 'delivery', value })
+      this.setCheckoutFieldAction({
+        field: 'delivery',
+        value
+      })
     },
     changePickup (value) {
-      this.setCheckoutFieldAction({ field: 'pickup', value })
+      this.setCheckoutFieldAction({
+        field: 'pickup',
+        value
+      })
     },
     setCheckoutInvalid (value) {
-      this.setCheckoutFieldAction({ field: 'invalid', value })
+      this.setCheckoutFieldAction({
+        field: 'invalid',
+        value
+      })
     }
   }
 }
 </script>
 
 <style lang="scss">
-.tm-checkout{
-    &__delivery {
-        &-item {
-            display: flex;
-            flex-wrap: wrap;
-            &:not(:last-child) {
-                margin-bottom: $global-small-margin;
-            }
-            @include media-mob($hm) {
-                &:not(:last-child) {
-                    margin-bottom: $global-margin;
-                }
-            }
-            .uk-text-muted {
-                width: 100%;
-                padding-left: 18px + $global-small-margin;
-            }
+.tm-checkout {
+  &__delivery {
+    &-item {
+      display: flex;
+      flex-wrap: wrap;
+
+      &:not(:last-child) {
+        margin-bottom: $global-small-margin;
+      }
+
+      @include media-mob($hm) {
+        &:not(:last-child) {
+          margin-bottom: $global-margin;
         }
-        &-heading {
-            flex: 1;
-            padding-left: $global-small-margin;
-        }
-        &-radio {
-            flex: none;
-            margin-top: .35rem;
-            @include media_mob($l) {
-                margin-top: .45rem;
-            }
-        }
+      }
+
+      .uk-text-muted {
+        width: 100%;
+        padding-left: 18px + $global-small-margin;
+      }
     }
-    &__lead {
-        &-data {
-            &:not(:first-child) {
-                margin-top: $global-small-margin;
-            }
-        }
+
+    &-heading {
+      flex: 1;
+      padding-left: $global-small-margin;
     }
+
+    &-radio {
+      flex: none;
+      margin-top: .35rem;
+      @include media_mob($l) {
+        margin-top: .45rem;
+      }
+    }
+  }
+
+  &__lead {
+    &-data {
+      &:not(:first-child) {
+        margin-top: $global-small-margin;
+      }
+    }
+  }
 }
 </style>

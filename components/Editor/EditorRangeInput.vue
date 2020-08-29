@@ -1,17 +1,18 @@
 <template lang="pug">
-    .tm-editor__sizes-input.uk-margin-small-left(:class="{'uk-config-danger' : invalid}")
-        .uk-inline
-            input.uk-input.uk-form-small(
-                type="number"
-                :min="min"
-                :max="max"
-                step="1"
-                :value="value"
-                @change="onChange"
-                @input="onInput"
-                @keyup.enter="onKeyUpEnter")
-            span.uk-form-icon.uk-form-icon-flip(
-                :class="{'uk-text-danger' : invalid}") см
+  .tm-editor__sizes-input.uk-margin-small-left(:class="{'uk-config-danger' : invalid}")
+    .uk-inline
+      input.uk-input.uk-form-small(
+        :class="{'uk-text-danger' : invalid}"
+        type="number"
+        :min="min"
+        :max="max"
+        step="1"
+        :value="value"
+        @change="onChange"
+        @input="onInput"
+        @keyup.enter="onKeyUpEnter")
+      span.uk-form-icon.uk-form-icon-flip(
+        :class="{'uk-text-danger' : invalid}") см
 </template>
 
 <script>
@@ -37,11 +38,11 @@ export default {
   },
   methods: {
     onInput (e) {
-      const value = +e.target.value
+      const value = Number(e.target.value)
       this.$emit('input', value)
     },
     onChange (e) {
-      const value = +e.target.value
+      const value = Number(e.target.value)
       const validValue = this.setValidValue(value)
       this.$emit('input', validValue)
     },
