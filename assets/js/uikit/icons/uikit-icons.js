@@ -1,10 +1,10 @@
 /* eslint-disable */
-/*! UIkit 3.5.5 | https://www.getuikit.com | (c) 2014 - 2020 YOOtheme | MIT License */
+/*! UIkit 3.5.6 | https://www.getuikit.com | (c) 2014 - 2020 YOOtheme | MIT License */
 
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
       typeof define === 'function' && define.amd ? define('uikiticons', factory) :
-        (global = global || self, global.UIkitIcons = factory());
+        (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.UIkitIcons = factory());
 }(this, (function () { 'use strict';
 
     function plugin(UIkit) {
@@ -57,6 +57,7 @@
             "sepia": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" xmlns=\"http://www.w3.org/2000/svg\"><path fill=\"#000\" stroke-width=\"0\" d=\"M12.5,3.5v-1H9.43v-1H4.57v1H1.5v16h11v-1h6v-14H12.5z M11.5,17.5h-9v-14h9V17.5z M14,16.5h-1.5V15H14V16.5z M14,6h-1.5V4.5 H14V6z M17,16.5h-1.5V15H17V16.5z M17,6h-1.5V4.5H17V6z\"/><path fill=\"#000\" stroke-width=\"0\" d=\"M10.6,11.94c0,1.44-0.72,2.16-2.16,2.16H3.76v-1.44h4.68c0.48,0,0.72-0.24,0.72-0.72s-0.24-0.72-0.72-0.72H5.56 c-1.44,0-2.16-0.72-2.16-2.16S4.12,6.9,5.56,6.9h4.68v1.44H5.56c-0.48,0-0.72,0.24-0.72,0.72s0.24,0.72,0.72,0.72h2.88 C9.88,9.78,10.6,10.5,10.6,11.94z\"/></svg>",
             "settings": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" xmlns=\"http://www.w3.org/2000/svg\"><ellipse fill=\"none\" stroke=\"#000\" cx=\"6.11\" cy=\"3.55\" rx=\"2.11\" ry=\"2.15\"/><ellipse fill=\"none\" stroke=\"#000\" cx=\"6.11\" cy=\"15.55\" rx=\"2.11\" ry=\"2.15\"/><circle fill=\"none\" stroke=\"#000\" cx=\"13.15\" cy=\"9.55\" r=\"2.15\"/><rect x=\"1\" y=\"3\" width=\"3\" height=\"1\"/><rect x=\"10\" y=\"3\" width=\"8\" height=\"1\"/><rect x=\"1\" y=\"9\" width=\"8\" height=\"1\"/><rect x=\"15\" y=\"9\" width=\"3\" height=\"1\"/><rect x=\"1\" y=\"15\" width=\"3\" height=\"1\"/><rect x=\"10\" y=\"15\" width=\"8\" height=\"1\"/></svg>",
             "square": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"3.2\" y=\"3.2\" class=\"st0\" width=\"13.61\" height=\"13.61\"/></svg>",
+            "star": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" xmlns=\"http://www.w3.org/2000/svg\"><polygon fill=\"none\" stroke=\"#000\" stroke-width=\"1.01\" points=\"10 2 12.63 7.27 18.5 8.12 14.25 12.22 15.25 18 10 15.27 4.75 18 5.75 12.22 1.5 8.12 7.37 7.27\"/></svg>",
             "stripes": "<svg width=\"30\" height=\"20\" viewBox=\"0 0 30 20\" xmlns=\"http://www.w3.org/2000/svg\"><rect fill=\"#B3B3B3\" width=\"8.8\" height=\"20\"/><rect fill=\"#B3B3B3\" x=\"10.6\" width=\"8.8\" height=\"20\"/><rect fill=\"#B3B3B3\" x=\"21.2\" width=\"8.8\" height=\"20\"/></svg>",
             "thumbcircles": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" xmlns=\"http://www.w3.org/2000/svg\"><circle fill=\"none\" stroke=\"none\" class=\"c1\" cx=\"6\" cy=\"6\" r=\"3\"/><circle fill=\"none\" stroke=\"none\" class=\"c2\" cx=\"14\" cy=\"6\" r=\"3\"/><circle fill=\"none\" stroke=\"none\" class=\"c3\" cx=\"14\" cy=\"14\" r=\"3\"/><circle fill=\"none\" stroke=\"none\" class=\"c4\" cx=\"6\" cy=\"14\" r=\"3\"/></svg>",
             "thumbnails": "<svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" xmlns=\"http://www.w3.org/2000/svg\"><rect fill=\"none\" stroke=\"#000\" x=\"3.5\" y=\"3.5\" width=\"5\" height=\"5\"/><rect fill=\"none\" stroke=\"#000\" x=\"11.5\" y=\"3.5\" width=\"5\" height=\"5\"/><rect fill=\"none\" stroke=\"#000\" x=\"11.5\" y=\"11.5\" width=\"5\" height=\"5\"/><rect fill=\"none\" stroke=\"#000\" x=\"3.5\" y=\"11.5\" width=\"5\" height=\"5\"/></svg>",

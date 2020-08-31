@@ -4,8 +4,8 @@
       main
         TopBar(:title="pageTitle")
           .uk-navbar-item
-            button.uk-close(type="button", data-uk-close, @click="onClose")
-        SlideYDownTransition(v-show="pageTitle")
+            button.uk-close(type="button", data-uk-close, @click="close")
+        SlideYDownTransition(v-show="!$fetchState.pending && pageTitle")
           section.tm-orders.uk-section(
             v-if="items.length"
             :class="{ 'uk-light': darkPeriod }")
@@ -14,8 +14,8 @@
                 v-for="item in items"
                 :key="item.number"
                 :order="item"
-                @pay="onPay"
-                @cancel="onCancel")
+                @pay="pay"
+                @cancel="cancel")
           section.uk-section.uk-section-xlarge.uk-text-center(
             v-else :class="{ 'uk-light': darkPeriod }")
             .uk-container
@@ -28,9 +28,9 @@
 import { mapState, mapActions } from 'vuex'
 import Page from '@/components/layout/Page.vue'
 import setLayout from '@/components/mixins/setLayout'
-import scrollToTop from '@/components/mixins/scrollToTop'
-import TopBar from '@/components/layout/TopBar'
 import OrderListItem from '@/components/Orders/OrderListItem'
+import TopBar from '@/components/layout/TopBar'
+import scrollToTop from '@/components/mixins/scrollToTop'
 
 export default {
   name: 'Orders',
@@ -47,28 +47,33 @@ export default {
       title: this.pageTitle
     }
   },
-  async fetch ({ store }) {
-    await store.dispatch('profile/getOrders')
-    store.commit('SET_FIELDS', { pageTitle: 'Заказы' })
+  async fetch () {
+    this.setFieldAction({ field: 'pageTitle', value: 'Заказы' })
+    await this.getItemsAction()
   },
   computed: {
     ...mapState({
-      items: state => state.profile.orders
+      items: state => state.orders.items
     })
+  },
+  beforeDestroy () {
+    this.setOrdersField({ field: 'items', value: [] })
   },
   methods: {
     ...mapActions({
-      cancelOrderAction: 'profile/cancelOrder',
+      setOrdersField: 'orders/setField',
+      getItemsAction: 'orders/getItems',
+      cancelOrderAction: 'orders/cancel',
       addNotificationAction: 'notifications/addItem',
       createPaymentAction: 'payment/create'
     }),
-    onPay (hash) {
+    pay (hash) {
       this.$router.push({
         path: '/payment',
         query: { hash }
       })
     },
-    onCancel (number) {
+    cancel (number) {
       const modal = this.$uikit.modal
 
       modal.labels = {
@@ -85,7 +90,7 @@ export default {
             }))
         })
     },
-    onClose () {
+    close () {
       this.$router.push('/profile')
     }
   }

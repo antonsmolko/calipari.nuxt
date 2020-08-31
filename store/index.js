@@ -19,7 +19,9 @@ export const mutations = {
     }
   },
   SET_FIELD (state, { field, value }) {
-    state[field] = value
+    if (Object.hasOwnProperty.call(state, field)) {
+      state[field] = value
+    }
   }
 }
 

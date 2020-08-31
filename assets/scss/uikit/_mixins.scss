@@ -297,7 +297,7 @@
 }
 
 @mixin hook-form-focus() {
-  background: $global-muted-background;
+  background-color: $global-muted-background;
 }
 
 @mixin hook-form-danger() {

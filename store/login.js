@@ -11,6 +11,11 @@ export const state = () => ({
 })
 
 export const mutations = {
+  SET_FORM_FIELD (state, { field, value }) {
+    if (Object.hasOwnProperty.call(state.form, field)) {
+      state.form[field] = value
+    }
+  },
   SET_FORM_FIELDS (state, payload) {
     for (const field of Object.keys(payload)) {
       if (Object.hasOwnProperty.call(state.form, field)) {
@@ -34,6 +39,9 @@ export const mutations = {
 }
 
 export const actions = {
+  setFormField ({ commit }, payload) {
+    commit('SET_FORM_FIELD', payload)
+  },
   setFormFields ({ commit }, payload) {
     commit('SET_FORM_FIELDS', payload)
   },

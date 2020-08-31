@@ -1,9 +1,14 @@
 <template lang="pug">
   Page
     template(#main)
-      main(:class="{ 'uk-light': darkPeriod }")
+      main
+        TopBar(:title="pageTitle")
+          .uk-navbar-item
+            button.uk-close(type="button", data-uk-close, @click="close")
         SlideYDownTransition
-          section.uk-section.uk-text-center(v-if="!$fetchState.pending && order")
+          section.uk-section.uk-text-center(
+            v-if="!$fetchState.pending && order"
+            :class="{ 'uk-light': darkPeriod }")
             .uk-container
               .uk-margin-large-bottom
                 h1.uk-heading-small.uk-margin-remove Оплата
@@ -43,8 +48,11 @@ import head from 'lodash/head'
 import Page from '@/components/layout/Page.vue'
 import PaymentCards from '@/components/Payment/Cards/PaymentCards'
 import PaymentForm from '@/components/Payment/PaymentForm'
+import TopBar from '@/components/layout/TopBar'
+import scrollToTop from '@/components/mixins/scrollToTop'
 
 export default {
+  scrollToTop: true,
   middleware ({ route, redirect }) {
     const paymentHash = route.query.hash
 
@@ -52,18 +60,19 @@ export default {
       redirect('/notfound')
     }
   },
-  scrollToTop: true,
-  components: { Page, PaymentCards, PaymentForm },
+  components: { Page, TopBar, PaymentCards, PaymentForm },
+  mixins: [scrollToTop],
   metaInfo () {
     return {
       script: [
         { src: 'https://kassa.yandex.ru/checkout-ui/v2.js' }
       ],
-      title: 'Оплата'
+      title: this.pageTitle
     }
   },
   async fetch () {
-    await this.$store.dispatch('profile/getOrderByHashForPayment', this.$route.query.hash)
+    this.setFieldAction({ field: 'pageTitle', value: 'Оплата заказа' })
+    await this.getOrderByHash(this.$route.query.hash)
       .then(response => this.$store.commit('payment/SET_FIELD', {
         field: 'status',
         value: response.status
@@ -77,7 +86,7 @@ export default {
     ...mapState({
       payment: state => state.payment.item,
       cards: state => state.checkout.cards,
-      order: state => state.profile.order,
+      order: state => state.orders.item,
       paymentStatus: state => state.payment.status
     }),
     paid () {
@@ -104,8 +113,13 @@ export default {
       this.formEnable = true
     }
   },
+  beforeDestroy () {
+    this.setOrderField({ field: 'item', value: null })
+  },
   methods: {
     ...mapActions({
+      setOrderField: 'orders/setField',
+      getOrderByHash: 'orders/getItemByHash',
       setPaymentFieldAction: 'payment/setField',
       payWithIdAction: 'payment/createWithId',
       syncCardsAction: 'checkout/syncCards'
@@ -120,9 +134,13 @@ export default {
       this.payWithIdAction(this.order.number)
         .then((response) => {
           if (response.status === 'success') {
-            this.$router.push('/')
+            this.close()
           }
         })
+    },
+    close () {
+      const redirectPath = this.$auth.loggedIn ? '/profile/orders' : '/'
+      this.$router.push(redirectPath)
     }
   },
   beforeRouteLeave (to, from, next) {

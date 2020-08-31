@@ -16,12 +16,15 @@ export const state = () => ({
   account: {
     name: '',
     email: ''
-  },
-  orders: [],
-  order: {}
+  }
 })
 
 export const mutations = {
+  SET_ACCOUNT_FIELD (state, { field, value }) {
+    if (Object.hasOwnProperty.call(state.account, field)) {
+      state.account[field] = value
+    }
+  },
   SET_ACCOUNT_FIELDS (state, payload) {
     for (const field of Object.keys(payload)) {
       if (Object.hasOwnProperty.call(state.account, field)) {
@@ -45,18 +48,10 @@ export const mutations = {
       }
     }
   },
-  SET_ORDERS (state, payload) {
-    state.orders = payload
-  },
   SET_FIELD (state, { field, value }) {
     if (Object.hasOwnProperty.call(state, field)) {
       state[field] = value
     }
-  },
-  UPDATE_ORDERS (state, payload) {
-    state.orders = state.orders.map((order) => {
-      return order.number === payload.number ? payload : order
-    })
   }
 }
 
@@ -102,34 +97,11 @@ export const actions = {
     })
       .then(response => commit('SET_ORDERS', response))
   },
-  getOrder ({ commit }, number) {
-    const token = this.$auth.strategy.token.get()
-
-    return this.$api.$get(`/profile/orders/${number}`, {
-      headers: { Authorization: token }
-    })
-      .then(response => commit('SET_FIELD', { field: 'order', value: response }))
-  },
-  getOrderByHashForPayment ({ commit }, hash) {
-    return this.$api.$get(`/orders/${hash}`)
-      .then((response) => {
-        commit('SET_FIELD', { field: 'order', value: response.order })
-        return response
-      })
-  },
-  cancelOrder ({ commit }, number) {
-    const token = this.$auth.strategy.token.get()
-
-    return this.$api.$get(`/profile/orders/${number}/cancel`, {
-      headers: { Authorization: token }
-    })
-      .then((response) => {
-        commit('SET_FIELD', { field: 'order', value: response })
-        commit('UPDATE_ORDERS', response)
-      })
-  },
   setFields ({ commit }, payload) {
     commit('SET_FIELDS', payload)
+  },
+  setAccountField ({ commit }, payload) {
+    commit('SET_ACCOUNT_FIELD', payload)
   },
   setAccountFields ({ commit }, payload) {
     commit('SET_ACCOUNT_FIELDS', payload)

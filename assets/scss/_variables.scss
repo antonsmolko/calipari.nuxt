@@ -2,10 +2,12 @@
 
 // Color
 
-$logo-color: #3CC4FC;
+//$logo-color: #3CC4FC;
+$logo-color: deepskyblue;
 $logo-hero-color: #D9D9D9;
 $logo-hero-light-color: rgba(#fff, .16);
-$accent-color: #24ADED;
+//$accent-color: #24ADED;
+$accent-color: deepskyblue;
 $primary-gradient: linear-gradient(to top right,#0171CD,#159AD1);
 $footer-primary-gradient: linear-gradient(to top right, #005194, #007caf);
 $primary-transparent-gradient: linear-gradient(to top right,rgba(#0171CD, .97),rgba(#159AD1, .97));
@@ -19,6 +21,7 @@ $border-radius-small: 3px;
 /* Background */
 $background-smoke: rgba(#fff, .5);
 $inverse-background-smoke: rgba(#d6d6d6, .1);
+$global-muted-background: #fcfcfc;
 
 /* Button */
 

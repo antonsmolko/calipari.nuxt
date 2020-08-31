@@ -33,7 +33,7 @@
                                                 :vRules="{ required: true, minLength: true }"
                                                 :vDelay="true"
                                                 module="profile"
-                                                dispatchName="setAccountFields"
+                                                dispatchName="setAccountField"
                                                 @control="nameControl")
                                         div
                                             VInput(
@@ -49,7 +49,7 @@
                                                 :vRules="{ required: true, email: true }"
                                                 :vDelay="true"
                                                 module="profile"
-                                                dispatchName="setAccountFields"
+                                                dispatchName="setAccountField"
                                                 @control="emailControl")
                                     .uk-margin-medium-top
                                         nuxt-link.uk-button.uk-button-primary(to="/reset-password") Сбросить пароль

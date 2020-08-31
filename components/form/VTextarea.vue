@@ -1,54 +1,35 @@
 <template lang="pug">
-  .tm-form__input.uk-width-1-1
-    label.tm-form__label(v-if="label") {{ title }}
-    .uk-inline.uk-width-1-1
-      span.uk-form-icon(
-        v-if="icon"
-        :data-uk-icon="`icon: ${icon}`"
-        :class="{ 'uk-text-danger': vField && vField.$error }")
-      button.uk-form-icon.uk-form-icon-flip.uk-text-primary(
-        :class="{ 'uk-text-danger': vField && vField.$error }"
-        v-if="controlBtn"
-        :data-uk-icon="controlButtonIcon"
-        :disabled="vField && vField.$error"
-        @click="onClick")
-      input.uk-input.uk-form-large.uk-box-shadow-medium(
+  div
+    .tm-form__input.uk-width-1-1
+      uk-textarea(
+        title="Комментарий"
         :name="name"
-        @input="onInput"
+        :rows="rows"
+        icon="comment"
         :value="currentValue"
-        :type="type"
         :disabled="disabled"
         :placeholder="placeholder"
+        @input="onInput"
         :class="{ 'uk-config-danger': vField && vField.$error }")
     .under-input-notice.uk-position-relative(v-if="vRules && vField && vField.$error")
       InputNotificationRequire(v-if="!vField.required && vRules.required" :name="title")
-      InputNotificationUnique(v-else-if="!vField.unique && vRules.unique" :name="title")
       InputNotificationMinString(v-else-if="!vField.minLength && vRules.minLength" :name="title" :min="min")
-      InputNotificationAlias(v-else-if="!vField.alias && vRules.alias" :name="title")
-      InputNotificationSameAsPassword(v-else-if="!vField.sameAsPassword && vRules.sameAsPassword" :name="title")
-      InputNotificationEmail(v-else-if="!vField.email && vRules.email" :name="title")
 </template>
 
 <script>
+import UkTextarea from '@/components/form/Input/UkTextarea'
 import {
   InputNotificationRequire,
-  InputNotificationUnique,
-  InputNotificationMinString,
-  InputNotificationAlias,
-  InputNotificationSameAsPassword,
-  InputNotificationEmail
+  InputNotificationMinString
 } from './input-notifications'
 
 const touchMap = new WeakMap()
 
 export default {
   components: {
+    UkTextarea,
     InputNotificationRequire,
-    InputNotificationUnique,
-    InputNotificationMinString,
-    InputNotificationAlias,
-    InputNotificationSameAsPassword,
-    InputNotificationEmail
+    InputNotificationMinString
   },
   props: {
     differ: {
@@ -87,9 +68,9 @@ export default {
       type: Boolean,
       default: false
     },
-    type: {
-      type: String,
-      default: 'text'
+    rows: {
+      type: Number,
+      default: 5
     },
     value: {
       type: String,
@@ -115,14 +96,6 @@ export default {
       type: Boolean,
       default: true
     },
-    controlBtn: {
-      type: Boolean,
-      default: false
-    },
-    controlBtnIcon: {
-      type: String,
-      default: 'pencil'
-    },
     disabled: {
       type: Boolean,
       default: false
@@ -137,9 +110,6 @@ export default {
   computed: {
     storeModule () {
       return this.module ? `${this.module}/` : ''
-    },
-    controlButtonIcon () {
-      return this.vField && this.vField.$error ? 'ban' : this.controlBtnIcon
     }
   },
   created () {
@@ -147,8 +117,7 @@ export default {
     this.currentValue = this.value
   },
   methods: {
-    onInput (e) {
-      let value = e.target.value
+    onInput ({ value }) {
       this.currentValue = value
 
       if (this.vField && this.vDelay) {
@@ -159,7 +128,10 @@ export default {
 
       value = this.trim ? value.trim() : value
 
-      this.$store.dispatch(`${this.storeModule}${this.dispatchName}`, { field: this.name, value })
+      this.$store.dispatch(`${this.storeModule}${this.dispatchName}`, {
+        field: this.name,
+        value
+      })
 
       this.$emit('input', { [this.name]: value })
     },
@@ -182,10 +154,6 @@ export default {
     },
     isDiffer (a, b) {
       return a !== b
-    },
-    onClick (e) {
-      const value = e.target.value
-      this.$emit('control', value)
     }
   }
 }
