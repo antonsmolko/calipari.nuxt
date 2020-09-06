@@ -1,4 +1,4 @@
-import { hash } from '~/helpers'
+import { hash } from '@/helpers'
 
 export const state = () => ({
   items: [],

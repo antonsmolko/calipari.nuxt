@@ -2,7 +2,7 @@ import values from 'lodash/values'
 import head from 'lodash/head'
 import omit from 'lodash/omit'
 import { noDiff, getParamsString } from '../helpers'
-import action from './mixins/action'
+import { action } from './mixins/action'
 
 export const state = () => ({
   selected: {

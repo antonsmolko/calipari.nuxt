@@ -1,4 +1,4 @@
-import axios from '@/store/mixins/action'
+import { action } from '@/store/mixins/action'
 export const state = () => ({
   fields: {
     hash: '',
@@ -27,7 +27,7 @@ export const mutations = {
 
 export const actions = {
   send ({ commit }, payload) {
-    return axios(this.$api, 'post', commit, {
+    return action(this.$api, 'post', commit, {
       url: '/reviews/store',
       payload,
       thenContent: response => commit('CLEAR_ITEM_FIELDS')

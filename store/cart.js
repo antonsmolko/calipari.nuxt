@@ -1,19 +1,22 @@
 import unionBy from 'lodash/unionBy'
+import union from 'lodash/union'
+import sumBy from 'lodash/sumBy'
 import values from 'lodash/values'
 import sum from 'lodash/sum'
-import { refreshTokens } from '@/helpers'
-import axios from '@/store/mixins/action'
+import map from 'lodash/map'
+import filter from 'lodash/filter'
+import { refreshTokens, getDiscountPrice } from '@/helpers'
+import { action } from '@/store/mixins/action'
 
 export const state = () => ({
   items: [],
+  saleKeys: [],
+  sales: [],
   totalPrice: null,
   version: 1
 })
 
 export const mutations = {
-  SET_ITEMS (state, payload) {
-    state.items = payload
-  },
   SET_ITEM_QTY (state, { id, qty }) {
     state.items.map((item) => {
       if (item.id === id) {
@@ -24,6 +27,11 @@ export const mutations = {
   DELETE_ITEM (state, id) {
     state.items = state.items.filter(item => item.id !== id)
   },
+  SET_FIELD (state, { field, value }) {
+    if (Object.hasOwnProperty.call(state, field)) {
+      state[field] = value
+    }
+  },
   SET_FIELDS (state, payload) {
     for (const [field, value] of Object.entries(payload)) {
       if (Object.hasOwnProperty.call(state, field)) {
@@ -33,6 +41,12 @@ export const mutations = {
   },
   UNION_ITEMS (state, payload) {
     state.items = unionBy(state.items, payload, 'id')
+  },
+  UNION_SALE_KEYS (state, payload) {
+    state.saleKeys = union(state.saleKeys, payload)
+  },
+  DELETE_SALE (state, id) {
+    state.saleKeys = state.saleKeys.filter(item => item !== id)
   }
 }
 
@@ -42,48 +56,62 @@ export const actions = {
       await refreshTokens(this.$auth)
     }
     return this.$auth.loggedIn
-      ? dispatch('add', item)
+      ? dispatch('addItemWithAuth', item)
       : dispatch('createItem', item)
   },
   setItemQty ({ commit }, { id, qty }) {
     return this.$api.$patch(`/cart-items/${id}`, { qty })
       .then(() => commit('SET_ITEM_QTY', { id, qty }))
   },
-  async syncItems ({ state, dispatch }) {
+  async sync ({ state, dispatch }) {
     if (this.$auth.loggedIn) {
       await refreshTokens(this.$auth)
     }
 
-    const items = state.items.map(item => item.id)
+    const itemKeys = map(state.items, 'id')
+    const saleKeys = state.saleKeys
 
-    this.$auth.loggedIn && items
-      ? dispatch('syncItemsAuth', items)
-      : dispatch('sync', items)
+    this.$auth.loggedIn
+      ? dispatch('authSync', { itemKeys, saleKeys })
+      : dispatch('guestSync')
   },
-  syncItemsAuth ({ state, commit }, items) {
+  authSync ({ state, commit }, payload) {
     const token = this.$auth.strategy.token.get()
     const headers = token ? { Authorization: token } : {}
 
-    return this.$api.$post('/carts/sync', { items }, { headers })
-      .then(response => commit('SET_ITEMS', response))
+    return this.$api.$post('/carts/sync', payload, { headers })
+      .then((response) => {
+        commit('SET_FIELD', { field: 'items', value: response.items })
+        commit('SET_FIELD', { field: 'saleKeys', value: response.sale_keys })
+      })
   },
-  sync ({ state, commit }, items) {
+  guestSync ({ state, dispatch }) {
+    return Promise.all([
+      dispatch('guestItemsSync', map(state.items, 'id')),
+      dispatch('guestSalesSync', state.saleKeys)
+    ])
+  },
+  guestItemsSync ({ commit }, items) {
     return this.$api.$post('/cart-items/sync', { items })
-      .then(response => commit('SET_ITEMS', response))
+      .then(response => commit('SET_FIELD', { field: 'items', value: response }))
   },
-  add ({ commit }, item) {
+  guestSalesSync ({ commit }, keys) {
+    return this.$api.$post('/sales/sync', { keys })
+      .then(response => commit('SET_FIELD', { field: 'saleKeys', value: response }))
+  },
+  addItemWithAuth ({ commit }, item) {
     const token = this.$auth.strategy.token.get()
     const headers = { Authorization: token }
 
-    return axios(this.$api, 'post', commit, {
-      url: '/carts/add',
+    return action(this.$api, 'post', commit, {
+      url: '/carts/add-item',
       payload: item,
       config: { headers },
-      thenContent: response => commit('SET_ITEMS', response.data)
+      thenContent: response => commit('SET_FIELD', { field: 'items', value: response.data })
     })
   },
   createItem ({ commit }, item) {
-    return axios(this.$api, 'post', commit, {
+    return action(this.$api, 'post', commit, {
       url: '/cart-items',
       payload: item,
       thenContent: response => commit('UNION_ITEMS', [response.data])
@@ -97,14 +125,86 @@ export const actions = {
     return this.$api.$post('/cart-items/get-project', { key })
       .then(response => commit('UNION_ITEMS', [response]))
   },
+  async addSale ({ commit, dispatch }, id) {
+    if (this.$auth.loggedIn) {
+      await refreshTokens(this.$auth)
+    }
+    return this.$auth.loggedIn
+      ? dispatch('addSaleWithAuth', id)
+      : commit('UNION_SALE_KEYS', [id])
+  },
+  addSaleWithAuth ({ commit }, id) {
+    const token = this.$auth.strategy.token.get()
+    const headers = { Authorization: token }
+
+    return this.$api.$get(`/carts/add-sale/${id}`, { headers })
+      .then((response) => {
+        commit('SET_FIELD', { field: 'saleKeys', value: map(response, 'id') })
+        commit('SET_FIELD', { field: 'sales', value: response })
+      })
+  },
+  async deleteSale ({ state, commit, dispatch }, id) {
+    if (this.$auth.loggedIn) {
+      await refreshTokens(this.$auth)
+    }
+
+    this.$auth.loggedIn
+      ? dispatch('detachSale', id)
+      : commit('DELETE_SALE', id)
+
+    return state.saleKeys.length
+      ? dispatch('getCartSales')
+      : commit('SET_FIELD', { field: 'sales', value: [] })
+  },
+  detachSale ({ commit }, id) {
+    const token = this.$auth.strategy.token.get()
+    const headers = { Authorization: token }
+
+    return this.$api.$get(`/carts/detach-sale/${id}`, { headers })
+      .then((response) => {
+        commit('SET_FIELD', { field: 'saleKeys', value: map(response, 'id') })
+        commit('SET_FIELD', { field: 'sales', value: response })
+      })
+  },
+  getCartSales ({ state, commit }) {
+    return action(this.$api, 'post', commit, {
+      url: '/sales/get-by-keys',
+      payload: { keys: state.saleKeys },
+      thenContent: (response) => {
+        commit('SET_FIELD', { field: 'saleKeys', value: map(response.data, 'id') })
+        commit('SET_FIELD', { field: 'sales', value: response.data })
+      }
+    })
+  },
+  getAvailableCartSales ({ state, commit }) {
+    return action(this.$api, 'post', commit, {
+      url: '/sales/get-available-by-keys',
+      payload: { keys: state.saleKeys },
+      thenContent: response => commit('SET_FIELD', { field: 'sales', value: response.data })
+    })
+  },
   setFields ({ commit }, payload) {
     commit('SET_FIELDS', payload)
+  },
+  setField ({ commit }, payload) {
+    commit('SET_FIELD', payload)
   }
 }
 
 export const getters = {
-  qty: state => state.items.reduce((qty, item) => qty + item.details.qty, 0),
-  totalPrice: (state, getters) => state.items.reduce((total, item) => total + getters.itemPrice(item.details), 0),
+  qty: (state) => {
+    const cartItemsCount = sumBy(state.items, item => item.details.qty)
+    const salesCount = state.saleKeys.length
+
+    return cartItemsCount + salesCount
+  },
+  totalPrice: (state, getters) => {
+    const cartItemsTotalPrice = sumBy(state.items, item => getters.itemPrice(item.details))
+    const availableSales = filter(state.sales, 'is_available')
+    const salesTotalPrice = sumBy(availableSales, item => getDiscountPrice(item.old_price, item.discount))
+
+    return cartItemsTotalPrice + salesTotalPrice
+  },
   itemPrice: (state, getters, rootState, rootGetters) => (itemDetails) => {
     const texture = rootGetters['textures/getItemById'](itemDetails.texture_id)
     const textureTax = texture.price
@@ -113,5 +213,6 @@ export const getters = {
     const price = Math.round(orderArea * textureTax / 100) * 100
 
     return price * itemDetails.qty + addedCosts
-  }
+  },
+  checkSaleInCart: state => id => state.saleKeys.includes(id)
 }

@@ -2,7 +2,6 @@
     ServiceBottomBar
         .uk-navbar-left
             .uk-navbar-item.tm-total__price
-                span.tm-total-price__heading Цена
                 span.tm-total-price__value.uk-text-large.uk-text-emphasis {{ formatPrice }}
         .uk-navbar-right
             .uk-navbar-item

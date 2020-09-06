@@ -62,7 +62,7 @@ export default {
       url: '/work-examples/list',
       clear: true
     })
-    await this.$store.dispatch('pages/getItem', 'portfolio')
+    await this.getPageAction('portfolio')
     this.setFieldAction({ field: 'pageTitle', value: this.page.title })
   },
   data: () => ({
@@ -86,7 +86,8 @@ export default {
   methods: {
     ...mapActions({
       getItemsAction: 'resources/getItems',
-      setImageFieldAction: 'images/setField'
+      setImageFieldAction: 'images/setField',
+      getPageAction: 'pages/getItem'
     }),
     intersected () {
       if (this.items.length !== this.pagination.total) {

@@ -109,7 +109,7 @@ export default {
     },
     dispatchName: {
       type: String,
-      default: 'setFormFields'
+      default: 'setFormField'
     },
     trim: {
       type: Boolean,

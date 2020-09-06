@@ -67,7 +67,6 @@
                                                     :disabled="$v.$invalid") Зарегистрироваться
 </template>
 <script>
-import { mapActions } from 'vuex'
 import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
 
 import Page from '@/components/layout/Page.vue'
@@ -144,12 +143,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      syncCartAction: 'cart/syncItems',
-      syncWishListAction: 'wishList/sync',
-      syncCardsAction: 'checkout/syncCards',
-      addNotificationAction: 'notifications/addItem'
-    }),
     async onSubmit () {
       this.loaded = true
       this.loadedMessage = 'Выполняется регистрация...'

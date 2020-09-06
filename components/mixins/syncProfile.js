@@ -2,7 +2,7 @@ import { mapActions } from 'vuex'
 export default {
   methods: {
     ...mapActions({
-      syncCartAction: 'cart/syncItems',
+      syncCartAction: 'cart/sync',
       syncWishListAction: 'wishList/sync',
       syncCardsAction: 'checkout/syncCards',
       addNotificationAction: 'notifications/addItem'

@@ -5,12 +5,12 @@
       .uk-divider-small
     .tm-form.uk-margin-medium-top
       .uk-fieldset
-        CheckoutDeliveryPickupItem(
+        checkout-delivery-pickup-item(
           v-for="item in items"
           :key="item.id"
           :item="item"
           v-model="currentPickup"
-          :checked="item.id === value.id"
+          :checked="item.id === currentPickup.id"
           @input="onInput")
       .uk-margin
         span Стоимость доставки:

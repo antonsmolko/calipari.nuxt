@@ -23,8 +23,7 @@
                       module="login"
                       :vField="$v.form.email"
                       :vRules="{ required: true, email: true }"
-                      :vDelay="true"
-                      dispatchName="setFormField")
+                      :vDelay="true")
                     VInput(
                       class="uk-margin"
                       title="Пароль"
@@ -36,8 +35,7 @@
                       :min="6"
                       :vField="$v.form.password"
                       :vRules="{ required: true, minLength: true }"
-                      :vDelay="true"
-                      dispatchName="setFormField")
+                      :vDelay="true")
                   .uk-inline.uk-margin.uk-margin-medium-top.uk-width-1-1
                     .tm-form__buttons
                       button.uk-button.uk-button-primary(
@@ -52,7 +50,6 @@
                     | Еще нет аккаунта?
 </template>
 <script>
-import { mapActions } from 'vuex'
 import { required, minLength, email } from 'vuelidate/lib/validators'
 
 import Page from '@/components/layout/Page.vue'
@@ -62,6 +59,7 @@ import routerParams from '@/components/mixins/routerParams'
 import VInput from '@/components/form/VInput'
 import setLayout from '@/components/mixins/setLayout'
 import syncProfile from '@/components/mixins/syncProfile'
+import scrollToTop from '@/components/mixins/scrollToTop'
 
 export default {
   middleware: 'guest',
@@ -70,17 +68,22 @@ export default {
     SocialsColor,
     VInput
   },
-  mixins: [form, routerParams, setLayout, syncProfile],
+  mixins: [
+    form,
+    routerParams,
+    setLayout,
+    syncProfile,
+    scrollToTop
+  ],
   metaInfo () {
     return {
       title: 'Вход'
     }
   },
-  data () {
-    return {
-      loaded: false
-    }
-  },
+  data: () => ({
+    loaded: false,
+    storeModule: 'login'
+  }),
   validations: {
     form: {
       email: {
@@ -96,12 +99,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      syncCartAction: 'cart/syncItems',
-      syncWishListAction: 'wishList/sync',
-      syncCardsAction: 'checkout/syncCards',
-      addNotificationAction: 'notifications/addItem'
-    }),
     async onSubmit () {
       try {
         this.loaded = true

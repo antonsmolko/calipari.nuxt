@@ -31,7 +31,6 @@
             td.tm-order-table__counter
                 CartCounter(@count="onCount" v-model="count")
             td.tm-order-table__price(class="uk-width-1-2 uk-width-1-4@s uk-width-auto@m")
-                span.tm-order-table__price-heading.uk-text-muted Цена
                 span.tm-order-table__price-value.uk-text-emphasis {{ formatPrice }}
                   sup.uk-text-primary.tm-order-table__price-note(
                     v-if="addedCostsContent"

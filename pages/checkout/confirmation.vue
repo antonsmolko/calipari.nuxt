@@ -1,49 +1,59 @@
 <template lang="pug">
-  Page
+  page(v-if="!$fetchState.pending")
     template(#main)
-      CheckoutLayout(
+      checkout-layout(
         v-show="!deliveryIsInvalid && enabled"
         title="Подтверждение"
         :price="totalPrice"
         buttonNextIcon="check"
         buttonNextStyle="uk-button-danger"
+        :altContent="true"
         @confirm="onNext")
-        template(#content)
-          SlideYDownTransition(v-show="pageTitle && !pending")
-            div
-              CartList(:items="items")
+        template(#alt-content)
+          slide-y-down-transition(v-show="pageTitle && !pending")
+            section.uk-section(:class="{ 'uk-light': darkPeriod }")
+              cart-list(:items="items")
+              .uk-container.uk-margin-medium(v-if="sales.length")
+                hr(v-if="items.length")
+                .uk-margin-large-bottom(v-else)
+              sale-list(
+                v-if="sales.length"
+                :items="sales"
+                @delete="deleteSale")
+              .uk-container.uk-margin-medium(v-if="sales.length")
+                hr(v-if="items.length")
               .uk-container.uk-margin-medium-top
                 .tm-confirmation__info.uk-grid(
                   class="uk-child-width-1-2@s"
                   data-uk-grid)
                   .tm-confirmation__details
-                    CheckoutOrderDetailsItem(
+                    checkout-order-details-item(
                       heading="Оплата"
                       content="Безналичный расчет")
-                    CheckoutOrderDetailsItem(
+                    checkout-order-details-item(
                       heading="ФИО"
                       :content="fullName")
-                    CheckoutOrderDetailsItem(
+                    checkout-order-details-item(
                       heading="Email"
                       :content="customer.email")
-                    CheckoutOrderDetailsItem(
+                    checkout-order-details-item(
                       heading="Телефон"
                       :content="customer.phone")
-                    CheckoutOrderDetailsItem(
+                    checkout-order-details-item(
                       heading="Способ доставки"
                       :content="delivery.title")
-                    CheckoutOrderDetailsItem(
+                    checkout-order-details-item(
                       heading="Населенный пункт"
                       :content="locality")
-                    CheckoutOrderDetailsItem(
+                    checkout-order-details-item(
                       v-if="delivery.alias === 'cdek' && !deliveryIsInvalid"
                       heading="Пункт выдачи заказа"
                       :content="deliveryDetails.pvz.address")
-                    CheckoutOrderDetailsItem(
+                    checkout-order-details-item(
                       v-else-if="!deliveryIsInvalid"
                       heading="Адрес доставки"
                       :content="address")
-                    CheckoutOrderDetailsItem(
+                    checkout-order-details-item(
                       v-if="deliveryDetails.price"
                       heading="Стоимость доставки"
                       :content="deliveryFormatPrice")
@@ -57,7 +67,6 @@
                     button.uk-button.uk-button-danger(
                       @click.prevent="onPrev") Назад
                     .uk-flex.uk-flex-middle
-                      span.uk-h5.tm-total-price__heading Цена
                       span.uk-text-large.uk-text-emphasis {{ totalFormatPrice }}
                       button.uk-button.uk-button-danger.uk-margin-left(
                         @click.prevent="onNext") Оформить
@@ -74,6 +83,7 @@ import CheckoutLayout from '@/components/Checkout/CheckoutLayout'
 import { getFormatPrice } from '@/components/helpers'
 import scrollToTop from '@/components/mixins/scrollToTop'
 import CartList from '@/components/Cart/CartList'
+import SaleList from '@/components/Cart/SaleList'
 import CheckoutOrderDetailsItem from '@/components/Checkout/CheckoutOrderDetailsItem'
 
 export default {
@@ -81,7 +91,8 @@ export default {
     Page,
     CheckoutOrderDetailsItem,
     CheckoutLayout,
-    CartList
+    CartList,
+    SaleList
   },
   mixins: [scrollToTop],
   metaInfo () {
@@ -89,10 +100,12 @@ export default {
       title: this.pageTitle
     }
   },
-  async fetch ({ store }) {
-    store.commit('SET_FIELDS', { pageTitle: 'Оформление заказа. Подтверждение' })
-    await store.$api.$get('/delivery')
-      .then(response => store.commit('delivery/SET_ITEMS', response))
+  async fetch () {
+    await Promise.all([
+      this.getDeliveryItemsAction(),
+      this.getCartSalesAction()
+    ])
+    this.setFieldAction({ field: 'pageTitle', value: 'Оформление заказа. Подтверждение' })
   },
   data: () => ({
     pending: false
@@ -100,6 +113,7 @@ export default {
   computed: {
     ...mapState({
       items: state => state.cart.items,
+      sales: state => state.cart.sales,
       customer: state => state.checkout.customer,
       comment: state => state.checkout.comment,
       enabled: state => state.checkout.enabled,
@@ -143,7 +157,10 @@ export default {
       orderConfirmAction: 'checkout/orderConfirm',
       setCheckoutFieldsAction: 'checkout/setFields',
       setCheckoutFieldAction: 'checkout/setField',
-      setCartFieldsAction: 'cart/setFields'
+      setCartFieldsAction: 'cart/setFields',
+      getCartSalesAction: 'cart/getAvailableCartSales',
+      getDeliveryItemsAction: 'delivery/getItems',
+      deleteSaleAction: 'cart/deleteSale'
     }),
     onPrev () {
       this.$router.push('/checkout/delivery')
@@ -168,6 +185,17 @@ export default {
         field: 'comment',
         value
       })
+    },
+    deleteSale (id) {
+      const modal = this.$uikit.modal
+
+      modal.labels = {
+        ok: 'Удалить',
+        cancel: 'Отменить'
+      }
+
+      modal.confirm(this.$conf.beforeCartItemDeletingConfirmationContent)
+        .then(() => this.deleteSaleAction(id))
     }
   }
 }

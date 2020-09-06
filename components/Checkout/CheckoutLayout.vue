@@ -1,25 +1,27 @@
 <template lang="pug">
-    div(v-show="isEnabled")
-        TopBar(
-            :title="title")
-            //.uk-navbar-item(class="uk-visible@l")
-                //span.uk-h5.tm-total-price__heading Цена
-                //span.uk-text-large.uk-text-emphasis {{ formatPrice }}
-            .uk-navbar-item
-                button.uk-close(type="button", data-uk-close, @click="onClose")
-        section.uk-section(
-            :class="{ 'uk-light': darkPeriod }"
-            data-uk-height-viewport="offset-top: true; offset-bottom: true")
-            .uk-container
-                slot(name="content")
-        SlideYDownTransition(mode="out-in")
-            CheckoutBottomBar(
-                :price="formatPrice"
-                :nextIcon="buttonNextIcon"
-                :nextDisabled="invalid"
-                :buttonNextStyle="buttonNextStyle"
-                @next="onNext")
-        .uk-padding(class="uk-hidden@l")
+  div(v-show="isEnabled")
+    TopBar(
+      :title="title")
+      //.uk-navbar-item(class="uk-visible@l")
+          //span.uk-h5.tm-total-price__heading Цена
+          //span.uk-text-large.uk-text-emphasis {{ formatPrice }}
+      .uk-navbar-item
+        button.uk-close(type="button", data-uk-close, @click="onClose")
+    section.uk-section(
+      v-if="!altContent"
+      :class="{ 'uk-light': darkPeriod }"
+      data-uk-height-viewport="offset-top: true; offset-bottom: true")
+      .uk-container
+        slot(name="content")
+    slot(name="alt-content")
+    SlideYDownTransition(mode="out-in")
+      CheckoutBottomBar(
+        :price="formatPrice"
+        :nextIcon="buttonNextIcon"
+        :nextDisabled="invalid"
+        :buttonNextStyle="buttonNextStyle"
+        @next="onNext")
+    .uk-padding(class="uk-hidden@l")
 </template>
 <script>
 import { mapState } from 'vuex'
@@ -56,6 +58,10 @@ export default {
     buttonNextStyle: {
       type: String,
       default: 'uk-button-primary'
+    },
+    altContent: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {

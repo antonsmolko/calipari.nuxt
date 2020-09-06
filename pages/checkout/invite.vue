@@ -72,13 +72,13 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { required, minLength, email } from 'vuelidate/lib/validators'
-import Page from '~/components/layout/Page.vue'
-import SocialsColor from '~/components/SocialsColor.vue'
-import form from '~/components/mixins/form'
-import routerParams from '~/components/mixins/routerParams'
-import VInput from '~/components/form/VInput'
-import setLayout from '~/components/mixins/setLayout'
-import CheckoutLayout from '~/components/Checkout/CheckoutLayout'
+import Page from '@/components/layout/Page.vue'
+import SocialsColor from '@/components/SocialsColor.vue'
+import form from '@/components/mixins/form'
+import routerParams from '@/components/mixins/routerParams'
+import VInput from '@/components/form/VInput'
+import setLayout from '@/components/mixins/setLayout'
+import CheckoutLayout from '@/components/Checkout/CheckoutLayout'
 
 export default {
   name: 'Invite',

@@ -300,7 +300,7 @@ export default {
       try {
         await this.addToCartAction(this.cartItemData)
         await this.addNotificationAction({
-          message: 'Ваш товар добавлен в корзину!',
+          message: 'Проект добавлен в корзину!',
           status: 'success'
         })
         this.onClose()

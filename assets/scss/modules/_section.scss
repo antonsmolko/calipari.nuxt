@@ -69,4 +69,16 @@
             //min-height: 700px;
         }
     }
+    &__expand-mobile {
+        @include media-desk($l) {
+            .uk-container {
+                padding: 0 $global-small-gutter;
+            }
+        }
+        @include media-desk($xs) {
+            .uk-container {
+                padding: 0 4px;
+            }
+        }
+    }
 }

@@ -1,23 +1,24 @@
 <template lang="pug">
-    .uk-container.tm-cart__container
-        SlideYDownTransition(mode="out-in")
-            .tm-cart__content
-                table.tm-order-table
-                    tbody
-                        CartItem(
-                            v-for="item in items"
-                            :key="item.id"
-                            :item="item"
-                            :texture="getTexture(item.details.texture_id)"
-                            :price="getPrice(item.details)"
-                            @delete="onDelete")
-        CartModal
+  .uk-container.tm-cart__container
+    h2.uk-h3 Проекты
+    slide-y-down-transition(mode="out-in")
+      .tm-cart__content
+        table.tm-order-table
+          tbody
+            cart-item(
+              v-for="item in items"
+              :key="item.id"
+              :item="item"
+              :texture="getTexture(item.details.texture_id)"
+              :price="getPrice(item.details)"
+              @delete="onDelete")
+    cart-modal
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import CartModal from '~/components/Cart/CartModal'
-import CartItem from '~/components/Cart/CartItem'
+import CartModal from '@/components/Cart/CartModal'
+import CartItem from '@/components/Cart/CartItem'
 
 export default {
   name: 'CartList',
@@ -31,11 +32,6 @@ export default {
       required: true
     }
   },
-  data: () => ({
-    confirmContent: `
-        <p class="uk-text-large">Вы уверены?</p>
-        <p class="tm-text-medium">Данное действие удалит товар безвозвратно!</p>`
-  }),
   computed: {
     ...mapState({
       textures: state => state.textures.items
@@ -59,7 +55,7 @@ export default {
         cancel: 'Отменить'
       }
 
-      modal.confirm(this.confirmContent)
+      modal.confirm(this.$conf.beforeCartItemDeletingConfirmationContent)
         .then(() => this.deleteItemAction(id))
     }
   }
@@ -68,8 +64,8 @@ export default {
 
 <style lang="scss">
 table.tm-order-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-spacing: 0;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 </style>

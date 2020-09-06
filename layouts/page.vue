@@ -8,7 +8,7 @@
                 :message="notification.message"
             )
             Navbar
-            TopBar(:title="title")
+            TopBar(:title="page.title")
             nuxt
             Footer
             BottomBar
@@ -33,7 +33,7 @@ export default {
   mixins: [notifications],
   metaInfo () {
     return {
-      title: this.title,
+      title: this.page.long_title,
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' }
@@ -46,9 +46,9 @@ export default {
     }
   },
   computed: {
-    ...mapState([
-      'title'
-    ])
+    ...mapState('pages', {
+      page: state => state.fields
+    })
   },
   mounted () {
     this.onLoad = true

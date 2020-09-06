@@ -12,8 +12,8 @@
         @input="onInput"
         :class="{ 'uk-config-danger': vField && vField.$error }")
     .under-input-notice.uk-position-relative(v-if="vRules && vField && vField.$error")
-      InputNotificationRequire(v-if="!vField.required && vRules.required" :name="title")
-      InputNotificationMinString(v-else-if="!vField.minLength && vRules.minLength" :name="title" :min="min")
+      input-notification-require(v-if="!vField.required && vRules.required" :name="title")
+      input-notification-min-string(v-else-if="!vField.minLength && vRules.minLength" :name="title" :min="min")
 </template>
 
 <script>
@@ -90,7 +90,7 @@ export default {
     },
     dispatchName: {
       type: String,
-      default: 'setFormFields'
+      default: 'setFormField'
     },
     trim: {
       type: Boolean,

@@ -1,5 +1,5 @@
 import unionBy from 'lodash/unionBy'
-import action from './mixins/action'
+import { action } from './mixins/action'
 
 export const state = () => ({
   items: [],

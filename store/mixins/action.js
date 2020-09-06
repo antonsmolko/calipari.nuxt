@@ -1,4 +1,4 @@
-export default (axios, method, commit, { url, payload = null, thenContent = null, config = null }) => {
+export const action = (axios, method, commit, { url, payload = null, thenContent = null, config = null }) => {
   return axios[method](url, payload, config)
     .then((response) => {
       if (thenContent) {

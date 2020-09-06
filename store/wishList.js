@@ -1,4 +1,4 @@
-import { refreshTokens } from '~/helpers'
+import { refreshTokens } from '@/helpers'
 
 export const state = () => ({
   items: [],

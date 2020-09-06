@@ -1,9 +1,9 @@
-import { isFieldLengthValid, isPhoneValid } from '~/helpers'
-import { form } from '~/plugins/config'
+import { isFieldLengthValid, isPhoneValid } from '@/helpers'
+import { form } from '@/plugins/config'
 const isLengthValid = isFieldLengthValid(form.BASE_MIN_LENGTH)
 
 export const state = () => ({
-  fields: {
+  form: {
     first_name: null,
     last_name: null,
     middle_name: null,
@@ -32,19 +32,24 @@ export const mutations = {
       }
     }
   },
-  SET_FIELDS (state, payload) {
+  SET_FORM_FIELD (state, { field, value }) {
+    if (Object.hasOwnProperty.call(state.form, field)) {
+      state.form[field] = value
+    }
+  },
+  SET_FORM_FIELDS (state, payload) {
     for (const field of Object.keys(payload)) {
-      if (Object.hasOwnProperty.call(state.fields, field)) {
-        state.fields[field] = payload[field]
+      if (Object.hasOwnProperty.call(state.form, field)) {
+        state.form[field] = payload[field]
       }
     }
   },
   RESPONSE_SET_FIELDS (state, payload) {
     for (const field of Object.keys(payload)) {
-      if (Object.hasOwnProperty.call(state.fields, field)) {
+      if (Object.hasOwnProperty.call(state.form, field)) {
         field === 'locality'
-          ? state.fields[field] = JSON.parse(payload[field])
-          : state.fields[field] = payload[field]
+          ? state.form[field] = JSON.parse(payload[field])
+          : state.form[field] = payload[field]
       }
     }
   },
@@ -67,7 +72,7 @@ export const actions = {
   update ({ state }) {
     const token = this.$auth.strategy.token.get()
 
-    return this.$api.$post('/profile/details', state.fields, {
+    return this.$api.$post('/profile/details', state.form, {
       headers: { Authorization: token }
     })
   },
@@ -97,8 +102,11 @@ export const actions = {
     })
       .then(response => commit('SET_ORDERS', response))
   },
-  setFields ({ commit }, payload) {
-    commit('SET_FIELDS', payload)
+  setFormField ({ commit }, payload) {
+    commit('SET_FORM_FIELD', payload)
+  },
+  setFormFields ({ commit }, payload) {
+    commit('SET_FORM_FIELDS', payload)
   },
   setAccountField ({ commit }, payload) {
     commit('SET_ACCOUNT_FIELD', payload)
@@ -110,12 +118,12 @@ export const actions = {
 
 export const getters = {
   personalIsInvalid: (state) => {
-    return !isLengthValid(state.fields.first_name) ||
-      !isLengthValid(state.fields.last_name) ||
-      !isLengthValid(state.fields.middle_name) ||
-      !isPhoneValid(state.fields.phone)
+    return !isLengthValid(state.form.first_name) ||
+      !isLengthValid(state.form.last_name) ||
+      !isLengthValid(state.form.middle_name) ||
+      !isPhoneValid(state.form.phone)
   },
-  localityIsInvalid: state => !state.fields.locality ||
-    !Object.hasOwnProperty.call(state.fields.locality, 'name') ||
-    !Object.hasOwnProperty.call(state.fields.locality, 'id')
+  localityIsInvalid: state => !state.form.locality ||
+    !Object.hasOwnProperty.call(state.form.locality, 'name') ||
+    !Object.hasOwnProperty.call(state.form.locality, 'id')
 }

@@ -1,28 +1,28 @@
 <template lang="pug">
-  Page
+  page
     template(#main)
-      CheckoutLayout(
+      checkout-layout(
         v-show="!personalIsInvalid && enabled"
         title="Способы доставки"
         :price="totalPrice"
         @confirm="onNext")
         template(#content)
-          SlideYDownTransition(v-show="pageTitle")
+          slide-y-down-transition(v-show="pageTitle")
             .uk-grid.uk-grid-divider.uk-flex-center(data-uk-grid)
               div(class="uk-width-xlarge@s uk-width-1-2@m")
-                CheckoutDeliveryList(
+                checkout-delivery-list(
                   :items="items"
                   @change="changeDelivery"
                   :defaultValue="selectDeliveryId")
               div(class="uk-width-xlarge@s uk-width-1-2@m")
-                CheckoutDeliveryPickup(
+                checkout-delivery-pickup(
                   v-if="selectDelivery.alias === 'pickup-bryansk'"
                   :items="selectDelivery.pickups"
                   :value="pickup"
                   @change="changePickup")
-                CheckoutDeliveryCDEK(
+                checkout-delivery-c-d-e-k(
                   v-else-if="selectDelivery.alias === 'cdek'")
-                CheckoutDeliveryCDEKCourier(
+                checkout-delivery-c-d-e-k-courier(
                   v-else-if="selectDelivery.alias === 'cdek-courier'")
               .uk-inline.uk-margin-medium-top.uk-margin-auto-left(
                 class="uk-width-xlarge@s uk-width-1-2@m uk-visible@l")

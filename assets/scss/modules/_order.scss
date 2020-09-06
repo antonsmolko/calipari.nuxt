@@ -1,5 +1,4 @@
 $button-delete-background: #efefef;
-$lightbox-background: rgba(#000, .05);
 
 .tm-order-table {
   width: 100%;
@@ -12,16 +11,18 @@ $lightbox-background: rgba(#000, .05);
     padding-top: $global-small-gutter;
     padding-bottom: $global-small-gutter;
     padding-right: $global-small-gutter;
-    margin-right: -$global-small-gutter;
+    margin-left: -$global-small-gutter + 4;
+    margin-right: -$global-small-gutter + 4;
     box-sizing: border-box;
+    border-radius: 1px;
     .uk-light & {
       background: $inverse-background-smoke;
     }
     @include media-mob($s) {
       padding-left: $global-small-gutter;
       padding-right: $global-gutter;
-      margin-left: -$global-gutter;
-      margin-right: -$global-gutter;
+      margin-left: -$global-gutter + 4;
+      margin-right: -$global-gutter + 4;
     }
     @include media-mob($hm) {
       padding-left: 5px;
@@ -73,7 +74,7 @@ $lightbox-background: rgba(#000, .05);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: $lightbox-background;
+    background: $order-item-lightbox-background;
   }
 
   &__params {
@@ -169,10 +170,7 @@ $lightbox-background: rgba(#000, .05);
       padding-right: 5px;
     }
     &-value {
-      font-size: $global-medium-font-size;
-      @include media-mob($se) {
-        font-size: $global-large-font-size;
-      }
+      font-size: 1.8rem;
     }
     &-note {
       cursor: pointer;
@@ -182,15 +180,10 @@ $lightbox-background: rgba(#000, .05);
       max-width: 160px;
       flex: 1;
       margin: 0 auto;
-      &-value {
-        font-size: $global-medium-font-size;
-      }
+      padding-left: $global-medium-margin;
     }
     @include media-mob($m) {
       max-width: 180px;
-      &-value {
-        font-size: $global-large-font-size;
-      }
     }
   }
 
@@ -198,4 +191,8 @@ $lightbox-background: rgba(#000, .05);
     order: 5;
     text-align: right;
   }
+}
+
+.tm-total-price {
+  font-size: 2rem;
 }

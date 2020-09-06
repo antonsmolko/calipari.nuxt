@@ -1,8 +1,10 @@
 import omit from 'lodash/omit'
 import uniqWith from 'lodash/uniqWith'
 import isEqual from 'lodash/isEqual'
-import { isFieldLengthValid, refreshTokens } from '../helpers'
-import { form } from '~/plugins/config'
+import filter from 'lodash/filter'
+import map from 'lodash/map'
+import { form } from '@/plugins/config'
+import { isFieldLengthValid, refreshTokens } from '@/helpers'
 const isCardEqual = (object, other) => isEqual(omit(object, 'id'), omit(other, 'id'))
 const isLengthValid = isFieldLengthValid(form.BASE_MIN_LENGTH)
 
@@ -85,10 +87,18 @@ export const actions = {
       : {}
 
     return this.$api.$post('/orders', getters.orderDetails, { headers })
-      .then(response => commit('notifications/ADD_ITEM', {
-        status: 'success',
-        message: `Поздравляем! Ваш заказ № ${response} размещен. Мы скоро с Вами свяжемся для уточнения деталей.`
-      }, { root: true }))
+      .then((response) => {
+        commit('cart/SET_FIELDS', {
+          items: [],
+          sales: [],
+          saleKeys: [],
+          totalPrice: null
+        }, { root: true })
+        commit('notifications/ADD_ITEM', {
+          status: 'success',
+          message: `Поздравляем! Ваш заказ № ${response} размещен. Мы скоро с Вами свяжемся для уточнения деталей.`
+        }, { root: true })
+      })
   },
   async syncCards ({ state, commit }) {
     if (!this.$auth.loggedIn) {
@@ -157,7 +167,8 @@ export const getters = {
   orderDetails: (state, getters, rootState) => {
     return {
       userId: rootState.auth.user ? rootState.auth.user.id : null,
-      items: rootState.cart.items.map(item => item.id),
+      items: map(rootState.cart.items, 'id'),
+      sales: map(filter(rootState.cart.sales, 'is_available'), 'id'),
       customer: JSON.stringify(state.customer),
       delivery: JSON.stringify(getters.deliveryDetails),
       comment: state.comment

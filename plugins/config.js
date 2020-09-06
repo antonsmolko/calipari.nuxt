@@ -10,10 +10,8 @@ const form = Object.freeze({
   PHONE_START_WITH: '+7 ('
 })
 
-Vue.prototype.$configForm = form
-
 /**
- * Типы статей блого
+ * Типы статей блога
  */
 const postTypes = [
   { title: 'Новости', index: 'news' },
@@ -22,9 +20,18 @@ const postTypes = [
   { title: 'События', index: 'events' }
 ]
 
-Vue.prototype.$postTypes = postTypes
+const beforeCartItemDeletingConfirmationContent = `
+  <p class="uk-text-large">Вы уверены?</p>
+  <p class="tm-text-medium">Подтвердите удаление позиции из корзины!</p>`
+
+Vue.prototype.$conf = Object.freeze({
+  form,
+  postTypes,
+  beforeCartItemDeletingConfirmationContent
+})
 
 export {
   form,
-  postTypes
+  postTypes,
+  beforeCartItemDeletingConfirmationContent
 }

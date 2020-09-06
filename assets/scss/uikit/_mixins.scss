@@ -389,6 +389,11 @@
   }
 }
 
+/** Label */
+@mixin hook-label() {
+  border-radius: 2px;
+}
+
 // Link
 
 @mixin hook-link-misc() {

@@ -1,4 +1,4 @@
-import { postTypes } from '../plugins/config'
+import { postTypes } from '@/plugins/config'
 
 export const state = () => ({
   item: {},

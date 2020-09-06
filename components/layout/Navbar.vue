@@ -12,6 +12,7 @@
                             ul.uk-navbar-nav
                                 li: nuxt-link(to="/catalog")  Каталог
                                 li: nuxt-link(to="/textures") Материалы
+                                li: nuxt-link(to="/sales") Распродажа
                                 li: nuxt-link(to="/blog") Блог
                                 li: nuxt-link(to="/portfolio") Портфолио
                                 li: nuxt-link(to="/contacts") Контакты

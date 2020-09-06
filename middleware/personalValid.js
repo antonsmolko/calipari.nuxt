@@ -1,4 +1,4 @@
-import lib from '~/plugins/lang/ru/lib'
+import lib from '@/plugins/lang/ru/lib'
 
 export default async ({ $auth, store, redirect }) => {
   if ($auth.loggedIn) {
@@ -13,7 +13,7 @@ export default async ({ $auth, store, redirect }) => {
         timeout: 10000
       })
     }
-    const authUserDetails = store.state.profile.fields
+    const authUserDetails = store.state.profile.form
     const email = $auth.user.email
     store.commit('checkout/SET_CUSTOMER_FIELDS', { ...authUserDetails, email })
     store.commit('checkout/SET_FIELDS', {
