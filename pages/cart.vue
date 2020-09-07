@@ -153,7 +153,6 @@ export default {
   &__footer {
     display: flex;
     align-items: center;
-    //justify-content: flex-end;
 
     .uk-button {
       margin-left: $global-margin;

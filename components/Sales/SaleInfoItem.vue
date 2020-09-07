@@ -1,7 +1,7 @@
 <template lang="pug">
   .tm-sale-card__info-item
     span.tm-sale-card__info-title.uk-text-muted {{ title }}
-    span.tm-sale-card__info-value.tm-text-medium.uk-text-emphasis {{ value }}
+    span.tm-sale-card__info-value.uk-text-emphasis {{ value }}
 </template>
 
 <script>
@@ -29,13 +29,15 @@ export default {
   }
   &-title {
     display: block;
-    font-size: 0.85rem;
     line-height: 1;
   }
   &-value {
-    //font-size: 1.1rem;
-    @include media-mob($xl) {
-      font-size: 1.1rem;
+    font-size: 1.3rem;
+    @include media-mob($s) {
+      font-size: 1.2rem;
+    }
+    @include media-mob($l) {
+      font-size: 18px;
       line-height: 1.2;
     }
   }

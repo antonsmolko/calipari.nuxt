@@ -128,7 +128,10 @@ export default {
   }
 
   &__body {
-    padding: $global-gutter;
+    padding: $global-margin $global-small-gutter - 4;
+    @include media-mob($s) {
+      padding: $global-margin;
+    }
   }
 
   &__old-price {

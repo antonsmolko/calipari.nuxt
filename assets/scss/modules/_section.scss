@@ -70,7 +70,7 @@
         }
     }
     &__expand-mobile {
-        @include media-desk($l) {
+        @include media-desk($xl) {
             .uk-container {
                 padding: 0 $global-small-gutter;
             }

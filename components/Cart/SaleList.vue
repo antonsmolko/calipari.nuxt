@@ -1,7 +1,9 @@
 <template lang="pug">
   .tm-sale-list
     .uk-container
-      h2.uk-h3 Товары с распродажи
+      .tm-checkout__header
+        span.uk-h2.uk-margin-remove Товары с распродажи
+        .uk-divider-small
       .tm-sale-list__container
     .uk-container.tm-sale-list__container
       .uk-grid.uk-grid-small(

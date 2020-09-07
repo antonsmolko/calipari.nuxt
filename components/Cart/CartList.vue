@@ -1,6 +1,8 @@
 <template lang="pug">
   .uk-container.tm-cart__container
-    h2.uk-h3 Проекты
+    .tm-checkout__header
+      span.uk-h2.uk-margin-remove Проекты
+      .uk-divider-small
     slide-y-down-transition(mode="out-in")
       .tm-cart__content
         table.tm-order-table

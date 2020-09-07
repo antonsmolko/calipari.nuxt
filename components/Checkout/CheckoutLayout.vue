@@ -1,6 +1,6 @@
 <template lang="pug">
   div(v-show="isEnabled")
-    TopBar(
+    top-bar(
       :title="title")
       //.uk-navbar-item(class="uk-visible@l")
           //span.uk-h5.tm-total-price__heading Цена
@@ -14,8 +14,8 @@
       .uk-container
         slot(name="content")
     slot(name="alt-content")
-    SlideYDownTransition(mode="out-in")
-      CheckoutBottomBar(
+    slide-y-down-transition(mode="out-in")
+      checkout-bottom-bar(
         :price="formatPrice"
         :nextIcon="buttonNextIcon"
         :nextDisabled="invalid"
@@ -25,11 +25,11 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import { getFormatPrice } from '~/components/helpers'
-import TopBar from '~/components/layout/TopBar'
-import CheckoutBottomBar from '~/components/Checkout/CheckoutBottomBar'
-import setLayout from '~/components/mixins/setLayout'
-import scrollToTop from '~/components/mixins/scrollToTop'
+import { getFormatPrice } from '@/components/helpers'
+import TopBar from '@/components/layout/TopBar'
+import CheckoutBottomBar from '@/components/Checkout/CheckoutBottomBar'
+import setLayout from '@/components/mixins/setLayout'
+import scrollToTop from '@/components/mixins/scrollToTop'
 
 export default {
   name: 'CheckoutLayout',
@@ -70,11 +70,13 @@ export default {
     },
     ...mapState({
       invalid: state => state.checkout.invalid,
-      enabled: state => state.checkout.enabled,
-      cartLength: state => state.cart.items.length
+      enabled: state => state.checkout.enabled
     }),
+    cartQty () {
+      return this.$store.getters['cart/qty']
+    },
     isEnabled () {
-      return this.enabled && this.cartLength
+      return this.enabled && this.cartQty
     }
   },
   created () {

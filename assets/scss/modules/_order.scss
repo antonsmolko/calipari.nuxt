@@ -19,8 +19,8 @@ $button-delete-background: #efefef;
       background: $inverse-background-smoke;
     }
     @include media-mob($s) {
-      padding-left: $global-small-gutter;
-      padding-right: $global-gutter;
+      padding-left: $global-small-gutter - 4;
+      padding-right: $global-gutter - 4;
       margin-left: -$global-gutter + 4;
       margin-right: -$global-gutter + 4;
     }
@@ -170,7 +170,7 @@ $button-delete-background: #efefef;
       padding-right: 5px;
     }
     &-value {
-      font-size: 1.8rem;
+      font-size: 2rem;
     }
     &-note {
       cursor: pointer;

@@ -14,7 +14,7 @@
           .uk-container.uk-container-large
             .uk-grid.uk-grid-small(v-if="items.length"
               data-uk-grid="masonry: true"
-              class="uk-child-width-1-2@s uk-child-width-1-3@m uk-child-width-1-4@xl")
+              class="uk-child-width-1-2@s uk-child-width-1-3@m uk-child-width-1-4@l")
               sale-item(
                 v-for="item in items"
                 :key="item.id"

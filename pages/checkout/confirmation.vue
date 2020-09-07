@@ -12,10 +12,9 @@
         template(#alt-content)
           slide-y-down-transition(v-show="pageTitle && !pending")
             section.uk-section(:class="{ 'uk-light': darkPeriod }")
-              cart-list(:items="items")
-              .uk-container.uk-margin-medium(v-if="sales.length")
-                hr(v-if="items.length")
-                .uk-margin-large-bottom(v-else)
+              cart-list(v-if="items.length" :items="items")
+              .uk-container.uk-margin-medium(v-if="items.length && sales.length")
+                hr
               sale-list(
                 v-if="sales.length"
                 :items="sales"
@@ -63,15 +62,17 @@
                       :value="comment"
                       @input="onInputComment")
                 .uk-width-1-1.uk-margin-large-top(class="uk-visible@l")
-                  .uk-flex.uk-flex-between
+                  .uk-flex.uk-flex-between.uk-flex-middle
                     button.uk-button.uk-button-danger(
                       @click.prevent="onPrev") Назад
                     .uk-flex.uk-flex-middle
-                      span.uk-text-large.uk-text-emphasis {{ totalFormatPrice }}
+                      span.tm-total-price.uk-text-emphasis {{ totalFormatPrice }}
                       button.uk-button.uk-button-danger.uk-margin-left(
                         @click.prevent="onNext") Оформить
 
-          .uk-position-center.uk-flex.uk-flex-column.uk-flex-middle.uk-padding.uk-text-center(v-if="pending")
+          .uk-position-center.uk-flex.uk-flex-column.uk-flex-middle.uk-padding.uk-text-center(
+            :class="{ 'uk-light': darkPeriod }"
+            v-if="pending")
             span.uk-text-large Подождите<br>Заказ отправляется...
             .uk-margin-top.uk-tex-muted(data-uk-spinner="ratio: 3")
 </template>
@@ -202,23 +203,6 @@ export default {
 </script>
 
 <style lang="scss">
-.tm-checkout {
-  &__footer {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin-top: $global-medium-margin;
-
-    .uk-button {
-      margin-left: $global-margin;
-    }
-  }
-
-  .tm-total-price__heading {
-    margin: 5px $global-small-margin 0 0 !important;
-  }
-}
-
 .tm-confirmation__comment {
   .uk-textarea {
     min-height: 200px;
