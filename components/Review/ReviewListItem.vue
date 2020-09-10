@@ -1,9 +1,9 @@
 <template lang="pug">
   .tm-review-item.tm-background__smoke.uk-card.uk-card-small.uk-card-body.uk-box-shadow-medium
     .tm-review-item__header.uk-flex.uk-flex-middle
-      .tm-review-item__gravatar.uk-box-shadow-medium
+      .tm-review-item__gravatar.uk-box-shadow-medium.uk-text-center
         img(v-if="item.gravatar" :data-src="item.gravatar" :alt="item.customer_name" data-uk-img)
-        i.uk-icon(v-else data-uk-icon="icon:user; ratio:1.5")
+        i.uk-icon.tm-review-item__icon(v-else data-uk-icon="icon:user; ratio:1.5")
       .tm-review-item__heading
         span.uk-text-muted.uk-display-block {{ item.date }}
         span.uk-h3.tm-review-item__name {{ item.customer_name }}
@@ -84,6 +84,12 @@ export default {
     @include media-mob($s) {
       width: 70px;
       height: 70px;
+    }
+  }
+  &__icon {
+    line-height: 50px;
+    @include media-mob($s) {
+      line-height: 70px;
     }
   }
   &__heading {

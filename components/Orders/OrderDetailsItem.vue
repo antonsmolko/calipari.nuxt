@@ -2,8 +2,7 @@
     .tm-order-details__item.uk-grid.uk-grid-small.uk-grid-row-collapse(data-uk-grid)
         span.tm-order-details__heading.uk-text-muted(
             v-if="heading"
-            class="uk-width-1-3"
-        ) {{ heading }}
+            class="uk-width-1-3") {{ heading }}
         span.tm-order-details__value.uk-text-emphasis(class="uk-width-2-3")
             span.uk-display-inline(:class="contentCss") {{ content }}
 </template>

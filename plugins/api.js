@@ -1,5 +1,5 @@
 import https from 'https'
-import errorsLibrary from '~/plugins/lang/ru/errorsLib'
+import errorsLibrary from '@/plugins/lang/ru/errorsLib'
 
 export default function ({ $axios, store, redirect }, inject) {
   const api = $axios.create({

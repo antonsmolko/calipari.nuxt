@@ -23,7 +23,7 @@
                 data-uk-grid class="uk-child-width-1-2@s")
                 .tm-order-details__block.tm-order-details__base-info
                   .uk-card.uk-card-small.uk-card-body
-                    h4.uk-h4.uk-text-background Заказ
+                    h4 Заказ
                     OrderDetailsItem(heading="Номер" :content="order.number")
                     OrderDetailsItem(heading="Дата" :content="order.date")
                     OrderDetailsItem(
@@ -32,18 +32,18 @@
                       :contentCss="statusCss")
                 .tm-order-details__block.tm-order-details__delivery
                   .uk-card.uk-card-small.uk-card-body
-                    h4.uk-h4.uk-text-background Детали доставки
+                    h4.uk-h4 Детали доставки
                     OrderDetailsItem(heading="Доставка" :content="order.delivery.title")
                     OrderDetailsItem(heading="Адрес" :content="order.delivery.address")
                     OrderDetailsItem(heading="Получатель" :content="order.customer.name")
                     OrderDetailsItem(heading="Телефон" :content="phoneFormat")
                 .tm-order-details__block.tm-order-details__comment(v-if="order.comment")
                   .uk-card.uk-card-small.uk-card-body
-                    h4.uk-h4.uk-text-background Комментарий
+                    h4.uk-h4 Комментарий
                     OrderDetailsItem(:content="order.comment")
                 .tm-order-details__block.tm-order-details__price
                   .uk-card.uk-card-small.uk-card-body
-                    h4.uk-h4.uk-text-background Цена
+                    h4.uk-h4 Цена
                     OrderDetailsItem(
                       heading="Заказ"
                       :content="getFormatPrice(order.price)")

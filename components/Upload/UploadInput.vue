@@ -17,7 +17,7 @@ export default {
   props: {
     maxFileSize: {
       type: Number,
-      default: 10
+      default: 5
     }
   },
   methods: {
@@ -28,18 +28,6 @@ export default {
       }
 
       await this.createImage(files[0])
-
-      // this.file = this.$refs.file.files[0]
-      // const reader = new FileReader()
-      // reader.addEventListener('load', function () {
-      //   this.showPreview = true
-      //   this.imagePreview = reader.result
-      // }.bind(this), false)
-      // if (this.file) {
-      //   if (/\.(jpe?g|png|gif)$/i.test(this.file.name)) {
-      //     reader.readAsDataURL(this.file)
-      //   }
-      // }
     },
     createImage (file) {
       const validation = this.validate(file)
@@ -60,7 +48,6 @@ export default {
           file
         })
       }
-      console.log(file)
 
       reader.readAsDataURL(file)
     },
