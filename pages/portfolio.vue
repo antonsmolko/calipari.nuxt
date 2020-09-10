@@ -24,12 +24,12 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import VueScrollTo from 'vue-scrollto'
-import Page from '~/components/layout/Page.vue'
-import TopBar from '~/components/layout/TopBar.vue'
-import PortfolioItem from '~/components/Portfolio/PortfolioItem'
-import Observer from '~/components/Observer'
-import setLayout from '~/components/mixins/setLayout'
-import scrollToTop from '~/components/mixins/scrollToTop'
+import Page from '@/components/layout/Page.vue'
+import TopBar from '@/components/layout/TopBar.vue'
+import PortfolioItem from '@/components/Portfolio/PortfolioItem'
+import Observer from '@/components/Observer'
+import setLayout from '@/components/mixins/setLayout'
+import scrollToTop from '@/components/mixins/scrollToTop'
 
 export default {
   name: 'Portfolio',
@@ -58,8 +58,8 @@ export default {
     }
   },
   async fetch () {
-    await this.$store.dispatch('resources/getItems', {
-      url: '/work-examples/list',
+    await this.getItemsAction({
+      url: '/work-examples',
       clear: true
     })
     await this.getPageAction('portfolio')
@@ -92,7 +92,7 @@ export default {
     intersected () {
       if (this.items.length !== this.pagination.total) {
         this.getItemsAction({
-          url: '/work-examples/list',
+          url: '/work-examples',
           increasePage: true
         })
       }

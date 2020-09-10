@@ -76,6 +76,7 @@ import Page from '@/components/layout/Page.vue'
 import SocialsColor from '@/components/SocialsColor.vue'
 import form from '@/components/mixins/form'
 import routerParams from '@/components/mixins/routerParams'
+import syncProfile from '@/components/mixins/syncProfile'
 import VInput from '@/components/form/VInput'
 import setLayout from '@/components/mixins/setLayout'
 import CheckoutLayout from '@/components/Checkout/CheckoutLayout'
@@ -89,7 +90,12 @@ export default {
     SocialsColor,
     VInput
   },
-  mixins: [form, routerParams, setLayout],
+  mixins: [
+    form,
+    routerParams,
+    syncProfile,
+    setLayout
+  ],
   metaInfo () {
     return {
       title: this.pageTitle
@@ -131,7 +137,7 @@ export default {
     async onSubmit () {
       try {
         this.loaded = true
-        await this.$auth.loginWith('local', {
+        await this.$auth.loginWith('laravelJWT', {
           data: {
             email: this.form.email,
             password: this.form.password
@@ -141,6 +147,8 @@ export default {
         this.loaded = false
         return e
       }
+      await this.$router.push('/checkout/delivery')
+      this.syncProfile() // @mixin: "syncProfile"
     },
     onPrev () {
       this.$router.push('/cart')

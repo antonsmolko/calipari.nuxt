@@ -1,13 +1,16 @@
 <template lang="pug">
-  .tm-orders__item.uk-box-shadow-medium
+  .tm-orders__item.uk-box-shadow-medium.tm-background__smoke
     .tm-orders__header.uk-flex.uk-flex-middle
       span.tm-orders__number.tm-text-medium.uk-margin-right.uk-text-emphasis {{ order.number }}
-      button.uk-button.tm-button-success.uk-button-small(
+      button.uk-button.uk-button-small.tm-button-success(
         v-if="order.status.alias === 'confirmed'"
         @click="onPay") Оплатить
+      nuxt-link.uk-button.uk-button-small.tm-button-success(
+        :to="`/reviews/create?hash=${order.hash_number}`"
+        v-if="order.status.alias === 'completed' && !order.has_review") Написать отзыв
       .tm-orders__more.uk-margin-auto-left.uk-inline
         button.uk-icon(data-uk-icon="more-vertical")
-        .tm-orders__dropdown(
+        .tm-orders__dropdown.uk-background-muted(
           data-uk-dropdown="animation: uk-animation-slide-right-small")
           ul.uk-nav.uk-dropdown-nav
             li: nuxt-link.uk-link(:to="`/profile/orders/${order.number}`") Подробнее
@@ -62,7 +65,8 @@ export default {
   },
   computed: {
     formatPrice () {
-      return getFormatPrice(this.order.price)
+      const fullPrice = this.order.price + this.order.delivery.price
+      return getFormatPrice(fullPrice)
     }
   },
   methods: {
@@ -90,16 +94,11 @@ export default {
 <style lang="scss">
 .tm-orders {
   &__item {
-    background: $background-smoke;
     padding: $global-margin $global-small-gutter;
     overflow: hidden;
 
     &:not(:last-child) {
       margin-bottom: $global-small-gutter;
-    }
-
-    .uk-light & {
-      background: $inverse-background-smoke;
     }
 
     @include media-desk($s) {
@@ -141,13 +140,13 @@ export default {
     right: -$global-small-gutter !important;
     left: inherit !important;
     margin: 0;
-    background: $overlay-default-background;
+    //background: $overlay-default-background;
     z-index: 0;
     padding: $global-small-gutter $global-medium-margin $global-small-gutter $global-margin;
 
-    .uk-light & {
-      background: $overlay-primary-background;
-    }
+    //.uk-light & {
+    //  background: $overlay-primary-background;
+    //}
 
     @include media-mob($s) {
       min-width: 220px;

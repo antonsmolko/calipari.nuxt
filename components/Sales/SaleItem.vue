@@ -1,6 +1,6 @@
 <template lang="pug">
   .tm-sale-card.uk-flex
-    .uk-box-shadow-small.tm-background__smoke
+    .uk-box-shadow-medium.tm-background__smoke
       .tm-sale-card__preview(data-uk-lightbox)
         a.uk-inline.uk-transition-toggle(
           :href="imageUrl"

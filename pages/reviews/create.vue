@@ -10,16 +10,16 @@
             v-if="!$fetchState.pending"
             :class="{ 'uk-light': darkPeriod }")
             .uk-container
-              .uk-flex.uk-flex-center
-                .uk-position-center.uk-flex.uk-flex-column.uk-flex-middle.uk-padding.uk-text-center(v-if="sending")
-                  span.uk-text-large Подождите<br>Отзыв отправляется...
-                  .uk-margin-top.uk-tex-muted(data-uk-spinner="ratio: 3")
-                .uk-width-1-1(v-else class="uk-width-xlarge@s")
-                  .uk-margin-bottom
-                    h1.uk-heading-small.uk-margin-remove Ваш отзыв
-                    span.uk-text-lead Заказ № {{ order.number }}
-                    .uk-divider-small
-                  .uk-position-relative.uk-flex-center
+              .uk-position-center.uk-flex.uk-flex-column.uk-flex-middle.uk-padding.uk-text-center(v-if="sending")
+                span.uk-text-large Подождите<br>Отзыв отправляется...
+                span.uk-margin-top.uk-tex-muted(data-uk-spinner="ratio: 3")
+              .uk-width-1-1(v-else)
+                .uk-margin-bottom
+                  h1.uk-heading-small.uk-margin-remove Ваш отзыв
+                  span.uk-text-lead Заказ № {{ order.number }}
+                  .uk-divider-small
+                .uk-grid(data-uk-grid)
+                  div(class="uk-width-2-3@m")
                     v-textarea.tm-review__comment(
                       title="Комментарий"
                       :label="true"
@@ -34,33 +34,48 @@
                       dispatchName="setItemField")
                     .uk-grid.uk-margin-medium-top(data-uk-grid)
                       div(class="uk-width-1-2@m")
-                        star-rating(
+                        star-rating-form(
                           title="Оценка за качество"
                           name="qualityRate"
                           idPrefix="quality-rate"
                           @input="rateQuality")
                       div(class="uk-width-1-2@m")
-                        star-rating(
+                        star-rating-form(
                           title="Оценка за сервис"
                           name="serviceRate"
                           idPrefix="service-rate"
                           @input="rateService")
-                    .tm-review__bottom.uk-margin-medium-top(class="uk-width-2-3@m")
-                      button.uk-button.uk-button-primary(@click="send" :disabled="$v.$invalid") Отправить
-                      .uk-margin-top
-                        span.uk-text-muted.uk-text-small
-                          | Нажимая кнопку, вы принимаете&nbsp;
-                          nuxt-link.uk-link(to="/policy") условия сервиса
+                  .tm-review__uploads(class="uk-width-1-3@m")
+                    .tm-review__uploads-title Изображения
+                    .uk-grid.uk-grid-small(data-uk-grid="masonry: true" class="uk-child-width-1-2 uk-child-width-1-4@s uk-child-width-1-2@m")
+                      upload-input(
+                        v-if="previews.length < maxFilesCount"
+                        @failed="handleFailed"
+                        @change="handleUpload")
+                      .uk-position-relative(v-for="(preview, index) in previews" :key="index")
+                        button.tm-review__uploads-close.uk-icon-button.uk-box-shadow-small(
+                          data-uk-icon="icon:close; ratio:0.8"
+                          @click="remove(preview)")
+                        img.uk-box-shadow-medium(:src="preview.content" :alt="`image-${index + 1}`")
+                  .tm-review__bottom.uk-margin-medium-top(class="uk-width-2-3@m")
+                    button.uk-button.uk-button-primary(@click="send" :disabled="$v.$invalid") Отправить
+                    .uk-margin-top
+                      span.uk-text-muted.uk-text-small
+                        | Нажимая кнопку, вы принимаете&nbsp;
+                        nuxt-link.uk-link(to="/policy") условия сервиса
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
 import { numeric, minLength, required } from 'vuelidate/lib/validators'
+import unionWith from 'lodash/unionWith'
 import Page from '@/components/layout/Page'
 import VTextarea from '@/components/form/VTextarea'
-import StarRating from '@/components/form/Input/StarRating'
+import StarRatingForm from '@/components/form/Input/StarRatingForm'
 import TopBar from '@/components/layout/TopBar'
+import UploadInput from '@/components/Upload/UploadInput'
 import scrollToTop from '@/components/mixins/scrollToTop'
+import { isEqualReviewPreview } from '@/helpers'
 
 export default {
   async middleware ({ $auth, route, redirect, store }) {
@@ -87,15 +102,20 @@ export default {
     Page,
     TopBar,
     VTextarea,
-    StarRating
+    StarRatingForm,
+    UploadInput
   },
   mixins: [scrollToTop],
   fetch () {
+    this.clearReviewItemFieldsAction()
     this.setFieldAction({ field: 'pageTitle', value: 'Отзыв о заказе' })
     this.setReviewItemFieldAction({ field: 'hash', value: this.$route.query.hash })
   },
   data: () => ({
-    sending: false
+    sending: false,
+    previews: [],
+    maxFilesCount: 5,
+    file: ''
   }),
   validations: {
     comment: {
@@ -120,14 +140,19 @@ export default {
       hash: state => state.reviews.fields.hash,
       comment: state => state.reviews.fields.comment,
       qualityRate: state => state.reviews.fields.quality_rate,
-      serviceRate: state => state.reviews.fields.service_rate
+      serviceRate: state => state.reviews.fields.service_rate,
+      files: state => state.reviews.fields.files
     })
   },
   methods: {
     ...mapActions({
       getOrderByHash: 'orders/getItemByHash',
       setReviewItemFieldAction: 'reviews/setItemField',
-      sendAction: 'reviews/send'
+      sendAction: 'reviews/send',
+      setNotificationAction: 'notifications/addItem',
+      unionFilesAction: 'reviews/unionFiles',
+      removeFileAction: 'reviews/removeFile',
+      clearReviewItemFieldsAction: 'reviews/clearItemFields'
     }),
     rateQuality (value) {
       this.setReviewItemFieldAction({ field: 'quality_rate', value })
@@ -142,7 +167,8 @@ export default {
           hash: this.hash,
           comment: this.comment,
           quality_rate: Number(this.qualityRate),
-          service_rate: Number(this.serviceRate)
+          service_rate: Number(this.serviceRate),
+          files: this.files
         })
       } catch (e) {
         this.sending = false
@@ -153,6 +179,20 @@ export default {
     close () {
       const redirectPath = this.$auth.loggedIn ? '/profile/orders' : '/'
       this.$router.push(redirectPath)
+    },
+    handleUpload ({ preview, file }) {
+      this.previews = unionWith(this.previews, [preview], isEqualReviewPreview)
+      this.unionFilesAction(file)
+    },
+    remove (preview) {
+      this.previews = this.previews.filter(n => n.name !== preview.name && n.size !== preview.size)
+      this.removeFileAction(preview)
+    },
+    handleFailed ({ message }) {
+      this.setNotificationAction({
+        status: 'danger',
+        message
+      })
     }
   }
 }
@@ -163,6 +203,20 @@ export default {
   &__comment {
     textarea {
       height: 270px;
+    }
+  }
+  &__uploads {
+    &-title {
+      font-size: 13px;
+      line-height: 1.9;
+    }
+    &-close {
+      width: 24px;
+      height: 24px;
+      position: absolute;
+      top: 0;
+      right: 0;
+      transform: translate(50%, -50%);
     }
   }
 }

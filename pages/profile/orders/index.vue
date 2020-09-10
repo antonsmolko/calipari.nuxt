@@ -1,16 +1,16 @@
 <template lang="pug">
-  Page
+  page
     template(#main)
       main
-        TopBar(:title="pageTitle")
+        top-bar(:title="pageTitle")
           .uk-navbar-item
             button.uk-close(type="button", data-uk-close, @click="close")
-        SlideYDownTransition(v-show="!$fetchState.pending && pageTitle")
+        slide-y-down-transition(v-show="!$fetchState.pending && pageTitle")
           section.tm-orders.uk-section(
             v-if="items.length"
             :class="{ 'uk-light': darkPeriod }")
             .uk-container
-              OrderListItem(
+              order-list-item(
                 v-for="item in items"
                 :key="item.number"
                 :order="item"

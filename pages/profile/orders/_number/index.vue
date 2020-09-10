@@ -46,24 +46,26 @@
                     h4.uk-h4.uk-text-background Цена
                     OrderDetailsItem(
                       heading="Заказ"
-                      :content="getFormatPrice(order.price - order.delivery.price)")
+                      :content="getFormatPrice(order.price)")
                     OrderDetailsItem(
                       heading="Доставка"
                       :content="getFormatPrice(order.delivery.price)")
                     OrderDetailsItem(
                       class="tm-order-details__total"
                       heading="Итого"
-                      :content="getFormatPrice(order.price)")
+                      :content="getFormatPrice(order.price + order.delivery.price)")
               .tm-order-details__buttons.uk-margin-medium-top(
                 v-if="order.status.alias === 'processing' || order.status.alias === 'confirmed'"
                 class="uk-visible@l")
                 button.uk-button.tm-button-success.uk-margin-right(
                   v-if="order.status.alias === 'confirmed'"
                   @click="pay") Оплатить
+                nuxt-link.uk-button.tm-button-success.uk-margin-right(
+                  :to="`/reviews/create?hash=${order.hash}`"
+                  v-if="order.status.alias === 'completed' && !order.has_review") Написать отзыв
                 button.uk-button.uk-button-danger(
                   @click="cancel"
-                  :disabled="sending"
-                  ) Отменить
+                  :disabled="sending") Отменить
 </template>
 
 <script>

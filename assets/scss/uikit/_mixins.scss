@@ -181,6 +181,10 @@
 
 // Card
 
+@mixin hook-card() {
+  border-radius: $base-pre-border-radius;
+}
+
 @mixin hook-card-primary() {
   background: $card-primary-background;
   background-image: $primary-gradient;

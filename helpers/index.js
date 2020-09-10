@@ -218,3 +218,5 @@ export const getAddedCostsContent = (addedCosts) => {
             </div>`
   }, '')
 }
+
+export const isEqualReviewPreview = (obj, other) => obj.name === other.name && obj.size === other.size

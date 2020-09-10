@@ -1,10 +1,15 @@
+import unionWith from 'lodash/unionWith'
+import isArray from 'lodash/isArray'
+import { isEqualReviewPreview } from '@/helpers'
 import { action } from '@/store/mixins/action'
+
 export const state = () => ({
   fields: {
     hash: '',
     comment: '',
     quality_rate: '',
-    service_rate: ''
+    service_rate: '',
+    files: []
   },
   items: []
 })
@@ -18,23 +23,46 @@ export const mutations = {
       state.fields[field] = value
     }
   },
+  UNION_FILES (state, payload) {
+    state.fields.files = unionWith(state.fields.files, [payload], isEqualReviewPreview)
+  },
+  REMOVE_FILE (state, payload) {
+    state.fields.files = state.fields.files.filter(n => n.name !== payload.name && n.size !== payload.size)
+  },
   CLEAR_ITEM_FIELDS (state) {
     for (const field of Object.keys(state.fields)) {
-      state.fields[field] = ''
+      state.fields[field] = isArray(state.fields[field]) ? [] : ''
     }
   }
 }
 
 export const actions = {
-  send ({ commit }, payload) {
+  send ({ state, commit }, payload) {
+    const form = new FormData()
+
+    for (const [field, value] of Object.entries(payload)) {
+      isArray(value)
+        ? value.forEach(v => form.append(`${field}[]`, v))
+        : form.append(field, value)
+    }
+
     return action(this.$api, 'post', commit, {
       url: '/reviews/store',
-      payload,
+      payload: form,
       thenContent: response => commit('CLEAR_ITEM_FIELDS')
     })
   },
   setItemField ({ commit }, payload) {
     commit('SET_ITEM_FIELD', payload)
+  },
+  unionFiles ({ commit }, payload) {
+    commit('UNION_FILES', payload)
+  },
+  removeFile ({ commit }, payload) {
+    commit('REMOVE_FILE', payload)
+  },
+  clearItemFields ({ commit }) {
+    commit('CLEAR_ITEM_FIELDS')
   }
 }
 
