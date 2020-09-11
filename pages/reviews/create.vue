@@ -182,17 +182,17 @@ export default {
     handleUpload ({ preview, file }) {
       if (!some(this.previews, { name: preview.name, size: preview.size })) {
         this.previews.push(preview)
-        this.unionFilesAction(file)
-        // this.$fileapi.Image(file)
-        //   .resize(1600, 1600, 'max')
-        //   .get((err, img) => {
-        //     if (err) {
-        //       return err
-        //     }
-        //     const dataUri = this.$fileapi.toDataURL(img, 'image/jpeg')
-        //     const image = this.dataURItoBlob(dataUri)
-        //     this.unionFilesAction(image)
-        //   })
+        // this.unionFilesAction(file)
+        this.$fileapi.Image(file)
+          .resize(1200, 1200, 'max')
+          .get((err, img) => {
+            if (err) {
+              return err
+            }
+            const dataUri = this.$fileapi.toDataURL(img, 'image/jpeg')
+            const image = this.dataURItoBlob(dataUri)
+            this.unionFilesAction(image)
+          })
       }
     },
     remove (preview) {
