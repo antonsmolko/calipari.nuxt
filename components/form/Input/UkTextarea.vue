@@ -50,7 +50,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .uk-textarea.uk-form-large {
   line-height: 1.3;
   padding: 12px 12px 12px 40px;

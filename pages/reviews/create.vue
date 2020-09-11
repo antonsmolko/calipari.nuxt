@@ -68,14 +68,13 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import { numeric, minLength, required } from 'vuelidate/lib/validators'
-import unionWith from 'lodash/unionWith'
+import some from 'lodash/some'
 import Page from '@/components/layout/Page'
+import TopBar from '@/components/layout/TopBar'
 import VTextarea from '@/components/form/VTextarea'
 import StarRatingForm from '@/components/form/Input/StarRatingForm'
-import TopBar from '@/components/layout/TopBar'
 import UploadInput from '@/components/Upload/UploadInput'
 import scrollToTop from '@/components/mixins/scrollToTop'
-import { isEqualReviewPreview } from '@/helpers'
 
 export default {
   async middleware ({ $auth, route, redirect, store }) {
@@ -181,8 +180,20 @@ export default {
       this.$router.push(redirectPath)
     },
     handleUpload ({ preview, file }) {
-      this.previews = unionWith(this.previews, [preview], isEqualReviewPreview)
-      this.unionFilesAction(file)
+      if (!some(this.previews, { name: preview.name, size: preview.size })) {
+        this.previews.push(preview)
+        this.unionFilesAction(file)
+        // this.$fileapi.Image(file)
+        //   .resize(1600, 1600, 'max')
+        //   .get((err, img) => {
+        //     if (err) {
+        //       return err
+        //     }
+        //     const dataUri = this.$fileapi.toDataURL(img, 'image/jpeg')
+        //     const image = this.dataURItoBlob(dataUri)
+        //     this.unionFilesAction(image)
+        //   })
+      }
     },
     remove (preview) {
       this.previews = this.previews.filter(n => n.name !== preview.name && n.size !== preview.size)
@@ -193,6 +204,19 @@ export default {
         status: 'danger',
         message
       })
+    },
+    dataURItoBlob (dataURI) {
+      const byteString = atob(dataURI.split(',')[1])
+
+      const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+      const ab = new ArrayBuffer(byteString.length)
+      const ia = new Uint8Array(ab)
+      for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i)
+      }
+
+      return new Blob([ab], { type: mimeString })
     }
   }
 }

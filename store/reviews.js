@@ -1,6 +1,4 @@
-import unionWith from 'lodash/unionWith'
 import isArray from 'lodash/isArray'
-import { isEqualReviewPreview } from '@/helpers'
 import { action } from '@/store/mixins/action'
 
 export const state = () => ({
@@ -24,7 +22,8 @@ export const mutations = {
     }
   },
   UNION_FILES (state, payload) {
-    state.fields.files = unionWith(state.fields.files, [payload], isEqualReviewPreview)
+    // state.fields.files = unionWith(state.fields.files, [payload], isEqualReviewPreview)
+    state.fields.files.push(payload)
   },
   REMOVE_FILE (state, payload) {
     state.fields.files = state.fields.files.filter(n => n.name !== payload.name && n.size !== payload.size)
@@ -50,6 +49,13 @@ export const actions = {
       url: '/reviews/store',
       payload: form,
       thenContent: response => commit('CLEAR_ITEM_FIELDS')
+    })
+  },
+  cropImage ({ commit }, image) {
+    return action(this.$api, 'post', commit, {
+      url: '/reviews/crop-review-image',
+      payload: { image },
+      thenContent: response => commit('UNION_FILES', response)
     })
   },
   setItemField ({ commit }, payload) {

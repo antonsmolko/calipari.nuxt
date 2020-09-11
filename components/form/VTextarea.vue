@@ -26,6 +26,7 @@ import {
 const touchMap = new WeakMap()
 
 export default {
+  name: 'VTextarea',
   components: {
     UkTextarea,
     InputNotificationRequire,

@@ -78,7 +78,8 @@ export default {
     { src: './plugins/lang/ru/lib.js' },
     { src: './plugins/config.js' },
     { src: './plugins/mixins/timePeriod.js' },
-    { src: '~/plugins/ymap.js', mode: 'client' }
+    { src: './plugins/ymap.js', mode: 'client' },
+    { src: './plugins/fileapi', mode: 'client' }
   ],
   env: {
     baseUrl,
