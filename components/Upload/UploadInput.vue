@@ -17,7 +17,7 @@ export default {
   props: {
     maxFileSize: {
       type: Number,
-      default: 5
+      default: 10
     }
   },
   methods: {

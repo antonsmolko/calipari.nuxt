@@ -21,8 +21,7 @@ export const mutations = {
       state.fields[field] = value
     }
   },
-  UNION_FILES (state, payload) {
-    // state.fields.files = unionWith(state.fields.files, [payload], isEqualReviewPreview)
+  ADD_FILE (state, payload) {
     state.fields.files.push(payload)
   },
   REMOVE_FILE (state, payload) {
@@ -61,8 +60,8 @@ export const actions = {
   setItemField ({ commit }, payload) {
     commit('SET_ITEM_FIELD', payload)
   },
-  unionFiles ({ commit }, payload) {
-    commit('UNION_FILES', payload)
+  addFile ({ commit }, payload) {
+    commit('ADD_FILE', payload)
   },
   removeFile ({ commit }, payload) {
     commit('REMOVE_FILE', payload)
