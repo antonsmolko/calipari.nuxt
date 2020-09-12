@@ -38,11 +38,11 @@
         span.tm-orders__info-heading.uk-text-muted Цена
         span.tm-orders__info-value.tm-orders__price.uk-text-emphasis {{ formatPrice }}
     .tm-orders__thumbs.uk-margin-top.uk-position-relative.uk-visible-toggle(
-      v-if="order.items.length"
+      v-if="items.length"
       data-uk-slider="finite: true"
       tabindex="-1")
       ul.uk-slider-items.uk-grid.uk-grid-small(data-uk-lightbox="animation: slide")
-        li(v-for="(item, index) in order.items" :key="index")
+        li(v-for="(item, index) in items" :key="index")
           a.uk-inline.uk-transition-toggle(
             :data-caption="getDataCaption(item)"
             :href="item.image_path")
@@ -53,7 +53,8 @@
 </template>
 
 <script>
-import { getFormatPrice } from '~/helpers'
+import concat from 'lodash/concat'
+import { getFormatPrice } from '@/helpers'
 
 export default {
   name: 'OrderListItem',
@@ -67,6 +68,9 @@ export default {
     formatPrice () {
       const fullPrice = this.order.price + this.order.delivery.price
       return getFormatPrice(fullPrice)
+    },
+    items () {
+      return concat(this.order.items, this.order.sales)
     }
   },
   methods: {
@@ -101,10 +105,6 @@ export default {
       margin-bottom: $global-small-gutter;
     }
 
-    @include media-desk($s) {
-      margin-left: -$global-small-gutter;
-      margin-right: -$global-small-gutter;
-    }
     @include media-mob($s) {
       padding: $global-margin;
       &:not(:last-child) {

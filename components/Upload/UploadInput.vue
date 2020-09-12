@@ -90,7 +90,7 @@ export default {
   }
   &__background {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: block;
     opacity: 0;
   }

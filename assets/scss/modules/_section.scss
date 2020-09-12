@@ -57,16 +57,12 @@
         }
     }
     &__semitransparent-background {
-        //padding-bottom: 200px;
         margin-bottom: -140px;
         opacity: .08;
         z-index: 0;
         @include media-mob($l) {
-            //padding-bottom: 300px;
             margin-bottom: -140px;
-            //max-height: calc(100vh - #{$navbar-height * 2});
             height: 100vh;
-            //min-height: 700px;
         }
     }
     &__expand-mobile {

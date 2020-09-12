@@ -1,28 +1,39 @@
 <template lang="pug">
-  Page
+  page
     template(#main)
       main
-        TopBar(:title="pageTitle")
+        top-bar(:title="pageTitle")
           .uk-navbar-item
             button.uk-close(type="button", data-uk-close, @click="onClose")
-        SlideYDownTransition(v-show="pageTitle")
+        slide-y-down-transition(v-show="pageTitle")
           section.uk-section.uk-position-relative(
             v-if="!$fetchState.pending && order"
             :class="{ 'uk-light': darkPeriod }"
             data-uk-height-viewport="offset-top: true; offset-bottom: true")
-            .uk-container.tm-cart__container
-              SlideYDownTransition(mode="out-in")
-                .tm-cart__content
-                  table.tm-order-table
-                    tbody
-                      OrderItem(
-                        v-for="(item, index) in order.items"
-                        :key="index"
-                        :item="item")
+            slide-y-down-transition(mode="out-in")
+              .tm-cart__content
+                template(v-if="order.items.length")
+                  .uk-container
+                    .tm-checkout__header
+                      span.uk-h2.uk-margin-remove Проекты
+                      .uk-divider-small
+                  .uk-container.tm-container__cart-items
+                    table.tm-order-table
+                      tbody
+                        order-item(
+                          v-for="item in order.items"
+                          :key="item.id"
+                          :item="item")
+                template(v-if="order.sales.length")
+                  .uk-container.tm-container__expand-mobile
+                    hr.uk-margin-medium-top.uk-margin-medium-bottom(v-if="order.items.length")
+                  sale-list(v-if="order.sales" :items="order.sales")
+            .uk-container.tm-container__expand-mobile
+              hr.uk-margin-medium-top.uk-margin-medium-bottom
               .tm-order-details.uk-grid.uk-grid-small.uk-grid-match.uk-margin-medium-top(
                 data-uk-grid class="uk-child-width-1-2@s")
                 .tm-order-details__block.tm-order-details__base-info
-                  .uk-card.uk-card-small.uk-card-body
+                  .uk-card.uk-card-small.uk-card-body.uk-box-shadow-medium
                     h4 Заказ
                     OrderDetailsItem(heading="Номер" :content="order.number")
                     OrderDetailsItem(heading="Дата" :content="order.date")
@@ -31,7 +42,7 @@
                       :content="order.status.title"
                       :contentCss="statusCss")
                 .tm-order-details__block.tm-order-details__delivery
-                  .uk-card.uk-card-small.uk-card-body
+                  .uk-card.uk-card-small.uk-card-body.uk-box-shadow-medium
                     h4.uk-h4 Детали доставки
                     OrderDetailsItem(heading="Доставка" :content="order.delivery.title")
                     OrderDetailsItem(heading="Адрес" :content="order.delivery.address")
@@ -42,7 +53,7 @@
                     h4.uk-h4 Комментарий
                     OrderDetailsItem(:content="order.comment")
                 .tm-order-details__block.tm-order-details__price
-                  .uk-card.uk-card-small.uk-card-body
+                  .uk-card.uk-card-small.uk-card-body.uk-box-shadow-medium
                     h4.uk-h4 Цена
                     OrderDetailsItem(
                       heading="Заказ"
@@ -73,18 +84,22 @@ import { mapState, mapActions } from 'vuex'
 import Page from '@/components/layout/Page.vue'
 import TopBar from '@/components/layout/TopBar'
 import OrderItem from '@/components/Orders/OrderItem'
+import SaleList from '@/components/Cart/SaleList'
 import OrderDetailsItem from '@/components/Orders/OrderDetailsItem'
+import scrollToTop from '@/components/mixins/scrollToTop'
 import { getFormatPrice, getPhoneFormat } from '@/helpers'
 
 export default {
   scrollToTop: true,
+  middleware: ['auth'],
   components: {
     Page,
     TopBar,
     OrderItem,
+    SaleList,
     OrderDetailsItem
   },
-  middleware: ['auth'],
+  mixins: [scrollToTop],
   async fetch () {
     const orderNumber = this.$route.params.number
     this.setFieldAction({ field: 'pageTitle', value: `Заказ № ${orderNumber}` })
@@ -169,28 +184,28 @@ export default {
       }
     }
 
-    @include media-desk($hm) {
-      &:nth-child(odd) {
-        .uk-card {
-          margin: 0 0 0 (-$global-gutter);
-          padding: $global-margin $global-margin $global-margin $global-gutter;
-        }
-      }
-      &:nth-child(even) {
-        .uk-card {
-          margin: 0 (-$global-gutter) 0 0;
-          padding: $global-margin $global-gutter $global-margin $global-margin;
-        }
-      }
-    }
-    @include media-desk($s) {
-      &:nth-child(odd), &:nth-child(even) {
-        .uk-card {
-          margin: 0 (-$global-small-gutter);
-          padding: $global-margin $global-small-gutter;
-        }
-      }
-    }
+    //@include media-desk($hm) {
+    //  &:nth-child(odd) {
+    //    .uk-card {
+    //      //margin: 0 0 0 (-$global-gutter);
+    //      padding: $global-margin $global-margin $global-margin $global-gutter;
+    //    }
+    //  }
+    //  &:nth-child(even) {
+    //    .uk-card {
+    //      margin: 0 (-$global-gutter) 0 0;
+    //      padding: $global-margin $global-gutter $global-margin $global-margin;
+    //    }
+    //  }
+    //}
+    //@include media-desk($s) {
+    //  &:nth-child(odd), &:nth-child(even) {
+    //    .uk-card {
+    //      //margin: 0 (-$global-small-gutter);
+    //      padding: $global-margin $global-small-gutter;
+    //    }
+    //  }
+    //}
   }
 
   &__total {

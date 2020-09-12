@@ -1,19 +1,21 @@
 <template lang="pug">
-  .uk-container.tm-cart__container
-    .tm-checkout__header
-      span.uk-h2.uk-margin-remove Проекты
-      .uk-divider-small
-    slide-y-down-transition(mode="out-in")
-      .tm-cart__content
-        table.tm-order-table
-          tbody
-            cart-item(
-              v-for="item in items"
-              :key="item.id"
-              :item="item"
-              :texture="getTexture(item.details.texture_id)"
-              :price="getPrice(item.details)"
-              @delete="onDelete")
+  .tm-cart__items
+    .uk-container
+      .tm-checkout__header
+        span.uk-h2.uk-margin-remove Проекты
+        .uk-divider-small
+    .uk-container.tm-container__cart-items
+      slide-y-down-transition(mode="out-in")
+        .tm-cart__content
+          table.tm-order-table
+            tbody
+              cart-item(
+                v-for="item in items"
+                :key="item.id"
+                :item="item"
+                :texture="getTexture(item.details.texture_id)"
+                :price="getPrice(item.details)"
+                @delete="onDelete")
     cart-modal
 </template>
 

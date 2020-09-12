@@ -4,8 +4,6 @@
       main
         top-bar(title="Корзина")
           .uk-navbar-item(class="uk-visible@l" v-if="items.length")
-            //span.tm-total-price__heading Цена
-            //span.uk-h3.uk-text-emphasis.uk-margin-right {{ totalFormatPrice }}
             button.uk-button.uk-button-small.uk-button-danger(
               @click.prevent="checkout") Оформить
           .uk-navbar-item

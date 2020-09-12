@@ -9,7 +9,7 @@
           section.tm-orders.uk-section(
             v-if="items.length"
             :class="{ 'uk-light': darkPeriod }")
-            .uk-container
+            .uk-container.tm-container__expand-mobile
               order-list-item(
                 v-for="item in items"
                 :key="item.number"

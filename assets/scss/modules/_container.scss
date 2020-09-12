@@ -1,0 +1,12 @@
+.tm-container__expand-mobile {
+  @include media-desk($xs) {
+    padding: 0 4px;
+  }
+}
+
+.tm-container__cart-items {
+  .tm-order-table tr {
+    margin-left: 0;
+  }
+  @extend .tm-container__expand-mobile;
+}

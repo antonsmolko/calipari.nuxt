@@ -50,6 +50,7 @@
                     .uk-grid.uk-grid-small(data-uk-grid="masonry: true" class="uk-child-width-1-2 uk-child-width-1-4@s uk-child-width-1-2@m")
                       upload-input(
                         v-if="previews.length < maxFilesCount"
+                        :max-file-size="15"
                         @failed="handleFailed"
                         @change="handleUpload")
                       .uk-position-relative(v-for="(preview, index) in previews" :key="index")

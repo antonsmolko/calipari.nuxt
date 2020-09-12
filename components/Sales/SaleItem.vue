@@ -1,6 +1,6 @@
 <template lang="pug">
   .tm-sale-card.uk-flex
-    .uk-box-shadow-medium.tm-background__smoke
+    .uk-box-shadow-medium.tm-background__smoke.tm-border-radius__base
       .tm-sale-card__preview(data-uk-lightbox)
         a.uk-inline.uk-transition-toggle(
           :href="imageUrl"
@@ -11,13 +11,13 @@
             :name="item.image_path"
             :width="800"
             :alt="item.article")
-      .tm-sale-card__body.uk-grid.uk-grid-small.uk-grid-divider(data-uk-grid class="uk-child-width-1-1")
-        .tm-sale-card__content.uk-grid.uk-grid-collapse.uk-flex-top(data-uk-grid class="uk-child-width-1-2")
-          .tm-sale-card__info
+      .tm-sale-card__body
+        .tm-sale-card__content.uk-flex.uk-flex-top
+          .tm-sale-card__info.uk-width-1-2
             sale-info-item(title="Артикул" :value="item.article")
             sale-info-item(title="Размеры" :value="`${item.width_cm} см × ${item.height_cm} см`")
             sale-info-item(title="Фактура" :value="item.texture.name")
-          .uk-box-shadow-small(data-uk-lightbox)
+          .uk-box-shadow-small.uk-width-1-2(data-uk-lightbox)
             a.uk-inline.uk-transition-toggle(
               :href="textureUrl"
               data-type="image"
@@ -26,19 +26,26 @@
               img(:data-src="thumbUrl"
                   :alt="item.texture.name"
                   data-uk-img)
+        hr
         .tm-sale-card__footer
-          .tm-sale-card__price-block
-            .tm-sale-card__discount-block.uk-flex.uk-flex-middle(v-if="item.is_available")
-              span.tm-sale-card__old-price.tm-text-medium.uk-margin-small-right {{ formatOldPrice }}
-              span.uk-label.uk-label-danger.tm-text-medium {{ item.discount }} %
-          .uk-flex.uk-flex-between.uk-flex-middle.uk-width-1-1
-            span.tm-sale-card__new-price.uk-text-emphasis(v-if="item.is_available") {{ formatNewPrice }}
-            span.uk-text-muted.uk-text-large(v-else) Нет в наличии
-            button.uk-button.uk-button-primary.uk-margin-remove-top(
-              v-if="!cartMode"
-              @click="addToCart"
-              :disabled="checkInCart") В корзину
-            button.uk-icon-button(v-else data-uk-icon="trash" @click="onDelete")
+          template(v-if="!item.price")
+            .tm-sale-card__price-block
+              .tm-sale-card__discount-block.uk-flex.uk-flex-middle(v-if="item.is_available")
+                span.tm-sale-card__old-price.tm-text-medium.uk-margin-small-right {{ formatOldPrice }}
+                span.uk-label.uk-label-danger.tm-text-medium {{ item.discount }} %
+            .uk-flex.uk-flex-between.uk-flex-middle.uk-width-1-1
+              span.tm-sale-card__new-price.uk-text-emphasis(v-if="item.is_available") {{ formatNewPrice }}
+              span.uk-text-muted.uk-text-large(v-else) Нет в наличии
+              button.uk-button.uk-button-primary.uk-margin-remove-top(
+                v-if="!cartMode"
+                @click="addToCart"
+                :disabled="checkInCart") В корзину
+              button.uk-icon-button(v-else data-uk-icon="trash" @click="onDelete")
+          template(v-else)
+            .uk-flex.uk-flex-between.uk-flex-middle.uk-width-1-1
+              span.tm-sale-card__price.uk-text-emphasis {{ formatPrice }}
+              span.tm-sale-card__counter.uk-box-shadow-small.tm-text-medium.uk-background-default.uk-text-center
+                |×<span class="uk-text-emphasis">1</span>
 </template>
 
 <script>
@@ -89,6 +96,9 @@ export default {
 
       return getFormatPrice(newPrice)
     },
+    formatPrice () {
+      return getFormatPrice(this.item.price)
+    },
     checkInCart () {
       return this.$store.getters['cart/checkSaleInCart'](this.item.id)
     }
@@ -129,6 +139,7 @@ export default {
 
   &__body {
     padding: $global-margin $global-small-gutter - 4;
+    border-radius: 0 0 $base-pre-border-radius $base-pre-border-radius;
     @include media-mob($s) {
       padding: $global-margin;
     }
@@ -138,8 +149,14 @@ export default {
     text-decoration: line-through;
   }
 
-  &__new-price {
+  &__new-price, &__price {
     font-size: 2rem;
+  }
+
+  &__counter {
+    display: block;
+    width: 50px;
+    line-height: 40px;
   }
 }
 </style>

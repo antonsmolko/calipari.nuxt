@@ -11,8 +11,8 @@ $button-delete-background: #efefef;
     padding-top: $global-small-gutter;
     padding-bottom: $global-small-gutter;
     padding-right: $global-small-gutter;
-    margin-left: -$global-small-gutter + 4;
-    margin-right: -$global-small-gutter + 4;
+    //margin-left: -$global-small-gutter + 4;
+    //margin-right: -$global-small-gutter + 4;
     box-sizing: border-box;
     border-radius: 1px;
     .uk-light & {
@@ -21,14 +21,14 @@ $button-delete-background: #efefef;
     @include media-mob($s) {
       padding-left: $global-small-gutter - 4;
       padding-right: $global-gutter - 4;
-      margin-left: -$global-gutter + 4;
-      margin-right: -$global-gutter + 4;
+      //margin-left: -$global-gutter + 4;
+      //margin-right: -$global-gutter + 4;
     }
     @include media-mob($hm) {
       padding-left: 5px;
       padding-right: $global-margin;
-      margin-left: 0;
-      margin-right: 0;
+      //margin-left: 0;
+      //margin-right: 0;
       box-sizing: border-box;
     }
   }
