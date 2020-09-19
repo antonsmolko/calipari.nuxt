@@ -116,21 +116,6 @@ export default {
     justify-content: space-between;
     overflow: hidden;
     z-index: 1;
-    //
-    //&-top, &-bottom {
-    //  width: inherit;
-    //  display: flex;
-    //  align-items: flex-start;
-    //  z-index: 1;
-    //}
-    //
-    //&-top {
-    //  justify-content: space-between;
-    //}
-    //
-    //&-bottom {
-    //  justify-content: flex-end;
-    //}
   }
 
   &__article {
@@ -153,13 +138,16 @@ export default {
     top: 0;
     right: 0;
     z-index: 1;
+    a {
+      &:not(:last-child) {
+        padding-bottom: 2px;
+      }
+      &:not(:first-child) {
+        padding-top: 2px;
+      }
+    }
   }
 
-  //&__logo, &__like {
-  //  display: flex;
-  //  user-select: none;
-  //}
-  //
   &__like {
     position: absolute;
     bottom: 0;

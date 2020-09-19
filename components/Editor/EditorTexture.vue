@@ -120,7 +120,12 @@ export default {
 
     &-filter-controls {
       padding: 2px 10px;
-      border-radius: 2px;
+      border-radius: $label-border-radius;
+      a {
+        @include media-mob-range($l, $xl) {
+          font-size: .75rem;
+        }
+      }
     }
 
     &-item {

@@ -1,24 +1,24 @@
 <template lang="pug">
-    Page(v-if="!$fetchState.pending && page")
-        template(#main)
-            main(v-show="page")
-                TopBar(:title="pageTitle")
-                section.tm-section__hero.uk-section.uk-position-relative(:class="{ 'uk-light': darkPeriod }")
-                    .uk-container.uk-position-relative.uk-position-z-index(
-                        data-uk-scrollspy="cls: uk-animation-slide-bottom-small")
-                        .uk-margin-large-top.uk-margin-medium-bottom.uk-width-xxlarge
-                            h1.uk-heading-medium {{ pageTitle }}
-                            .uk-divider-small.uk-margin-large-bottom
-                            .tm-text-medium(v-if="page.content" v-html="page.content")
-                section.uk-section.uk-section-large.uk-section-default.tm-flex-grow
-                    .uk-container.uk-container-large
-                        PortfolioItem.uk-margin-xlarge(
-                            v-for="item in items"
-                            :key="item.id"
-                            :item="item")
-                Observer(
-                    :options="observerOptions"
-                    @intersect="intersected")
+  page(v-if="!$fetchState.pending && page")
+    template(#main)
+      main(v-show="page")
+        top-bar(:title="pageTitle")
+        section.tm-section__hero.uk-section.uk-position-relative(:class="{ 'uk-light': darkPeriod }")
+          .uk-container.uk-position-relative.uk-position-z-index(
+            data-uk-scrollspy="cls: uk-animation-slide-bottom-small")
+            .uk-margin-large-top.uk-margin-medium-bottom.uk-width-xxlarge
+              h1.uk-heading-medium {{ pageTitle }}
+              .uk-divider-small.uk-margin-large-bottom
+              .tm-text-medium(v-if="page.content" v-html="page.content")
+        section.uk-section.uk-section-large.uk-section-default.tm-flex-grow
+          .uk-container.uk-container-large.tm-container__expand-mobile
+            portfolio-item.uk-margin-xlarge(
+              v-for="item in items"
+              :key="item.id"
+              :item="item")
+        observer(
+          :options="observerOptions"
+          @intersect="intersected")
 </template>
 
 <script>
@@ -63,7 +63,10 @@ export default {
       clear: true
     })
     await this.getPageAction('portfolio')
-    this.setFieldAction({ field: 'pageTitle', value: this.page.title })
+    this.setFieldAction({
+      field: 'pageTitle',
+      value: this.page.title
+    })
   },
   data: () => ({
     observerOptions: {
@@ -101,7 +104,10 @@ export default {
       const options = {
         easing: 'ease-in-out',
         offset: 100,
-        onDone: () => this.setImageFieldAction({ field: 'lastPreview', value: null })
+        onDone: () => this.setImageFieldAction({
+          field: 'lastPreview',
+          value: null
+        })
       }
       VueScrollTo.scrollTo(`#image-${this.lastPreview}`, 300, options)
     }

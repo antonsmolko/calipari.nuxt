@@ -52,8 +52,8 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import debounce from 'lodash/debounce'
 import head from 'lodash/head'
 import find from 'lodash/find'
-import CollectionImageItem from '~/components/Catalog/Collection/CollectionImageItem'
-import { getS3ImageUrl } from '~/helpers'
+import CollectionImageItem from '@/components/Catalog/Collection/CollectionImageItem'
+import { getS3ImageUrl } from '@/helpers'
 
 const _debounce = debounce(fn => fn(), 500)
 

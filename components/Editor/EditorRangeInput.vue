@@ -11,7 +11,7 @@
         @change="onChange"
         @input="onInput"
         @keyup.enter="onKeyUpEnter")
-      span.uk-form-icon.uk-form-icon-flip(
+      span.uk-form-icon.uk-form-icon-flip.uk-margin-remove(
         :class="{'uk-text-danger' : invalid}") см
 </template>
 
@@ -59,3 +59,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+.tm-editor {
+  &__sizes-input {
+    .uk-form-icon {
+      line-height: 30px;
+    }
+  }
+}
+</style>

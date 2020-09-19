@@ -1,15 +1,17 @@
 <template lang="pug">
-    li
-        a.uk-inline.uk-link-toggle.uk-width-1-1(
-            :href="url"
-            :data-caption="item.title")
-            uk-image.uk-position-relative.uk-position-z-index(
-                :name="item.path"
-                :width="800"
-                :height="600"
-                :alt="item.title")
-            .uk-position-cover.uk-flex.uk-flex-middle.uk-flex-center(v-if="imgLoaded")
-                .uk-text-muted(data-uk-spinner="ratio: 2")
+  li
+    a.uk-inline.uk-link-toggle.uk-width-1-1(
+      :href="url"
+      data-type="image"
+      tabindex="1"
+      :data-caption="item.title")
+      uk-image.uk-position-relative.uk-position-z-index(
+        :name="item.path"
+        :width="800"
+        :height="600"
+        :alt="item.title")
+      .uk-position-cover.uk-flex.uk-flex-middle.uk-flex-center(v-if="imgLoaded")
+        .uk-text-muted(data-uk-spinner="ratio: 2")
 </template>
 
 <script>

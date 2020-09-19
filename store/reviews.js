@@ -7,7 +7,7 @@ export const state = () => ({
     comment: '',
     quality_rate: '',
     service_rate: '',
-    files: []
+    images: []
   },
   items: []
 })
@@ -21,11 +21,11 @@ export const mutations = {
       state.fields[field] = value
     }
   },
-  ADD_FILE (state, payload) {
-    state.fields.files.push(payload)
+  ADD_IMAGE (state, payload) {
+    state.fields.images.push(payload)
   },
   REMOVE_FILE (state, payload) {
-    state.fields.files = state.fields.files.filter(n => n.name !== payload.name && n.size !== payload.size)
+    state.fields.images = state.fields.images.filter(n => n.name !== payload.name && n.size !== payload.size)
   },
   CLEAR_ITEM_FIELDS (state) {
     for (const field of Object.keys(state.fields)) {
@@ -60,8 +60,8 @@ export const actions = {
   setItemField ({ commit }, payload) {
     commit('SET_ITEM_FIELD', payload)
   },
-  addFile ({ commit }, payload) {
-    commit('ADD_FILE', payload)
+  addImage ({ commit }, payload) {
+    commit('ADD_IMAGE', payload)
   },
   removeFile ({ commit }, payload) {
     commit('REMOVE_FILE', payload)

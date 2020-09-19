@@ -142,7 +142,7 @@ export default {
       comment: state => state.reviews.fields.comment,
       qualityRate: state => state.reviews.fields.quality_rate,
       serviceRate: state => state.reviews.fields.service_rate,
-      files: state => state.reviews.fields.files
+      images: state => state.reviews.fields.images
     })
   },
   methods: {
@@ -151,7 +151,7 @@ export default {
       setReviewItemFieldAction: 'reviews/setItemField',
       sendAction: 'reviews/send',
       setNotificationAction: 'notifications/addItem',
-      addFileAction: 'reviews/addFile',
+      addImageAction: 'reviews/addImage',
       removeFileAction: 'reviews/removeFile',
       clearReviewItemFieldsAction: 'reviews/clearItemFields'
     }),
@@ -169,7 +169,7 @@ export default {
           comment: this.comment,
           quality_rate: Number(this.qualityRate),
           service_rate: Number(this.serviceRate),
-          files: this.files
+          images: this.images
         })
       } catch (e) {
         this.sending = false
@@ -194,7 +194,7 @@ export default {
             const dataUri = this.$fileapi.toDataURL(img, 'image/jpeg')
             const image = dataURItoBlob(dataUri)
 
-            this.addFileAction(image)
+            this.addImageAction(image)
           })
       }
     },

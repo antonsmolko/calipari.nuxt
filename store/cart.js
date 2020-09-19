@@ -5,7 +5,7 @@ import values from 'lodash/values'
 import sum from 'lodash/sum'
 import map from 'lodash/map'
 import filter from 'lodash/filter'
-import { refreshTokens, getDiscountPrice } from '@/helpers'
+import { refreshTokens, getDiscountPrice, getItemPrice } from '@/helpers'
 import { action } from '@/store/mixins/action'
 
 export const state = () => ({
@@ -20,7 +20,7 @@ export const mutations = {
   SET_ITEM_QTY (state, { id, qty }) {
     state.items.map((item) => {
       if (item.id === id) {
-        item.details.qty = qty
+        item.qty = qty
       }
     })
   },
@@ -193,26 +193,25 @@ export const actions = {
 
 export const getters = {
   qty: (state) => {
-    const cartItemsCount = sumBy(state.items, item => item.details.qty)
+    const cartItemsCount = sumBy(state.items, item => item.qty)
     const salesCount = state.saleKeys.length
 
     return cartItemsCount + salesCount
   },
   totalPrice: (state, getters) => {
-    const cartItemsTotalPrice = sumBy(state.items, item => getters.itemPrice(item.details))
+    const cartItemsTotalPrice = sumBy(state.items, item => getters.itemPrice(item))
     const availableSales = filter(state.sales, 'is_available')
     const salesTotalPrice = sumBy(availableSales, item => getDiscountPrice(item.old_price, item.discount))
 
     return cartItemsTotalPrice + salesTotalPrice
   },
-  itemPrice: (state, getters, rootState, rootGetters) => (itemDetails) => {
-    const texture = rootGetters['textures/getItemById'](itemDetails.texture_id)
+  itemPrice: (state, getters, rootState, rootGetters) => (item) => {
+    const texture = rootGetters['textures/getItemById'](item.texture_id)
     const texturePrice = texture.price
-    const addedCosts = itemDetails.added_costs ? sum(values(itemDetails.added_costs)) : 0
-    // const orderArea = Math.round(itemDetails.width_cm * itemDetails.height_cm / 100) / 100
-    const price = Math.round(itemDetails.width_cm * itemDetails.height_cm / 1e6 * texturePrice) * 100
+    const addedCosts = item.added_costs ? sum(values(item.added_costs)) : 0
+    const price = getItemPrice(item.width, item.height, texturePrice)
 
-    return price * itemDetails.qty + addedCosts
+    return price * item.qty + addedCosts
   },
   checkSaleInCart: state => id => state.saleKeys.includes(id)
 }

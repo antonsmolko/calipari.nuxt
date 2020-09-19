@@ -428,6 +428,9 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
     @include media_mob($m) {
       width: 350px;
     }
+    @include media_mob($l) {
+      width: 310px;
+    }
     @include media_mob($xl) {
       width: 430px;
     }

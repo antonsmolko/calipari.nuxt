@@ -44,8 +44,9 @@
           template(v-else)
             .uk-flex.uk-flex-between.uk-flex-middle.uk-width-1-1
               span.tm-sale-card__price.uk-text-emphasis {{ formatPrice }}
-              span.tm-sale-card__counter.uk-box-shadow-small.tm-text-medium.uk-background-default.uk-text-center
-                |×<span class="uk-text-emphasis">1</span>
+              span.tm-sale-card__counter.uk-dark.uk-box-shadow-small.tm-text-medium.uk-background-default.uk-text-center
+                span ×
+                span.tm-sale-card__counter-num 1
 </template>
 
 <script>
@@ -157,6 +158,10 @@ export default {
     display: block;
     width: 50px;
     line-height: 40px;
+    color: $global-muted-color !important;
+    &-num {
+      color: $global-emphasis-color !important;
+    }
   }
 }
 </style>

@@ -1,17 +1,14 @@
 <template lang="pug">
   .tm-mosaic__image.uk-box-shadow-small(:id="`image-${item.id}`")
     span.tm-mosaic__article {{ item.article }}
-    image-like.tm-mosaic__like(
-      :liked="liked"
-      @like="onLike")
+    image-like.tm-mosaic__like(:liked="liked" @like="onLike")
     image-color-collection-badge(
       v-if="colorBadge && item.colorCollection"
       :url="`/catalog/color-collections/${item.colorCollection}`")
     image-art-collection-badge(
       v-if="artBadge && item.artCollection"
       :url="`/catalog/art-collections/${item.artCollection}`")
-    nuxt-link.uk-link-reset(
-      :to="editorUrl")
+    nuxt-link.uk-link-reset(:to="editorUrl")
       .tm-mosaic__container.uk-position-relative
         uk-image.uk-box-shadow-medium(
           :name="item.path"
@@ -96,8 +93,16 @@ export default {
   }
 
   &__article {
-    top: 0;
-    left: 0;
+    position: absolute;
+    display: inline-block;
+    line-height: 1;
+    background: rgba($global-secondary-background, .5);
+    border-radius: 2px;
+    font-size: 13px;
+    color: $global-inverse-color;
+    font-weight: normal;
+    padding: 3px 4px;
+    margin: $base-mosaic-badge-margin;
   }
 
   &__like {

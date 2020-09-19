@@ -49,9 +49,9 @@ export const noDiff = (a, b) => {
   return true
 }
 
-// export const getItemPrice = (width, height, texturePrice) => {
-//   return Math.ceil(width * height / 1000000 * texturePrice) * 100
-// }
+export const getItemPrice = (width, height, texturePrice) => {
+  return Math.ceil(width * height / 1000000 * texturePrice) * 100
+}
 
 export const getDiscountPrice = (oldPrice, discount) => {
   return Math.ceil(oldPrice / 100 * (100 - discount))
@@ -218,8 +218,6 @@ export const getAddedCostsContent = (addedCosts) => {
             </div>`
   }, '')
 }
-
-// export const isEqualReviewPreview = (obj, other) => obj.name === other.name && obj.size === other.size
 
 export const dataURItoBlob = (dataURI) => {
   const byteString = atob(dataURI.split(',')[1])

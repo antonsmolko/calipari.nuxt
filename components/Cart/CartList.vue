@@ -9,12 +9,11 @@
         .tm-cart__content
           table.tm-order-table
             tbody
-              cart-item(
+              order-item(
                 v-for="item in items"
                 :key="item.id"
                 :item="item"
-                :texture="getTexture(item.details.texture_id)"
-                :price="getPrice(item.details)"
+                :isCart="true"
                 @delete="onDelete")
     cart-modal
 </template>
@@ -22,12 +21,12 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import CartModal from '@/components/Cart/CartModal'
-import CartItem from '@/components/Cart/CartItem'
+import OrderItem from '@/components/Orders/OrderItem'
 
 export default {
   name: 'CartList',
   components: {
-    CartItem,
+    OrderItem,
     CartModal
   },
   props: {
@@ -47,9 +46,6 @@ export default {
     }),
     getTexture (id) {
       return this.$store.getters['textures/getItemById'](id)
-    },
-    getPrice (itemDetails) {
-      return this.$store.getters['cart/itemPrice'](itemDetails)
     },
     onDelete (id) {
       const modal = this.$uikit.modal

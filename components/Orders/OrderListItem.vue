@@ -42,22 +42,20 @@
       data-uk-slider="finite: true"
       tabindex="-1")
       ul.uk-slider-items.uk-grid.uk-grid-small(data-uk-lightbox="animation: slide")
-        li(v-for="(item, index) in items" :key="index")
-          a.uk-inline.uk-transition-toggle(
-            :data-caption="getDataCaption(item)"
-            :href="item.image_path")
-            img.uk-box-shadow-small(
-              :data-src="item.thumb_path"
-              :alt="item.article"
-              data-uk-img)
+        order-list-item-slide(
+          v-for="(item, index) in items"
+          :key="index"
+          :item="item")
 </template>
 
 <script>
 import concat from 'lodash/concat'
+import OrderListItemSlide from '@/components/Orders/OrderListItemSlide'
 import { getFormatPrice } from '@/helpers'
 
 export default {
   name: 'OrderListItem',
+  components: { OrderListItemSlide },
   props: {
     order: {
       type: Object,
@@ -74,17 +72,6 @@ export default {
     }
   },
   methods: {
-    getDataCaption (item) {
-      /* eslint-disable */
-      return `
-        Изображение: ${item.article} |
-        Ширина: ${item.width} см |
-        Высота: ${item.height} см |
-        Фактура: «${item.texture}» |
-        Эффекты: ${item.filter} |
-        Цена: ${getFormatPrice(item.price)}`
-      /* eslint-enable */
-    },
     onPay () {
       this.$emit('pay', this.order.hash_number)
     },

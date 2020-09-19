@@ -1,7 +1,7 @@
 <template lang="pug">
     .tm-product-counter.uk-box-shadow-small
         input.tm-product-counter__input.uk-input.uk-form-width-xsmall(
-            type="number" min="min" max="max" step="step" v-model="model")
+            type="number" min="min" max="max" step="step" :value="value")
         .tm-product-counter__controls
             span.tm-product-counter__up.uk-icon(
                 :disabled="isMax"
@@ -32,6 +32,10 @@ export default {
       type: Number,
       default: 1
     },
+    value: {
+      type: Number,
+      default: 1
+    },
     model: {
       type: Number,
       default: 1
@@ -49,7 +53,7 @@ export default {
     }
   },
   created () {
-    this.count = this.model
+    this.count = this.value
   },
   methods: {
     countUp () {

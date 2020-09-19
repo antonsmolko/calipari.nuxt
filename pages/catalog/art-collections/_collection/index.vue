@@ -24,10 +24,7 @@
                 .uk-position-fixed.uk-width-1-1.uk-height-viewport.uk-position-top(
                     data-uk-scrollspy="cls: uk-animation-fade; delay: 50")
                     .tm-section__semitransparent-background.uk-position-cover.uk-background-cover.uk-background-fixed(
-                        v-show="backgroundPath"
                         :data-src="url" data-uk-img)
-                    .tm-category__background-default(
-                        v-if="!backgroundPath")
 </template>
 
 <script>
@@ -76,13 +73,8 @@ export default {
     ...mapState({
       artCollection: state => state.artCollections.item
     }),
-    backgroundPath () {
-      return this.artCollection.background ? this.artCollection.background : null
-    },
     url () {
-      return this.backgroundPath
-        ? getS3ImageUrl({ name: this.backgroundPath, grayscale: true })
-        : ''
+      return getS3ImageUrl({ name: this.artCollection.image_path, grayscale: true })
     }
   },
   methods: {
