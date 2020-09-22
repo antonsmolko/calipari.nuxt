@@ -49,6 +49,8 @@ export default function ({ $auth, $axios, store, redirect }) {
           })
         }
     }
+
+    // return Promise.reject(error)
   })
 
   $axios.onRequest(() => {

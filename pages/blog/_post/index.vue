@@ -52,13 +52,6 @@ export default {
     TopBar
   },
   mixins: [setLayout, scrollToTop],
-  // metaInfo () {
-  //   return {
-  //     script: [
-  //       { src: '//cdn.iframe.ly/embed.js?api_key=cbf6e83443222ac53bca55', charset: 'utf-8', async: true }
-  //     ]
-  //   }
-  // },
   data: () => ({
     responseData: false,
     baseImageUrl: `${process.env.baseImageUrl}/widen/800`

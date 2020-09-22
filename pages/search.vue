@@ -1,8 +1,8 @@
 <template lang="pug">
-  Page
+  page
     template(#main)
       main(:class="{ 'uk-light': darkPeriod }")
-        GalleryLayout(
+        gallery-layout(
           :title="pageTitle"
           :mode="mode"
           :backgroundPath="imagePath"
@@ -11,7 +11,7 @@
             .tm-search__form.uk-margin-medium-top.uk-position-relative.uk-position-z-index(
               data-uk-scrollspy="cls: uk-animation-slide-bottom-small")
               .uk-fieldset
-                VSelect(
+                v-select(
                   class="uk-margin"
                   name="search"
                   icon="search"

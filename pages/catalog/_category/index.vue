@@ -29,20 +29,12 @@ export default {
   },
   mixins: [setLayout, scrollToTop],
   async fetch () {
-    const category = await this.$store.getters['categories/getItemByAlias'](this.$route.params.category)
-    if (!category) {
-      await this.$router.push('/notfound')
-    } else {
-      await this.$store.dispatch('categories/setField', {
-        field: 'item',
-        value: category
-      })
-      await this.$store.dispatch('tags/getItemsByCategoryId', category.id)
-      await this.$store.dispatch('setField', {
-        field: 'pageTitle',
-        value: category.title
-      })
-    }
+    await this.getCategoryByAliasAction(this.$route.params.category)
+    await this.$store.dispatch('tags/getItemsByCategoryId', this.item.id)
+    await this.$store.dispatch('setField', {
+      field: 'pageTitle',
+      value: this.item.title
+    })
   },
   computed: {
     ...mapState({
@@ -53,7 +45,8 @@ export default {
     ...mapActions({
       clearFiltersAction: 'filter/clearFilters',
       setCategoriesFieldAction: 'categories/setField',
-      setImagesFieldAction: 'images/setField'
+      setImagesFieldAction: 'images/setField',
+      getCategoryByAliasAction: 'categories/getItemByAlias'
     })
   },
   beforeRouteLeave (to, from, next) {

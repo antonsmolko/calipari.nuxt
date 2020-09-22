@@ -1,11 +1,11 @@
 <template lang="pug">
-  Page
+  page
     template(#main)
       main
-        TopBar(:title="pageTitle")
+        top-bar(:title="pageTitle")
           .uk-navbar-item
             button.uk-close(type="button", data-uk-close, @click="close")
-        SlideYDownTransition
+        slide-y-down-transition
           section.uk-section(
             v-if="!$fetchState.pending"
             :class="{ 'uk-light': darkPeriod }")

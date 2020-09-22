@@ -115,16 +115,13 @@ export default {
   },
   mixins: [scrollToTop, closeEditorMethods],
   async fetch () {
-    await this.$store.dispatch('setFields', {
+    await this.setFieldsAction({
       pageTitle: 'Редактор',
       bottomBar: false,
       footer: false,
       editorEnable: true
     })
-    if (!this.$route.params.id) {
-      await this.$router.push('/notfound')
-    }
-    await this.$store.dispatch('images/getItemFromEditor', this.$route.params.id)
+    await this.getImageAction(this.$route.params.id)
       .then(() => {
         this.orderSettings.currentImage = this.image
         this.orderSettings.texture = this.textures[0].id
@@ -251,6 +248,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      getImageAction: 'images/getItemFromEditor',
       setImagesFieldsAction: 'images/setFields',
       setImagesFieldAction: 'images/setField',
       addToCartAction: 'cart/addItem',

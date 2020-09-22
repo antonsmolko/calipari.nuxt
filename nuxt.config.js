@@ -58,7 +58,14 @@ export default {
     linkExactActiveClass: 'uk-active',
     middleware: [
       'clearValidationErrors'
-    ]
+    ],
+    extendRoutes (routes, resolve) {
+      routes.push({
+        name: '404',
+        path: '*',
+        component: resolve(__dirname, 'pages/notfound.vue')
+      })
+    }
   },
   /*
   ** Plugins to load before mounting the App

@@ -1,16 +1,16 @@
 <template lang="pug">
-    .tm-layout__container(v-if="onLoad" :class="pageBg")
-        notification(
-            v-for="notification in notifications"
-            :key="notification.id"
-            :item="notification")
-        navbar
-            template(#content v-if="editorEnable")
-                EditorNavbarContent
-        nuxt(keep-alive :keep-alive-props="{ max: 10 }" :key="$route.fullPath")
-        slide-y-down-transition(mode="out-in")
-            bottom-bar(v-if="bottomBar")
-        off-canvas-menu
+  .tm-layout__container(v-if="onLoad" :class="pageBg")
+    notification(
+      v-for="notification in notifications"
+      :key="notification.id"
+      :item="notification")
+    navbar
+      template(#content v-if="editorEnable")
+        editor-navbar-content
+    nuxt(keep-alive :keep-alive-props="{ max: 10 }" :key="$route.fullPath")
+    slide-y-down-transition(mode="out-in")
+      bottom-bar(v-if="bottomBar")
+    off-canvas-menu
 </template>
 <script>
 import { mapState } from 'vuex'
@@ -22,8 +22,9 @@ import OffCanvasMenu from '@/components/layout/OffCanvas/OffCanvasMenu.vue'
 import EditorNavbarContent from '@/components/Editor/EditorNavbarContent'
 import notifications from '@/components/mixins/notifications'
 import syncProfile from '@/components/mixins/syncProfile'
-import layoutTimePeriod from '~/components/mixins/layoutTimePeriod'
-import { refreshTokens, getCurrentBreakPoint } from '~/helpers'
+import layoutTimePeriod from '@/components/mixins/layoutTimePeriod'
+import { refreshTokens, getCurrentBreakPoint } from '@/helpers'
+
 const _throttle = throttle(fn => fn(), 50)
 
 export default {
@@ -41,10 +42,12 @@ export default {
   mixins: [notifications, layoutTimePeriod, syncProfile],
   metaInfo () {
     return {
-      title: 'Главная',
       meta: [
         { charset: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+        {
+          name: 'viewport',
+          content: 'width=device-width, initial-scale=1'
+        }
       ],
       bodyAttrs: {
         class: this.pageBg

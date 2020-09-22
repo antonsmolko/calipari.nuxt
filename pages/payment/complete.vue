@@ -1,5 +1,5 @@
 <template lang="pug">
-    Page
+    page
         template(#main)
             main.uk-position-relative
                 section.uk-section
@@ -10,7 +10,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import Page from '~/components/layout/Page.vue'
+import Page from '@/components/layout/Page.vue'
 
 export default {
   components: { Page },
