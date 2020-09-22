@@ -1,5 +1,5 @@
 <template lang="pug">
-    Page
+    page
         template(#main)
             main
                 home-hero-section
@@ -9,7 +9,8 @@
                 home-interiors-section(
                     v-if="interiors.length"
                     :items="interiors")
-                SectionConsultation
+                home-consultation-section(
+                  :page="page.title")
                 //SectionTopics
                 SectionAdvantages
                 home-purchase-steps-section(
@@ -17,13 +18,13 @@
                     :items="purchaseSteps")
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import Page from '@/components/layout/Page.vue'
 import HomeHeroSection from '@/components/Home/HomeHeroSection.vue'
 import SectionAlbums from '@/components/sections/SectionAlbums.vue'
 import SectionMaterials from '@/components/sections/SectionMaterials.vue'
 import SectionPlacements from '@/components/sections/SectionPlacements.vue'
-import SectionConsultation from '@/components/sections/SectionConsultation.vue'
+import HomeConsultationSection from '@/components/Home/HomeConsultationSection.vue'
 import SectionTopics from '@/components/sections/SectionTopics.vue'
 import SectionAdvantages from '@/components/sections/SectionAdvantages.vue'
 import HomeTexturesSection from '@/components/Home/HomeTexturesSection'
@@ -33,6 +34,7 @@ import HomePurchaseStepsSection from '@/components/Home/HomePurchaseStepsSection
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
 import scrollToTarget from '@/components/mixins/scrollToTarget'
+import page from '@/components/mixins/page'
 
 export default {
   components: {
@@ -41,7 +43,7 @@ export default {
     SectionAlbums,
     SectionMaterials,
     SectionPlacements,
-    SectionConsultation,
+    HomeConsultationSection,
     SectionTopics,
     SectionAdvantages,
     HomeTexturesSection,
@@ -49,29 +51,12 @@ export default {
     HomeInteriorsSection,
     HomePurchaseStepsSection
   },
-  mixins: [setLayout, scrollToTop, scrollToTarget],
-  metaInfo () {
-    return {
-      title: this.page.long_title,
-      meta: [
-        {
-          vmid: 'description',
-          name: 'description',
-          content: this.page.description
-        },
-        {
-          vmid: 'keywords',
-          name: 'keywords',
-          content: this.page.keywords
-        }
-      ]
-    }
-  },
-  async fetch ({ store }) {
+  mixins: [setLayout, scrollToTop, scrollToTarget, page],
+  async fetch () {
     await Promise.all([
-      store.dispatch('home/getPurchaseSteps'),
-      store.dispatch('home/getInteriors'),
-      store.dispatch('pages/getItem', 'home')
+      this.getPurchaseStepsAction(),
+      this.getInteriorsAction(),
+      this.getPageAction('home')
     ])
   },
   computed: {
@@ -87,6 +72,12 @@ export default {
       topBar: false,
       bottomBar: true,
       pageTitle: this.page.title
+    })
+  },
+  methods: {
+    ...mapActions({
+      getPurchaseStepsAction: 'home/getPurchaseSteps',
+      getInteriorsAction: 'home/getInteriors'
     })
   }
 }

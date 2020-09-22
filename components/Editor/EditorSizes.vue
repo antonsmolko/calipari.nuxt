@@ -64,9 +64,6 @@ export default {
       default: true
     }
   },
-  // data: () => ({
-  //   ratioLocked: true
-  // }),
   computed: {
     widthInvalid () {
       return this.model.width < this.minWidth || this.model.width > this.maxWidth

@@ -1,8 +1,8 @@
 <template lang="pug">
-  Page
+  page
     template(#main)
       main
-        TopBar(:title="pageTitle")
+        top-bar(:title="pageTitle")
         section.tm-section__hero.uk-section.uk-position-relative.uk-padding-remove-bottom(:class="{ 'uk-light': darkPeriod }")
           .uk-container.uk-position-relative.uk-position-z-index(
             data-uk-scrollspy="cls: uk-animation-slide-bottom-small")
@@ -57,20 +57,21 @@
                   :href="getSettingValueByKey('instagram_account')") Instagram
               div(class="uk-width-xlarge@s uk-width-3-5@m")
                 h3.uk-h3.uk-text-primary Обратная связь
-                form.uk-grid.uk-grid-small.uk-flex-column(data-uk-grid)
+                form.uk-grid.uk-grid-small.uk-flex-column(data-uk-grid @submit.prevent="onSubmit")
                   v-input.uk-width-1-1(
                     title="Имя"
                     :label="true"
                     name="name"
                     icon="user"
-                    :value="customer.first_name"
-                    :vField="$v.form.name"
-                    module="feedback")
+                    v-model="form.name"
+                    :v-model-enable="true"
+                    :vRules="{ required: true, minLength: true }"
+                    :vField="$v.form.name")
                   phone-input(
                     :value="customer.phone"
                     :vDelay="true"
                     :vField="$v.customer.phone"
-                    :vRules="{ phone: true }"
+                    :vRules="{ phone: true, required: true }"
                     module="checkout"
                     dispatch-name="setCustomerField")
                   v-textarea.uk-width-1-1(
@@ -81,16 +82,21 @@
                     :maxlength="1000"
                     icon="comment"
                     name="message"
+                    v-model="form.message"
+                    :v-model-enable="true"
                     :rows="7"
                     :vField="$v.form.message"
                     :vRules="{ required: true, minLength: true }"
-                    :vDelay="true"
-                    module="feedback")
+                    :vDelay="true")
                   .uk-width-1-1.uk-margin-top
                     p.uk-text-small.uk-margin-right()
                       | Нажимая кнопку «Отправить», я даю согласие на обработку персональных данных и соглашаюсь с&nbsp;
                       nuxt-link(to="/policy") политикой конфиденциальности
-                    button.uk-button.uk-button-primary(type="submit" :disabled="$v.$invalid") Отправить
+                    button.uk-button.uk-button-primary(type="submit" :disabled="$v.$invalid || sending")
+                      | Отправить
+                      i.tm-payment__pay-button-spinner.uk-margin-small-left.uk-text-muted.uk-animation-fade(
+                        v-if="sending"
+                        data-uk-spinner="ratio: 0.7")
 </template>
 
 <script>
@@ -103,6 +109,7 @@ import PhoneInput from '@/components/form/PhoneInput'
 import VTextarea from '@/components/form/VTextarea'
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
+import page from '@/components/mixins/page'
 import { getPhoneFormat } from '@/helpers'
 
 export default {
@@ -114,11 +121,13 @@ export default {
     VInput,
     PhoneInput
   },
-  mixins: [setLayout, scrollToTop],
-  metaInfo () {
-    return {
-      title: this.pageTitle
-    }
+  mixins: [setLayout, scrollToTop, page],
+  async fetch () {
+    await this.getPageAction('contacts')
+    this.setFieldAction({
+      field: 'pageTitle',
+      value: this.page.title
+    })
   },
   data: () => ({
     center: [53.272154, 34.371165],
@@ -135,7 +144,12 @@ export default {
         mag: 34.280951
       }
     ],
-    mapInit: false
+    mapInit: false,
+    sending: false,
+    form: {
+      name: '',
+      message: ''
+    }
   }),
   validations: {
     customer: {
@@ -149,6 +163,7 @@ export default {
     },
     form: {
       name: {
+        required,
         touch: false
       },
       message: {
@@ -160,8 +175,7 @@ export default {
   },
   computed: {
     ...mapState({
-      customer: state => state.checkout.customer,
-      form: state => state.feedback.form
+      customer: state => state.checkout.customer
     }),
     phoneFormat () {
       return getPhoneFormat(this.companyPhone)
@@ -171,14 +185,12 @@ export default {
     }
   },
   created () {
-    this.setFieldAction({
-      field: 'pageTitle',
-      value: 'Контакты'
-    })
+    this.$set(this.form, 'name', this.customer.first_name)
   },
   methods: {
-    ...mapActions({
-      setFeedbackFieldAction: 'feedback/setFormField'
+    ...mapActions('feedback', {
+      setFeedbackFieldAction: 'setFormField',
+      sendFeedbackMailAction: 'sendFeedbackMail'
     }),
     onClick (e) {
       this.coords = e.get('coords')
@@ -189,6 +201,18 @@ export default {
     getSettingValueByKey (key) {
       const setting = this.$store.getters['settings/getSettingByKey'](key)
       return setting.value
+    },
+    async onSubmit () {
+      this.sending = true
+      await this.sendFeedbackMailAction({
+        page: this.page.title,
+        name: this.form.name,
+        phone: this.customer.phone,
+        message: this.form.message
+      })
+      this.$set(this.form, 'message', '')
+      this.$v.$reset()
+      this.sending = false
     }
   }
 }

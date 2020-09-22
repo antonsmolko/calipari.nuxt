@@ -1,19 +1,21 @@
 <template lang="pug">
-  div
-    .tm-form__input.uk-width-1-1
-      uk-textarea(
-        title="Комментарий"
-        :name="name"
-        :rows="rows"
-        icon="comment"
-        :value="currentValue"
-        :disabled="disabled"
-        :placeholder="placeholder"
-        @input="onInput"
-        :class="{ 'uk-config-danger': vField && vField.$error }")
-    .under-input-notice.uk-position-relative(v-if="vRules && vField && vField.$error")
-      input-notification-require(v-if="!vField.required && vRules.required" :name="title")
-      input-notification-min-string(v-else-if="!vField.minLength && vRules.minLength" :name="title" :min="min")
+  .tm-form__input.uk-width-1-1
+    uk-textarea(
+      :title="title"
+      :name="name"
+      icon="comment"
+      :class="{ 'uk-config-danger': vField && vField.$error }")
+      template(#input)
+        textarea.uk-textarea.uk-form-large.uk-box-shadow-medium(
+          :rows="rows"
+          v-model="currentValue"
+          :disabled="disabled"
+          :placeholder="placeholder"
+          @input="onInput")
+      template(#notification)
+        .under-input-notice.uk-position-relative(v-if="vRules && vField && vField.$error")
+          input-notification-require(v-if="!vField.required && vRules.required" :name="title")
+          input-notification-min-string(v-else-if="!vField.minLength && vRules.minLength" :name="title" :min="min")
 </template>
 
 <script>
@@ -31,6 +33,10 @@ export default {
     UkTextarea,
     InputNotificationRequire,
     InputNotificationMinString
+  },
+  model: {
+    prop: 'model',
+    event: 'input'
   },
   props: {
     differ: {
@@ -100,25 +106,39 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    model: {
+      type: String,
+      default: ''
+    },
+    vModelEnable: {
+      type: Boolean,
+      default: false
     }
   },
-  data () {
-    return {
-      valueReference: '',
-      currentValue: ''
-    }
-  },
+  data: () => ({
+    valueReference: '',
+    currentValue: ''
+  }),
   computed: {
     storeModule () {
       return this.module ? `${this.module}/` : ''
     }
   },
+  watch: {
+    model () {
+      if (this.vModelEnable) {
+        this.currentValue = this.model
+      }
+    }
+  },
   created () {
     this.valueReference = this.value
-    this.currentValue = this.value
+    this.currentValue = this.vModelEnable ? this.model : this.value
   },
   methods: {
-    onInput ({ value }) {
+    onInput (e) {
+      let value = e.target.value
       this.currentValue = value
 
       if (this.vField && this.vDelay) {
@@ -129,12 +149,16 @@ export default {
 
       value = this.trim ? value.trim() : value
 
-      this.$store.dispatch(`${this.storeModule}${this.dispatchName}`, {
-        field: this.name,
-        value
-      })
+      if (this.vModelEnable) {
+        this.$emit('input', value)
+      } else {
+        this.$store.dispatch(`${this.storeModule}${this.dispatchName}`, {
+          field: this.name,
+          value
+        })
 
-      this.$emit('input', { [this.name]: value })
+        this.$emit('input', { [this.name]: value })
+      }
     },
     setValidationDelay (v, value) {
       v.$reset()

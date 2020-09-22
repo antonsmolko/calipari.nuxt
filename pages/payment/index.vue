@@ -1,11 +1,11 @@
 <template lang="pug">
-  Page
+  page
     template(#main)
       main
-        TopBar(:title="pageTitle")
+        top-bar(:title="pageTitle")
           .uk-navbar-item
             button.uk-close(type="button", data-uk-close, @click="close")
-        SlideYDownTransition
+        slide-y-down-transition
           section.uk-section.uk-text-center(
             v-if="!$fetchState.pending && order"
             :class="{ 'uk-light': darkPeriod }")
@@ -36,7 +36,7 @@
                     v-if="!cardsLength && order.number"
                     :orderNumber="order.number"
                     :enable="formEnable")
-                SlideYDownTransition
+                slide-y-down-transition
                   div(v-if="paid")
                     p.tm-text-medium Заказ уже оплачен!
                     nuxt-link.uk-button.uk-button-primary.uk-margin-medium-top(to="/") На главную

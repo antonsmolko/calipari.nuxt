@@ -3,7 +3,7 @@
     .tm-navbar.tm-bottombar.uk-position-bottom.uk-position-fixed.uk-background-secondary.uk-light(
       class="uk-hidden@l")
       ul.tm-iconnav.uk-navbar-nav.uk-flex.uk-flex-middle.uk-flex-between
-        li: nuxt-link(to="/" data-uk-icon="home")
+        li(class="uk-visible@s"): nuxt-link(to="/" data-uk-icon="home")
           span.tm-bottombar__item-title Главная
         li: nuxt-link(to="/catalog" data-uk-icon="album")
           span.tm-bottombar__item-title Каталог

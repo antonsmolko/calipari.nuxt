@@ -15,7 +15,7 @@
       input.uk-input.uk-form-large.uk-box-shadow-medium(
         :name="name"
         @input="onInput"
-        :value="currentValue"
+        v-model="currentValue"
         :type="type"
         :disabled="disabled"
         :placeholder="placeholder"
@@ -49,6 +49,10 @@ export default {
     InputNotificationAlias,
     InputNotificationSameAsPassword,
     InputNotificationEmail
+  },
+  model: {
+    prop: 'model',
+    event: 'input'
   },
   props: {
     differ: {
@@ -126,14 +130,20 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    model: {
+      type: String,
+      default: ''
+    },
+    vModelEnable: {
+      type: Boolean,
+      default: false
     }
   },
-  data () {
-    return {
-      valueReference: '',
-      currentValue: ''
-    }
-  },
+  data: () => ({
+    valueReference: '',
+    currentValue: ''
+  }),
   computed: {
     storeModule () {
       return this.module ? `${this.module}/` : ''
@@ -144,7 +154,7 @@ export default {
   },
   created () {
     this.valueReference = this.value
-    this.currentValue = this.value
+    this.currentValue = this.vModelEnable ? this.model : this.value
   },
   methods: {
     onInput (e) {
@@ -159,9 +169,13 @@ export default {
 
       value = this.trim ? value.trim() : value
 
-      this.$store.dispatch(`${this.storeModule}${this.dispatchName}`, { field: this.name, value })
+      if (this.vModelEnable) {
+        this.$emit('input', value)
+      } else {
+        this.$store.dispatch(`${this.storeModule}${this.dispatchName}`, { field: this.name, value })
 
-      this.$emit('input', { [this.name]: value })
+        this.$emit('input', { [this.name]: value })
+      }
     },
     setValidationDelay (v, value) {
       v.$reset()

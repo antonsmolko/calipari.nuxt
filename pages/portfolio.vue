@@ -30,6 +30,7 @@ import PortfolioItem from '@/components/Portfolio/PortfolioItem'
 import Observer from '@/components/Observer'
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
+import page from '@/components/mixins/page'
 
 export default {
   name: 'Portfolio',
@@ -39,24 +40,7 @@ export default {
     PortfolioItem,
     Observer
   },
-  mixins: [setLayout, scrollToTop],
-  metaInfo () {
-    return {
-      title: this.page.long_title,
-      meta: [
-        {
-          vmid: 'description',
-          name: 'description',
-          content: this.page.description
-        },
-        {
-          vmid: 'keywords',
-          name: 'keywords',
-          content: this.page.keywords
-        }
-      ]
-    }
-  },
+  mixins: [setLayout, scrollToTop, page],
   async fetch () {
     await this.getItemsAction({
       url: '/work-examples',

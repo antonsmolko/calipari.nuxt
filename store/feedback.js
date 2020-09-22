@@ -1,3 +1,5 @@
+import { action } from '@/store/mixins/action'
+
 export const state = () => ({
   form: {
     name: '',
@@ -26,6 +28,18 @@ export const actions = {
   },
   clearFormFields ({ commit }) {
     commit('CLEAR_FORM_FIELDS')
+  },
+  sendFeedbackMail ({ commit }, payload) {
+    return action(this.$api, 'post', commit, {
+      url: '/mail/feedback',
+      payload
+    })
+  },
+  sendBackCallMail ({ commit }, payload) {
+    return action(this.$api, 'post', commit, {
+      url: '/mail/back-call',
+      payload
+    })
   }
 }
 

@@ -2,7 +2,7 @@ export const state = () => ({
   fields: {
     title: '',
     alias: '',
-    long_title: '',
+    meta_title: '',
     content: '',
     image_path: '',
     description: '',
