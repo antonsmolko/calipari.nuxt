@@ -1,17 +1,16 @@
 <template lang="pug">
     .tm-layout__container(v-if="onLoad" :class="pageBg")
-        Notification(
+        notification(
             v-for="notification in notifications"
             :key="notification.id"
             :item="notification")
-        Navbar
+        navbar
             template(#content v-if="editorEnable")
                 EditorNavbarContent
-        FadeTransition(mode="out-in")
-            nuxt(keep-alive :keep-alive-props="{ max: 10 }" :key="$route.fullPath")
-        SlideYDownTransition(mode="out-in")
-            BottomBar(v-if="bottomBar")
-        Menu
+        nuxt(keep-alive :keep-alive-props="{ max: 10 }" :key="$route.fullPath")
+        slide-y-down-transition(mode="out-in")
+            bottom-bar(v-if="bottomBar")
+        off-canvas-menu
 </template>
 <script>
 import { mapState } from 'vuex'
@@ -19,7 +18,7 @@ import throttle from 'lodash/throttle'
 import TopBar from '@/components/layout/TopBar.vue'
 import BottomBar from '@/components/layout/BottomBar.vue'
 import Notification from '@/components/notifications/Notification'
-import Menu from '@/components/layout/OffCanvas/OffCanvasMenu.vue'
+import OffCanvasMenu from '@/components/layout/OffCanvas/OffCanvasMenu.vue'
 import EditorNavbarContent from '@/components/Editor/EditorNavbarContent'
 import notifications from '@/components/mixins/notifications'
 import syncProfile from '@/components/mixins/syncProfile'
@@ -37,7 +36,7 @@ export default {
     TopBar,
     BottomBar,
     Notification,
-    Menu
+    OffCanvasMenu
   },
   mixins: [notifications, layoutTimePeriod, syncProfile],
   metaInfo () {

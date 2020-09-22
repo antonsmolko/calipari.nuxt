@@ -29,7 +29,7 @@ export default {
       background: rgba($global-secondary-background, .5);
       line-height: 1;
       padding: 1px;
-      border-radius: 2px;
+      border-radius: $label-border-radius;
 
       .uk-icon {
         margin: auto;

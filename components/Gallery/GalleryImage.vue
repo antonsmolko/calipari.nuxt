@@ -20,24 +20,30 @@
         image-art-collection-badge(
           v-if="image.artCollection"
           :url="`/catalog/art-collections/${image.artCollection.alias}`")
-      ImageLike.tm-mosaic__like(
+      image-examples-gallery.tm-mosaic__examples-gallery(
+        v-if="image.examples"
+        :article="image.article"
+        :items="image.examples")
+      image-like.tm-mosaic__like(
         :liked="liked"
         @like="onLike")
 </template>
 
 <script>
 import { mapActions } from 'vuex'
-import ImageLike from './ImageLike'
-import ImageColorCollectionBadge from '~/components/Gallery/ImageColorCollectionBadge'
-import ImageArtCollectionBadge from '~/components/Gallery/ImageArtCollectionBadge'
-import { getS3ImageUrl } from '~/helpers'
+import ImageLike from '@/components/Gallery/ImageLike'
+import ImageExamplesGallery from '@/components/Gallery/ImageExamplesGallery'
+import ImageColorCollectionBadge from '@/components/Gallery/ImageColorCollectionBadge'
+import ImageArtCollectionBadge from '@/components/Gallery/ImageArtCollectionBadge'
+import { getS3ImageUrl } from '@/helpers'
 
 export default {
   name: 'GalleryImage',
   components: {
     ImageLike,
     ImageColorCollectionBadge,
-    ImageArtCollectionBadge
+    ImageArtCollectionBadge,
+    ImageExamplesGallery
   },
   props: {
     image: {
@@ -146,6 +152,12 @@ export default {
         padding-top: 2px;
       }
     }
+  }
+
+  &__examples-gallery {
+    position: absolute;
+    bottom: 0;
+    left: 0;
   }
 
   &__like {

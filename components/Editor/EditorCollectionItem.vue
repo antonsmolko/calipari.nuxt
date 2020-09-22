@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { getS3ImageUrl } from '~/helpers'
+import { getS3ImageUrl } from '@/helpers'
 
 export default {
   name: 'EditorCollectionItem',

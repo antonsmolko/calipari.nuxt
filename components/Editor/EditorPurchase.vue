@@ -1,5 +1,5 @@
 <template lang="pug">
-    .tm-editor__purchase.tm-editor__panel(class="uk-visible@l")
+    .tm-editor__panel(class="uk-visible@l")
         editor-panel-heading(title="Цена")
         .tm-editor__purchase-content.uk-flex-wrap
             span.tm-editor__purchase-price.uk-text-emphasis {{ formatPrice }}

@@ -70,6 +70,10 @@
             :flipV="orderSettings.filter.flipV"
             :colorEffect="orderColorEffectName"
             :texture="orderTexture.name")
+          editor-gallery(
+            v-if="image.examples"
+            :items="image.examples"
+            :article="image.article")
           editor-purchase(:price="orderPrice" @confirm="onConfirm")
       editor-bottom-bar(:price="orderPrice" @confirm="onConfirm")
 </template>
@@ -84,6 +88,7 @@ import EditorTexture from '@/components/Editor/EditorTexture'
 import EditorCollection from '@/components/Editor/EditorCollection'
 import Cropper from '@/components/Editor/Cropper/Cropper'
 import EditorPreview from '@/components/Editor/EditorPreview'
+import EditorGallery from '@/components/Editor/EditorGallery'
 import EditorInfo from '@/components/Editor/EditorInfo'
 import EditorPurchase from '@/components/Editor/EditorPurchase'
 import EditorBottomBar from '@/components/Editor/EditorBottomBar'
@@ -101,6 +106,7 @@ export default {
     EditorCollection,
     Cropper,
     EditorPreview,
+    EditorGallery,
     EditorInfo,
     EditorPurchase,
     EditorBottomBar,
@@ -724,6 +730,80 @@ $editor-top-bar-box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
       color: $global-inverse-color;
       @include media_mob($l) {
         width: 150px;
+      }
+    }
+  }
+
+  /* Gallery
+  ========================================================================== */
+
+  &__gallery {
+    &-slider-container {
+      margin-left: -$global-small-gutter;
+      margin-right: -$global-small-gutter;
+      .tm-editor__right-bar-slider {
+        padding: 0 $global-small-gutter;
+      }
+    }
+    &-item {
+      img {
+        height: 70px;
+      }
+    }
+    @include media-mob($s) {
+      padding: $global-small-gutter $global-gutter;
+      &-slider-container {
+        margin-left: -$global-gutter;
+        margin-right: -$global-gutter;
+
+        .tm-editor__right-bar-slider {
+          padding: 0 $global-gutter;
+        }
+      }
+    }
+    @include media-mob($m) {
+      padding: $global-small-gutter $global-medium-margin;
+      &-slider-container {
+        margin-left: -$global-medium-margin;
+        margin-right: -$global-medium-margin;
+        .tm-editor__right-bar-slider {
+          padding: 0 $global-medium-margin;
+        }
+      }
+      &-item {
+        img {
+          height: 100px;
+        }
+      }
+    }
+    @include media-mob($l) {
+      padding: $global-small-gutter $global-medium-margin $global-small-gutter $global-margin;
+      &-slider-container {
+        margin-left: -$global-margin;
+        margin-right: -$global-medium-margin;
+        .tm-editor__right-bar-slider {
+          padding: 0 $global-medium-margin 0 $global-margin;
+        }
+      }
+      &-item {
+        img {
+          height: 70px;
+        }
+      }
+    }
+    @include media-mob($xl) {
+      padding: $global-small-gutter $global-medium-margin $global-small-gutter $global-margin;
+      &-slider-container {
+        margin-left: -$global-margin;
+        margin-right: -$global-medium-margin;
+        .tm-editor__right-bar-slider {
+          padding: 0 $global-medium-margin 0 $global-margin;
+        }
+      }
+      &-item {
+        img {
+          height: 100px;
+        }
       }
     }
   }

@@ -87,8 +87,8 @@ export default {
         Изображение: ${this.item.article} |
         Ширина: ${this.item.width} см |
         Высота: ${this.item.height} см |
-        Фактура: «${this.item.texture}» |
-        Эффекты: ${this.filter} |
+        Фактура: «${this.textureName}» |
+        Эффекты: ${this.filterString} |
         Цена: ${this.formatPrice}`
       /* eslint-enable */
     },

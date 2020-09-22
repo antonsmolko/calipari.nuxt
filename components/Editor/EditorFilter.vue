@@ -1,25 +1,25 @@
 <template lang="pug">
-    .tm-editor__filter.tm-editor__panel
-        editor-panel-heading(title="Фильтр")
-        .uk-grid.uk-child-width-auto.uk-grid-small(
-            data-uk-grid
-            data-uk-scrollspy="cls: uk-animation-slide-left-medium; delay: 500")
-            editor-filter-item(
-                icon="flip-h"
-                :active="model.flipH"
-                @click="onFlipH")
-            editor-filter-item(
-                icon="flip-v"
-                :active="model.flipV"
-                @click="onFlipV")
-            editor-filter-item(
-                icon="black"
-                :active="model.colorize === 'grayscale'"
-                @click="onColorChange('grayscale')")
-            editor-filter-item(
-                icon="sepia"
-                :active="model.colorize === 'sepia'"
-                @click="onColorChange('sepia')")
+  .tm-editor__filter.tm-editor__panel
+    editor-panel-heading(title="Фильтр")
+    .uk-grid.uk-child-width-auto.uk-grid-small(
+      data-uk-grid
+      data-uk-scrollspy="cls: uk-animation-slide-left-medium; delay: 500")
+      editor-filter-item(
+        icon="flip-h"
+        :active="model.flipH"
+        @click="onFlipH")
+      editor-filter-item(
+        icon="flip-v"
+        :active="model.flipV"
+        @click="onFlipV")
+      editor-filter-item(
+        icon="black"
+        :active="model.colorize === 'grayscale'"
+        @click="onColorChange('grayscale')")
+      editor-filter-item(
+        icon="sepia"
+        :active="model.colorize === 'sepia'"
+        @click="onColorChange('sepia')")
 </template>
 
 <script>
@@ -39,7 +39,8 @@ export default {
   props: {
     model: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   methods: {
@@ -69,27 +70,30 @@ export default {
 <style lang="scss">
 .tm-editor {
 
-    /* Filter
-    ========================================================================== */
+  /* Filter
+  ========================================================================== */
 
-    &__filter {
-        &-button {
-            width: 100%;
-            background-color: rgba(#fff, .1);
-            height: 36px;
-            border: 1px solid transparent;
-            border-radius: 0;
-            padding: 0 $global-small-gutter;
-            line-height: 1;
-            @include media-mob($xl) {
-                padding: 0 $global-margin;
-            }
+  &__filter {
+    &-button {
+      width: 100%;
+      background-color: rgba(#fff, .1);
+      height: 36px;
+      border: 1px solid transparent;
+      border-radius: 0;
+      padding: 0 $global-small-gutter;
+      line-height: 1;
+      @include media-mob($l) {
+        padding: 0 12px;
+      }
+      @include media-mob($xl) {
+        padding: 0 $global-margin;
+      }
 
-            &.active {
-                border-color: $global-inverse-color;
-                color: $global-inverse-color;
-            }
-        }
+      &.active {
+        border-color: $global-inverse-color;
+        color: $global-inverse-color;
+      }
     }
+  }
 }
 </style>

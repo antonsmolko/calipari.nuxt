@@ -107,7 +107,7 @@ export default {
 
 .tm-bottombar {
   border-bottom: none;
-  z-index: 2000;
+  z-index: 1010;
 
   .uk-navbar, .uk-navbar-item {
     min-height: $bottom-bar-height;
