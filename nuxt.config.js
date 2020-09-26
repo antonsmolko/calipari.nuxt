@@ -400,7 +400,7 @@ export default {
     }
   },
   server: {
-    ...(isDev && {
+    ...(baseUrl === 'https://localhost:3000' && {
       https: {
         key: fs.readFileSync(path.resolve(__dirname, 'localhost.key')),
         cert: fs.readFileSync(path.resolve(__dirname, 'localhost.crt'))

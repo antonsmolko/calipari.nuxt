@@ -94,5 +94,5 @@ sw.*
 #nuxt.config.js
 
 # Certs
-#localhost.crt
-#localhost.key
+localhost.crt
+localhost.key
