@@ -1,11 +1,12 @@
 import path from 'path'
 import fs from 'fs'
 import imageminMozjpeg from 'imagemin-mozjpeg'
+require('dotenv').config()
 const ImageminPlugin = require('imagemin-webpack-plugin').default
 
 const isDev = process.env.NODE_ENV !== 'production'
-const isLocalMode = process.env.NODE_ENV === 'local'
-const devBaseUrl = isLocalMode ? 'https://localhost:3000' : 'https://calipari.ru'
+const isLocal = process.env.NODE_ENV === 'local'
+const devBaseUrl = isLocal ? 'https://localhost:3000' : 'https://calipari.ru'
 const baseUrl = !isDev ? process.env.BASE_URL : devBaseUrl
 const baseApiUrl = !isDev ? process.env.API_BASE_URL : 'https://manager.local.calipari.ru'
 const imageProvider = !isDev ? process.env.IMAGE_PROVIDER : 's3' // s3, local
@@ -402,7 +403,7 @@ export default {
     }
   },
   server: {
-    ...(isDev && isLocalMode && {
+    ...(isDev && {
       https: {
         key: fs.readFileSync(path.resolve(__dirname, 'localhost.key')),
         cert: fs.readFileSync(path.resolve(__dirname, 'localhost.crt'))
