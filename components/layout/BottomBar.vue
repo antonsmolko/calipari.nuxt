@@ -3,16 +3,16 @@
     .tm-navbar.tm-bottombar.uk-position-bottom.uk-position-fixed.uk-background-secondary.uk-light(
       class="uk-hidden@l")
       ul.tm-iconnav.uk-navbar-nav.uk-flex.uk-flex-middle.uk-flex-between
-        li(class="uk-visible@s"): nuxt-link(to="/" data-uk-icon="home")
+        li(class="uk-visible@s"): nuxt-link(to="/" data-uk-icon="icon: home; ratio: 1.3")
           span.tm-bottombar__item-title Главная
-        li: nuxt-link(to="/catalog" data-uk-icon="album")
+        li: nuxt-link(to="/catalog" data-uk-icon="icon: album; ratio: 1.3")
           span.tm-bottombar__item-title Каталог
-        li: nuxt-link(to="/search" data-uk-icon="search")
+        li: nuxt-link(to="/search" data-uk-icon="icon: search; ratio: 1.3")
           span.tm-bottombar__item-title Поиск
-        li: nuxt-link(to="/cart" data-uk-icon="bag")
+        li: nuxt-link(to="/cart" data-uk-icon="icon: bag; ratio: 1.3")
           span.uk-badge(v-if="cartQty") {{ cartQty }}
           span.tm-bottombar__item-title Корзина
-        li: nuxt-link(to="/wishlist" data-uk-icon="heart")
+        li: nuxt-link(to="/wishlist" data-uk-icon="icon: heart; ratio: 1.3")
           span.uk-badge(v-if="likeQty") {{ likeQty }}
           span.tm-bottombar__item-title Wishlist
         template(v-if="$auth.loggedIn")
@@ -21,7 +21,7 @@
             .tm-navbar__gravatar
               img(:data-src="$auth.user.gravatar_small" :alt="$auth.user.name" data-uk-img)
         template(v-else)
-          li: nuxt-link(to="/login" data-uk-icon="user")
+          li: nuxt-link(to="/login" data-uk-icon="icon: user; ratio: 1.3")
             span.tm-bottombar__item-title Войти
 </template>
 <script>
@@ -118,8 +118,8 @@ export default {
   justify-content: flex-end;
 
   .tm-navbar__gravatar {
-    width: 20px;
-    height: 20px;
+    width: 26px;
+    height: 26px;
     border-radius: 500px;
     overflow: hidden;
   }

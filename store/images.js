@@ -1,6 +1,5 @@
 import unionBy from 'lodash/unionBy'
-import { getParamsString } from '@/helpers'
-import { action } from './mixins/action'
+import { getParamsString, action } from '@/helpers'
 
 export const state = () => ({
   item: null,

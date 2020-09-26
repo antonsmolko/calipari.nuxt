@@ -42,10 +42,8 @@ export default {
   },
   mixins: [setLayout, scrollToTop, page],
   async fetch () {
-    await this.getItemsAction({
-      url: '/reviews',
-      clear: true
-    })
+    await this.resetPaginationAction()
+    await this.getItemsAction({ url: '/reviews', clear: true })
     await this.getPageAction('reviews')
     this.setFieldAction({ field: 'pageTitle', value: this.page.title })
   },
@@ -60,10 +58,14 @@ export default {
       pagination: state => state.resources.pagination
     })
   },
+  beforeDestroy () {
+    this.resetPaginationAction()
+  },
   methods: {
     ...mapActions({
       getItemsAction: 'resources/getItems',
-      getPageAction: 'pages/getItem'
+      getPageAction: 'pages/getItem',
+      resetPaginationAction: 'images/resetPagination'
     }),
     intersected () {
       if (this.items.length !== this.pagination.total) {

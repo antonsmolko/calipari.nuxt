@@ -21,7 +21,7 @@
           v-if="image.artCollection"
           :url="`/catalog/art-collections/${image.artCollection.alias}`")
       image-examples-gallery.tm-mosaic__examples-gallery(
-        v-if="image.examples"
+        v-if="image.examples && image.examples.length"
         :article="image.article"
         :items="image.examples")
       image-like.tm-mosaic__like(

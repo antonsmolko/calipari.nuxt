@@ -1,8 +1,8 @@
 <template lang="pug">
-  Page(v-if="!$fetchState.pending && page.title")
+  page(v-if="!$fetchState.pending && page.title")
     template(#main)
       main(v-show="page")
-        TopBar(:title="pageTitle")
+        top-bar(:title="pageTitle")
         section.tm-section__hero.uk-section.uk-position-relative(:class="{ 'uk-light': darkPeriod }")
           .uk-container.uk-position-relative.uk-position-z-index(
             data-uk-scrollspy="cls: uk-animation-slide-bottom-small")
@@ -20,7 +20,7 @@
                 :key="item.id"
                 :item="item"
                 @addToCart="addToCart")
-        Observer(:options="observerOptions" @intersect="intersected")
+        observer(:options="observerOptions" @intersect="intersected")
 </template>
 
 <script>
@@ -31,6 +31,7 @@ import SaleItem from '@/components/Sales/SaleItem'
 import Observer from '@/components/Observer'
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
+import page from '@/components/mixins/page'
 
 export default {
   name: 'Sales',
@@ -40,25 +41,9 @@ export default {
     SaleItem,
     Observer
   },
-  mixins: [setLayout, scrollToTop],
-  metaInfo () {
-    return {
-      title: this.page.long_title,
-      meta: [
-        {
-          vmid: 'description',
-          name: 'description',
-          content: this.page.description
-        },
-        {
-          vmid: 'keywords',
-          name: 'keywords',
-          content: this.page.keywords
-        }
-      ]
-    }
-  },
+  mixins: [setLayout, scrollToTop, page],
   async fetch () {
+    await this.resetPaginationAction()
     await Promise.all([
       this.getItemsAction({ url: '/sales', clear: true }),
       this.getPageAction('sales')
@@ -73,11 +58,13 @@ export default {
   }),
   computed: {
     ...mapState({
-      page: state => state.pages.fields,
       items: state => state.resources.items,
       pagination: state => state.resources.pagination,
       lastPreview: state => state.images.lastPreview
     })
+  },
+  beforeDestroy () {
+    this.resetPaginationAction()
   },
   methods: {
     ...mapActions({
@@ -85,7 +72,8 @@ export default {
       getItemsAction: 'resources/getItems',
       setImageFieldAction: 'images/setField',
       addToCartAction: 'cart/addSale',
-      addNotificationAction: 'notifications/addItem'
+      addNotificationAction: 'notifications/addItem',
+      resetPaginationAction: 'images/resetPagination'
     }),
     intersected () {
       if (this.items.length !== this.pagination.total) {

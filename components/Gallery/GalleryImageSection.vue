@@ -2,12 +2,12 @@
   section.tm-gallery__section.uk-section
     .uk-container.uk-container-expand
       div(ref="mosaic")
-        GalleryImage(
+        gallery-image(
           v-for="image in images"
           :key="image.id"
           :image="image"
           @dislike="dislike")
-    Observer(
+    observer(
       :options="observerOptions"
       @intersect="intersected")
 </template>
@@ -16,9 +16,9 @@
 import { mapState, mapGetters, mapActions } from 'vuex'
 import VueScrollTo from 'vue-scrollto'
 import debounce from 'lodash/debounce'
-import GalleryImage from '~/components/Gallery/GalleryImage'
-import Observer from '~/components/Observer'
-import Mosaic from '~/plugins/mosaic'
+import GalleryImage from '@/components/Gallery/GalleryImage'
+import Observer from '@/components/Observer'
+import Mosaic from '@/plugins/mosaic'
 const _debounce = debounce(fn => fn(), 2000)
 
 export default {

@@ -1,43 +1,43 @@
 <template lang="pug">
-    div(data-uk-height-viewport="offset-top: true; offset-bottom: true")
-        Gallery(
-            v-if="!filterOpen"
-            :title="title"
-            :images="images"
-            :enabled="Boolean(keyValue)"
-            @filterOpen="handleFilterOpen"
-            @paginate="paginate"
-            @dislike="dislike")
-            template(#hero)
-                GalleryHero(:title="title")
-                    template(#sub-hero)
-                        slot(name="search")
-                        .tm-gallery__tags.uk-flex.uk-flex-wrap(
-                            data-uk-scrollspy="target: > div; cls: uk-animation-slide-bottom-small; delay: 50"
-                            v-if="tags && tags.length")
-                            GalleryTag(
-                                :active="!filterQty"
-                                @click="tagClick")
-                            GalleryTag(
-                                v-for="tag in tags"
-                                :key="tag.id"
-                                :item="tag"
-                                :active="activeTag === tag.id"
-                                @click="tagClick")
-        ImageFilter(
-            v-if="filterOpen"
-            :mode="mode"
-            :keyValue="keyValue"
-            :open="filterOpen"
-            @close="handleFilterClose"
-            @filter="handleFilter")
-        .tm-category__background.uk-position-fixed.uk-width-1-1.uk-height-viewport.uk-position-z-index.uk-position-top(
-            data-uk-scrollspy="cls: uk-animation-fade; delay: 50")
-            .tm-section__semitransparent-background.uk-position-cover.uk-background-cover.uk-background-fixed(
-                v-show="backgroundUrl"
-                :data-src="backgroundUrl" data-uk-img)
-            .tm-category__background-default(
-                v-if="!backgroundUrl")
+  div(data-uk-height-viewport="offset-top: true; offset-bottom: true")
+    gallery(
+      v-if="!filterOpen"
+      :title="title"
+      :images="images"
+      :enabled="Boolean(keyValue)"
+      @filterOpen="handleFilterOpen"
+      @paginate="paginate"
+      @dislike="dislike")
+      template(#hero)
+        GalleryHero(:title="title")
+          template(#sub-hero)
+            slot(name="search")
+            .tm-gallery__tags.uk-flex.uk-flex-wrap(
+              data-uk-scrollspy="target: > div; cls: uk-animation-slide-bottom-small; delay: 50"
+              v-if="tags && tags.length")
+              GalleryTag(
+                :active="!filterQty"
+                @click="tagClick")
+              GalleryTag(
+                v-for="tag in tags"
+                :key="tag.id"
+                :item="tag"
+                :active="activeTag === tag.id"
+                @click="tagClick")
+    image-filter(
+      v-if="filterOpen"
+      :mode="mode"
+      :keyValue="keyValue"
+      :open="filterOpen"
+      @close="handleFilterClose"
+      @filter="handleFilter")
+    .tm-category__background.uk-position-fixed.uk-width-1-1.uk-height-viewport.uk-position-z-index.uk-position-top(
+      data-uk-scrollspy="cls: uk-animation-fade; delay: 50")
+      .tm-section__semitransparent-background.uk-position-cover.uk-background-cover.uk-background-fixed(
+        v-show="backgroundUrl"
+        :data-src="backgroundUrl" data-uk-img)
+      .tm-category__background-default(
+        v-if="!backgroundUrl")
 </template>
 
 <script>
@@ -100,7 +100,10 @@ export default {
         : { [`restrictive_${this.mode}`]: this.keyValue }
     },
     backgroundUrl () {
-      return getS3ImageUrl({ name: this.backgroundPath, grayscale: true })
+      return getS3ImageUrl({
+        name: this.backgroundPath,
+        grayscale: true
+      })
     }
   },
   mounted () {
@@ -120,16 +123,25 @@ export default {
     }),
     handleFilterOpen () {
       this.filterOpen = true
-      this.setFieldAction({ field: 'bottomBar', value: false })
+      this.setFieldAction({
+        field: 'bottomBar',
+        value: false
+      })
     },
     async handleFilter () {
       await this.refreshItems()
       this.filterOpen = false
-      this.setFieldAction({ field: 'bottomBar', value: true })
+      this.setFieldAction({
+        field: 'bottomBar',
+        value: true
+      })
     },
     handleFilterClose () {
       this.filterOpen = false
-      this.setFieldAction({ field: 'bottomBar', value: true })
+      this.setFieldAction({
+        field: 'bottomBar',
+        value: true
+      })
     },
     async paginate () {
       await this.getItems({ increasePage: true })
@@ -174,6 +186,6 @@ export default {
 
 <style lang="scss">
 .tm-category__background-default {
-    background: rgba(#000, .08);
+  background: rgba(#000, .08);
 }
 </style>

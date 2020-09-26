@@ -28,7 +28,10 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
+      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' },
+      ...(isDev && {
+        name: 'robots', content: 'noindex, nofollow'
+      })
     ],
     link: [
       { rel: 'shortcut icon', type: 'image/x-icon', href: '/favicon.ico' }
@@ -109,7 +112,6 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    // '@nuxtjs/auth',
     '@nuxtjs/auth-next',
     '@nuxtjs/svg-sprite',
     '@nuxtjs/style-resources',
@@ -158,9 +160,12 @@ export default {
     baseURL: `${baseApiUrl}/api`,
     https: true,
     credentials: true
+    // proxy: true
   },
   // proxy: {
-  //   '/api/': 'https://manager.calipari.ru/api'
+  //   '/api/': {
+  //     target: `${baseApiUrl}/api`
+  //   }
   // },
   auth: {
     strategies: {
@@ -169,23 +174,23 @@ export default {
         url: `${baseApiUrl}/api`,
         endpoints: {
           login: {
-            url: '/auth/login',
+            url: 'auth/login',
             method: 'post'
           },
           refresh: {
-            url: '/auth/refresh',
+            url: 'auth/refresh',
             method: 'post'
           },
           register: {
-            url: '/auth/register',
+            url: 'auth/register',
             method: 'post'
           },
           user: {
-            url: '/auth/me',
+            url: 'auth/me',
             method: 'post'
           },
           logout: {
-            url: '/auth/logout',
+            url: 'auth/logout',
             method: 'post'
           }
         },
@@ -297,7 +302,7 @@ export default {
       },
       ...(!isDev && {
         preset: {
-          browsers: 'cover 99.5%',
+          browsers: 'cover 99%',
           autoprefixer: true
         }
       }),

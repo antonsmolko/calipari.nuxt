@@ -1,8 +1,8 @@
 <template lang="pug">
-  Page(v-if="!$fetchState.pending && page")
+  page(v-if="!$fetchState.pending && page")
     template(#main)
       main
-        TopBar(:title="pageTitle")
+        top-bar(:title="pageTitle")
           .uk-navbar-item(v-if="availableTypes.length")
             ul.tm-navbar__tab(data-uk-tab)
               li.tm-navbar__tab-item(v-for="type in availableTypes"
@@ -31,7 +31,8 @@
               class="uk-child-width-1-2@s uk-child-width-1-3@m")
               div(v-for="item in items"
                 :key="item.id"
-                data-uk-scrollspy="cls: uk-animation-fade; delay: 300")
+                data-uk-scrollspy="cls: uk-animation-fade; delay: 300"
+                :id="`post-${item.alias}`")
                 .uk-card.uk-card-default.uk-box-shadow-medium
                   .uk-card-media-top
                     nuxt-link.uk-link-reset(:to="`/blog/${item.alias}`")
@@ -48,7 +49,7 @@
                       span(data-uk-icon="chevron-right") Подробнее
             .uk-width-1-1.uk-flex.uk-flex-center.uk-margin-large-top(v-else)
               .uk-spinner(data-uk-spinner ratio="3")
-            Observer(
+            observer(
               :options="observerOptions"
               @intersect="intersected")
 </template>
@@ -61,6 +62,7 @@ import TopBar from '@/components/layout/TopBar.vue'
 import Observer from '@/components/Observer'
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
+import page from '@/components/mixins/page'
 
 export default {
   name: 'Blog',
@@ -70,37 +72,31 @@ export default {
     TopBar,
     Observer
   },
-  mixins: [setLayout, scrollToTop],
+  mixins: [setLayout, scrollToTop, page],
   async fetch () {
-    await Promise.all([
-      this.$store.dispatch('pages/getItem', 'blog'),
-      this.$store.dispatch('posts/getTypes')
-    ])
-    const defaultPostType = this.$store.getters['posts/defaultType']
+    await this.getPageAction('blog')
+    this.setFieldAction({ field: 'pageTitle', value: this.page.title })
 
-    if (defaultPostType) {
-      await this.$store.dispatch('resources/getItems', {
-        url: `/posts/${defaultPostType.index}/list`,
-        clear: true
-      })
-    }
-    this.currentTypeIndex = this.defaultType ? this.defaultType.index : null
-    this.setFieldAction({
-      field: 'pageTitle',
-      value: this.page.title
+    await Promise.all([
+      this.getPostTypesAction(),
+      this.resetPaginationAction()
+    ])
+
+    await this.getItemsAction({
+      url: `/posts/${this.currentTypeIndex}/list`,
+      clear: true
     })
   },
   data: () => ({
     observerOptions: {
       threshold: 0.1
-    },
-    currentTypeIndex: null
+    }
   }),
   computed: {
     ...mapState({
-      page: state => state.pages.fields,
       items: state => state.resources.items,
       pagination: state => state.resources.pagination,
+      currentType: state => state.posts.currentType,
       lastPreview: state => state.resources.lastPreview
     }),
     ...mapGetters('posts', [
@@ -109,18 +105,31 @@ export default {
     ]),
     baseImageUrl () {
       return `${process.env.baseImageUrl}/fit/600/400`
+    },
+    currentTypeIndex () {
+      return this.currentType || this.defaultType.index
     }
+  },
+  mounted () {
+    if (this.lastPreview) {
+      this.scrollToItem()
+    }
+  },
+  beforeDestroy () {
+    this.resetPaginationAction()
   },
   methods: {
     ...mapActions({
       getItemsAction: 'resources/getItems',
       setResourceFieldAction: 'resources/setField',
-      resetPaginationAction: 'resources/resetPagination'
+      resetPaginationAction: 'resources/resetPagination',
+      getPostTypesAction: 'posts/getTypes',
+      setPostsFieldAction: 'posts/setField'
     }),
     changeType (type) {
       window.scrollTo(0, 0)
       this.resetPaginationAction()
-      this.currentTypeIndex = type
+      this.setPostsFieldAction({ field: 'currentType', value: type })
       this.getItemsAction({
         url: `/posts/${type}/list`,
         clear: true
@@ -137,13 +146,10 @@ export default {
     scrollToItem () {
       const options = {
         easing: 'ease-in-out',
-        offset: 100,
-        onDone: () => this.setImageFieldAction({
-          field: 'lastPreview',
-          value: null
-        })
+        offset: -300,
+        onDone: () => this.setResourceFieldAction({ field: 'lastPreview', value: null })
       }
-      VueScrollTo.scrollTo(`#post-${this.lastPreview}`, 300, options)
+      VueScrollTo.scrollTo('#post-2', 300, options)
     }
   }
 }

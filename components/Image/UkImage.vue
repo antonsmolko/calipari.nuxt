@@ -1,9 +1,8 @@
 <template lang="pug">
-  .tm-mosaic__image-inside.uk-position-relative
-    .tm-mosaic__image-spinner.uk-text-muted.uk-position-center.uk-position-z-index(
+  .uk-position-relative
+    .uk-text-muted.uk-position-center.uk-position-z-index(
       v-show="imgLoaded"
-      data-uk-spinner="ratio: 2"
-      data-no-mosaic="true")
+      data-uk-spinner="ratio: 2")
     img(:data-src="url"
       :alt="alt"
       :width="width"
@@ -79,7 +78,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 img {
   border-radius: 1px;
 }

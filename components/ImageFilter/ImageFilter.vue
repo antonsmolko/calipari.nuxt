@@ -1,6 +1,6 @@
 <template lang="pug">
   .tm-filter
-    TopBar(title="Фильтр")
+    top-bar(title="Фильтр")
       .uk-navbar-item(class="uk-visible@l")
         button.uk-button.uk-button-small.uk-button-primary.uk-margin-small-right(
           :disabled="!isSelectedDiff"
@@ -8,17 +8,17 @@
         button.uk-button.uk-button-small.uk-button-danger(
           :disabled="!selectedQty"
           @click.prevent="reset") Сбросить
-      SlideYDownTransition
+      slide-y-down-transition
         .uk-navbar-item
-          span.tm-topbar__control.uk-icon-link(data-uk-icon="close" @click.prevent="close")
+          span.tm-topbar__control.uk-icon-link(data-uk-icon="icon: close; ratio: 1.1" @click.prevent="close")
     ul.tm-filter__list(data-uk-scrollspy="cls: uk-animation-slide-bottom-small; delay: 250"
       data-uk-accordion="content: .uk-accordion-content; toggle: .uk-accordion-title")
-      ImageFilterSection(
+      image-filter-section(
         title="По формату"
         field="formats"
         @toggle="handleFieldToggle")
         template(v-if="fields.formats.length")
-          ImageFilterItem(
+          image-filter-item(
             v-for="format in fields.formats"
             :key="format.id"
             :value="format.id"
@@ -26,26 +26,25 @@
             filterField="formats"
             type="icon"
             @toggle="filterFieldToggle({ field: 'formats', value: $event })")
-      ImageFilterSection(
+      image-filter-section(
         title="По тэгам"
         field="tags"
         css="tm-filter__section-muted"
         @toggle="handleFieldToggle")
         template(v-if="fields.tags.length")
-          ImageFilterItem(
+          image-filter-item(
             v-for="tag in fields.tags"
             :key="tag.id"
             :value="tag.id"
             :filter="tag"
             filterField="tags"
             @toggle="filterFieldToggle({ field: 'tags', value: $event })")
-        //span.uk-text-lead(v-else) —
-      ImageFilterSection(
+      image-filter-section(
         title="По темам"
         field="topics"
         @toggle="handleFieldToggle")
         template(v-if="fields.topics.length")
-          ImageFilterItem(
+          image-filter-item(
             v-for="topic in fields.topics"
             :key="topic.id"
             :value="topic.id"
@@ -53,14 +52,13 @@
             filterField="topics"
             type="image"
             @toggle="filterFieldToggle({ field: 'topics', value: $event })")
-        //span.uk-text-lead(v-else) —
-      ImageFilterSection(
+      image-filter-section(
         title="По цветам"
         field="colors"
         css="tm-filter__section-muted"
         @toggle="handleFieldToggle")
         template(v-if="fields.colors.length")
-          ImageFilterItem(
+          image-filter-item(
             v-for="color in fields.colors"
             :key="color.id"
             :value="color.id"
@@ -68,13 +66,12 @@
             filterField="colors"
             type="color"
             @toggle="filterFieldToggle({ field: 'colors', value: $event })")
-        //span.uk-text-lead(v-else) —
-      ImageFilterSection(
+      image-filter-section(
         title="По интерьерам"
         field="interiors"
         @toggle="handleFieldToggle")
         template(v-if="fields.interiors.length")
-          ImageFilterItem(
+          image-filter-item(
             v-for="interior in fields.interiors"
             :key="interior.id"
             :value="interior.id"
@@ -82,9 +79,8 @@
             filterField="interiors"
             type="image"
             @toggle="filterFieldToggle({ field: 'interiors', value: $event })")
-        //span.uk-text-lead(v-else) —
-    SlideYDownTransition(mode="out-in" v-show="!bottomBar")
-      ServiceBottomBar
+    slide-y-down-transition(mode="out-in" v-show="!bottomBar")
+      service-bottom-bar
         .uk-navbar-center
           .uk-navbar-item(v-if="isSelectedDiff")
             button.uk-button.uk-button-small.uk-button-primary(
@@ -100,10 +96,10 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import ImageFilterSection from './ImageFilterSection'
-import ImageFilterItem from './ImageFilterItem'
-import TopBar from '~/components/layout/TopBar'
-import ServiceBottomBar from '~/components/layout/ServiceBottomBar'
+import ImageFilterSection from '@/components/ImageFilter/ImageFilterSection'
+import ImageFilterItem from '@/components/ImageFilter/ImageFilterItem'
+import TopBar from '@/components/layout/TopBar'
+import ServiceBottomBar from '@/components/layout/ServiceBottomBar'
 
 export default {
   name: 'Filters',

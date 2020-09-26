@@ -5,8 +5,12 @@ import values from 'lodash/values'
 import sum from 'lodash/sum'
 import map from 'lodash/map'
 import filter from 'lodash/filter'
-import { refreshTokens, getDiscountPrice, getItemPrice } from '@/helpers'
-import { action } from '@/store/mixins/action'
+import {
+  refreshTokens,
+  getDiscountPrice,
+  getItemPrice,
+  action
+} from '@/helpers'
 
 export const state = () => ({
   items: [],

@@ -71,7 +71,7 @@
             :colorEffect="orderColorEffectName"
             :texture="orderTexture.name")
           editor-gallery(
-            v-if="image.examples"
+            v-if="image.examples && image.examples.length"
             :items="image.examples"
             :article="image.article")
           editor-purchase(:price="orderPrice" @confirm="onConfirm")

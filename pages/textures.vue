@@ -48,11 +48,11 @@ export default {
   },
   mixins: [setLayout, scrollToTop, page],
   async fetch () {
-    await this.getItemsAction()
-    await this.setFieldAction({
-      field: 'pageTitle',
-      value: this.page.title
-    })
+    await Promise.all([
+      this.getItemsAction(),
+      this.getPageAction('textures')
+    ])
+    await this.setFieldAction({ field: 'pageTitle', value: this.page.title })
   },
   computed: {
     ...mapState({

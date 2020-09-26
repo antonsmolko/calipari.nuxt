@@ -1,5 +1,5 @@
 <template lang="pug">
-  page
+  page(v-if="!$fetchState.pending && page")
     template(#main)
       main
         top-bar(:title="pageTitle")
@@ -124,10 +124,7 @@ export default {
   mixins: [setLayout, scrollToTop, page],
   async fetch () {
     await this.getPageAction('contacts')
-    this.setFieldAction({
-      field: 'pageTitle',
-      value: this.page.title
-    })
+    this.setFieldAction({ field: 'pageTitle', value: this.page.title })
   },
   data: () => ({
     center: [53.272154, 34.371165],

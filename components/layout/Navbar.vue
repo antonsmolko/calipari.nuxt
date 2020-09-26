@@ -8,23 +8,24 @@
                         .uk-navbar-left
                             .uk-navbar-item
                                 nuxt-link.tm-logo.uk-logo.uk-icon(to="/" data-uk-icon="calipari")
-                        .uk-navbar-center(class="uk-visible@m")
+                        .uk-navbar-center(class="uk-visible@l")
                             ul.uk-navbar-nav
                                 li: nuxt-link(to="/catalog")  Каталог
                                 li: nuxt-link(to="/textures") Материалы
                                 li: nuxt-link(to="/sales") Распродажа
                                 li: nuxt-link(to="/blog") Блог
                                 li: nuxt-link(to="/portfolio") Портфолио
+                                li: nuxt-link(to="/reviews") Отзывы
                                 li: nuxt-link(to="/contacts") Контакты
                         .uk-navbar-right
                             ul.uk-navbar-nav.tm-navbar-icon(class="uk-visible@m")
                                 li.uk-navbar-item
-                                    nuxt-link(to="/search" data-uk-icon="search")
+                                    nuxt-link(to="/search" data-uk-icon="icon: search; ratio: 1.1")
                                 li.uk-navbar-item
-                                    nuxt-link(to="/wishlist" data-uk-icon="heart")
+                                    nuxt-link(to="/wishlist" data-uk-icon="icon: heart; ratio: 1.1")
                                         span.uk-badge(v-if="likeQty") {{ likeQty }}
                                 li.uk-navbar-item
-                                    nuxt-link(to="/cart" data-uk-icon="bag")
+                                    nuxt-link(to="/cart" data-uk-icon="icon: bag; ratio: 1.1")
                                         span.uk-badge(v-if="cartQty") {{ cartQty }}
                                 template(v-if="$auth.loggedIn")
                                     li.uk-navbar-item
@@ -35,11 +36,11 @@
                                                     data-uk-img)
                                 template(v-else)
                                     li.uk-navbar-item
-                                        nuxt-link(to="/login" data-uk-icon="user")
+                                        nuxt-link(to="/login" data-uk-icon="icon: user; ratio: 1.1")
                             button.uk-navbar-toggle(
                                 data-uk-toggle="target: #off-canvas-menu"
-                                data-uk-icon="ll-menu"
-                                class="uk-hidden@m")
+                                data-uk-icon="icon: ll-menu; ratio: 1.1"
+                                class="uk-hidden@l")
 </template>
 
 <script>

@@ -1,4 +1,4 @@
-import { action } from './mixins/action'
+import { action } from '@/helpers'
 
 export const state = () => ({
   item: null,

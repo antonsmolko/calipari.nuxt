@@ -3,7 +3,7 @@
         template(#main)
             main
                 home-hero-section
-                SectionAlbums
+                section-albums
                 home-textures-section
                 home-watch-section
                 home-interiors-section(
@@ -11,11 +11,8 @@
                     :items="interiors")
                 home-consultation-section(
                   :page="page.title")
-                //SectionTopics
-                SectionAdvantages
-                home-purchase-steps-section(
-                    v-if="purchaseSteps.length"
-                    :items="purchaseSteps")
+                //section-topics
+                section-advantages
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'

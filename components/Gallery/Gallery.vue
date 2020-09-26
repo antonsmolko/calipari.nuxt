@@ -2,7 +2,7 @@
     div
         TopBar(:title="title")
             .uk-navbar-item(v-if="images.length")
-                span.tm-topbar__control.uk-icon-link(data-uk-icon="settings" @click.prevent="filterClick")
+                span.tm-topbar__control.uk-icon-link(data-uk-icon="icon: settings; ratio: 1.1" @click.prevent="filterClick")
                     span.uk-badge(v-if="filterQty") {{ filterQty }}
         slot(name="hero")
         template(v-if="enabled")

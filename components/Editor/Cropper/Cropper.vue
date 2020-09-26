@@ -12,7 +12,7 @@
             :class="{active: active}",
             :style="cropBoxStyle")
             .cropper__view-box
-              FadeTransition
+              fade-transition
                 img(v-show="imageLoad"
                   :src="imageUrl",
                   :alt="image.article",

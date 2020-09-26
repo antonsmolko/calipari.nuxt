@@ -3,7 +3,7 @@ import { mapState, mapActions } from 'vuex'
 export default {
   metaInfo () {
     return {
-      title: this.page.meta_title,
+      title: this.page.meta_title || this.page.title,
       meta: [
         {
           vmid: 'description',

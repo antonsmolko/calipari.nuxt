@@ -1,8 +1,8 @@
 <template lang="pug">
-  Page(v-if="!$fetchState.pending")
+  page(v-if="!$fetchState.pending")
     template(#main)
       main(:class="{ 'uk-light': darkPeriod }")
-        GalleryLayout(
+        gallery-layout(
           :title="item.title"
           :backgroundPath="item.image_path"
           :keyValue="item.id")
@@ -15,26 +15,36 @@ import Page from '@/components/layout/Page.vue'
 import GalleryLayout from '@/components/Gallery/GalleryLayout'
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
+import page from '@/components/mixins/page'
 
 export default {
   name: 'Category',
-  metaInfo () {
-    return {
-      title: this.pageTitle
-    }
-  },
   components: {
     Page,
     GalleryLayout
   },
-  mixins: [setLayout, scrollToTop],
+  mixins: [setLayout, scrollToTop, page],
+  metaInfo () {
+    return {
+      title: this.item.meta_title || this.pageTitle,
+      meta: [
+        {
+          vmid: 'description',
+          name: 'description',
+          content: this.item.description
+        },
+        {
+          vmid: 'keywords',
+          name: 'keywords',
+          content: this.item.keywords
+        }
+      ]
+    }
+  },
   async fetch () {
     await this.getCategoryByAliasAction(this.$route.params.category)
-    await this.$store.dispatch('tags/getItemsByCategoryId', this.item.id)
-    await this.$store.dispatch('setField', {
-      field: 'pageTitle',
-      value: this.item.title
-    })
+    await this.getTagsByCategoryId(this.item.id)
+    await this.setFieldAction({ field: 'pageTitle', value: this.item.title })
   },
   computed: {
     ...mapState({
@@ -46,7 +56,8 @@ export default {
       clearFiltersAction: 'filter/clearFilters',
       setCategoriesFieldAction: 'categories/setField',
       setImagesFieldAction: 'images/setField',
-      getCategoryByAliasAction: 'categories/getItemByAlias'
+      getCategoryByAliasAction: 'categories/getItemByAlias',
+      getTagsByCategoryId: 'tags/getItemsByCategoryId'
     })
   },
   beforeRouteLeave (to, from, next) {

@@ -1,8 +1,10 @@
+import head from 'lodash/head'
 import { postTypes } from '@/plugins/config'
 
 export const state = () => ({
   item: {},
-  types: []
+  types: [],
+  currentType: null
 })
 
 export const mutations = {
@@ -26,8 +28,8 @@ export const actions = {
 }
 
 export const getters = {
-  defaultType: state => state.types.length
-    ? postTypes.find(type => state.types.includes(type.index))
+  defaultType: (state, getters) => state.types.length
+    ? head(getters.availableTypes)
     : null,
   availableTypes: state => state.types.length
     ? postTypes.filter(type => state.types.includes(type.index))

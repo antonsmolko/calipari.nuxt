@@ -7,7 +7,7 @@
       .uk-card.uk-card-body.uk-card-default.uk-height-1-1.uk-box-shadow-medium.uk-text-center.uk-flex.uk-flex-center.uk-flex-column
         span.uk-text-muted {{ item.date }}
         span.uk-h2.uk-display-block.uk-margin-remove {{ item.title }}
-        nuxt-link.tm-text-medium.uk-link.uk-link-text.uk-margin-top(:to="`/editor/${item.image_id}`")
+        nuxt-link.tm-text-medium.uk-link.uk-link-text.uk-margin-top(:id="`image-${item.image_id}`" :to="`/editor/${item.image_id}`")
           | Артикул — {{ item.article }}
     div(class="uk-width-2-3@m"
       data-uk-scrollspy="cls: uk-animation-slide-right-small; delay: 300")

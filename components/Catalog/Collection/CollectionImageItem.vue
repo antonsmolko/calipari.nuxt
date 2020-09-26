@@ -12,7 +12,7 @@
       .tm-mosaic__container.uk-position-relative
         uk-image.uk-box-shadow-medium(
           :name="item.path"
-          :width="600"
+          :width="width"
           :height="imageHeight"
           fit="cover"
           :alt="item.title")
@@ -49,6 +49,9 @@ export default {
       default: false
     }
   },
+  data: () => ({
+    width: 600
+  }),
   computed: {
     editorUrl () {
       return this.anchor ? `/editor/${this.item.id}?anchor=${this.anchor}` : `/editor/${this.item.id}`
@@ -57,10 +60,7 @@ export default {
       return this.$store.getters['wishList/liked'](this.item.id)
     },
     imageHeight () {
-      return Math.round(600 / this.imageRatio)
-    },
-    imageRatio () {
-      return Math.round(this.item.width / this.item.height * 100) / 100
+      return Math.round(this.width / this.item.ratio)
     }
   },
   watch: {

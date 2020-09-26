@@ -42,15 +42,13 @@ export default {
   },
   mixins: [setLayout, scrollToTop, page],
   async fetch () {
+    await this.resetPaginationAction()
     await this.getItemsAction({
       url: '/work-examples',
       clear: true
     })
     await this.getPageAction('portfolio')
-    this.setFieldAction({
-      field: 'pageTitle',
-      value: this.page.title
-    })
+    this.setFieldAction({ field: 'pageTitle', value: this.page.title })
   },
   data: () => ({
     observerOptions: {
@@ -59,22 +57,22 @@ export default {
   }),
   computed: {
     ...mapState({
-      page: state => state.pages.fields,
       items: state => state.resources.items,
       pagination: state => state.resources.pagination,
       lastPreview: state => state.images.lastPreview
     })
   },
   mounted () {
-    if (this.lastPreview) {
-      this.scrollToItem()
-    }
+    this.lastPreview
+      ? this.scrollToItem()
+      : this.resetPaginationAction()
   },
   methods: {
     ...mapActions({
       getItemsAction: 'resources/getItems',
       setImageFieldAction: 'images/setField',
-      getPageAction: 'pages/getItem'
+      getPageAction: 'pages/getItem',
+      resetPaginationAction: 'images/resetPagination'
     }),
     intersected () {
       if (this.items.length !== this.pagination.total) {

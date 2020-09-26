@@ -1,4 +1,4 @@
-import { action } from '@/store/mixins/action'
+import { action } from '@/helpers'
 
 export const state = () => ({
   form: {
