@@ -28,11 +28,12 @@ export default {
     return {
       title: this.item.meta_title || this.pageTitle,
       meta: [
-        ...[process.env.isDev && {
+        {
+          skip: process.env.isDev,
           vmid: 'robots',
           name: 'robots',
           content: 'noindex, nofollow'
-        }],
+        },
         {
           vmid: 'description',
           name: 'description',

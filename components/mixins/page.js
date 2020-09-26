@@ -6,6 +6,12 @@ export default {
       title: this.page.meta_title || this.page.title,
       meta: [
         {
+          skip: process.env.isDev,
+          vmid: 'robots',
+          name: 'robots',
+          content: 'noindex, nofollow'
+        },
+        {
           vmid: 'description',
           name: 'description',
           content: this.page.description
