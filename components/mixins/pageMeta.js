@@ -5,6 +5,8 @@ export default {
     return {
       title: this.page.meta_title || this.page.title,
       meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         {
           skip: process.env.NODE_ENV === 'production',
           vmid: 'robots',

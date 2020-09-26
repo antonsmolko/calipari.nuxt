@@ -15,7 +15,7 @@ import Page from '@/components/layout/Page.vue'
 import GalleryLayout from '@/components/Gallery/GalleryLayout'
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
-import page from '@/components/mixins/page'
+import page from '@/components/mixins/pageMeta'
 
 export default {
   name: 'Category',

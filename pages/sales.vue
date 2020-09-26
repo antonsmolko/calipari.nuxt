@@ -31,7 +31,7 @@ import SaleItem from '@/components/Sales/SaleItem'
 import Observer from '@/components/Observer'
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
-import page from '@/components/mixins/page'
+import pageMeta from '@/components/mixins/pageMeta'
 
 export default {
   name: 'Sales',
@@ -41,7 +41,7 @@ export default {
     SaleItem,
     Observer
   },
-  mixins: [setLayout, scrollToTop, page],
+  mixins: [setLayout, scrollToTop, pageMeta],
   async fetch () {
     await this.resetPaginationAction()
     await Promise.all([

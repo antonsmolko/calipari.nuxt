@@ -31,7 +31,7 @@ import ReviewListItem from '@/components/Review/ReviewListItem'
 import Observer from '@/components/Observer'
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
-import page from '@/components/mixins/page'
+import pageMeta from '@/components/mixins/pageMeta'
 
 export default {
   components: {
@@ -40,7 +40,7 @@ export default {
     ReviewListItem,
     Observer
   },
-  mixins: [setLayout, scrollToTop, page],
+  mixins: [setLayout, scrollToTop, pageMeta],
   async fetch () {
     await this.resetPaginationAction()
     await this.getItemsAction({ url: '/reviews', clear: true })

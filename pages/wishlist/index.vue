@@ -33,7 +33,7 @@ import GalleryHero from '@/components/Gallery/GalleryHero'
 import TopBar from '@/components/layout/TopBar'
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
-import page from '@/components/mixins/page'
+import pageMeta from '@/components/mixins/pageMeta'
 
 export default {
   name: 'WishList',
@@ -44,7 +44,7 @@ export default {
     GalleryLayout,
     GalleryHero
   },
-  mixins: [setLayout, scrollToTop, page],
+  mixins: [setLayout, scrollToTop, pageMeta],
   async fetch () {
     if (this.items.length) {
       await this.getTagsAction(this.items)

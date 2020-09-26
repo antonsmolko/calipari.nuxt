@@ -31,6 +31,7 @@ import setLayout from '@/components/mixins/setLayout'
 import OrderListItem from '@/components/Orders/OrderListItem'
 import TopBar from '@/components/layout/TopBar'
 import scrollToTop from '@/components/mixins/scrollToTop'
+import noindexPageMeta from '@/components/mixins/noindexPageMeta'
 
 export default {
   name: 'Orders',
@@ -40,13 +41,8 @@ export default {
     TopBar,
     OrderListItem
   },
-  middleware: ['auth'],
-  mixins: [scrollToTop, setLayout],
-  metaInfo () {
-    return {
-      title: this.pageTitle
-    }
-  },
+  middleware: 'auth',
+  mixins: [scrollToTop, setLayout, noindexPageMeta],
   async fetch () {
     this.setFieldAction({ field: 'pageTitle', value: 'Заказы' })
     await this.getItemsAction()

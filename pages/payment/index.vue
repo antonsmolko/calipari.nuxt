@@ -52,7 +52,24 @@ import TopBar from '@/components/layout/TopBar'
 import scrollToTop from '@/components/mixins/scrollToTop'
 
 export default {
-  scrollToTop: true,
+  metaInfo () {
+    return {
+      title: this.pageTitle,
+      meta: [
+        {
+          vmid: 'robots',
+          name: 'robots',
+          content: 'noindex, nofollow'
+        }
+      ],
+      link: [
+        { rel: 'canonical', href: process.env.BASE_URL + this.fullPath }
+      ],
+      script: [
+        { src: 'https://kassa.yandex.ru/checkout-ui/v2.js' }
+      ]
+    }
+  },
   middleware ({ route, redirect }) {
     const paymentHash = route.query.hash
 
@@ -60,16 +77,9 @@ export default {
       redirect('/notfound')
     }
   },
+  scrollToTop: true,
   components: { Page, TopBar, PaymentCards, PaymentForm },
   mixins: [scrollToTop],
-  metaInfo () {
-    return {
-      script: [
-        { src: 'https://kassa.yandex.ru/checkout-ui/v2.js' }
-      ],
-      title: this.pageTitle
-    }
-  },
   async fetch () {
     this.setFieldAction({ field: 'pageTitle', value: 'Оплата заказа' })
     await this.getOrderByHash(this.$route.query.hash)

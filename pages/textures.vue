@@ -36,7 +36,7 @@ import TopBar from '@/components/layout/TopBar.vue'
 import SectionTextureItem from '@/components/Textures/SectionTextureItem'
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
-import page from '@/components/mixins/page'
+import pageMeta from '@/components/mixins/pageMeta'
 import { getBreakPointByKey } from '@/helpers'
 
 export default {
@@ -46,7 +46,7 @@ export default {
     SectionTextureItem,
     TopBar
   },
-  mixins: [setLayout, scrollToTop, page],
+  mixins: [setLayout, scrollToTop, pageMeta],
   async fetch () {
     await Promise.all([
       this.getItemsAction(),

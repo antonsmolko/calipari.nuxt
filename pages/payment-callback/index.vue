@@ -1,19 +1,21 @@
 <template lang="pug">
-    page
-        template(#main)
-            main.uk-position-relative
-                section.uk-section
-                    .uk-container
-                        .uk-position-cover.uk-flex.uk-flex-middle
-                            .uk-margin-auto.uk-text-muted(data-uk-spinner="ratio: 3")
+  page
+    template(#main)
+      main.uk-position-relative
+        section.uk-section
+          .uk-container
+            .uk-position-cover.uk-flex.uk-flex-middle
+              .uk-margin-auto.uk-text-muted(data-uk-spinner="ratio: 3")
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
 import Page from '@/components/layout/Page.vue'
+import noindexPageMeta from '@/components/mixins/noindexPageMeta'
 
 export default {
   components: { Page },
+  mixins: [noindexPageMeta],
   middleware ({ route, redirect }) {
     const token = route.query.token
     const id = route.query.id
@@ -41,7 +43,10 @@ export default {
   watch: {
     async orderNumber () {
       if (this.orderNumber) {
-        this.setPaymentFieldAction({ field: 'orderNumber', value: null })
+        this.setPaymentFieldAction({
+          field: 'orderNumber',
+          value: null
+        })
         await this.$router.push({ name: 'index' })
       }
     }

@@ -1,17 +1,14 @@
 <template lang="pug">
-    .tm-layout__container(v-if="onLoad" :class="pageBg")
-        Notification(
-            v-for="notification in notifications"
-            :key="notification.id"
-            :item="notification")
-        Navbar
-            template(#content v-if="editorEnable")
-                EditorNavbarContent
-        FadeTransition(mode="out-in")
-            nuxt(keep-alive :keep-alive-props="{ max: 10 }" :key="$route.fullPath")
-        SlideYDownTransition(mode="out-in")
-            BottomBar(v-if="bottomBar")
-        Menu
+  .tm-layout__container(v-if="onLoad" :class="pageBg")
+    notification(
+      v-for="notification in notifications"
+      :key="notification.id"
+      :item="notification")
+    navbar
+    nuxt(keep-alive :keep-alive-props="{ max: 10 }" :key="$route.fullPath")
+    slide-y-down-transition(mode="out-in")
+      bottom-bar(v-if="bottomBar")
+    menu
 </template>
 <script>
 import { mapState } from 'vuex'
@@ -39,7 +36,18 @@ export default {
       title: '404',
       meta: [
         { charset: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+        {
+          name: 'viewport',
+          content: 'width=device-width, initial-scale=1'
+        },
+        {
+          vmid: 'robots',
+          name: 'robots',
+          content: 'noindex, nofollow'
+        }
+      ],
+      link: [
+        { rel: 'canonical', href: process.env.BASE_URL + this.$route.fullPath }
       ],
       bodyAttrs: {
         class: this.pageBg

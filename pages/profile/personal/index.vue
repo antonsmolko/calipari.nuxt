@@ -1,12 +1,12 @@
 <template lang="pug">
-  Page
+  page
     template(#main)
       main
-        TopBar(
+        top-bar(
           :title="pageTitle")
           .uk-navbar-item
             button.uk-close(type="button", data-uk-close, @click="onClose")
-        SlideYDownTransition
+        slide-y-down-transition
           section.uk-section(
             v-if="responseData"
             :class="{ 'uk-light': darkPeriod }"
@@ -144,6 +144,7 @@ import VSelect from '@/components/form/Select/VSelect'
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
 import syncProfile from '@/components/mixins/syncProfile'
+import noindexPageMeta from '@/components/mixins/noindexPageMeta'
 
 const _debounce = debounce(value => value(), 300)
 
@@ -160,12 +161,12 @@ export default {
     PhoneInput,
     PaymentCard
   },
-  mixins: [setLayout, scrollToTop, syncProfile],
-  metaInfo () {
-    return {
-      title: this.pageTitle
-    }
-  },
+  mixins: [
+    setLayout,
+    scrollToTop,
+    syncProfile,
+    noindexPageMeta
+  ],
   data: () => ({
     responseData: false,
     nameIsEdited: false,

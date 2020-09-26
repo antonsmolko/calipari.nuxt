@@ -31,7 +31,7 @@ import HomePurchaseStepsSection from '@/components/Home/HomePurchaseStepsSection
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
 import scrollToTarget from '@/components/mixins/scrollToTarget'
-import page from '@/components/mixins/page'
+import pageMeta from '@/components/mixins/pageMeta'
 
 export default {
   components: {
@@ -48,7 +48,7 @@ export default {
     HomeInteriorsSection,
     HomePurchaseStepsSection
   },
-  mixins: [setLayout, scrollToTop, scrollToTarget, page],
+  mixins: [setLayout, scrollToTop, scrollToTarget, pageMeta],
   async fetch () {
     await Promise.all([
       this.getPurchaseStepsAction(),

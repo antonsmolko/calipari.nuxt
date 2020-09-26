@@ -109,7 +109,7 @@ import PhoneInput from '@/components/form/PhoneInput'
 import VTextarea from '@/components/form/VTextarea'
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
-import page from '@/components/mixins/page'
+import pageMeta from '@/components/mixins/pageMeta'
 import { getPhoneFormat } from '@/helpers'
 
 export default {
@@ -121,7 +121,7 @@ export default {
     VInput,
     PhoneInput
   },
-  mixins: [setLayout, scrollToTop, page],
+  mixins: [setLayout, scrollToTop, pageMeta],
   async fetch () {
     await this.getPageAction('contacts')
     this.setFieldAction({ field: 'pageTitle', value: this.page.title })

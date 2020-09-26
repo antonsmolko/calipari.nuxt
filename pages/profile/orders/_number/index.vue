@@ -35,33 +35,33 @@
                 .tm-order-details__block.tm-order-details__base-info
                   .uk-card.uk-card-small.uk-card-body.uk-box-shadow-medium
                     h4 Заказ
-                    OrderDetailsItem(heading="Номер" :content="order.number")
-                    OrderDetailsItem(heading="Дата" :content="order.date")
-                    OrderDetailsItem(
+                    order-details-item(heading="Номер" :content="order.number")
+                    order-details-item(heading="Дата" :content="order.date")
+                    order-details-item(
                       heading="Статус"
                       :content="order.status.title"
                       :contentCss="statusCss")
                 .tm-order-details__block.tm-order-details__delivery
                   .uk-card.uk-card-small.uk-card-body.uk-box-shadow-medium
                     h4.uk-h4 Детали доставки
-                    OrderDetailsItem(heading="Доставка" :content="order.delivery.title")
-                    OrderDetailsItem(heading="Адрес" :content="order.delivery.address")
-                    OrderDetailsItem(heading="Получатель" :content="order.customer.name")
-                    OrderDetailsItem(heading="Телефон" :content="phoneFormat")
+                    order-details-item(heading="Доставка" :content="order.delivery.title")
+                    order-details-item(heading="Адрес" :content="order.delivery.address")
+                    order-details-item(heading="Получатель" :content="order.customer.name")
+                    order-details-item(heading="Телефон" :content="phoneFormat")
                 .tm-order-details__block.tm-order-details__comment(v-if="order.comment")
                   .uk-card.uk-card-small.uk-card-body
                     h4.uk-h4 Комментарий
-                    OrderDetailsItem(:content="order.comment")
+                    order-details-item(:content="order.comment")
                 .tm-order-details__block.tm-order-details__price
                   .uk-card.uk-card-small.uk-card-body.uk-box-shadow-medium
                     h4.uk-h4 Цена
-                    OrderDetailsItem(
+                    order-details-item(
                       heading="Заказ"
                       :content="getFormatPrice(order.price)")
-                    OrderDetailsItem(
+                    order-details-item(
                       heading="Доставка"
                       :content="getFormatPrice(order.delivery.price)")
-                    OrderDetailsItem(
+                    order-details-item(
                       class="tm-order-details__total"
                       heading="Итого"
                       :content="getFormatPrice(order.price + order.delivery.price)")
@@ -88,10 +88,11 @@ import SaleList from '@/components/Cart/SaleList'
 import OrderDetailsItem from '@/components/Orders/OrderDetailsItem'
 import scrollToTop from '@/components/mixins/scrollToTop'
 import { getFormatPrice, getPhoneFormat } from '@/helpers'
+import noindexPageMeta from '@/components/mixins/noindexPageMeta'
 
 export default {
   scrollToTop: true,
-  middleware: ['auth'],
+  middleware: 'auth',
   components: {
     Page,
     TopBar,
@@ -99,7 +100,7 @@ export default {
     SaleList,
     OrderDetailsItem
   },
-  mixins: [scrollToTop],
+  mixins: [scrollToTop, noindexPageMeta],
   async fetch () {
     const orderNumber = this.$route.params.number
     this.setFieldAction({ field: 'pageTitle', value: `Заказ № ${orderNumber}` })

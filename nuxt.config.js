@@ -86,9 +86,9 @@ export default {
     { src: './plugins/lang/ru/validationLib.js' }, // Lang Libs
     { src: './plugins/lang/ru/lib.js' },
     { src: './plugins/config.js' },
-    { src: './plugins/mixins/timePeriod.js', ssr: false },
-    { src: './plugins/ymap.js', mode: 'client' },
-    { src: './plugins/fileapi', mode: 'client' }
+    { src: './plugins/mixins/timePeriod.js' },
+    { src: './plugins/ymap.js', mode: 'client' }
+    // { src: './plugins/fileapi', mode: 'client' }
   ],
   env: {
     isDev,
@@ -105,7 +105,8 @@ export default {
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
-    ['@nuxtjs/dotenv', { systemvars: true }]
+    ['@nuxtjs/dotenv', { systemvars: true }],
+    '@nuxtjs/pwa'
   ],
   /*
   ** Nuxt.js modules
@@ -116,9 +117,9 @@ export default {
     '@nuxtjs/auth-next',
     '@nuxtjs/svg-sprite',
     '@nuxtjs/style-resources',
-    'nuxt-trailingslash-module',
+    // 'nuxt-trailingslash-module',
     'nuxt-webfontloader',
-    'cookie-universal-nuxt',
+    // 'cookie-universal-nuxt',
     'nuxt-user-agent',
     ['nuxt-vuex-localstorage', {
       ...(isDev && {
@@ -218,16 +219,15 @@ export default {
   },
   render: {
     // http2: {
-    //     push: true,
-    //     pushAssets: (req, res, publicPath, preloadFiles) => preloadFiles
-    //     .map(f => `<${publicPath}${f.file}>; rel=preload; as=${f.asType}`)
-    //   },
-    compressor: false,
-    // bundleRenderer: {
-    //   shouldPreload: (file, type) => {
-    //     return ['script', 'style', 'font'].includes(type)
-    //   }
+    //   push: true,
+    //   pushAssets: null
     // },
+    compressor: false,
+    bundleRenderer: {
+      shouldPreload: (file, type) => {
+        return ['script', 'style', 'font'].includes(type)
+      }
+    },
     resourceHints: false,
     etag: false,
     static: {
@@ -248,6 +248,7 @@ export default {
   */
   build: {
     optimizeCss: false,
+    // analyze: true,
     filenames: {
       app: ({ isDev }) => isDev ? '[name].js' : 'js/[contenthash].js',
       chunk: ({ isDev }) => isDev ? '[name].js' : 'js/[contenthash].js',

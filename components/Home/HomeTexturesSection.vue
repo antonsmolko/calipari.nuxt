@@ -39,7 +39,7 @@
                 :height="500"
                 :alt="item.name")
               .tm-carousel-3d__slide-vignette
-            FadeTransition(mode="out-in")
+            fade-transition(mode="out-in")
               .tm-carousel-3d__overlay.uk-text-center.uk-dark(
                 v-show="isCurrent")
                 span.tm-carousel-3d__slide-title.uk-h2 {{ item.name }}
@@ -149,7 +149,7 @@ export default {
 
 .carousel-3d-slide {
   padding: 40px 50px 60px;
-  background: transparent;
+  background: transparent !important;
 
   figure {
     border: 1px solid white;

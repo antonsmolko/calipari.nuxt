@@ -62,7 +62,7 @@ import TopBar from '@/components/layout/TopBar.vue'
 import Observer from '@/components/Observer'
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
-import page from '@/components/mixins/page'
+import page from '@/components/mixins/pageMeta'
 
 export default {
   name: 'Blog',

@@ -1,8 +1,8 @@
 <template lang="pug">
-  Page.tm-profile
+  page.tm-profile
     template(#main)
       main(:class="{ 'uk-light': darkPeriod }")
-        SlideYDownTransition(v-show="pageTitle")
+        slide-y-down-transition(v-show="pageTitle")
           section.tm-profile__section.uk-section(
             data-uk-height-viewport="offset-top: true; offset-bottom: true")
             .uk-container.uk-container-xsmall.uk-margin-large-bottom
@@ -35,17 +35,13 @@
 import Page from '@/components/layout/Page.vue'
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
+import noindexPageMeta from '@/components/mixins/noindexPageMeta'
 
 export default {
   middleware: 'auth',
   scrollToTop: true,
   components: { Page },
-  mixins: [setLayout, scrollToTop],
-  metaInfo () {
-    return {
-      title: this.pageTitle
-    }
-  },
+  mixins: [setLayout, scrollToTop, noindexPageMeta],
   created () {
     this.setFieldsAction({
       pageTitle: 'Профиль',

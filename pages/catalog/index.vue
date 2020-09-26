@@ -33,7 +33,7 @@ import CatalogImageItem from '@/components/Catalog/CatalogImageItem'
 import CatalogColorItem from '@/components/Catalog/CatalogColorItem'
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
-import page from '@/components/mixins/page'
+import page from '@/components/mixins/pageMeta'
 
 export default {
   name: 'Catalog',

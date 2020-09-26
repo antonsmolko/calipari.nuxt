@@ -1,70 +1,70 @@
 <template lang="pug">
-    Page
-        template(#main)
-            main(:class="{ 'uk-light': darkPeriod }")
-                section.uk-section.uk-section-large.tm-section-lines(data-uk-height-viewport='offset-top: true')
-                    .uk-position-center.uk-flex.uk-flex-column.uk-flex-middle.uk-padding.uk-text-center(v-if="loaded")
-                        span.uk-text-large {{ loadedMessage }}
-                        .uk-margin-top.uk-text-muted(data-uk-spinner="ratio: 3")
-                    .uk-container(v-else)
-                        .uk-flex.uk-flex-center
-                            .uk-width-1-1(class="uk-width-xlarge@s")
-                                .tm-login__header
-                                    h1.uk-margin-remove Уточните свои данные
-                                    .uk-divider-small
-                                .uk-flex.uk-flex-column.uk-flex-center.uk-margin-medium-top
-                                    form.tm-form(@submit.prevent="onSubmit")
-                                        .tm-form__items
-                                            VInput(
-                                                class="uk-margin"
-                                                title="Имя"
-                                                :label="true"
-                                                icon="user"
-                                                name="name"
-                                                :value="form.name"
-                                                module="login"
-                                                :trim="false"
-                                                :vField="$v.form.name"
-                                                :vRules="{ required: true, email: true }"
-                                                :vDelay="true")
-                                            VInput(
-                                                class="uk-margin"
-                                                title="Email"
-                                                :label="true"
-                                                icon="mail"
-                                                name="email"
-                                                :value="form.email"
-                                                module="login"
-                                                :vField="$v.form.email"
-                                                :vRules="{ required: true, email: true }"
-                                                :vDelay="true")
-                                            VInput(
-                                                class="uk-margin"
-                                                title="Пароль"
-                                                :label="true"
-                                                icon="lock"
-                                                name="password"
-                                                type="password"
-                                                module="login"
-                                                :vField="$v.form.password"
-                                                :vRules="{ required: true, minLength: true }"
-                                                :vDelay="true")
-                                            VInput(
-                                                class="uk-margin"
-                                                title="Подтверждение пароля"
-                                                :label="true"
-                                                icon="lock"
-                                                name="password_confirmation"
-                                                type="password"
-                                                module="login"
-                                                :vField="$v.form.password_confirmation"
-                                                :vRules="{ required: true, sameAsPassword: true }"
-                                                :vDelay="true")
-                                        .uk-inline.uk-margin.uk-margin-medium-top.uk-width-1-1
-                                            .uk-text-center(class="uk-text-left@s")
-                                                button.uk-button.uk-button-primary(
-                                                    type="submit"
-                                                    :disabled="$v.$invalid") Зарегистрироваться
+  page
+    template(#main)
+      main(:class="{ 'uk-light': darkPeriod }")
+        section.uk-section.uk-section-large.tm-section-lines(data-uk-height-viewport='offset-top: true')
+          .uk-position-center.uk-flex.uk-flex-column.uk-flex-middle.uk-padding.uk-text-center(v-if="loaded")
+            span.uk-text-large {{ loadedMessage }}
+            .uk-margin-top.uk-text-muted(data-uk-spinner="ratio: 3")
+          .uk-container(v-else)
+            .uk-flex.uk-flex-center
+              .uk-width-1-1(class="uk-width-xlarge@s")
+                .tm-login__header
+                  h1.uk-margin-remove Уточните свои данные
+                  .uk-divider-small
+                .uk-flex.uk-flex-column.uk-flex-center.uk-margin-medium-top
+                  form.tm-form(@submit.prevent="onSubmit")
+                    .tm-form__items
+                      v-input(
+                        class="uk-margin"
+                        title="Имя"
+                        :label="true"
+                        icon="user"
+                        name="name"
+                        :value="form.name"
+                        module="login"
+                        :trim="false"
+                        :vField="$v.form.name"
+                        :vRules="{ required: true, email: true }"
+                        :vDelay="true")
+                      v-input(
+                        class="uk-margin"
+                        title="Email"
+                        :label="true"
+                        icon="mail"
+                        name="email"
+                        :value="form.email"
+                        module="login"
+                        :vField="$v.form.email"
+                        :vRules="{ required: true, email: true }"
+                        :vDelay="true")
+                      v-input(
+                        class="uk-margin"
+                        title="Пароль"
+                        :label="true"
+                        icon="lock"
+                        name="password"
+                        type="password"
+                        module="login"
+                        :vField="$v.form.password"
+                        :vRules="{ required: true, minLength: true }"
+                        :vDelay="true")
+                      v-input(
+                        class="uk-margin"
+                        title="Подтверждение пароля"
+                        :label="true"
+                        icon="lock"
+                        name="password_confirmation"
+                        type="password"
+                        module="login"
+                        :vField="$v.form.password_confirmation"
+                        :vRules="{ required: true, sameAsPassword: true }"
+                        :vDelay="true")
+                    .uk-inline.uk-margin.uk-margin-medium-top.uk-width-1-1
+                      .uk-text-center(class="uk-text-left@s")
+                        button.uk-button.uk-button-primary(
+                          type="submit"
+                          :disabled="$v.$invalid") Зарегистрироваться
 </template>
 <script>
 import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
@@ -75,15 +75,20 @@ import routerParams from '@/components/mixins/routerParams'
 import VInput from '@/components/form/VInput'
 import setLayout from '@/components/mixins/setLayout'
 import syncProfile from '@/components/mixins/syncProfile'
+import noindexPageMeta from '@/components/mixins/noindexPageMeta'
 
 export default {
-  components: { Page, VInput },
-  mixins: [form, routerParams, setLayout, syncProfile],
-  metaInfo () {
-    return {
-      title: 'Уточнение регистрационных данных'
-    }
+  components: {
+    Page,
+    VInput
   },
+  mixins: [
+    form,
+    routerParams,
+    setLayout,
+    syncProfile,
+    noindexPageMeta
+  ],
   data () {
     return {
       token: this.$route.query.access_token ? this.$route.query.access_token : null,
@@ -121,6 +126,7 @@ export default {
     }
   },
   created () {
+    this.setFieldAction({ field: 'pageTitle', value: 'Уточнение регистрационных данных' })
     if (this.token) {
       this.loaded = true
       this.loadedMessage = 'Выполняется авторизация...'

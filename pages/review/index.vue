@@ -77,8 +77,12 @@ import StarRatingForm from '@/components/form/Input/StarRatingForm'
 import UploadInput from '@/components/Upload/UploadInput'
 import scrollToTop from '@/components/mixins/scrollToTop'
 import { dataURItoBlob } from '@/helpers'
+import noindexPageMeta from '@/components/mixins/noindexPageMeta'
 
 export default {
+  metaInfo: {
+    title: 'Отзыв о заказе'
+  },
   async middleware ({ $auth, route, redirect, store }) {
     const hash = route.query.hash
 
@@ -94,11 +98,6 @@ export default {
         : redirect('/')
     }
   },
-  metaInfo () {
-    return {
-      title: this.pageTitle
-    }
-  },
   components: {
     Page,
     TopBar,
@@ -106,7 +105,7 @@ export default {
     StarRatingForm,
     UploadInput
   },
-  mixins: [scrollToTop],
+  mixins: [scrollToTop, noindexPageMeta],
   fetch () {
     this.clearReviewItemFieldsAction()
     this.setFieldAction({ field: 'pageTitle', value: 'Отзыв о заказе' })
