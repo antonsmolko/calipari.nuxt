@@ -5,6 +5,11 @@ export default {
     return {
       title: this.page.meta_title || this.page.title,
       meta: [
+        ...[process.env.isDev && {
+          vmid: 'robots',
+          name: 'robots',
+          content: 'noindex, nofollow'
+        }],
         {
           vmid: 'description',
           name: 'description',
@@ -17,7 +22,7 @@ export default {
         }
       ],
       link: [
-        { rel: 'canonical', href: `${process.env.BASE_URL}/${this.$route.params}` }
+        { rel: 'canonical', href: process.env.BASE_URL + this.$route.fullPath }
       ]
     }
   },

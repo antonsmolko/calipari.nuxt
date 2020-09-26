@@ -92,6 +92,7 @@ export default {
     { src: './plugins/fileapi', mode: 'client' }
   ],
   env: {
+    isDev,
     baseUrl,
     baseApiUrl,
     imageProvider,

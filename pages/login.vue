@@ -1,5 +1,5 @@
 <template lang="pug">
-  Page
+  page
     template(#main)
       main(:class="{ 'uk-light': darkPeriod }")
         section.uk-section.uk-section-large.tm-section-lines(data-uk-height-viewport='offset-top: true')
@@ -14,7 +14,7 @@
                   .uk-divider-small
                 form.tm-form(@submit.prevent="onSubmit")
                   .tm-form__items
-                    VInput(
+                    v-input(
                       class="uk-margin"
                       title="Email"
                       :label="true"
@@ -24,7 +24,7 @@
                       :vField="$v.form.email"
                       :vRules="{ required: true, email: true }"
                       :vDelay="true")
-                    VInput(
+                    v-input(
                       class="uk-margin"
                       title="Пароль"
                       :label="true"
@@ -41,7 +41,7 @@
                       button.uk-button.uk-button-primary(
                         type="submit"
                         :disabled="$v.$invalid") Войти
-                      SocialsColor(@submit="loaded = true")
+                      socials-color(@submit="loaded = true")
                 .tm-login__footer.uk-inline.uk-margin
                   nuxt-link.uk-link.tm-text-medium.uk-display-block.uk-margin-small-bottom(
                     to="/reset-password")

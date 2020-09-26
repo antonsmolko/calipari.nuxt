@@ -28,6 +28,11 @@ export default {
     return {
       title: this.item.meta_title || this.pageTitle,
       meta: [
+        ...[process.env.isDev && {
+          vmid: 'robots',
+          name: 'robots',
+          content: 'noindex, nofollow'
+        }],
         {
           vmid: 'description',
           name: 'description',
@@ -38,6 +43,9 @@ export default {
           name: 'keywords',
           content: this.item.keywords
         }
+      ],
+      link: [
+        { rel: 'canonical', href: process.env.BASE_URL + this.$route.fullPath }
       ]
     }
   },
