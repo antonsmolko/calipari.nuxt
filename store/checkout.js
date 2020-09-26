@@ -136,7 +136,7 @@ export const getters = {
       switch (delivery.alias) {
         case 'cdek':
           return getters.localityIsInvalid || getters.pvzIsInvalid
-        case 'cdek_courier':
+        case 'cdek-courier':
           return getters.localityIsInvalid || getters.addressIsInvalid
         default:
           return false

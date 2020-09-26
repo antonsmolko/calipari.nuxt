@@ -1,10 +1,6 @@
 <template lang="pug">
-  div(v-show="isEnabled")
-    top-bar(
-      :title="title")
-      //.uk-navbar-item(class="uk-visible@l")
-          //span.uk-h5.tm-total-price__heading Цена
-          //span.uk-text-large.uk-text-emphasis {{ formatPrice }}
+  main(v-show="isEnabled")
+    top-bar(:title="title")
       .uk-navbar-item
         button.uk-close(type="button", data-uk-close, @click="onClose")
     section.uk-section(
@@ -64,6 +60,15 @@ export default {
       default: false
     }
   },
+  async fetch () {
+    if (!this.isEnabled) {
+      await this.$router.push('/')
+    }
+    await this.setFieldsAction({
+      bottomBar: false,
+      footer: false
+    })
+  },
   computed: {
     formatPrice () {
       return getFormatPrice(this.price)
@@ -78,15 +83,6 @@ export default {
     isEnabled () {
       return this.enabled && this.cartQty
     }
-  },
-  created () {
-    if (!this.isEnabled) {
-      this.$router.push('/')
-    }
-    this.setFieldsAction({
-      bottomBar: false,
-      footer: false
-    })
   },
   methods: {
     onPrev () {

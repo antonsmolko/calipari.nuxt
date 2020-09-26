@@ -1,54 +1,52 @@
 <template lang="pug">
-    div
-        .tm-checkout__header
-            span.uk-h2.uk-margin-remove {{ $lib.DELIVERY_CDEK_COURIER }}
-            .uk-divider-small
-        .tm-form.uk-margin-medium-top
-            .uk-fieldset
-                VSelect(
-                    class="uk-margin"
-                    name="locality"
-                    labelName="Регион / город"
-                    icon="world"
-                    :error="localityIsInvalid && $v.locality.$dirty"
-                    @input="localityInput"
-                    @search="localitySearch"
-                    :isLoading="settlementsLoading"
-                    label="name"
-                    :value="!localityIsInvalid ? locality.name : ''"
-                    :placeholder="!localityIsInvalid ? '' : 'Введите населенный пункт'"
-                    :options="settlements"
-                    noOptionsText="Введите город")
-                VInput(
-                    class="uk-margin"
-                    title="Улица"
-                    icon="location"
-                    :label="true"
-                    name="street"
-                    :value="street"
-                    module="checkout"
-                    :vField="$v.street"
-                    :vRules="{ required: true }"
-                    :trim="false"
-                    dispatchName="setFields"
-                )
-                VInput(
-                    class="uk-margin"
-                    title="Дом / Корпус / Строение / Квартира"
-                    icon="home"
-                    :label="true"
-                    name="apartments"
-                    :value="apartments"
-                    module="checkout"
-                    :vField="$v.apartments"
-                    :vRules="{ required: true }"
-                    :trim="false"
-                    dispatchName="setFields"
-                )
-                .uk-margin
-                    span Стоимость доставки:
-                    span.uk-text-emphasis.uk-margin-small-left.uk-text-large
-                        | {{ price ? deliveryFormatPrice : 'нет данных' }}
+  div
+    .tm-checkout__header
+      span.uk-h2.uk-margin-remove {{ $lib.DELIVERY_CDEK_COURIER }}
+      .uk-divider-small
+    .tm-form.uk-margin-medium-top
+      .uk-fieldset
+        v-select(
+          class="uk-margin"
+          name="locality"
+          labelName="Регион / город"
+          icon="world"
+          :error="localityIsInvalid && $v.locality.$dirty"
+          @input="localityInput"
+          @search="localitySearch"
+          :isLoading="settlementsLoading"
+          label="name"
+          :value="!localityIsInvalid ? locality.name : ''"
+          :placeholder="!localityIsInvalid ? '' : 'Введите населенный пункт'"
+          :options="settlements"
+          noOptionsText="Введите город")
+        v-input(
+          class="uk-margin"
+          title="Улица"
+          icon="location"
+          :label="true"
+          name="street"
+          :value="street"
+          module="checkout"
+          :vField="$v.street"
+          :vRules="{ required: true }"
+          :trim="false"
+          dispatchName="setField")
+        v-input(
+          class="uk-margin"
+          title="Дом / Корпус / Строение / Квартира"
+          icon="home"
+          :label="true"
+          name="apartments"
+          :value="apartments"
+          module="checkout"
+          :vField="$v.apartments"
+          :vRules="{ required: true }"
+          :trim="false"
+          dispatchName="setField")
+        .uk-margin
+          span Стоимость доставки:
+          span.uk-text-emphasis.uk-margin-small-left.uk-text-large
+            | {{ price ? deliveryFormatPrice : 'нет данных' }}
 </template>
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
@@ -56,16 +54,20 @@ import { required } from 'vuelidate/lib/validators'
 
 import VueSelect from 'vue-select'
 import debounce from 'lodash/debounce'
-import { getFormatPrice } from '~/components/helpers'
+import { getFormatPrice } from '@/components/helpers'
 
-import VSelect from '~/components/form/Select/VSelect'
-import VInput from '~/components/form/VInput'
+import VSelect from '@/components/form/Select/VSelect'
+import VInput from '@/components/form/VInput'
 
 const _debounce = debounce(fn => fn(), 500)
 
 export default {
   name: 'CheckoutDeliveryCDEKCourier',
-  components: { VSelect, VInput, VueSelect },
+  components: {
+    VSelect,
+    VInput,
+    VueSelect
+  },
   data: () => ({
     searchedLocality: ''
   }),

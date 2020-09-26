@@ -1,5 +1,5 @@
 <template lang="pug">
-  page
+  page(v-if="!$fetchState.pending")
     template(#main)
       checkout-layout(
         v-show="!personalIsInvalid && enabled"
@@ -7,32 +7,31 @@
         :price="totalPrice"
         @confirm="onNext")
         template(#content)
-          slide-y-down-transition(v-show="pageTitle")
-            .uk-grid.uk-grid-divider.uk-flex-center(data-uk-grid)
-              div(class="uk-width-xlarge@s uk-width-1-2@m")
-                checkout-delivery-list(
-                  :items="items"
-                  @change="changeDelivery"
-                  :defaultValue="selectDeliveryId")
-              div(class="uk-width-xlarge@s uk-width-1-2@m")
-                checkout-delivery-pickup(
-                  v-if="selectDelivery.alias === 'pickup-bryansk'"
-                  :items="selectDelivery.pickups"
-                  :value="pickup"
-                  @change="changePickup")
-                checkout-delivery-c-d-e-k(
-                  v-else-if="selectDelivery.alias === 'cdek'")
-                checkout-delivery-c-d-e-k-courier(
-                  v-else-if="selectDelivery.alias === 'cdek-courier'")
-              .uk-inline.uk-margin-medium-top.uk-margin-auto-left(
-                class="uk-width-xlarge@s uk-width-1-2@m uk-visible@l")
-                .uk-flex.uk-flex-between
-                  button.uk-button.uk-button-danger(
-                    @click.prevent="onPrev") Назад
-                  button.uk-button.uk-button-primary(
-                    :disabled="invalid"
-                    @click.prevent="onNext"
-                    type="submit") Продолжить
+          .uk-grid.uk-grid-divider.uk-flex-center(data-uk-grid)
+            div(class="uk-width-xlarge@s uk-width-1-2@m")
+              checkout-delivery-list(
+                :items="items"
+                @change="changeDelivery"
+                :defaultValue="selectDeliveryId")
+            div(class="uk-width-xlarge@s uk-width-1-2@m")
+              checkout-delivery-pickup(
+                v-if="selectDelivery.alias === 'pickup-bryansk'"
+                :items="selectDelivery.pickups"
+                :value="pickup"
+                @change="changePickup")
+              checkout-delivery-c-d-e-k(
+                v-else-if="selectDelivery.alias === 'cdek'")
+              checkout-delivery-c-d-e-k-courier(
+                v-else-if="selectDelivery.alias === 'cdek-courier'")
+            .uk-inline.uk-margin-medium-top.uk-margin-auto-left(
+              class="uk-width-xlarge@s uk-width-1-2@m uk-visible@l")
+              .uk-flex.uk-flex-between
+                button.uk-button.uk-button-danger(
+                  @click.prevent="onPrev") Назад
+                button.uk-button.uk-button-primary(
+                  :disabled="invalid"
+                  @click.prevent="onNext"
+                  type="submit") Продолжить
 </template>
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
@@ -63,6 +62,22 @@ export default {
       title: this.pageTitle
     }
   },
+  async fetch () {
+    if (this.personalIsInvalid) {
+      const path = this.$auth.loggedIn
+        ? {
+          path: '/profile/personal',
+          query: { from: '/checkout/delivery' }
+        }
+        : '/checkout/personal'
+      await this.$router.push(path)
+    }
+    await Promise.all([
+      this.setDefaultDelivery(),
+      this.setCheckoutInvalid(this.deliveryIsInvalid),
+      this.setFieldsAction({ pageTitle: 'Оформление заказа. Способы доставки' })
+    ])
+  },
   computed: {
     ...mapState({
       items: state => state.delivery.items,
@@ -85,20 +100,6 @@ export default {
     deliveryIsInvalid () {
       this.setCheckoutInvalid(this.deliveryIsInvalid)
     }
-  },
-  created () {
-    if (this.personalIsInvalid) {
-      const path = this.$auth.loggedIn
-        ? {
-          path: '/profile/personal',
-          query: { from: '/checkout/delivery' }
-        }
-        : '/checkout/personal'
-      this.$router.push(path)
-    }
-    this.setDefaultDelivery()
-    this.setCheckoutInvalid(this.deliveryIsInvalid)
-    this.setFieldsAction({ pageTitle: 'Оформление заказа. Способы доставки' })
   },
   methods: {
     ...mapActions({

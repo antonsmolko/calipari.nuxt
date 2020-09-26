@@ -69,7 +69,7 @@ export default {
       await this.getProjectAction(key)
     }
     await new Promise((resolve) => {
-      this.$store.dispatch('setFields', {
+      this.setFieldsAction({
         bottomBar: false,
         footer: false
       })
@@ -118,7 +118,8 @@ export default {
       checkoutEnableAction: 'checkout/enable',
       getProjectAction: 'cart/getProject',
       deleteSaleAction: 'cart/deleteSale',
-      getCartSalesAction: 'cart/getCartSales'
+      getCartSalesAction: 'cart/getCartSales',
+      setFieldsAction: 'setFields'
     }),
     checkout () {
       this.checkoutEnableAction({

@@ -1,12 +1,12 @@
 <template lang="pug">
-  Page
+  page(v-if="!$fetchState.pending")
     template(#main)
-      CheckoutLayout(
+      checkout-layout(
         title="Персональные данные"
         :price="totalPrice"
         @confirm="onNext")
         template(#content)
-          SlideYDownTransition(v-show="sectionTitle")
+          slide-y-down-transition(v-show="sectionTitle")
             .uk-flex.uk-flex-center
               .uk-width-xlarge(class="uk-width-1-1@m")
                 .tm-checkout__header
@@ -112,6 +112,13 @@ export default {
       title: 'Оформление заказа. Персональная информация'
     }
   },
+  async fetch () {
+    await Promise.all([
+      this.setCheckoutInvalid(this.isInvalid),
+      this.setSectionTitle(),
+      this.setFieldsAction({ pageTitle: 'Оформление заказа. Персональная информация' })
+    ])
+  },
   data: () => ({
     sectionTitle: null
   }),
@@ -161,11 +168,6 @@ export default {
     isInvalid () {
       this.setCheckoutInvalid(this.isInvalid)
     }
-  },
-  created () {
-    this.setCheckoutInvalid(this.isInvalid)
-    this.setSectionTitle()
-    this.setFieldsAction({ pageTitle: 'Оформление заказа. Персональная информация' })
   },
   methods: {
     ...mapActions({

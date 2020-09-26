@@ -6,7 +6,7 @@
     .uk-flex.uk-flex-column.uk-flex-center.uk-margin-medium-top
       form.tm-form(@submit.prevent)
         fieldset.uk-fieldset
-          CheckoutDeliveryItem(
+          checkout-delivery-item(
             v-for="item in items"
             :key="item.id"
             :item="item"
