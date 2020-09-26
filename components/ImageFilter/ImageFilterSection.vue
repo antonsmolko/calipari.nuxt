@@ -5,7 +5,7 @@
         .tm-filter__content(class="uk-width-1-2@m")
           a.uk-accordion-title(href="#" @click.prevent="onClick")
             span.tm-filter__heading.uk-h3.uk-margin-remove {{ title }}
-              SlideYDownTransition
+              slide-y-down-transition
                 span.tm-filter__badge.uk-badge(v-if="qty") {{ qty }}
           .uk-accordion-content
             template(v-if="!loading")

@@ -4,7 +4,7 @@
       main
         top-bar(:title="pageTitle")
           .uk-navbar-item
-            button.uk-close(type="button", data-uk-close, @click="onClose")
+            button.uk-close(type="button", data-uk-icon="icon: close; ratio: 1.1", @click="onClose")
         section.uk-section.uk-section-xlarge.uk-text-center(:class="{ 'uk-light': darkPeriod }")
           .uk-container
             span.uk-heading-small {{ pageTitle }}

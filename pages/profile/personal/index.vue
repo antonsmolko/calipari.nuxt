@@ -5,7 +5,7 @@
         top-bar(
           :title="pageTitle")
           .uk-navbar-item
-            button.uk-close(type="button", data-uk-close, @click="onClose")
+            button.uk-close(type="button", data-uk-icon="icon: close; ratio: 1.1", @click="onClose")
         slide-y-down-transition
           section.uk-section(
             v-if="responseData"

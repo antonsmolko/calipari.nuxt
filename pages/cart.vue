@@ -7,7 +7,7 @@
             button.uk-button.uk-button-small.uk-button-danger(
               @click.prevent="checkout") Оформить
           .uk-navbar-item
-            button.uk-close(type="button", data-uk-close, @click="onClose")
+            button.uk-close(type="button", data-uk-icon="icon: close; ratio: 1.1", @click="onClose")
         section.uk-section(v-if="items.length || sales.length"
           :class="{ 'uk-light': darkPeriod }"
           data-uk-height-viewport="offset-top: true; offset-bottom: true")

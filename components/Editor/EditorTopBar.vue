@@ -10,7 +10,7 @@
               h1.uk-h4.uk-margin-remove.uk-text-muted Редактор
           .uk-navbar-right
             .uk-navbar-item
-              button.uk-close(type='button', data-uk-close, @click='onClose')
+              button.uk-close(type='button', data-uk-icon="icon: close; ratio: 1.1", @click='onClose')
 </template>
 
 <script>

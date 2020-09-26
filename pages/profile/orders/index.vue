@@ -4,7 +4,7 @@
       main
         top-bar(:title="pageTitle")
           .uk-navbar-item
-            button.uk-close(type="button", data-uk-close, @click="close")
+            button.uk-close(type="button", data-uk-icon="icon: close; ratio: 1.1", @click="close")
         slide-y-down-transition(v-show="!$fetchState.pending && pageTitle")
           section.tm-orders.uk-section(
             v-if="items.length"

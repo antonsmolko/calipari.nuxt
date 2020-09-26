@@ -2,7 +2,7 @@
   main(v-show="isEnabled")
     top-bar(:title="title")
       .uk-navbar-item
-        button.uk-close(type="button", data-uk-close, @click="onClose")
+        button.uk-close(type="button", data-uk-icon="icon: close; ratio: 1.1", @click="onClose")
     section.uk-section(
       v-if="!altContent"
       :class="{ 'uk-light': darkPeriod }"

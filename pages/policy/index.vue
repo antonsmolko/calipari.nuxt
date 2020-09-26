@@ -4,7 +4,7 @@
       main(v-show="page")
         top-bar(:title="pageTitle")
           .uk-navbar-item
-            button.uk-close(type="button", data-uk-close, @click="onClose")
+            button.uk-close(type="button", data-uk-icon="icon: close; ratio: 1.1", @click="onClose")
         section.tm-section__hero.uk-section.uk-position-relative(:class="{ 'uk-light': darkPeriod }")
           .uk-container.uk-position-relative.uk-position-z-index(
             data-uk-scrollspy="cls: uk-animation-slide-bottom-small")

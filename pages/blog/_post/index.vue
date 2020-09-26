@@ -4,7 +4,7 @@
       main
         top-bar(:title="pageTitle")
           .uk-navbar-item
-            button.uk-close(type="button", data-uk-close, @click="onClose")
+            button.uk-close(type="button", data-uk-icon="icon: close; ratio: 1.1", @click="onClose")
         template(v-if="responseData")
           section.tm-section__hero.uk-section.uk-position-relative(
             :class="{ 'uk-light': darkPeriod }")
