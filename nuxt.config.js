@@ -4,7 +4,9 @@ import imageminMozjpeg from 'imagemin-mozjpeg'
 const ImageminPlugin = require('imagemin-webpack-plugin').default
 
 const isDev = process.env.NODE_ENV !== 'production'
-const baseUrl = !isDev ? process.env.BASE_URL : 'https://localhost:3000'
+const isLocalMode = process.env.NODE_ENV === 'local'
+const devBaseUrl = isLocalMode ? 'https://localhost:3000' : 'https://calipari.ru'
+const baseUrl = !isDev ? process.env.BASE_URL : devBaseUrl
 const baseApiUrl = !isDev ? process.env.API_BASE_URL : 'https://manager.local.calipari.ru'
 const imageProvider = !isDev ? process.env.IMAGE_PROVIDER : 's3' // s3, local
 const localImageEndpoint = !isDev ? process.env.LOCAL_IMAGE_ENDPOINT : `${baseApiUrl}/api/image`
@@ -24,10 +26,10 @@ export default {
     htmlAttrs: {
       lang: 'ru'
     },
-    title: process.env.npm_package_name || '',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'theme-color', content: '#093256' },
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' },
       ...[isDev && {
         name: 'robots', content: 'noindex, nofollow'
@@ -400,7 +402,7 @@ export default {
     }
   },
   server: {
-    ...(baseUrl === 'https://localhost:3000' && {
+    ...(isDev && isLocalMode && {
       https: {
         key: fs.readFileSync(path.resolve(__dirname, 'localhost.key')),
         cert: fs.readFileSync(path.resolve(__dirname, 'localhost.crt'))
