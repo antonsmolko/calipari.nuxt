@@ -5,11 +5,6 @@ export default {
     return {
       title: this.page.meta_title || this.page.title,
       meta: [
-        ...[process.env.isDev && {
-          vmid: 'robots',
-          name: 'robots',
-          content: 'noindex, nofollow'
-        }],
         {
           vmid: 'description',
           name: 'description',
