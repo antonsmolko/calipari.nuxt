@@ -1,7 +1,7 @@
 <template lang="pug">
   div
     slot(name="main")
-    footer(v-if="footer")
+    Footer(v-if="footer")
 </template>
 
 <script>
