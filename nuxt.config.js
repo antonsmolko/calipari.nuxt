@@ -304,7 +304,7 @@ export default {
       },
       ...(!isDev && {
         preset: {
-          browsers: 'cover 99%',
+          browsers: 'cover 99.5%',
           autoprefixer: true
         }
       }),
