@@ -29,7 +29,7 @@ export default {
       title: this.item.meta_title || this.pageTitle,
       meta: [
         {
-          skip: process.env.isDev,
+          skip: process.env.NODE_ENV === 'production',
           vmid: 'robots',
           name: 'robots',
           content: 'noindex, nofollow'

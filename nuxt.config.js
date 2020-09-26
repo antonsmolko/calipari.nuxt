@@ -78,15 +78,15 @@ export default {
     { src: './plugins/uikit', ssr: false },
     // { src: './plugins/resize-observer' },
     { src: './plugins/app-components' },
-    { src: './plugins/vuelidate' },
+    { src: './plugins/vuelidate', ssr: false },
     { src: './plugins/mixins/pageSettings' },
-    { src: './plugins/vue2-transitions' },
+    { src: './plugins/vue2-transitions', ssr: false },
     { src: './plugins/vue-carousel-3d', ssr: false },
     { src: './plugins/vue-meta' },
     { src: './plugins/lang/ru/validationLib.js' }, // Lang Libs
     { src: './plugins/lang/ru/lib.js' },
     { src: './plugins/config.js' },
-    { src: './plugins/mixins/timePeriod.js' },
+    { src: './plugins/mixins/timePeriod.js', ssr: false },
     { src: './plugins/ymap.js', mode: 'client' },
     { src: './plugins/fileapi', mode: 'client' }
   ],

@@ -6,7 +6,7 @@ export default {
       title: this.page.meta_title || this.page.title,
       meta: [
         {
-          skip: process.env.isDev,
+          skip: process.env.NODE_ENV === 'production',
           vmid: 'robots',
           name: 'robots',
           content: 'noindex, nofollow'
@@ -23,14 +23,17 @@ export default {
         }
       ],
       link: [
-        { rel: 'canonical', href: process.env.BASE_URL + this.$route.fullPath }
+        { rel: 'canonical', href: process.env.BASE_URL + this.fullPath }
       ]
     }
   },
   computed: {
     ...mapState({
       page: state => state.pages.fields
-    })
+    }),
+    fullPath () {
+      return this.$route.fullPath === '/' ? '' : this.$route.fullPath
+    }
   },
   methods: {
     ...mapActions({
