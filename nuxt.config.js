@@ -5,17 +5,16 @@ require('dotenv').config()
 const ImageminPlugin = require('imagemin-webpack-plugin').default
 
 const isDev = process.env.NODE_ENV !== 'production'
-const isLocal = process.env.NODE_ENV === 'local'
-const devBaseUrl = isLocal ? 'https://localhost:3000' : 'https://calipari.ru'
+const isLocal = process.env.DEV_MODE === 'local'
+const devBaseUrl = isLocal ? process.env.LOCAL_BASE_URL : process.env.BASE_URL
 const baseUrl = !isDev ? process.env.BASE_URL : devBaseUrl
-const baseApiUrl = !isDev ? process.env.API_BASE_URL : 'https://manager.local.calipari.ru'
-const imageProvider = !isDev ? process.env.IMAGE_PROVIDER : 's3' // s3, local
-const localImageEndpoint = !isDev ? process.env.LOCAL_IMAGE_ENDPOINT : `${baseApiUrl}/api/image`
-const s3ImageEndpoint = !isDev ? process.env.S3_IMAGE_ENDPOINT : 'https://d38w12trhxpmo3.cloudfront.net'
-const awsBucket = !isDev ? process.env.AWS_BUCKET : 'dev.calipari.frames'
+const baseApiUrl = process.env.API_BASE_URL
+const imageProvider = process.env.IMAGE_PROVIDER // s3, local
+const localImageEndpoint = `${baseApiUrl}/api/image`
+const s3ImageEndpoint = process.env.S3_IMAGE_ENDPOINT
+const awsBucket = process.env.AWS_BUCKET
 
 export default {
-  mode: 'universal',
   ...(!isDev && {
     modern: 'client'
   }),
@@ -107,7 +106,8 @@ export default {
   */
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module'
+    '@nuxtjs/eslint-module',
+    ['@nuxtjs/dotenv', { systemvars: true }]
   ],
   /*
   ** Nuxt.js modules

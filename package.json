@@ -47,6 +47,7 @@
     "vuelidate": "^0.7.5"
   },
   "devDependencies": {
+    "@nuxtjs/dotenv": "^1.4.1",
     "@nuxtjs/eslint-config": "^3.1.0",
     "@nuxtjs/eslint-module": "^2.0.0",
     "@nuxtjs/style-resources": "^1.0.0",
