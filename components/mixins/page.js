@@ -15,6 +15,9 @@ export default {
           name: 'keywords',
           content: this.page.keywords
         }
+      ],
+      link: [
+        { rel: 'canonical', href: `${process.env.BASE_URL}/${this.$route.params}` }
       ]
     }
   },

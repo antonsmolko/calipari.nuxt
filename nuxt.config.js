@@ -31,9 +31,7 @@ export default {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { name: 'theme-color', content: '#093256' },
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' },
-      ...[isDev && {
-        name: 'robots', content: 'noindex, nofollow'
-      }]
+      { name: 'robots', content: 'noindex, nofollow' }
     ],
     link: [
       { rel: 'shortcut icon', type: 'image/x-icon', href: '/favicon.ico' }
@@ -177,23 +175,23 @@ export default {
         url: `${baseApiUrl}/api`,
         endpoints: {
           login: {
-            url: 'auth/login',
+            url: '/auth/login',
             method: 'post'
           },
           refresh: {
-            url: 'auth/refresh',
+            url: '/auth/refresh',
             method: 'post'
           },
           register: {
-            url: 'auth/register',
+            url: '/auth/register',
             method: 'post'
           },
           user: {
-            url: 'auth/me',
+            url: '/auth/me',
             method: 'post'
           },
           logout: {
-            url: 'auth/logout',
+            url: '/auth/logout',
             method: 'post'
           }
         },
