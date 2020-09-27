@@ -48,6 +48,7 @@ import CartList from '@/components/Cart/CartList'
 import SaleList from '@/components/Cart/SaleList'
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
+import noindexPageMeta from '@/components/mixins/noindexPageMeta'
 
 export default {
   components: {
@@ -57,12 +58,7 @@ export default {
     CartBottomBar,
     TopBar
   },
-  mixins: [setLayout, scrollToTop],
-  metaInfo () {
-    return {
-      title: 'Корзина'
-    }
-  },
+  mixins: [setLayout, scrollToTop, noindexPageMeta],
   async fetch () {
     const key = this.$route.query.key
     if (key) {
@@ -78,6 +74,7 @@ export default {
     if (this.saleKeys.length) {
       await this.getCartSalesAction()
     }
+    this.setFieldAction({ field: 'pageTitle', value: 'Корзина' })
     this.responseData = true
   },
   data: () => ({

@@ -3,7 +3,7 @@ import { mapState, mapActions } from 'vuex'
 export default {
   metaInfo () {
     return {
-      title: this.page.meta_title || this.page.title,
+      title: this.page.meta_title || this.page.title || this.pageTitle,
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },

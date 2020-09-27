@@ -1,5 +1,5 @@
 <template lang="pug">
-  page
+  page(v-if="!$fetchState.pending")
     template(#main)
       main(:class="{ 'uk-light': darkPeriod }")
         section.uk-section.uk-section-large.tm-section-lines(data-uk-height-viewport='offset-top: true')
@@ -89,6 +89,9 @@ export default {
     syncProfile,
     noindexPageMeta
   ],
+  fetch () {
+    this.setFieldAction({ field: 'pageTitle', value: 'Уточнение регистрационных данных' })
+  },
   data () {
     return {
       token: this.$route.query.access_token ? this.$route.query.access_token : null,
@@ -126,7 +129,6 @@ export default {
     }
   },
   created () {
-    this.setFieldAction({ field: 'pageTitle', value: 'Уточнение регистрационных данных' })
     if (this.token) {
       this.loaded = true
       this.loadedMessage = 'Выполняется авторизация...'

@@ -1,5 +1,5 @@
 <template lang="pug">
-  page
+  page(v-if="!$fetchState.pending")
     template(#main)
       main(:class="{ 'uk-light': darkPeriod }")
         section.uk-section.uk-section-large.tm-section-lines(data-uk-height-viewport='offset-top: true')
@@ -60,6 +60,7 @@ import VInput from '@/components/form/VInput'
 import setLayout from '@/components/mixins/setLayout'
 import syncProfile from '@/components/mixins/syncProfile'
 import scrollToTop from '@/components/mixins/scrollToTop'
+import noindexPageMeta from '@/components/mixins/noindexPageMeta'
 
 export default {
   middleware: 'guest',
@@ -73,12 +74,11 @@ export default {
     routerParams,
     setLayout,
     syncProfile,
-    scrollToTop
+    scrollToTop,
+    noindexPageMeta
   ],
-  metaInfo () {
-    return {
-      title: 'Вход'
-    }
+  fetch () {
+    this.setFieldAction({ field: 'pageTitle', value: 'Вход' })
   },
   data: () => ({
     loaded: false,

@@ -1,5 +1,5 @@
 <template lang="pug">
-  page
+  page(v-if="!$fetchState.pending")
     template(#main)
       main
         top-bar(:title="pageTitle")
@@ -17,6 +17,7 @@ import Page from '@/components/layout/Page.vue'
 import TopBar from '@/components/layout/TopBar.vue'
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
+import noindexPageMeta from '@/components/mixins/noindexPageMeta'
 
 export default {
   layout: '404',
@@ -25,12 +26,9 @@ export default {
     Page,
     TopBar
   },
-  mixins: [setLayout, scrollToTop],
-  created () {
-    this.setFieldAction({
-      field: 'pageTitle',
-      value: 'Ошибка 404'
-    })
+  mixins: [setLayout, scrollToTop, noindexPageMeta],
+  fetch () {
+    this.setFieldAction({ field: 'pageTitle', value: 'Ошибка 404' })
   },
   methods: {
     onClose () {

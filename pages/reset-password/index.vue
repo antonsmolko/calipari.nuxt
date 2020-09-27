@@ -1,5 +1,5 @@
 <template lang="pug">
-  page
+  page(v-if="!$fetchState.pending")
     template(#main)
       main(:class="{ 'uk-light': darkPeriod }")
         section.uk-section.uk-section-large.tm-section-lines(data-uk-height-viewport='offset-top: true')
@@ -43,17 +43,16 @@ import form from '@/components/mixins/form'
 import Page from '@/components/layout/Page.vue'
 import VInput from '@/components/form/VInput'
 import setLayout from '@/components/mixins/setLayout'
+import noindexPageMeta from '@/components/mixins/noindexPageMeta'
 
 export default {
   components: {
     Page,
     VInput
   },
-  mixins: [form, setLayout],
-  metaInfo () {
-    return {
-      title: 'Запрос на сброс пароля'
-    }
+  mixins: [form, setLayout, noindexPageMeta],
+  fetch () {
+    this.setFieldAction({ field: 'pageTitle', value: 'Запрос на сброс пароля' })
   },
   data () {
     return {

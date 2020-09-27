@@ -1,5 +1,5 @@
 <template lang="pug">
-  page
+  page(v-if="!$fetchState.pending")
     template(#main)
       main(:class="{ 'uk-light': darkPeriod }")
         gallery-layout(
@@ -32,6 +32,7 @@ import VSelect from '@/components/form/Select/VSelect'
 import GalleryLayout from '@/components/Gallery/GalleryLayout'
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
+import noindexPageMeta from '@/components/mixins/noindexPageMeta'
 
 const _throttle = throttle(f => f(), 300)
 export default {
@@ -40,11 +41,9 @@ export default {
     VSelect,
     GalleryLayout
   },
-  mixins: [setLayout, scrollToTop],
-  metaInfo () {
-    return {
-      title: 'Поиск изображений'
-    }
+  mixins: [setLayout, scrollToTop, noindexPageMeta],
+  fetch () {
+    this.setFieldAction({ field: 'pageTitle', value: 'Поиск изображений' })
   },
   data: () => ({
     query: ''
