@@ -9,14 +9,12 @@
         editor-navbar-content
     nuxt(keep-alive :keep-alive-props="{ max: 10 }" :key="$route.fullPath")
     slide-y-down-transition(mode="out-in")
-      bottom-bar(v-if="bottomBar")
     off-canvas-menu
 </template>
 <script>
 import { mapState } from 'vuex'
 import throttle from 'lodash/throttle'
 import TopBar from '@/components/layout/TopBar.vue'
-import BottomBar from '@/components/layout/BottomBar.vue'
 import Notification from '@/components/notifications/Notification'
 import OffCanvasMenu from '@/components/layout/OffCanvas/OffCanvasMenu.vue'
 import EditorNavbarContent from '@/components/Editor/EditorNavbarContent'
@@ -35,7 +33,6 @@ export default {
   components: {
     EditorNavbarContent,
     TopBar,
-    BottomBar,
     Notification,
     OffCanvasMenu
   },

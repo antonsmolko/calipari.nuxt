@@ -1,10 +1,11 @@
 <template lang="pug">
-  page(v-if="!$fetchState.pending")
+  page(v-if="!$fetchState.pending && responseData")
     template(#main)
       checkout-layout(
         v-show="!personalIsInvalid && enabled"
         title="Способы доставки"
         :price="totalPrice"
+        @prev="onPrev"
         @confirm="onNext")
         template(#content)
           .uk-grid.uk-grid-divider.uk-flex-center(data-uk-grid)
@@ -42,8 +43,8 @@ import CheckoutDeliveryList from '@/components/Checkout/CheckoutDeliveryList'
 import CheckoutDeliveryPickup from '@/components/Checkout/CheckoutDeliveryPickup'
 import CheckoutDeliveryCDEK from '@/components/Checkout/CheckoutDeliveryCDEK'
 import CheckoutDeliveryCDEKCourier from '@/components/Checkout/CheckoutDeliveryCDEKCourier'
-import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
+import noindexPageMeta from '@/components/mixins/noindexPageMeta'
 
 export default {
   name: 'Delivery',
@@ -56,12 +57,7 @@ export default {
     CheckoutLayout
   },
   middleware: ['personalValid'],
-  mixins: [scrollToTop, setLayout],
-  metaInfo () {
-    return {
-      title: this.pageTitle
-    }
-  },
+  mixins: [scrollToTop, noindexPageMeta],
   async fetch () {
     if (this.personalIsInvalid) {
       const path = this.$auth.loggedIn
@@ -73,11 +69,19 @@ export default {
       await this.$router.push(path)
     }
     await Promise.all([
+      this.setFieldsAction({
+        bottomBar: false,
+        footer: false
+      }),
       this.setDefaultDelivery(),
       this.setCheckoutInvalid(this.deliveryIsInvalid),
       this.setFieldsAction({ pageTitle: 'Оформление заказа. Способы доставки' })
     ])
+    this.responseData = true
   },
+  data: () => ({
+    responseData: false
+  }),
   computed: {
     ...mapState({
       items: state => state.delivery.items,

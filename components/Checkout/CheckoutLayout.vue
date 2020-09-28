@@ -16,7 +16,8 @@
         :nextIcon="buttonNextIcon"
         :nextDisabled="invalid"
         :buttonNextStyle="buttonNextStyle"
-        @next="onNext")
+        @next="onNext"
+        @prev="onPrev")
     .uk-padding(class="uk-hidden@l")
 </template>
 <script>
@@ -24,7 +25,6 @@ import { mapState } from 'vuex'
 import { getFormatPrice } from '@/components/helpers'
 import TopBar from '@/components/layout/TopBar'
 import CheckoutBottomBar from '@/components/Checkout/CheckoutBottomBar'
-import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
 
 export default {
@@ -33,7 +33,7 @@ export default {
     CheckoutBottomBar,
     TopBar
   },
-  mixins: [scrollToTop, setLayout],
+  mixins: [scrollToTop],
   props: {
     title: {
       type: String,
@@ -64,10 +64,6 @@ export default {
     if (!this.isEnabled) {
       await this.$router.push('/')
     }
-    await this.setFieldsAction({
-      bottomBar: false,
-      footer: false
-    })
   },
   computed: {
     formatPrice () {
@@ -86,7 +82,7 @@ export default {
   },
   methods: {
     onPrev () {
-      window.history.length > 1 ? this.$router.go(-1) : this.$router.push('/')
+      this.$emit('prev')
     },
     onNext () {
       this.$emit('confirm')

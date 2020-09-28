@@ -1,5 +1,5 @@
 <template lang="pug">
-  page(v-if="!$fetchState.pending")
+  page(v-if="!$fetchState.pending && responseData")
     template(#main)
       checkout-layout(
         v-show="!deliveryIsInvalid && enabled"
@@ -8,6 +8,7 @@
         buttonNextIcon="check"
         buttonNextStyle="uk-button-danger"
         :altContent="true"
+        @prev="onPrev"
         @confirm="onNext")
         template(#alt-content)
           slide-y-down-transition(v-show="pageTitle && !pending")
@@ -86,6 +87,7 @@ import scrollToTop from '@/components/mixins/scrollToTop'
 import CartList from '@/components/Cart/CartList'
 import SaleList from '@/components/Cart/SaleList'
 import CheckoutOrderDetailsItem from '@/components/Checkout/CheckoutOrderDetailsItem'
+import noindexPageMeta from '@/components/mixins/noindexPageMeta'
 
 export default {
   components: {
@@ -95,21 +97,22 @@ export default {
     CartList,
     SaleList
   },
-  mixins: [scrollToTop],
-  metaInfo () {
-    return {
-      title: this.pageTitle
-    }
-  },
+  mixins: [scrollToTop, noindexPageMeta],
   async fetch () {
     await Promise.all([
+      this.setFieldsAction({
+        bottomBar: false,
+        footer: false
+      }),
       this.getDeliveryItemsAction(),
       this.getCartSalesAction()
     ])
     this.setFieldAction({ field: 'pageTitle', value: 'Оформление заказа. Подтверждение' })
+    this.responseData = true
   },
   data: () => ({
-    pending: false
+    pending: false,
+    responseData: false
   }),
   computed: {
     ...mapState({

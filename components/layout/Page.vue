@@ -1,19 +1,17 @@
 <template lang="pug">
   div
     slot(name="main")
+    slide-y-down-transition(mode="out-in")
+      slot(name="bottom-bar" v-if="bottomBar")
+        bottom-bar
     Footer(v-if="footer")
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Page',
-  computed: {
-    ...mapState({
-      footer: state => state.footer
-    })
-  },
   beforeDestroy () {
     this.clearItemFieldsAction()
   },

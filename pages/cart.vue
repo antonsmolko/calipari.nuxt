@@ -60,19 +60,18 @@ export default {
   },
   mixins: [setLayout, scrollToTop, noindexPageMeta],
   async fetch () {
+    if (this.saleKeys.length) {
+      await Promise.all([
+        this.setFieldsAction({
+          bottomBar: false,
+          footer: false
+        }),
+        this.getCartSalesAction()
+      ])
+    }
     const key = this.$route.query.key
     if (key) {
       await this.getProjectAction(key)
-    }
-    await new Promise((resolve) => {
-      this.setFieldsAction({
-        bottomBar: false,
-        footer: false
-      })
-      resolve()
-    })
-    if (this.saleKeys.length) {
-      await this.getCartSalesAction()
     }
     this.setFieldAction({ field: 'pageTitle', value: 'Корзина' })
     this.responseData = true

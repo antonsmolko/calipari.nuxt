@@ -1,9 +1,10 @@
 <template lang="pug">
-  page(v-if="!$fetchState.pending")
+  page(v-if="!$fetchState.pending && responseData")
     template(#main)
       checkout-layout(
         title="Персональные данные"
         :price="totalPrice"
+        @prev="onPrev"
         @confirm="onNext")
         template(#content)
           slide-y-down-transition(v-show="sectionTitle")
@@ -92,12 +93,13 @@ import { required, minLength, email } from 'vuelidate/lib/validators'
 import Page from '@/components/layout/Page.vue'
 import VInput from '@/components/form/VInput'
 import UkInput from '@/components/form/Input/UkInput'
-import setLayout from '@/components/mixins/setLayout'
 import CheckoutLayout from '@/components/Checkout/CheckoutLayout'
 import PhoneInput from '@/components/form/PhoneInput'
+import noindexPageMeta from '@/components/mixins/noindexPageMeta'
 
 export default {
   name: 'Personal',
+  middleware: ['guest'],
   components: {
     Page,
     CheckoutLayout,
@@ -105,22 +107,22 @@ export default {
     UkInput,
     PhoneInput
   },
-  middleware: ['guest'],
-  mixins: [setLayout],
-  metaInfo () {
-    return {
-      title: 'Оформление заказа. Персональная информация'
-    }
-  },
+  mixins: [noindexPageMeta],
   async fetch () {
     await Promise.all([
+      this.setFieldsAction({
+        bottomBar: false,
+        footer: false
+      }),
       this.setCheckoutInvalid(this.isInvalid),
       this.setSectionTitle(),
       this.setFieldsAction({ pageTitle: 'Оформление заказа. Персональная информация' })
     ])
+    this.responseData = true
   },
   data: () => ({
-    sectionTitle: null
+    sectionTitle: null,
+    responseData: false
   }),
   validations: {
     customer: {

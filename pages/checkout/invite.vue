@@ -1,9 +1,10 @@
 <template lang="pug">
-  page(v-if="!$fetchState.pending")
+  page(v-if="!$fetchState.pending && responseData")
     template(#main)
       checkout-layout(
         title="Приглашение войти"
         :price="totalPrice"
+        @prev="onPrev"
         @confirm="onNext")
         template(#content)
           .uk-grid.uk-grid-divider.uk-flex-center(data-uk-grid)
@@ -77,8 +78,8 @@ import form from '@/components/mixins/form'
 import routerParams from '@/components/mixins/routerParams'
 import syncProfile from '@/components/mixins/syncProfile'
 import VInput from '@/components/form/VInput'
-import setLayout from '@/components/mixins/setLayout'
 import CheckoutLayout from '@/components/Checkout/CheckoutLayout'
+import noindexPageMeta from '@/components/mixins/noindexPageMeta'
 
 export default {
   name: 'Invite',
@@ -93,26 +94,27 @@ export default {
     form,
     routerParams,
     syncProfile,
-    setLayout
+    noindexPageMeta
   ],
-  metaInfo () {
-    return {
-      title: this.pageTitle
-    }
-  },
   async fetch () {
     await Promise.all([
+      this.setFieldsAction({
+        bottomBar: false,
+        footer: false
+      }),
       this.setFieldsAction({ pageTitle: 'Оформление заказа. Приглашение войти' }),
       this.setCheckoutFieldAction({
         field: 'invalid',
         value: false
       })
     ])
+    this.responseData = true
   },
   data () {
     return {
       loaded: false,
-      sectionTitle: 'Войти'
+      sectionTitle: 'Войти',
+      responseData: false
     }
   },
   validations: {

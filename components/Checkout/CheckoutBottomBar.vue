@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import ServiceBottomBar from '~/components/layout/ServiceBottomBar'
+import ServiceBottomBar from '@/components/layout/ServiceBottomBar'
 
 export default {
   name: 'CheckoutBottomBar',
@@ -46,7 +46,7 @@ export default {
       this.$emit('next')
     },
     onPrev () {
-      this.$router.go(-1) ? this.$router.go(-1) : this.$router.push('/')
+      this.$emit('prev')
     }
   }
 }
