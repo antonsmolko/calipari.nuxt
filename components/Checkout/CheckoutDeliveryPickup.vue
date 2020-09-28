@@ -50,7 +50,6 @@ export default {
     } else {
       this.setDefaultPickup()
     }
-    this.setCheckoutFieldAction({ field: 'deliveryPrice', value: 0 })
   },
   methods: {
     ...mapActions({

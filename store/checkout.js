@@ -216,5 +216,6 @@ export const getters = {
       ? `${delivery.locality.countryName}, ${delivery.locality.regionName}, ${delivery.locality.cityName}`
       : ''
   },
-  fullName: state => `${state.customer.last_name} ${state.customer.first_name} ${state.customer.middle_name}`
+  fullName: state => `${state.customer.last_name} ${state.customer.first_name} ${state.customer.middle_name}`,
+  getCurrentDelivery: (state, rootState, getters, rootGetters) => rootGetters['delivery/getItemById'](state.delivery)
 }

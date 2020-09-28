@@ -1,45 +1,45 @@
 <template lang="pug">
-    div
-        .tm-checkout__header
-            span.uk-h2.uk-margin-remove {{ $lib.DELIVERY_CDEK }}
-            .uk-divider-small
-        .tm-form.uk-margin-medium-top
-            .uk-fieldset
-                VSelect(
-                    class="uk-margin"
-                    name="locality"
-                    labelName="Регион / город"
-                    icon="world"
-                    :error="localityIsInvalid && $v.locality.$dirty"
-                    @input="localityInput"
-                    @search="localitySearch"
-                    :isLoading="settlementsLoading"
-                    label="name"
-                    :value="!localityIsInvalid ? locality.name : ''"
-                    :placeholder="!localityIsInvalid ? '' : 'Введите населенный пункт'"
-                    :options="settlements"
-                    noOptionsText="Введите город")
-                VSelect(
-                    class="uk-margin"
-                    name="pvz"
-                    labelName="Пункт вывоза заказа"
-                    icon="location"
-                    :error="pvzIsInvalid && $v.pvz.$dirty"
-                    :disabled="!pvzs.length"
-                    @input="pvzsInput"
-                    :isLoading="pvzsLoading"
-                    label="address"
-                    :value="pvz"
-                    :placeholder="pvzs.length ? 'Выберите пункт вывоза заказа' : ''"
-                    :options="pvzs"
-                    optionKey="code"
-                    noOptionsText="Нет совпадений с поиском")
-                    template(#footer v-if="pvzsNotFound")
-                        span.uk-text-small.uk-text-danger В данном н.п. пункте нет пунктов самовывоза CDEK
-                .uk-margin
-                    span Стоимость доставки:
-                    span.uk-text-emphasis.uk-margin-small-left.uk-text-large
-                        | {{ price ? deliveryFormatPrice : 'нет данных' }}
+  div
+    .tm-checkout__header
+      span.uk-h2.uk-margin-remove {{ $lib.DELIVERY_CDEK }}
+      .uk-divider-small
+    .tm-form.uk-margin-medium-top
+      .uk-fieldset
+        v-select(
+          class="uk-margin"
+          name="locality"
+          labelName="Регион / город"
+          icon="world"
+          :error="localityIsInvalid && $v.locality.$dirty"
+          @input="localityInput"
+          @search="localitySearch"
+          :isLoading="settlementsLoading"
+          label="name"
+          :value="!localityIsInvalid ? locality.name : ''"
+          :placeholder="!localityIsInvalid ? '' : 'Введите населенный пункт'"
+          :options="settlements"
+          noOptionsText="Введите город")
+        v-select(
+          class="uk-margin"
+          name="pvz"
+          labelName="Пункт вывоза заказа"
+          icon="location"
+          :error="pvzIsInvalid && $v.pvz.$dirty"
+          :disabled="!pvzs.length"
+          @input="pvzsInput"
+          :isLoading="pvzsLoading"
+          label="address"
+          :value="pvz"
+          :placeholder="pvzs.length ? 'Выберите пункт вывоза заказа' : ''"
+          :options="pvzs"
+          optionKey="code"
+          noOptionsText="Нет совпадений с поиском")
+          template(#footer v-if="pvzsNotFound")
+            span.uk-text-small.uk-text-danger В данном н.п. пункте нет пунктов самовывоза CDEK
+        .uk-margin
+          span Стоимость доставки:
+          span.uk-text-emphasis.uk-margin-small-left.uk-text-large
+            | {{ price ? deliveryFormatPrice : 'нет данных' }}
 </template>
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
@@ -53,7 +53,10 @@ const _debounce = debounce(f => f(), 500)
 
 export default {
   name: 'CheckoutDeliveryTcCdek',
-  components: { VInput, VSelect },
+  components: {
+    VInput,
+    VSelect
+  },
   validations: {
     locality: {
       touch: false

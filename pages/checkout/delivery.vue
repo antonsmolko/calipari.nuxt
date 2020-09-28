@@ -103,6 +103,11 @@ export default {
   watch: {
     deliveryIsInvalid () {
       this.setCheckoutInvalid(this.deliveryIsInvalid)
+    },
+    selectDeliveryId () {
+      if (this.selectDelivery.pickup) {
+        this.setCheckoutFieldAction({ field: 'deliveryPrice', value: 0 })
+      }
     }
   },
   methods: {
@@ -115,6 +120,9 @@ export default {
           field: 'delivery',
           value: this.defaultDeliveryId
         })
+      }
+      if (this.selectDelivery.pickup) {
+        this.setCheckoutFieldAction({ field: 'deliveryPrice', value: 0 })
       }
     },
     onPrev () {
