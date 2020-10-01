@@ -1,5 +1,7 @@
 import path from 'path'
+import https from 'https'
 import fs from 'fs'
+import axios from 'axios'
 import imageminMozjpeg from 'imagemin-mozjpeg'
 require('dotenv').config()
 const ImageminPlugin = require('imagemin-webpack-plugin').default
@@ -65,7 +67,7 @@ export default {
       routes.push({
         name: '404',
         path: '*',
-        component: resolve(__dirname, 'pages/notfound.vue')
+        component: resolve(__dirname, 'pages/notfound/index.vue')
       })
     }
   },
@@ -127,8 +129,42 @@ export default {
       }),
       localStorage: ['cart', 'wishList', 'checkout'] //  If not entered, “localStorage” is the default value
     }],
-    'vue-scrollto/nuxt'
+    'vue-scrollto/nuxt',
+    '@nuxtjs/sitemap',
+    '@nuxtjs/redirect-module'
   ],
+  sitemap: {
+    hostname: baseUrl,
+    defaults: {
+      changefreq: 'daily',
+      priority: 1,
+      lastmod: new Date()
+    },
+    exclude: [
+      '/_icons',
+      '/checkout/invite',
+      '/checkout/personal',
+      '/checkout/delivery',
+      '/checkout/confirmation',
+      '/payment',
+      '/payment/complete',
+      '/profile',
+      '/profile/personal',
+      '/profile/orders',
+      '/review',
+      '/social-callback'
+    ],
+    routes: async () => {
+      const api = axios.create({
+        httpsAgent: new https.Agent({
+          rejectUnauthorized: false
+        })
+      })
+      const { data } = await api.get(`${baseApiUrl}/api/sitemap`)
+
+      return data
+    }
+  },
   webfontloader: {
     events: false,
     custom: {

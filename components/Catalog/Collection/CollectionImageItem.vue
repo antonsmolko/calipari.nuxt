@@ -94,6 +94,8 @@ export default {
 
   &__article {
     position: absolute;
+    top: 0;
+    left: 0;
     display: inline-block;
     line-height: 1;
     background: rgba($global-secondary-background, .5);

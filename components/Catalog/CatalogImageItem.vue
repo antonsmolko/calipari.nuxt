@@ -1,13 +1,13 @@
 <template lang="pug">
-    .uk-panel
-        nuxt-link.uk-link-reset(
-            :to="{ name: 'catalog-category', params: { category: item.alias } }")
-            uk-image.uk-box-shadow-medium(
-                :name="item.image_path"
-                :width="width"
-                :height="height"
-                :alt="item.title")
-            h3.tm-catalog__title {{ item.title }}
+  .uk-panel
+    nuxt-link.uk-link-reset(
+      :to="{ name: 'catalog-category', params: { category: item.alias } }")
+      uk-image.uk-box-shadow-medium(
+        :name="item.image_path"
+        :width="width"
+        :height="height"
+        :alt="item.title")
+      h3.tm-catalog__title {{ item.title }}
 </template>
 
 <script>

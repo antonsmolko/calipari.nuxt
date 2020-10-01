@@ -16,12 +16,12 @@ export default {
         {
           vmid: 'description',
           name: 'description',
-          content: this.page.description
+          content: this.page.description || ''
         },
         {
           vmid: 'keywords',
           name: 'keywords',
-          content: this.page.keywords
+          content: this.page.keywords || ''
         }
       ],
       link: [

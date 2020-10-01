@@ -96,6 +96,7 @@ import ImageLike from '@/components/Gallery/ImageLike'
 import EditorPanelHeading from '@/components/Editor/EditorPanelHeading'
 import scrollToTop from '@/components/mixins/scrollToTop'
 import closeEditorMethods from '@/components/mixins/closeEditorMethods'
+import noindexPageMeta from '@/components/mixins/noindexPageMeta'
 import { filterSet, hash } from '@/helpers'
 
 export default {
@@ -113,7 +114,11 @@ export default {
     ImageLike,
     EditorPanelHeading
   },
-  mixins: [scrollToTop, closeEditorMethods],
+  mixins: [
+    scrollToTop,
+    closeEditorMethods,
+    noindexPageMeta
+  ],
   async fetch () {
     await this.setFieldsAction({
       pageTitle: 'Редактор',

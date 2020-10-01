@@ -1,5 +1,5 @@
 <template lang="pug">
-  ServiceBottomBar
+  service-bottom-bar
     .uk-navbar-left
       .uk-navbar-item.tm-total__price
         span.tm-total-price__value.uk-text-emphasis {{ formatPrice }}

@@ -15,7 +15,6 @@ import Page from '@/components/layout/Page.vue'
 import GalleryLayout from '@/components/Gallery/GalleryLayout'
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
-import page from '@/components/mixins/pageMeta'
 
 export default {
   name: 'Category',
@@ -23,7 +22,7 @@ export default {
     Page,
     GalleryLayout
   },
-  mixins: [setLayout, scrollToTop, page],
+  mixins: [setLayout, scrollToTop],
   metaInfo () {
     return {
       title: this.item.meta_title || this.pageTitle,

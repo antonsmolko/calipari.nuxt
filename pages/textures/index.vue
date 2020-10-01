@@ -77,7 +77,7 @@ export default {
 <style lang="scss">
 .tm-textures {
   &__hero {
-    background-image: url('/img/bg/bg-textures-1.png');
+    background-image: url('/static/img/bg/bg-textures-1.png');
     background-repeat: no-repeat;
     background-position: bottom right;
     background-size: 90%;
@@ -99,7 +99,7 @@ export default {
       }
     }
     @include media-portrait() {
-      background-image: url('/img/bg/bg-textures-m.png');
+      background-image: url('/static/img/bg/bg-textures-m.png');
       background-size: contain;
       background-position: bottom center;
       align-items: flex-start;

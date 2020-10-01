@@ -18,6 +18,8 @@
     "@nuxtjs/axios": "^5.12.2",
     "@nuxtjs/proxy": "^2.0.1",
     "@nuxtjs/pwa": "^3.0.2",
+    "@nuxtjs/redirect-module": "^0.3.1",
+    "@nuxtjs/sitemap": "^2.4.0",
     "@nuxtjs/svg-sprite": "^0.4.12",
     "cookie-universal-nuxt": "^2.1.4",
     "crc-32": "^1.2.0",
