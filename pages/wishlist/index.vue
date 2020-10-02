@@ -1,5 +1,5 @@
 <template lang="pug">
-  page(v-if="!$fetchState.pending && page")
+  page(v-if="!$fetchState.pending")
     template(#main)
       main(:class="{ 'uk-light': darkPeriod }")
         gallery-layout(
