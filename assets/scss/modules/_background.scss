@@ -56,18 +56,26 @@ html, body {
       background: radial-gradient(circle at top right, #0D4968 0%, #185370 40%, #185370 60%, #093256 100%);
     }
   }
+  //&.tm-light-bg {
+  //  &::before {
+  //    @include beforeBg();
+  //    background-color: #EFEFEF;
+  //    background: radial-gradient(circle at top center, #EFEFEF 0%, #FFFFFF 25%, #F8F8F8 60%, #E3E3E3 100%);
+  //  }
+  //}
   &.tm-light-bg {
     &::before {
       @include beforeBg();
       background-color: #EFEFEF;
-      background: radial-gradient(circle at top center, #EFEFEF 0%, #FFFFFF 25%, #F8F8F8 60%, #E3E3E3 100%);
+      background: radial-gradient(circle at top center, #EEEEEE 0%, #FEFEFE 25%, #F6F6F6 60%, #E1E1E1 100%);
     }
   }
   &.tm-light-grey-bg {
     &::before {
       @include beforeBg();
       background-color: #dddddd;
-      background: radial-gradient(circle at top right, #cfcfcf 0%, #f1efef 40%, #efefef 60%, #eeeeee 100%);
+      //background: radial-gradient(circle at top right, #cfcfcf 0%, #f1efef 40%, #efefef 60%, #eeeeee 100%);
+      background: radial-gradient(circle at top center, #EEEEEE 0%, #FEFEFE 25%, #F6F6F6 60%, #E1E1E1 100%);
     }
   }
   &.tm-dark-grey-bg {

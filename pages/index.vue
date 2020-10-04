@@ -13,6 +13,9 @@
                   :page="page.title")
                 //section-topics
                 section-advantages
+                home-purchase-steps-section(
+                  v-if="purchaseSteps.length"
+                  :items="purchaseSteps")
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'

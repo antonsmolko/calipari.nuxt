@@ -1,5 +1,5 @@
 <template lang="pug">
-  section.tm-section__textures.uk-section.uk-section-large.uk-section-default.uk-padding-remove-bottom.uk-position-relative.uk-position-z-index
+  section.tm-section__textures.uk-section.uk-section-large.uk-padding-remove-bottom.uk-position-relative.uk-position-z-index
     .uk-width-1-1(data-uk-parallax="y: -150,-80; media: @m")
       .tm-logo-background.uk-position-top-center
         span.uk-icon(data-uk-icon="icon: calipari; ratio: 10")
@@ -82,9 +82,22 @@ export default {
 
 <style lang="scss">
 .tm-section__textures {
-  clip-path: polygon(100% 0, 100% 83%, 50% 87%, 0 83%, 0 0);
-  @include media_mob($m) {
-    clip-path: polygon(100% 0, 100% 82%, 50% 88%, 0 82%, 0 0);
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    background: white;
+    background-image: url('/img/svg/section-background-image-lines.svg');
+    background-position-x: 50%;
+    clip-path: polygon(100% 0, 100% 83%, 50% 87%, 0 83%, 0 0);
+    @include media_mob($m) {
+      clip-path: polygon(100% 0, 100% 82%, 50% 88%, 0 82%, 0 0);
+    }
   }
 }
 
