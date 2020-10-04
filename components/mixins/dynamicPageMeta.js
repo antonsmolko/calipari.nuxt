@@ -88,7 +88,7 @@ export default {
     getSettingValueByKey (key) {
       const setting = this.$store.getters['settings/getSettingByKey'](key)
 
-      return setting.value
+      return setting && setting.value
     }
   }
 }
