@@ -1,5 +1,6 @@
 <template lang="pug">
-  .tm-review-item.tm-background__smoke.uk-card.uk-card-small.uk-card-body.uk-box-shadow-medium
+  .tm-review-item.tm-background__smoke.uk-card.uk-card-small.uk-card-body.uk-box-shadow-medium(
+    data-uk-scrollspy="cls: uk-animation-fade; delay: 300")
     .tm-review-item__header.uk-flex.uk-flex-middle
       .tm-review-item__gravatar.uk-box-shadow-medium.uk-text-center
         img(v-if="item.gravatar" :data-src="item.gravatar" :alt="item.customer_name" data-uk-img)
@@ -23,6 +24,7 @@
     .tm-review-item__images.uk-margin-medium-top.uk-position-relative.uk-visible-toggle(
       v-if="item.images"
       data-uk-slider="finite: true"
+      data-uk-scrollspy="cls: uk-animation-slide-right-medium; delay: 300"
       tabindex="-1")
       ul.uk-slider-items.uk-grid.uk-grid-small(data-uk-lightbox="animation: slide")
         li.tm-review-item__image(v-for="(image, index) in item.images" :key="index")
@@ -62,6 +64,7 @@ export default {
 
 <style lang="scss">
 .tm-review-item {
+  overflow: hidden;
   &:not(:last-child) {
     margin-bottom: $global-margin;
   }

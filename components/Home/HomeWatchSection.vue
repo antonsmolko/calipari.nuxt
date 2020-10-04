@@ -77,10 +77,26 @@
       width: inherit;
       height: inherit;
       fill: $global-muted-background;
+      rect {
+        transform: rotate(-360deg);
+        transform-origin: center center;
+        &.arrow-large {
+          animation: rotate 120s linear infinite;
+        }
+        &.arrow-small {
+          animation: rotate 10s linear infinite;
+        }
+      }
     }
 
     &.uk-light {
       opacity: .08;
+    }
+  }
+
+  @keyframes rotate {
+    100% {
+      transform: rotate(0);
     }
   }
 }
