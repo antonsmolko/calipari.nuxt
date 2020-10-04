@@ -130,18 +130,15 @@ export default {
   /*
   ** PWA
    */
-  // pwa: {
-  //   meta: {
-  //     title: 'Calipari',
-  //     author: 'Anton Smolko',
-  //     theme_color: '#292C30'
-  //   },
-  //   manifest: {
-  //     name: 'Calipari application',
-  //     short_name: 'Calipari app',
-  //     lang: 'ru'
-  //   }
-  // },
+  pwa: {
+    manifest: {
+      name: 'Calipari application',
+      short_name: 'Calipari app',
+      theme_color: '#292C30',
+      lang: 'ru',
+      description: 'Calipari - студия печати и дизайна. Изготовление фотообоев на заказ.'
+    }
+  },
   /*
   ** Nuxt.js modules
   */

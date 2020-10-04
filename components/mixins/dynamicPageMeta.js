@@ -1,13 +1,11 @@
-import { mapState, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 import { getS3ImageUrl } from '@/helpers'
 
 export default {
   metaInfo () {
     return {
-      title: this.page.meta_title || this.page.title || this.pageTitle,
+      title: this.item.meta_title || this.pageTitle,
       meta: [
-        { charset: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         {
           skip: process.env.NODE_ENV === 'production',
           hid: 'robots',
@@ -17,27 +15,27 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: this.page.description || ''
+          content: this.item.description
         },
         {
           hid: 'keywords',
           name: 'keywords',
-          content: this.page.keywords || ''
+          content: this.item.keywords
         },
         {
           property: 'og:url',
-          content: process.env.BASE_URL + this.fullPath
+          content: process.env.BASE_URL + this.$route.fullPath
         },
         {
           property: 'og:type', content: 'website'
         },
         {
           property: 'og:title',
-          content: this.page.meta_title || this.page.title || this.pageTitle
+          content: this.item.meta_title || this.pageTitle
         },
         {
           property: 'og:description',
-          content: this.page.description || ''
+          content: this.item.description || ''
         },
         {
           property: 'og:site_name',
@@ -59,7 +57,7 @@ export default {
         { name: 'theme-color', content: '#292C30' }
       ],
       link: [
-        { rel: 'canonical', href: process.env.BASE_URL + this.fullPath },
+        { rel: 'canonical', href: process.env.BASE_URL + this.$route.fullPath },
         { rel: 'shortcut icon', type: 'image/x-icon', href: '/favicon.ico' },
         { rel: 'apple-touch-icon', sizes: '57x57', href: '/favicon/apple-icon-57x57.png' },
         { rel: 'apple-touch-icon', sizes: '60x60', href: '/favicon/apple-icon-60x60.png' },
@@ -79,15 +77,8 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      page: state => state.pages.fields
-    }),
-    fullPath () {
-      return this.$route.fullPath === '/' ? '' : this.$route.fullPath
-    },
     ogImageUrl () {
-      const name = this.page.image_path || this.getSettingValueByKey('default_og_image')
-      return getS3ImageUrl({ name, width: 600 })
+      return getS3ImageUrl({ name: this.item.image_path, width: 600 })
     }
   },
   methods: {

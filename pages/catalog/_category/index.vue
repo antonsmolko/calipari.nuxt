@@ -9,12 +9,13 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 import Page from '@/components/layout/Page.vue'
 import GalleryLayout from '@/components/Gallery/GalleryLayout'
 import setLayout from '@/components/mixins/setLayout'
 import scrollToTop from '@/components/mixins/scrollToTop'
+import dynamicPageMeta from '@/components/mixins/dynamicPageMeta'
 
 export default {
   name: 'Category',
@@ -22,33 +23,11 @@ export default {
     Page,
     GalleryLayout
   },
-  mixins: [setLayout, scrollToTop],
-  metaInfo () {
-    return {
-      title: this.item.meta_title || this.pageTitle,
-      meta: [
-        {
-          skip: process.env.NODE_ENV === 'production',
-          vmid: 'robots',
-          name: 'robots',
-          content: 'noindex, nofollow'
-        },
-        {
-          vmid: 'description',
-          name: 'description',
-          content: this.item.description
-        },
-        {
-          vmid: 'keywords',
-          name: 'keywords',
-          content: this.item.keywords
-        }
-      ],
-      link: [
-        { rel: 'canonical', href: process.env.BASE_URL + this.$route.fullPath }
-      ]
-    }
-  },
+  mixins: [
+    setLayout,
+    scrollToTop,
+    dynamicPageMeta
+  ],
   async fetch () {
     await this.getCategoryByAliasAction(this.$route.params.category)
     await this.getTagsByCategoryId(this.item.id)

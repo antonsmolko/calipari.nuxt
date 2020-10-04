@@ -43,6 +43,7 @@ import Page from '@/components/layout/Page.vue'
 import TopBar from '@/components/layout/TopBar.vue'
 import scrollToTop from '@/components/mixins/scrollToTop'
 import setLayout from '@/components/mixins/setLayout'
+import dynamicPageMeta from '@/components/mixins/dynamicPageMeta'
 
 export default {
   name: 'Post',
@@ -51,24 +52,11 @@ export default {
     Page,
     TopBar
   },
-  mixins: [setLayout, scrollToTop],
-  metaInfo () {
-    return {
-      title: this.item.meta_title || this.pageTitle,
-      meta: [
-        {
-          vmid: 'description',
-          name: 'description',
-          content: this.item.description
-        },
-        {
-          vmid: 'keywords',
-          name: 'keywords',
-          content: this.item.keywords
-        }
-      ]
-    }
-  },
+  mixins: [
+    setLayout,
+    scrollToTop,
+    dynamicPageMeta
+  ],
   data: () => ({
     responseData: false
   }),
