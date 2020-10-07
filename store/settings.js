@@ -20,6 +20,5 @@ export const actions = {
 
 export const getters = {
   getSettingByKey: state => key => [].concat(...Object.values(state.items))
-    .find(item => item.key_name === key),
-  defaultPickup: state => state.items.pickups[0]
+    .find(item => item.key_name === key)
 }
