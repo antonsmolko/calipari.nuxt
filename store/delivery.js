@@ -1,4 +1,7 @@
 import head from 'lodash/head'
+import reduce from 'lodash/reduce'
+import sortBy from 'lodash/sortBy'
+import groupBy from 'lodash/groupBy'
 
 export const state = () => ({
   items: [],
@@ -6,7 +9,8 @@ export const state = () => ({
   settlementsLoading: false,
   pvzs: [],
   pvzsLoading: false,
-  pvzsNotFound: false
+  pvzsNotFound: false,
+  pickups: []
 })
 
 export const mutations = {
@@ -62,5 +66,16 @@ export const actions = {
 
 export const getters = {
   defaultItemId: state => state.items.length > 0 ? head(state.items).id : null,
-  getItemById: state => id => state.items.find(item => item.id === id)
+  getItemById: state => id => state.items.find(item => item.id === id),
+  getPickups: (state) => {
+    const pickups = reduce(state.items, (acc, item) => {
+      if (item.is_pickup) {
+        acc = [...acc, ...item.pickups]
+      }
+
+      return acc
+    }, [])
+
+    return groupBy(sortBy(pickups, 'locality'), 'locality')
+  }
 }

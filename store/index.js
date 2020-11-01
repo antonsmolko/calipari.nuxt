@@ -30,6 +30,8 @@ export const actions = {
     await Promise.all([
       dispatch('textures/getItems'),
       dispatch('categories/getItems'),
+      dispatch('colorCollections/getItems'),
+      dispatch('artCollections/getItems'),
       dispatch('settings/getItems'),
       dispatch('delivery/getItems')
     ])

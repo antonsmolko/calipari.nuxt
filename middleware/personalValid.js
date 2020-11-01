@@ -35,7 +35,7 @@ export default async ({ $auth, store, redirect }) => {
 
     const currentDelivery = store.getters['checkout/getCurrentDelivery']
 
-    currentDelivery && !currentDelivery.pickup && priceQuery
+    currentDelivery && !currentDelivery.is_pickup && priceQuery
       ? store.dispatch('delivery/getPrice', { query: priceQuery })
       : store.commit('delivery/SET_FIELDS', { deliveryPrice: 0 })
   }

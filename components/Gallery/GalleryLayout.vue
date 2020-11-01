@@ -13,7 +13,7 @@
           template(#sub-hero)
             slot(name="search")
             .tm-gallery__tags.uk-flex.uk-flex-wrap(
-              data-uk-scrollspy="target: > div; cls: uk-animation-slide-bottom-small; delay: 50"
+              data-uk-scrollspy="target: > div; cls: uk-animation-fade"
               v-if="tags && tags.length")
               GalleryTag(
                 :active="!filterQty"

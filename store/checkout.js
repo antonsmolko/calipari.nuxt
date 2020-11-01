@@ -183,7 +183,7 @@ export const getters = {
 
     let details = {}
 
-    if (delivery.pickup) {
+    if (delivery.is_pickup) {
       details = {
         pickup: state.pickup.id
       }

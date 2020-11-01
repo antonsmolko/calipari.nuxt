@@ -1,7 +1,8 @@
 import { action } from '@/helpers'
 
 export const state = () => ({
-  item: {}
+  item: {},
+  items: []
 })
 
 export const mutations = {
@@ -11,10 +12,19 @@ export const mutations = {
 }
 
 export const actions = {
+  getItems ({ commit }) {
+    return action(this.$api, 'get', commit, {
+      url: '/catalog/art-collections',
+      thenContent: ({ data }) => {
+        commit('SET_FIELD', { field: 'items', value: data })
+        return data
+      }
+    })
+  },
   getItem ({ commit }, collection) {
     return action(this.$api, 'get', commit, {
       url: `/catalog/art-collections/${collection}`,
-      thenContent: response => commit('SET_FIELD', { field: 'item', value: response.data })
+      thenContent: ({ data }) => commit('SET_FIELD', { field: 'item', value: data })
     })
   },
   setField ({ commit }, payload) {

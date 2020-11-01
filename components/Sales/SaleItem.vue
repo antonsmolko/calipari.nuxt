@@ -2,7 +2,7 @@
   .tm-sale-card.uk-flex
     .uk-box-shadow-medium.tm-background__smoke.tm-border-radius__base
       .tm-sale-card__preview(data-uk-lightbox)
-        a.uk-inline.uk-transition-toggle(
+        a.uk-inline.uk-transition-toggle.uk-width-1-1(
           :href="imageUrl"
           data-type="image"
           tabindex="1"
@@ -10,6 +10,7 @@
           uk-image(
             :name="item.image_path"
             :width="800"
+            :height="800 * imageRation"
             :alt="item.article")
       .tm-sale-card__body
         .tm-sale-card__content.uk-flex.uk-flex-top
@@ -102,6 +103,9 @@ export default {
     },
     checkInCart () {
       return this.$store.getters['cart/checkSaleInCart'](this.item.id)
+    },
+    imageRation () {
+      return this.width / this.height
     }
   },
   methods: {

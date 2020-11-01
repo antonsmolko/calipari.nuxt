@@ -39,8 +39,11 @@
               data-uk-scrollspy="cls: uk-animation-slide-bottom-small; delay: 300")
               div(class="uk-width-xlarge@s uk-width-2-5@m")
                 h3.uk-h3.uk-text-primary Пункты самовывоза
-                p {{ getSettingValueByKey('pickup_1') }}
-                p {{ getSettingValueByKey('pickup_2') }}
+                div(v-for="(pickupGroup, index) in pickupGroups" :key="index")
+                  p.uk-h4 {{ index }}
+                  ul.uk-list
+                    li(v-for="pickup in pickupGroup" :key="pickup.id")
+                      | {{ pickup.address }}
                 h3.uk-h3.uk-text-primary Свяжитесь с нами
                 a.uk-link.uk-link-muted.uk-display-block.tm-text-medium(
                   :href="`tel:${getSettingValueByKey('company_phone')}`")
@@ -100,7 +103,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import { minLength, required } from 'vuelidate/lib/validators'
 import Page from '@/components/layout/Page.vue'
 import TopBar from '@/components/layout/TopBar.vue'
@@ -173,6 +176,9 @@ export default {
   computed: {
     ...mapState({
       customer: state => state.checkout.customer
+    }),
+    ...mapGetters({
+      pickupGroups: 'delivery/getPickups'
     }),
     phoneFormat () {
       return getPhoneFormat(this.companyPhone)

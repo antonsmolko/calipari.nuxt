@@ -155,7 +155,7 @@ export default {
     },
     ratioLocked: true,
     minInputValue: 90,
-    sizeFactor: 3,
+    sizeFactor: 5,
     cropData: {
       width: null,
       height: null,

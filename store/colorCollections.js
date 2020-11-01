@@ -1,7 +1,8 @@
 import { action } from '@/helpers'
 
 export const state = () => ({
-  item: {}
+  item: {},
+  items: []
 })
 
 export const mutations = {
@@ -11,12 +12,21 @@ export const mutations = {
 }
 
 export const actions = {
+  getItems ({ commit }) {
+    return action(this.$api, 'get', commit, {
+      url: '/catalog/color-collections',
+      thenContent: ({ data }) => {
+        commit('SET_FIELD', { field: 'items', value: data })
+        return data
+      }
+    })
+  },
   getItem ({ commit }, collection) {
     return action(this.$api, 'get', commit, {
       url: `/catalog/color-collections/${collection}`,
-      thenContent: (response) => {
-        commit('SET_FIELD', { field: 'item', value: response.data })
-        return response.data
+      thenContent: ({ data }) => {
+        commit('SET_FIELD', { field: 'item', value: data })
+        return data
       }
     })
   },
@@ -26,5 +36,5 @@ export const actions = {
 }
 
 export const getters = {
-  mainImage: state => state.item ? state.item.images.find(image => image.id === state.item.main_image_id) : null
+  mainImage: state => state.item ? state.item.images?.find(image => image.id === state.item.main_image_id) : null
 }

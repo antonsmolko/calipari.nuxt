@@ -141,12 +141,12 @@ export default {
       return this.$store.getters['delivery/getItemById'](this.deliveryId)
     },
     locality () {
-      return this.delivery.pickup
+      return this.delivery.is_pickup
         ? this.pickup.locality
         : this.localityString
     },
     address () {
-      return this.delivery.pickup
+      return this.delivery.is_pickup
         ? this.pickup.address
         : this.deliveryDetails.address
     }
